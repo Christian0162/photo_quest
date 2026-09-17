@@ -20,6 +20,8 @@ Future<void> seedDefaultQuests(AppDatabase db) async {
         title: quest.title,
         category: quest.category,
         description: Value(quest.description),
+        type: Value(quest.type),
+        status: const Value('published'),
         createdAt: now,
         updatedAt: now,
       ),
@@ -53,12 +55,14 @@ class _SeedQuest {
     required this.title,
     required this.category,
     required this.description,
+    this.type = 'group',
     required this.shots,
   });
 
   final String title;
   final String category;
   final String description;
+  final String type; // solo, pair, group
   final List<_SeedShot> shots;
 }
 
@@ -67,6 +71,7 @@ final _defaultQuests = <_SeedQuest>[
     title: 'Anniversary',
     category: 'For Us',
     description: 'Celebrate another year together.',
+    type: 'pair',
     shots: [
       _SeedShot('Stand close and smile like the day you met', 'group'),
       _SeedShot('Foreheads together, eyes closed', 'close_up'),
@@ -78,6 +83,7 @@ final _defaultQuests = <_SeedQuest>[
     title: 'Date Night',
     category: 'For Us',
     description: 'A little proof you still make time for each other.',
+    type: 'pair',
     shots: [
       _SeedShot('Cheers to tonight', 'group'),
       _SeedShot('Show off tonight\'s outfit', 'solo'),
@@ -125,6 +131,7 @@ final _defaultQuests = <_SeedQuest>[
     title: 'Just Me',
     category: 'For Me',
     description: 'A moment for yourself, exactly as you are.',
+    type: 'solo',
     shots: [
       _SeedShot('However you\'re feeling right now', 'solo'),
       _SeedShot('A close-up, no pressure to pose', 'close_up'),

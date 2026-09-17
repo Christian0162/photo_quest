@@ -6,6 +6,8 @@ class QuestShot {
     required this.position,
     required this.instruction,
     required this.shotType,
+    this.exampleImagePath,
+    this.required = true,
   });
 
   final String id;
@@ -13,4 +15,8 @@ class QuestShot {
   final int position;
   final String instruction;
   final String shotType;
+  final String? exampleImagePath;
+
+  /// Whether this shot gates quest completion. See CLAUDE.md §37.
+  final bool required;
 }

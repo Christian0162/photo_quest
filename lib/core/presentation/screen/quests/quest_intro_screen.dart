@@ -7,8 +7,10 @@ import '../../../../config/constant/app_typography.dart';
 import '../../widget/atoms/primary_button.dart';
 import '../../widget/molecules/empty_state.dart';
 import '../../widget/atoms/loading_indicator.dart';
+import '../../widget/organisms/quest_participants_section.dart';
 import '../../../data/repositories/memory_repository_provider.dart';
 import '../../view_model/quests/quest_detail_view_model.dart';
+import '../../view_model/quests/quest_participants_view_model.dart';
 
 /// Introduces a Quest before capture begins: what it is, how many shots,
 /// and the single primary action to begin. See CLAUDE.md §60, §65.
@@ -32,11 +34,14 @@ class _QuestIntroScreenState extends ConsumerState<QuestIntroScreen> {
       final memoryRepo = ref.read(memoryRepositoryProvider);
       final sessionId = await memoryRepo.startQuestSession(widget.questId);
       final detail = await ref.read(questDetailProvider(widget.questId).future);
+      final participants = await ref.read(
+        questParticipantsViewModelProvider(widget.questId).future,
+      );
       await memoryRepo.createMemory(
         questSessionId: sessionId,
         title: detail.quest.title,
         capturedAt: DateTime.now(),
-        personIds: const [],
+        personIds: participants.map((p) => p.person.id).toList(),
       );
 
       if (!mounted) return;
@@ -72,6 +77,8 @@ class _QuestIntroScreenState extends ConsumerState<QuestIntroScreen> {
                 ],
                 const SizedBox(height: AppSpacing.md),
                 Text('${data.shots.length} shots', style: AppTypography.body),
+                const SizedBox(height: AppSpacing.lg),
+                QuestParticipantsSection(questId: widget.questId),
                 const Spacer(),
                 PrimaryButton(
                   label: _starting ? 'Starting…' : 'Start This Quest',

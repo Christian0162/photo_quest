@@ -4,12 +4,12 @@ part of 'memory_dao.dart';
 
 // ignore_for_file: type=lint
 mixin _$MemoryDaoMixin on DatabaseAccessor<AppDatabase> {
+  $PeopleTable get people => attachedDatabase.people;
   $QuestsTable get quests => attachedDatabase.quests;
   $QuestSessionsTable get questSessions => attachedDatabase.questSessions;
   $MemoriesTable get memories => attachedDatabase.memories;
   $QuestShotsTable get questShots => attachedDatabase.questShots;
   $PhotosTable get photos => attachedDatabase.photos;
-  $PeopleTable get people => attachedDatabase.people;
   $MemoryPeopleTable get memoryPeople => attachedDatabase.memoryPeople;
   MemoryDaoManager get managers => MemoryDaoManager(this);
 }
@@ -17,6 +17,8 @@ mixin _$MemoryDaoMixin on DatabaseAccessor<AppDatabase> {
 class MemoryDaoManager {
   final _$MemoryDaoMixin _db;
   MemoryDaoManager(this._db);
+  $$PeopleTableTableManager get people =>
+      $$PeopleTableTableManager(_db.attachedDatabase, _db.people);
   $$QuestsTableTableManager get quests =>
       $$QuestsTableTableManager(_db.attachedDatabase, _db.quests);
   $$QuestSessionsTableTableManager get questSessions =>
@@ -27,8 +29,6 @@ class MemoryDaoManager {
       $$QuestShotsTableTableManager(_db.attachedDatabase, _db.questShots);
   $$PhotosTableTableManager get photos =>
       $$PhotosTableTableManager(_db.attachedDatabase, _db.photos);
-  $$PeopleTableTableManager get people =>
-      $$PeopleTableTableManager(_db.attachedDatabase, _db.people);
   $$MemoryPeopleTableTableManager get memoryPeople =>
       $$MemoryPeopleTableTableManager(_db.attachedDatabase, _db.memoryPeople);
 }
