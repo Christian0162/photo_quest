@@ -4,6 +4,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'daos/memory_dao.dart';
 import 'daos/people_dao.dart';
 import 'daos/quest_dao.dart';
+import 'seed/default_quests_seed.dart';
 import 'tables/memories_table.dart';
 import 'tables/memory_people_table.dart';
 import 'tables/people_table.dart';
@@ -38,6 +39,7 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
+      await seedDefaultQuests(this);
     },
     // Future schema changes add a step here rather than recreating
     // tables. See CLAUDE.md §48.

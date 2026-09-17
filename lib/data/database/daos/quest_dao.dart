@@ -26,6 +26,9 @@ class QuestDao extends DatabaseAccessor<AppDatabase> with _$QuestDaoMixin {
 
   Future<void> insertQuest(QuestsCompanion quest) => into(quests).insert(quest);
 
+  Future<void> insertShot(QuestShotsCompanion shot) =>
+      into(questShots).insert(shot);
+
   Future<void> deleteQuest(String id) =>
       (delete(quests)..where((q) => q.id.equals(id))).go();
 }
