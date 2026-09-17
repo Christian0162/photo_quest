@@ -4,15 +4,22 @@
 
 You are working on **Photo Quest**, a mobile application built with Flutter.
 
-Photo Quest is **not a social media app** and is not simply a camera application.
+Photo Quest is a **social real-life quest and photobooth app**. It is not a
+photo-editing app, a generic camera app, a public social-media feed, or a
+digital scrapbook.
 
-The core concept is:
+The core idea:
 
-> **A digital photobooth for life.**
+> **Do something together. Take the picture. Keep the memory.**
 
-The application helps people intentionally create memories through guided photo sessions called **Quests**.
+The product revolves around one loop:
 
-A Quest guides the user through a sequence of photographs:
+```text
+QUEST → PEOPLE → REAL-LIFE ACTIVITY → PHOTOBOOTH → MEMORY
+```
+
+A **Quest** guides one or more people through a real-life activity and a
+sequence of photographs:
 
 * different poses
 * different angles
@@ -24,9 +31,14 @@ A Quest guides the user through a sequence of photographs:
 * playful prompts
 * relationship/family/friend/pet/solo moments
 
+A quest is **not complete** just because someone taps "Completed." Its
+required photobooth photo(s) must actually be captured — the photo is the
+evidence the quest happened in real life.
+
 The resulting photographs become a **Memory**.
 
-The long-term purpose is to allow users to repeat the same Quest over time and see how life changes.
+The long-term purpose is to let people repeat the same Quest over time and
+see how life — and their relationships — change.
 
 Example:
 
@@ -40,7 +52,15 @@ US — 2028
 US — 2029
 ```
 
-The product should make users feel:
+The product should make people feel:
+
+> "Let's do this together."
+
+not:
+
+> "Let's browse an app."
+
+and:
 
 > "Let's make a memory."
 
@@ -54,20 +74,26 @@ not:
 
 Always preserve these principles when implementing features.
 
-## 2.1 Memory First
+## 2.1 Real Life First
 
-The photograph is the artifact.
+Photo Quest should push people out into the real world, not keep them
+scrolling inside the app.
 
-The memory is the product.
+The important action is people doing something together. The app's job is
+to prompt that activity, then capture proof of it — not to be the activity
+itself.
 
-The camera is the experience.
+## 2.2 Quests Create Memories
 
-The Quest is the structure.
+The photograph is the artifact. The memory is the product. The camera is
+the experience. The Quest is the structure that gets people there together.
 
 Think:
 
 ```text
 Quest
+  ↓
+Participants (People)
   ↓
 Photo Session
   ↓
@@ -80,15 +106,40 @@ Timeline
 Growth Over Time
 ```
 
----
+## 2.3 Every Quest Requires a Photobooth Result
 
-## 2.2 Photobooth Experience
+```text
+Quest Created
+    ↓
+Participants Invited
+    ↓
+Quest Accepted
+    ↓
+Quest Started
+    ↓
+Photobooth Instructions
+    ↓
+Required Photo(s) Captured
+    ↓
+Photo Confirmed
+    ↓
+Quest Completed
+    ↓
+Memory Created
+```
+
+Do not let a quest be marked complete by a button press alone — completion
+is gated on its required shots actually being captured (§11, §21, §60).
+
+## 2.4 Photobooth Experience
 
 The camera experience should feel like a modern physical photobooth.
 
 Important characteristics:
 
 * large camera preview
+* a visual example of what to do (pose/positioning/expression), never a
+  photography tutorial
 * countdown
 * visual instructions
 * progress indicators
@@ -101,9 +152,7 @@ Important characteristics:
 
 Avoid making the camera screen look like a generic phone camera.
 
----
-
-## 2.3 Emotional Product
+## 2.5 Emotional Product
 
 The app should feel:
 
@@ -115,6 +164,7 @@ The app should feel:
 * memorable
 * simple
 * premium
+* social, but never performative
 
 Avoid:
 
@@ -124,6 +174,10 @@ Avoid:
 * technical terminology
 * overly complex settings
 * generic SaaS styling
+* likes, followers, engagement scores, trending feeds, popularity mechanics
+
+Photo Quest's social model is: **invite → participate → complete together →
+create memory.** It is not a public feed.
 
 ---
 
@@ -143,13 +197,15 @@ Target:
 
 The project should remain cross-platform.
 
-Flutter provides a reactive UI framework and allows shared application code across platforms while integrating with native platform capabilities.
+Flutter provides a reactive UI framework and allows shared application code
+across platforms while integrating with native platform capabilities.
 
 ---
 
 # 4. Core Libraries
 
-Use the following libraries unless there is a strong technical reason to change them.
+Use the following libraries unless there is a strong technical reason to
+change them.
 
 ## Camera
 
@@ -168,7 +224,8 @@ Purpose:
 * camera lifecycle
 * image streaming if required later
 
-The official Flutter `camera` plugin currently supports Android, iOS and web, including preview, image/video capture and image streaming.
+The official Flutter `camera` plugin currently supports Android, iOS and
+web, including preview, image/video capture and image streaming.
 
 Do NOT use `image_picker` as the primary camera implementation.
 
@@ -196,6 +253,7 @@ Use SQLite for:
 * metadata
 * relationships
 * quests
+* quest participants / invitations
 * sessions
 * memories
 * people
@@ -212,6 +270,7 @@ SQLite / Drift
     ├── Memory metadata
     ├── Photo metadata
     ├── Quest metadata
+    ├── Quest participants / invitations
     ├── People
     └── Relationships
 
@@ -238,7 +297,8 @@ path_provider:
 
 for application directories.
 
-The package provides platform-specific application storage directories such as application documents/support and cache directories.
+The package provides platform-specific application storage directories
+such as application documents/support and cache directories.
 
 Recommended structure:
 
@@ -293,7 +353,8 @@ Use it for:
 * photo-strip composition
 * image format conversion
 
-The Dart `image` library supports reading, manipulating and writing common image formats including JPEG, PNG, WebP and others.
+The Dart `image` library supports reading, manipulating and writing common
+image formats including JPEG, PNG, WebP and others.
 
 Do not perform expensive image processing directly inside UI widgets.
 
@@ -320,12 +381,15 @@ Use providers for:
 * ViewModels
 * screen state
 * asynchronous state
-* selected people
+* current user / profile
+* selected people / quest participants
 * active Quest
+* invitations
 * camera session state
 * memory state
 
-Riverpod providers encapsulate state/dependencies and are designed to be composable and testable.
+Riverpod providers encapsulate state/dependencies and are designed to be
+composable and testable.
 
 ---
 
@@ -351,7 +415,9 @@ Do not place business logic inside widgets.
 
 Do not use `StateProvider` for complex state.
 
-Use `Notifier`/`AsyncNotifier` when state has meaningful behavior or business logic. Riverpod's documentation specifically recommends more structured notifiers for more complex state.
+Use `Notifier`/`AsyncNotifier` when state has meaningful behavior or
+business logic. Riverpod's documentation specifically recommends more
+structured notifiers for more complex state.
 
 ---
 
@@ -363,7 +429,8 @@ Use:
 go_router:
 ```
 
-Flutter's architecture recommendations currently recommend `go_router` for most Flutter applications.
+Flutter's architecture recommendations currently recommend `go_router` for
+most Flutter applications.
 
 Navigation should be centralized.
 
@@ -373,7 +440,9 @@ Example:
 /
 ├── home
 ├── quests
+├── quests/create
 ├── quests/:questId
+├── quests/:questId/invitations
 ├── capture/:sessionId
 ├── memory/:memoryId
 ├── memories
@@ -381,7 +450,8 @@ Example:
 └── settings
 ```
 
-Do not scatter navigation logic throughout the application.
+Do not scatter navigation logic throughout the application. Do not
+introduce route changes without a product reason.
 
 Widgets should only perform simple navigation actions.
 
@@ -402,7 +472,7 @@ Purpose:
 
 ### uuid
 
-Generate stable IDs.
+Generate stable IDs (users, quests, participants, photos, memories).
 
 ### intl
 
@@ -416,9 +486,7 @@ Filesystem directories.
 
 Allow users to share finished photo strips/memories.
 
-Only add another package when its value is clear.
-
-Avoid dependency bloat.
+Only add another package when its value is clear. Avoid dependency bloat.
 
 ---
 
@@ -437,9 +505,8 @@ riverpod_lint:
 
 where appropriate for the selected Riverpod/Drift setup.
 
-Use code generation where it meaningfully reduces repetitive code.
-
-Do not introduce code generation everywhere simply because it exists.
+Use code generation where it meaningfully reduces repetitive code. Do not
+introduce code generation everywhere simply because it exists.
 
 ---
 
@@ -447,7 +514,10 @@ Do not introduce code generation everywhere simply because it exists.
 
 Use a **layered architecture with domain-grouped subfolders**.
 
-Flutter's current architecture guidance recommends separation of UI and data responsibilities, repositories as sources of truth, ViewModels for UI logic, dependency injection, unidirectional data flow, immutable state, and testing architectural components separately.
+Flutter's current architecture guidance recommends separation of UI and
+data responsibilities, repositories as sources of truth, ViewModels for UI
+logic, dependency injection, unidirectional data flow, immutable state, and
+testing architectural components separately.
 
 Photo Quest should use:
 
@@ -459,9 +529,8 @@ Domain
 Data
 ```
 
-The domain layer should remain lightweight.
-
-Do not create unnecessary abstractions.
+The domain layer should remain lightweight. Do not create unnecessary
+abstractions.
 
 ---
 
@@ -549,12 +618,15 @@ CreateMemory
 CompleteQuest
 StartQuestSession
 CaptureQuestShot
+InviteParticipant
+RespondToInvitation
 DeleteMemory
 RepeatQuest
 GeneratePhotoStrip
 ```
 
-Do not create a use case for trivial one-line operations unless it improves clarity.
+Do not create a use case for trivial one-line operations unless it
+improves clarity.
 
 ---
 
@@ -570,7 +642,8 @@ Responsible for:
 * image processing
 * platform services
 
-The data layer should hide implementation details from the presentation layer.
+The data layer should hide implementation details from the presentation
+layer.
 
 ---
 
@@ -586,18 +659,27 @@ MemoryRepository
     getMemory()
     createMemory()
     deleteMemory()
+
+QuestRepository
+    getQuests()
+    getQuest()
+    createQuest()
+    getParticipants()
+    inviteParticipant()
+    respondToInvitation()
+    removeParticipant()
 ```
 
 The ViewModel should depend on:
 
 ```text
-MemoryRepository
+QuestRepository
 ```
 
 not:
 
 ```text
-MemoryDao
+QuestDao
 ```
 
 and never:
@@ -606,7 +688,9 @@ and never:
 DriftDatabase
 ```
 
-Flutter's architecture guidance recommends repository abstractions because they isolate data access from the rest of the application and make implementations replaceable/testable.
+Flutter's architecture guidance recommends repository abstractions because
+they isolate data access from the rest of the application and make
+implementations replaceable/testable.
 
 ---
 
@@ -636,9 +720,8 @@ CameraService
     dispose()
 ```
 
-The camera service knows how to operate the camera.
-
-It does not know what a Memory is.
+The camera service knows how to operate the camera. It does not know what
+a Memory is.
 
 ---
 
@@ -649,6 +732,7 @@ Initial entities:
 ```text
 people
 quests
+quest_participants
 quest_shots
 quest_sessions
 memories
@@ -660,6 +744,8 @@ Relationship:
 
 ```text
 QUEST
+  │
+  ├── QUEST_PARTICIPANTS ── PERSON
   │
   └── QUEST_SHOTS
           │
@@ -677,13 +763,27 @@ People:
 ```text
 PERSON
   │
+  ├── QUEST_PARTICIPANTS
+  │        │
+  │        ↓
+  │      QUEST
+  │
   └── MEMORY_PEOPLE
           │
           ↓
        MEMORY
 ```
 
-This allows one memory to contain multiple people.
+This allows one quest to have multiple participants, and one memory to
+contain multiple people.
+
+> **Local-first note (§56A):** V1 has no backend/auth. `people` doubles as
+> the local, on-device stand-in for both "a person tagged in a memory" and
+> "a participant on a quest" — one `person.type == 'self'` row represents
+> the device owner. There is no separate network `User`/`Invitation` model
+> yet; `quest_participants.status` carries the invited → accepted/declined
+> lifecycle locally. See §54A before adding real accounts or network
+> invitations.
 
 ---
 
@@ -711,15 +811,22 @@ pet
 other
 ```
 
+`type == 'self'` is the device owner and the implicit creator of quests
+they start.
+
 ---
 
 ## quests
 
 ```text
 id
+creator_id       -- people.id; null for built-in quest templates
 title
 description
 category
+type             -- solo, pair, group
+status           -- draft, published, invited, active, completed
+max_participants -- nullable; a configured default applies when null (§15A)
 cover_image_path
 created_at
 updated_at
@@ -738,6 +845,26 @@ Christmas
 Random Day
 ```
 
+Do not confuse `quests.status` (the quest template/instance lifecycle)
+with `quest_participants.status` (one participant's membership state).
+Keep them separate columns on separate tables (§16A).
+
+---
+
+## quest_participants
+
+```text
+id
+quest_id
+person_id
+status        -- invited, accepted, declined, removed, completed
+invited_at
+responded_at
+```
+
+One quest has many participants; this is the join between `quests` and
+`people` that also carries invitation/membership state.
+
 ---
 
 ## quest_shots
@@ -748,6 +875,8 @@ quest_id
 position
 instruction
 shot_type
+example_image_path  -- visual example of the pose/framing (§10A)
+required             -- whether this shot gates quest completion
 created_at
 ```
 
@@ -825,12 +954,35 @@ Use a composite primary key where appropriate.
 
 ---
 
+# 15A. Group Quest Participant Limit
+
+The initial target for a group quest is **4–5 participants**. This limit
+must live as a single configured constant (e.g. an `AppConstants` value
+used by validation and by the participant-picker UI), never hardcoded
+independently in multiple screens or repositories.
+
+---
+
+# 16A. Quest Status vs. Participant Status
+
+```text
+quest.status        draft → published → invited → active → completed
+participant.status  invited → accepted | declined → (removed | completed)
+```
+
+A quest can be `active` while individual participants are still
+`invited`. Do not merge these two state machines into one column.
+
+---
+
 # 20. Important Domain Distinction
 
 Do not confuse:
 
 ```text
+Person
 Quest
+Quest Participant
 Quest Session
 Memory
 Photo
@@ -838,13 +990,24 @@ Photo
 
 They represent different things.
 
+### Person
+
+Someone (or a pet) known to the app on this device — including the device
+owner (`type == 'self'`). The local stand-in for a social "user" until a
+real account system exists (§54A).
+
 ### Quest
 
-A reusable template/instruction set.
+A reusable template/instruction set, with an owner/creator and a
+participation model (solo/pair/group).
 
 ```text
 "Couple Anniversary"
 ```
+
+### Quest Participant
+
+One Person's membership and invitation status on one Quest.
 
 ### Quest Session
 
@@ -893,9 +1056,7 @@ Same Couple Quest
 4 photos
 ```
 
-Never overwrite the previous session.
-
-Each repeat creates a new:
+Never overwrite the previous session. Each repeat creates a new:
 
 ```text
 QuestSession
@@ -903,7 +1064,8 @@ Memory
 Photos
 ```
 
-The original Quest remains reusable.
+Participants may be re-confirmed or changed per repeat, but the original
+Quest template remains reusable.
 
 ---
 
@@ -922,6 +1084,7 @@ lib/
 │   │   ├── app_colors.dart
 │   │   ├── app_typography.dart
 │   │   ├── app_spacing.dart
+│   │   ├── app_constants.dart
 │   │   └── app_theme.dart
 │   └── routes/
 │       ├── app_router.dart
@@ -974,19 +1137,36 @@ lib/
     └── repositories/
 ```
 
-`app.dart` holds the root `MaterialApp.router` widget; `main.dart` only bootstraps it.
+`app.dart` holds the root `MaterialApp.router` widget; `main.dart` only
+bootstraps it.
 
-`core/presentation/screen/` and `core/presentation/view_model/` are grouped by domain area (`quests`, `camera`, `memories`, `people`, `home`, `settings`) so related screens and their ViewModels stay easy to find. `core/presentation/widget/` follows atomic design (`atoms` → `molecules` → `organisms` → `template`) instead of being duplicated per domain area, since most UI components are shared or composed from small pieces.
+`core/presentation/screen/` and `core/presentation/view_model/` are
+grouped by domain area (`quests`, `camera`, `memories`, `people`, `home`,
+`settings`) so related screens and their ViewModels stay easy to find.
+`core/presentation/widget/` follows atomic design (`atoms` → `molecules` →
+`organisms` → `template`) instead of being duplicated per domain area,
+since most UI components are shared or composed from small pieces.
 
-`domain/` holds entities (and use cases, when needed — see §53) grouped by domain area, not by technical layer.
+`domain/` holds entities (and use cases, when needed — see §53) grouped
+by domain area, not by technical layer.
 
-`data/repositories/` is flat: one repository per aggregate (`quest_repository.dart`, `memory_repository.dart`, `people_repository.dart`), each with its Riverpod provider file alongside it.
+`data/repositories/` is flat: one repository per aggregate
+(`quest_repository.dart`, `memory_repository.dart`,
+`people_repository.dart`), each with its Riverpod provider file alongside
+it. Quest participant/invitation operations live on `QuestRepository`
+rather than a separate repository, since they are part of the Quest
+aggregate (§16).
 
 ---
 
 # 23. Presentation Structure
 
-Within `core/presentation/`, keep the same shape as the top-level `screen/` and `view_model/` folders: one subfolder per domain area (`home`, `quests`, `camera`, `memories`, `people`, `settings`). A screen and its ViewModel live in the matching subfolder under `screen/` and `view_model/` respectively — e.g. `screen/memories/memory_detail_screen.dart` pairs with `view_model/memories/memory_detail_view_model.dart`.
+Within `core/presentation/`, keep the same shape as the top-level
+`screen/` and `view_model/` folders: one subfolder per domain area
+(`home`, `quests`, `camera`, `memories`, `people`, `settings`). A screen
+and its ViewModel live in the matching subfolder under `screen/` and
+`view_model/` respectively — e.g. `screen/memories/memory_detail_screen.dart`
+pairs with `view_model/memories/memory_detail_view_model.dart`.
 
 Shared UI components go in `widget/`, classified by atomic-design tier:
 
@@ -995,15 +1175,17 @@ widget/
 │
 ├── atoms/       # PrimaryButton, LoadingIndicator, PersonAvatar
 ├── molecules/   # AppCard, EmptyState
-├── organisms/   # QuestCard, MemoryCard, RecentMemoriesSection
+├── organisms/   # QuestCard, MemoryCard, RecentMemoriesSection, ParticipantList
 └── template/    # AppWidgetPreview and other composition scaffolds
 ```
 
-Only create a domain-area subfolder under `screen/` or `view_model/` when a screen actually exists for it. Only create a new atomic tier folder entry when a component actually belongs there — do not force something into `organisms/` just to have an entry in every tier.
+Only create a domain-area subfolder under `screen/` or `view_model/` when
+a screen actually exists for it. Only create a new atomic tier folder
+entry when a component actually belongs there — do not force something
+into `organisms/` just to have an entry in every tier.
 
-Only create folders that are actually needed.
-
-Do not create empty architectural layers simply to satisfy a template.
+Only create folders that are actually needed. Do not create empty
+architectural layers simply to satisfy a template.
 
 ---
 
@@ -1036,6 +1218,7 @@ memory_detail_screen.dart
 memory_detail_view_model.dart
 memory_repository.dart
 photo_storage_service.dart
+quest_participant.dart
 ```
 
 Avoid vague names:
@@ -1075,9 +1258,8 @@ MemoryPeople
 MemoryTimeline
 ```
 
-The screen coordinates composition.
-
-Individual widgets should remain focused.
+The screen coordinates composition. Individual widgets should remain
+focused.
 
 ---
 
@@ -1090,9 +1272,8 @@ Create a widget when:
 * it improves readability
 * it contains meaningful UI behavior
 
-Do not extract every three lines into a widget.
-
-Do not create generic components before there is a real need.
+Do not extract every three lines into a widget. Do not create generic
+components before there is a real need.
 
 Prefer:
 
@@ -1202,9 +1383,8 @@ Soft Peach
 
 for supporting surfaces.
 
-Do not use every color on every screen.
-
-The palette should feel intentional.
+Do not use every color on every screen. The palette should feel
+intentional.
 
 ---
 
@@ -1261,12 +1441,39 @@ Avoid:
 * excessive glassmorphism
 * dashboard aesthetics
 * unnecessary icons
+* likes/followers/engagement-score UI
 
 ---
 
 # 31. Home Screen
 
-The Home screen should communicate the product immediately.
+The home screen should focus on things the user can do **today**, not
+become a dashboard full of statistics.
+
+Suggested hierarchy:
+
+```text
+Greeting
+
+Today's Quest
+┌─────────────────────────┐
+│ Take a photo with       │
+│ someone you love        │
+│                         │
+│ [Example image]         │
+│                         │
+│ Start Quest             │
+└─────────────────────────┘
+
+Invitations
+"You've been invited..."
+
+Your Quests
+
+Recent Memories
+
+Create Quest
+```
 
 Primary CTA:
 
@@ -1280,57 +1487,35 @@ or:
 Start a Quest
 ```
 
-Possible structure:
-
-```text
-Good evening, Christian
-
-Let's make a memory.
-
-[ Start a Quest ]
-
-Recent Memories
-
-[ Memory ] [ Memory ]
-
-Repeat a Moment
-
-[ Us — 2026 → 2027 ]
-```
-
 Do not make Home feel like a database dashboard.
 
 ---
 
-# 32. Bottom Navigation
+# 32. Core Navigation
 
-Keep navigation simple.
-
-Initial structure:
+Recommended navigation:
 
 ```text
 Home
+Quests
+Create
 Memories
-People
+Profile
 ```
 
-The primary Quest action should be visually prominent.
-
-Possible:
+The primary Quest/create action should be visually prominent, e.g.:
 
 ```text
 Home      Memories     [ + ]     People
 ```
 
-or another equally simple interaction.
-
 Do not overload the navigation bar.
 
 ---
 
-# 33. Quest Selection
+# 33. Quest Selection & Creation
 
-Quest selection should feel inspirational.
+Quest selection should feel inspirational, not like a dense list.
 
 Example:
 
@@ -1357,34 +1542,57 @@ For Life
 
 Large visual cards are preferred over dense lists.
 
+Quest creation flow:
+
+```text
+Create Quest
+    ↓
+Quest title
+    ↓
+Description
+    ↓
+Choose quest type (solo/pair/group)
+    ↓
+Choose participants
+    ↓
+Configure photobooth shots
+    ↓
+Review
+    ↓
+Create Quest
+```
+
+Every quest should answer, in its description:
+
+1. What are we doing?
+2. Who is this for?
+3. What should we do in real life?
+4. What photo needs to be captured?
+
+Descriptions should be short, friendly, and actionable.
+
 ---
 
 # 34. Camera / Photobooth Screen
 
 This is one of the most important screens.
 
-Prioritize:
-
-```text
-Camera Preview
-```
-
-over everything else.
+Prioritize, in order: participants, example shot, instruction, camera
+preview, countdown, capture, review, retake/keep, progress.
 
 Structure:
 
 ```text
 ┌──────────────────────────────┐
+│ Shot 2 of 4                  │
+│                              │
+│ "Get closer together"        │
+│                              │
+│      [Example Photo]         │
 │                              │
 │         CAMERA VIEW          │
 │                              │
-│                              │
-│             3               │
-│                              │
-│      "Get closer together"   │
-│                              │
-├──────────────────────────────┤
-│        Shot 2 of 4           │
+│             3                │
 │                              │
 │             ●                │
 └──────────────────────────────┘
@@ -1401,6 +1609,8 @@ Capture flow:
 ```text
 Instruction
  ↓
+Example
+ ↓
 Ready
  ↓
 Countdown
@@ -1410,6 +1620,8 @@ Shutter
 Photo captured
  ↓
 Preview feedback
+ ↓
+Retake / Keep
  ↓
 Next instruction
 ```
@@ -1454,15 +1666,38 @@ The strip should be generated as an actual image file.
 
 ---
 
-# 37. Memory Reveal
+# 37. Quest Completion & Memory Reveal
 
-After completing a Quest:
+A quest must not be manually completed without its required photo(s).
 
-Do not immediately throw the user into a database list.
+For a single required shot:
 
-Create a satisfying reveal.
+```text
+Capture photo
+    ↓
+Review photo
+    ↓
+Keep / Retake
+    ↓
+Photo accepted
+    ↓
+Quest completed
+```
 
-Example:
+For multiple required shots:
+
+```text
+Shot 1 → complete
+Shot 2 → complete
+Shot 3 → complete
+        ↓
+All required shots complete
+        ↓
+Quest complete
+```
+
+Do not immediately throw the user into a database list after completion.
+Create a satisfying reveal:
 
 ```text
 Quest Complete ✨
@@ -1476,15 +1711,12 @@ September 17, 2026
 [ Keep This Memory ]
 ```
 
-The completion state should feel meaningful.
-
 ---
 
 # 38. Memories Screen
 
-The Memories screen is not a social feed.
-
-It is the user's private memory collection.
+The Memories screen is not a social feed. It is the user's private
+memory collection, shared only with the people who were actually there.
 
 Possible layout:
 
@@ -1503,19 +1735,9 @@ August
 [ memory ]
 ```
 
-Prioritize:
+Prioritize: photography, dates, participants, Quest identity.
 
-* photography
-* dates
-* people
-* Quest identity
-
-Avoid:
-
-* likes
-* followers
-* comments
-* public engagement metrics
+Avoid: likes, followers, comments, public engagement metrics.
 
 ---
 
@@ -1524,9 +1746,9 @@ Avoid:
 Memory detail should contain:
 
 ```text
-Memory title
+Quest title
 Date
-People
+Participants
 Quest
 Photos
 Note
@@ -1534,19 +1756,22 @@ Photo strip
 Repeat Quest
 ```
 
-Important CTA:
+Important CTAs:
 
 ```text
 Do This Again
+Share
+View Participants
 ```
 
-This connects the current memory to future memories.
+"Do This Again" connects the current memory to future memories (§21).
 
 ---
 
-# 40. People
+# 40. People & Participants
 
-People are private entities used to organize memories.
+People are private, on-device entities used to organize memories and
+participate in quests.
 
 Examples:
 
@@ -1559,13 +1784,41 @@ Friends
 Buddy
 ```
 
-A Person can appear in multiple memories.
+A Person can appear in multiple memories and be a participant on multiple
+quests. Quest participants have explicit membership state (§16A,
+`quest_participants.status`): `invited`, `accepted`, `declined`,
+`removed`, `completed`.
 
-Do not create social-network behavior.
+Do not create social-network behavior (public profiles, followers,
+discovery feeds). Invitation is always explicit and scoped to one quest.
 
 ---
 
-# 41. Error Handling
+# 41. Group Quests
+
+Group quests are one quest shared by multiple participants — not several
+separate quests.
+
+```text
+Family Christmas Quest
+
+Participants
+
+👤 Christian
+👤 Mom
+👤 Dad
+👤 Sister
+👤 Brother
+
+5 / 5 participants
+```
+
+The participant limit (initial target 4–5, §15A) must come from a single
+configured constant, never hardcoded per-screen.
+
+---
+
+# 42. Error Handling
 
 Never expose raw exceptions to users.
 
@@ -1582,23 +1835,33 @@ Something went wrong while saving your memory.
 Please try again.
 ```
 
-Log technical details for developers.
+Log technical details for developers. Show friendly messages to users.
 
-Show friendly messages to users.
+Always account for:
+
+* camera permission denied
+* camera unavailable
+* photo capture failure
+* user leaves during quest
+* participant declines invitation
+* participant removed
+* incomplete required shots
+* storage failure
+* corrupted image
+* quest no longer available
+* duplicate invitation
+* offline state
+
+Never silently fail.
 
 ---
 
-# 42. Loading States
+# 43. Loading States
 
 Avoid unnecessary full-screen spinners.
 
-Prefer:
-
-* skeletons
-* progressive loading
-* subtle placeholders
-* image placeholders
-* localized loading indicators
+Prefer: skeletons, progressive loading, subtle placeholders, image
+placeholders, localized loading indicators.
 
 For the camera:
 
@@ -1610,7 +1873,7 @@ should only appear when genuinely necessary.
 
 ---
 
-# 43. Empty States
+# 44. Empty States
 
 Empty states should encourage the user.
 
@@ -1632,16 +1895,10 @@ Ready to make the first one?
 
 ---
 
-# 44. Animations
+# 45. Animations
 
-Animations should communicate:
-
-* transition
-* progress
-* feedback
-* emotional reward
-
-Avoid animation for decoration alone.
+Animations should communicate transition, progress, feedback, or
+emotional reward. Avoid animation for decoration alone.
 
 Use animations especially for:
 
@@ -1655,17 +1912,14 @@ Memory reveal
 Timeline transitions
 ```
 
-Animations should be short and responsive.
-
-Never make users wait for decorative animations.
+Animations should be short and responsive. Never make users wait for
+decorative animations.
 
 ---
 
-# 45. Performance
+# 46. Performance
 
-Photo processing can be expensive.
-
-Rules:
+Photo processing can be expensive. Rules:
 
 * never decode huge images unnecessarily
 * create thumbnails
@@ -1673,30 +1927,23 @@ Rules:
 * dispose camera controllers correctly
 * dispose animation controllers
 * process images outside the UI thread when appropriate
-* paginate large memory collections
+* paginate large memory/quest collections
 * avoid loading every original photo at once
 
 ---
 
-# 46. Camera Lifecycle
+# 47. Camera Lifecycle
 
 Camera resources must be managed carefully.
 
-Handle:
-
-* initialization
-* permission denial
-* app lifecycle
-* background/foreground transitions
-* camera switching
-* disposal
-* errors
+Handle: initialization, permission denial, app lifecycle,
+background/foreground transitions, camera switching, disposal, errors.
 
 Never assume the camera remains available forever.
 
 ---
 
-# 47. Database Rules
+# 48. Database Rules
 
 All database access must go through:
 
@@ -1706,28 +1953,16 @@ DAO
 Repository
 ```
 
-Do not write SQL queries inside:
+Do not write SQL queries inside: Screen, ViewModel, Widget, UseCase.
 
-```text
-Screen
-ViewModel
-Widget
-UseCase
-```
-
-Database schema belongs inside:
-
-```text
-data/database/
-```
+Database schema belongs inside `data/database/`.
 
 ---
 
-# 48. Migration Rules
+# 49. Migration Rules
 
-Database changes must use migrations.
-
-Never casually delete/recreate production tables.
+Database changes must use migrations. Never casually delete/recreate
+production tables.
 
 Whenever schema changes:
 
@@ -1743,7 +1978,7 @@ Test migrations.
 
 ---
 
-# 49. Dependency Injection
+# 50. Dependency Injection
 
 Use Riverpod providers to construct:
 
@@ -1773,15 +2008,14 @@ Do not manually instantiate repositories inside screens.
 
 ---
 
-# 50. Testing
+# 51. Testing
 
 Write tests for important logic.
 
-Priorities:
-
 ### Unit tests
 
-* Quest completion
+* Quest completion (gated on required shots)
+* Invitation/participant status transitions
 * Memory creation
 * Repeat Quest
 * repository logic
@@ -1792,8 +2026,9 @@ Priorities:
 ### Widget tests
 
 * Home
-* Quest selection
+* Quest selection / creation
 * Memory detail
+* Participant picker / invitations list
 * empty states
 * error states
 
@@ -1801,16 +2036,18 @@ Priorities:
 
 Later:
 
-* full Quest flow
+* full Quest flow, including participants
 * camera flow where practical
 * saving a memory
 * reopening a saved memory
 
-Flutter recommends testing services, repositories and ViewModels separately, along with widget tests for views and important routing/dependency-injection behavior.
+Flutter recommends testing services, repositories and ViewModels
+separately, along with widget tests for views and important
+routing/dependency-injection behavior.
 
 ---
 
-# 51. Git Rules
+# 52. Git Rules
 
 Use meaningful commits.
 
@@ -1820,26 +2057,19 @@ Examples:
 feat: add quest selection flow
 feat: implement photobooth countdown
 feat: add memory persistence
+feat: add quest participants and invitation status
 fix: handle camera lifecycle
 fix: prevent duplicate memory photos
 refactor: extract photo storage service
 test: add memory repository tests
 ```
 
-Do not create commits like:
-
-```text
-update
-changes
-fix
-stuff
-final
-final2
-```
+Do not create commits like: `update`, `changes`, `fix`, `stuff`, `final`,
+`final2`.
 
 ---
 
-# 52. Code Quality
+# 53. Code Quality
 
 Before considering a feature complete:
 
@@ -1848,26 +2078,15 @@ flutter analyze
 flutter test
 ```
 
-must pass.
+must pass. Use `dart format`.
 
-Use:
-
-```text
-dart format
-```
-
-Do not leave:
-
-* dead code
-* unused imports
-* temporary debugging prints
-* commented-out abandoned implementations
-* duplicate business logic
-* TODOs without reason
+Do not leave: dead code, unused imports, temporary debugging prints,
+commented-out abandoned implementations, duplicate business logic, TODOs
+without reason.
 
 ---
 
-# 53. Architecture Decision Rule
+# 54. Architecture Decision Rule
 
 Do not over-engineer.
 
@@ -1884,41 +2103,44 @@ XBuilder
 
 ask whether the abstraction solves a real problem.
 
-Prefer simple architecture that can evolve.
+Prefer simple architecture that can evolve. Flutter's own guidance
+explicitly treats the domain/use-case layer as conditional: introduce it
+when client-side business logic becomes sufficiently complex, rather than
+adding it mechanically to every app.
 
-Flutter's own guidance explicitly treats the domain/use-case layer as conditional: introduce it when client-side business logic becomes sufficiently complex, rather than adding it mechanically to every app.
-
-For Photo Quest, use domain objects/use cases where they clarify the Quest → Session → Memory workflow.
+For Photo Quest, use domain objects/use cases where they clarify the
+Quest → Participants → Session → Memory workflow.
 
 ---
 
-# 54. Do Not Build Yet
+# 54A. Do Not Build Yet (Real Backend / Social Infrastructure)
 
-Unless specifically requested, do NOT prematurely implement:
+Photo Quest's product vision is social and eventually needs real
+authentication and cross-device invitations (§54B). Unless specifically
+requested, do NOT prematurely implement:
 
-* Firebase
-* Supabase
-* authentication
+* Firebase / Supabase / any remote backend
+* real network authentication (passwords, OAuth, sessions, tokens)
 * cloud synchronization
-* social accounts
-* followers
-* likes
-* comments
-* public profiles
 * push notifications
+* public profiles, followers, likes, comments
+* public discovery / recommendation feeds
 * AI photo generation
 * AI face recognition
-* payments
-* subscriptions
-* ads
+* payments / subscriptions / ads
 
-The initial version is local-first.
+V1 ships **local-first**: one `people` row with `type == 'self'` stands
+in for "the current user," and quest participants/invitations are modeled
+and stored locally on-device (§18 note, §16A). This lets the full quest →
+participants → photobooth → memory data model and UI be built now, ready
+to swap onto a real backend later without reshaping the domain layer.
 
 ---
 
-# 55. Future Architecture
+# 54B. Future Architecture
 
-The architecture should make cloud synchronization possible later.
+The architecture should make real accounts and cloud synchronization
+possible later without a rewrite.
 
 Future:
 
@@ -1940,13 +2162,16 @@ Repository
 SQLite
 ```
 
-Do not build synchronization before the product needs it.
+When a real backend is introduced, `people` (self) becomes the local
+cache of an authenticated `User`, and `quest_participants.status`
+transitions start being driven by real invitations instead of local-only
+state changes. Do not build synchronization before the product needs it.
 
 ---
 
-# 56. Local-First Principle
+# 55. Local-First Principle
 
-Photo Quest should work without an account in V1.
+Photo Quest should work without a network account in V1.
 
 The user should be able to:
 
@@ -1954,6 +2179,8 @@ The user should be able to:
 Open app
  ↓
 Create Quest
+ ↓
+Add participants (local People)
  ↓
 Take photos
  ↓
@@ -1970,21 +2197,21 @@ No internet should be required for the core experience.
 
 ---
 
-# 57. Security / Privacy
+# 56. Security / Privacy
 
-Photos are personal.
+Photos and quest/participant data are personal.
 
-Treat all memories as private by default.
+Treat all memories and quests as private by default. Quest participation
+requires an explicit invite/accept step, even locally.
 
-Do not upload photos anywhere unless explicitly required by a future feature.
-
-Do not add analytics that collect photo contents.
-
-Do not expose filesystem paths in the UI.
+Do not upload photos anywhere unless explicitly required by a future
+feature. Do not add analytics that collect photo contents. Do not expose
+filesystem paths in the UI. Do not expose one person's private
+information to another without cause.
 
 ---
 
-# 58. UI Copywriting
+# 57. UI Copywriting
 
 Use warm, human language.
 
@@ -2024,17 +2251,37 @@ over:
 Session completed successfully.
 ```
 
+Prefer:
+
+```text
+Invite someone to join
+```
+
+over:
+
+```text
+Add participant
+```
+
 Technical terminology belongs in code, not user-facing UI.
 
 ---
 
-# 59. Product Vocabulary
+# 58. Product Vocabulary
 
 Always use these meanings:
 
 ```text
+Person
+= someone (or a pet) known to the app on this device, including the
+  device owner
+
 Quest
-= reusable guided photobooth experience
+= reusable guided real-life activity + photobooth experience, with an
+  owner and a participation model (solo/pair/group)
+
+Quest Participant
+= one Person's membership/invitation status on one Quest
 
 Shot
 = one instruction/photo within a Quest
@@ -2046,42 +2293,33 @@ Photo
 = one captured image
 
 Memory
-= completed collection of photos representing a moment
-
-Person
-= someone/pet associated with memories
+= completed collection of photos representing a moment, tied to the
+  people who were there
 ```
 
-Do not randomly rename these concepts.
+Do not randomly rename these concepts. Do not conflate `quest.status`
+with `quest_participants.status` (§16A).
 
 ---
 
-# 60. Core Product Flow
+# 59. Core Product Flow
 
 The primary V1 flow is:
 
 ```text
-Onboarding
-    ↓
 Home
     ↓
-Start a Quest
+Today's Quest / Create Quest
     ↓
-Choose People
+Choose Participants
     ↓
-Choose Quest
+Choose/Confirm Quest
     ↓
-Quest Introduction
+Quest Introduction (participants, example, instructions)
     ↓
 Photobooth
     ↓
-Shot 1
-    ↓
-Shot 2
-    ↓
-Shot 3
-    ↓
-Shot 4
+Shot 1 → Shot 2 → Shot 3 → Shot 4
     ↓
 Photo Strip
     ↓
@@ -2101,14 +2339,30 @@ Memory Detail
     ↓
 Do This Again
     ↓
-New Quest Session
+New Quest Session (participants re-confirmed)
     ↓
 New Memory
 ```
 
+Invitation flow (local-only in V1, §54A):
+
+```text
+Creator
+   ↓
+Creates Quest
+   ↓
+Selects People
+   ↓
+quest_participants rows created (status: invited)
+   ↓
+Accept / Decline (locally simulated until real accounts exist)
+   ↓
+Accepted participants join the Quest Session
+```
+
 ---
 
-# 61. Coding Philosophy
+# 60. Coding Philosophy
 
 When implementing anything:
 
@@ -2130,7 +2384,7 @@ When implementing anything:
 
 ---
 
-# 62. Dependency Direction
+# 61. Dependency Direction
 
 The intended dependency direction is:
 
@@ -2142,9 +2396,8 @@ Domain
 Data
 ```
 
-Data must never depend on Presentation.
-
-Domain must never depend on Flutter UI.
+Data must never depend on Presentation. Domain must never depend on
+Flutter UI.
 
 Avoid:
 
@@ -2170,7 +2423,7 @@ Service / DAO
 
 ---
 
-# 63. When Claude Is Asked to Implement a Feature
+# 62. When Claude Is Asked to Implement a Feature
 
 Before writing code:
 
@@ -2179,22 +2432,24 @@ Before writing code:
 3. Inspect the existing project structure.
 4. Reuse existing components.
 5. Determine whether a new abstraction is actually needed.
-6. Identify database changes, if any.
+6. Identify database changes, if any (and whether they need a migration).
 7. Identify state changes.
 8. Identify UI changes.
-9. Implement the smallest clean solution.
-10. Run formatting.
-11. Run analysis.
-12. Run relevant tests.
-13. Report what changed.
+9. Check the request against §54A ("Do Not Build Yet") — flag real
+   backend/auth/social-infrastructure asks before silently implementing
+   them, and default to the local-only model instead.
+10. Implement the smallest clean solution.
+11. Run formatting.
+12. Run analysis.
+13. Run relevant tests.
+14. Report what changed.
 
-Do not rewrite unrelated files.
-
-Do not refactor unrelated architecture during feature work.
+Do not rewrite unrelated files. Do not refactor unrelated architecture
+during feature work.
 
 ---
 
-# 64. When Claude Is Asked to Fix a Bug
+# 63. When Claude Is Asked to Fix a Bug
 
 Follow:
 
@@ -2214,75 +2469,52 @@ Analyze
 Test
 ```
 
-Do not blindly patch symptoms.
-
-Do not introduce a new package unless necessary.
-
----
-
-# 65. When Claude Is Asked to Design a Screen
-
-First consider:
-
-```text
-Purpose
-Primary action
-Secondary action
-Information hierarchy
-Empty state
-Loading state
-Error state
-Accessibility
-Responsive layout
-Animation
-```
-
-Then implement.
-
-Every screen should have one obvious primary action.
+Do not blindly patch symptoms. Do not introduce a new package unless
+necessary.
 
 ---
 
-# 66. Accessibility
+# 64. When Claude Is Asked to Design a Screen
 
-Support:
+First consider: Purpose, Primary action, Secondary action, Information
+hierarchy, Empty state, Loading state, Error state, Accessibility,
+Responsive layout, Animation.
 
-* sufficient contrast
-* semantic labels
-* readable text
-* large enough touch targets
-* screen-reader meaningful labels
-* reduced-motion considerations where appropriate
+Then implement. Every screen should have one obvious primary action.
+
+---
+
+# 65. Accessibility
+
+Support: sufficient contrast, semantic labels, readable text, large
+enough touch targets, screen-reader meaningful labels, reduced-motion
+considerations where appropriate.
 
 Do not communicate important information using color alone.
 
 ---
 
-# 67. Responsive Design
+# 66. Responsive Design
 
-The primary target is mobile.
+The primary target is mobile. Do not design the application as a desktop
+UI squeezed onto a phone.
 
-Do not design the application as a desktop UI squeezed onto a phone.
+Use `SafeArea`, `MediaQuery`, `LayoutBuilder`, `Flexible`, `Expanded` when
+appropriate.
 
-Use:
+Respect: notches, status bars, navigation areas, different screen sizes,
+portrait orientation.
 
-```text
-SafeArea
-MediaQuery
-LayoutBuilder
-Flexible
-Expanded
-```
+---
 
-when appropriate.
+# 67. Product Rule
 
-Respect:
+When implementing a feature, always ask:
 
-* notches
-* status bars
-* navigation areas
-* different screen sizes
-* portrait orientation
+> Does this help people complete a real-life quest together and create a
+> memorable photo?
+
+If not, it should not automatically become part of the product.
 
 ---
 
@@ -2292,6 +2524,8 @@ The application should feel like:
 
 ```text
 A beautiful photobooth
++
+A shared quest between people who matter to you
 +
 A private memory box
 +
