@@ -2,9 +2,9 @@ import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:photoquest/app/app.dart';
-import 'package:photoquest/data/database/app_database.dart';
-import 'package:photoquest/data/database/database_providers.dart';
+import 'package:photoquest/app.dart';
+import 'package:photoquest/core/data/database/app_database.dart';
+import 'package:photoquest/core/data/database/database_providers.dart';
 
 void main() {
   testWidgets('PhotoQuestApp boots to the Home route', (tester) async {

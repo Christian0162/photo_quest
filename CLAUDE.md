@@ -445,7 +445,7 @@ Do not introduce code generation everywhere simply because it exists.
 
 # 13. Architecture
 
-Use a **feature-first layered architecture**.
+Use a **layered architecture with domain-grouped subfolders**.
 
 Flutter's current architecture guidance recommends separation of UI and data responsibilities, repositories as sources of truth, ViewModels for UI logic, dependency injection, unidirectional data flow, immutable state, and testing architectural components separately.
 
@@ -914,97 +914,92 @@ Use this structure:
 ```text
 lib/
 │
-├── app/
-│   ├── app.dart
-│   ├── router/
-│   │   └── app_router.dart
-│   └── theme/
-│       ├── app_theme.dart
-│       ├── app_colors.dart
-│       ├── app_typography.dart
-│       └── app_spacing.dart
+├── main.dart
+├── app.dart
+│
+├── config/
+│   ├── constant/
+│   │   ├── app_colors.dart
+│   │   ├── app_typography.dart
+│   │   ├── app_spacing.dart
+│   │   └── app_theme.dart
+│   └── routes/
+│       ├── app_router.dart
+│       └── app_shell.dart
 │
 ├── core/
-│   ├── constants/
 │   ├── errors/
 │   ├── extensions/
 │   ├── utils/
-│   └── widgets/
-│       ├── buttons/
-│       ├── cards/
-│       ├── dialogs/
-│       ├── empty_states/
-│       └── loading/
+│   └── presentation/
+│       ├── enum/
+│       ├── types/
+│       ├── screen/
+│       │   ├── home/
+│       │   ├── quests/
+│       │   ├── camera/
+│       │   ├── memories/
+│       │   ├── people/
+│       │   └── settings/
+│       ├── view_model/
+│       │   ├── quests/
+│       │   ├── camera/
+│       │   ├── memories/
+│       │   └── people/
+│       └── widget/
+│           ├── atoms/
+│           ├── molecules/
+│           ├── organisms/
+│           └── template/
 │
-├── data/
-│   ├── database/
-│   │   ├── app_database.dart
-│   │   ├── tables/
-│   │   └── daos/
-│   │
-│   └── services/
-│       ├── camera/
-│       ├── storage/
-│       ├── image/
-│       └── sharing/
-│
-├── features/
-│   │
-│   ├── home/
-│   │   ├── presentation/
-│   │   │   ├── screens/
-│   │   │   ├── widgets/
-│   │   │   └── view_models/
-│   │   └── domain/
-│   │
+├── domain/
 │   ├── quests/
-│   │   ├── presentation/
-│   │   ├── domain/
-│   │   └── data/
-│   │
-│   ├── camera/
-│   │   ├── presentation/
-│   │   ├── domain/
-│   │   └── data/
-│   │
+│   │   └── entities/
 │   ├── memories/
-│   │   ├── presentation/
-│   │   ├── domain/
-│   │   └── data/
-│   │
-│   ├── people/
-│   │   ├── presentation/
-│   │   ├── domain/
-│   │   └── data/
-│   │
-│   └── settings/
-│       └── presentation/
+│   │   └── entities/
+│   └── people/
+│       └── entities/
 │
-└── main.dart
+└── data/
+    ├── database/
+    │   ├── app_database.dart
+    │   ├── tables/
+    │   ├── daos/
+    │   └── seed/
+    ├── services/
+    │   ├── camera/
+    │   ├── storage/
+    │   ├── image/
+    │   └── sharing/
+    └── repositories/
 ```
+
+`app.dart` holds the root `MaterialApp.router` widget; `main.dart` only bootstraps it.
+
+`core/presentation/screen/` and `core/presentation/view_model/` are grouped by domain area (`quests`, `camera`, `memories`, `people`, `home`, `settings`) so related screens and their ViewModels stay easy to find. `core/presentation/widget/` follows atomic design (`atoms` → `molecules` → `organisms` → `template`) instead of being duplicated per domain area, since most UI components are shared or composed from small pieces.
+
+`domain/` holds entities (and use cases, when needed — see §53) grouped by domain area, not by technical layer.
+
+`data/repositories/` is flat: one repository per aggregate (`quest_repository.dart`, `memory_repository.dart`, `people_repository.dart`), each with its Riverpod provider file alongside it.
 
 ---
 
-# 23. Feature Structure
+# 23. Presentation Structure
 
-Each feature should follow:
+Within `core/presentation/`, keep the same shape as the top-level `screen/` and `view_model/` folders: one subfolder per domain area (`home`, `quests`, `camera`, `memories`, `people`, `settings`). A screen and its ViewModel live in the matching subfolder under `screen/` and `view_model/` respectively — e.g. `screen/memories/memory_detail_screen.dart` pairs with `view_model/memories/memory_detail_view_model.dart`.
+
+Shared UI components go in `widget/`, classified by atomic-design tier:
 
 ```text
-feature/
+widget/
 │
-├── presentation/
-│   ├── screens/
-│   ├── widgets/
-│   └── view_models/
-│
-├── domain/
-│   ├── entities/
-│   └── use_cases/
-│
-└── data/
-    ├── repositories/
-    └── models/
+├── atoms/       # PrimaryButton, LoadingIndicator, PersonAvatar
+├── molecules/   # AppCard, EmptyState
+├── organisms/   # QuestCard, MemoryCard, RecentMemoriesSection
+└── template/    # AppWidgetPreview and other composition scaffolds
 ```
+
+Only create a domain-area subfolder under `screen/` or `view_model/` when a screen actually exists for it. Only create a new atomic tier folder entry when a component actually belongs there — do not force something into `organisms/` just to have an entry in every tier.
 
 Only create folders that are actually needed.
 
