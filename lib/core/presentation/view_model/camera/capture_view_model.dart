@@ -6,7 +6,9 @@ import 'package:uuid/uuid.dart';
 
 import '../../../data/services/service_providers.dart';
 import '../../../data/repositories/memory_repository_provider.dart';
+import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
+import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
 
@@ -19,6 +21,7 @@ class CaptureState {
     required this.quest,
     required this.shots,
     required this.memoryId,
+    required this.participants,
     required this.currentIndex,
     required this.phase,
     required this.countdownValue,
@@ -27,6 +30,10 @@ class CaptureState {
   final Quest quest;
   final List<QuestShot> shots;
   final String memoryId;
+
+  /// The confirmed participants doing this quest together, for on-screen
+  /// context during capture. See design system §59-60.
+  final List<Person> participants;
   final int currentIndex;
   final CapturePhase phase;
   final int countdownValue;
@@ -45,6 +52,7 @@ class CaptureState {
       quest: quest,
       shots: shots,
       memoryId: memoryId,
+      participants: participants,
       currentIndex: currentIndex ?? this.currentIndex,
       phase: phase ?? this.phase,
       countdownValue: countdownValue ?? this.countdownValue,
@@ -62,6 +70,7 @@ class CaptureViewModel extends _$CaptureViewModel {
   Future<CaptureState> build(String sessionId) async {
     final memoryRepo = ref.watch(memoryRepositoryProvider);
     final questRepo = ref.watch(questRepositoryProvider);
+    final peopleRepo = ref.watch(peopleRepositoryProvider);
     final camera = ref.watch(cameraServiceProvider);
 
     final session = await memoryRepo.getSession(sessionId);
@@ -78,6 +87,13 @@ class CaptureViewModel extends _$CaptureViewModel {
       throw StateError('No memory exists yet for session $sessionId.');
     }
 
+    final personIds = await memoryRepo.getPersonIds(memory.id);
+    final participants = <Person>[];
+    for (final id in personIds) {
+      final person = await peopleRepo.getPerson(id);
+      if (person != null) participants.add(person);
+    }
+
     if (!camera.isInitialized) {
       await camera.initialize();
     }
@@ -86,6 +102,7 @@ class CaptureViewModel extends _$CaptureViewModel {
       quest: quest,
       shots: shots,
       memoryId: memory.id,
+      participants: participants,
       currentIndex: 0,
       phase: CapturePhase.instruction,
       countdownValue: 3,

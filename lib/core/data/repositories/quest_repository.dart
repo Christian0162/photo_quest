@@ -63,6 +63,21 @@ class QuestRepository {
 
   Future<void> deleteQuest(String id) => _dao.deleteQuest(id);
 
+  Future<void> addShot(QuestShot shot) {
+    return _dao.insertShot(
+      db.QuestShotsCompanion.insert(
+        id: shot.id.isEmpty ? _uuid.v4() : shot.id,
+        questId: shot.questId,
+        position: shot.position,
+        instruction: shot.instruction,
+        shotType: shot.shotType,
+        exampleImagePath: Value(shot.exampleImagePath),
+        required: Value(shot.required),
+        createdAt: DateTime.now(),
+      ),
+    );
+  }
+
   /// Invites a Person to participate in a Quest, creating a
   /// [QuestParticipant] with status `invited`. See CLAUDE.md §16A, §59.
   Future<void> inviteParticipant({

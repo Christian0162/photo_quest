@@ -8,6 +8,7 @@ import '../../core/presentation/screen/home/home_screen.dart';
 import '../../core/presentation/screen/memories/memories_screen.dart';
 import '../../core/presentation/screen/memories/memory_detail_screen.dart';
 import '../../core/presentation/screen/people/people_screen.dart';
+import '../../core/presentation/screen/quests/create_quest_screen.dart';
 import '../../core/presentation/screen/quests/quest_intro_screen.dart';
 import '../../core/presentation/screen/quests/quest_selection_screen.dart';
 import '../../core/presentation/screen/settings/settings_screen.dart';
@@ -20,6 +21,7 @@ part 'app_router.g.dart';
 abstract final class AppRoutes {
   static const home = '/';
   static const quests = '/quests';
+  static const createQuest = '/quests/create';
   static const questDetail = '/quests/:questId';
   static const capture = '/capture/:sessionId';
   static const memoryReveal = '/capture/:sessionId/reveal';
@@ -70,6 +72,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: AppRoutes.quests,
         builder: (context, state) => const QuestSelectionScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.createQuest,
+        builder: (context, state) => const CreateQuestScreen(),
       ),
       GoRoute(
         path: AppRoutes.questDetail,

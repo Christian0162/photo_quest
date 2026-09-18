@@ -64,7 +64,7 @@ final class QuestDetailProvider
   }
 }
 
-String _$questDetailHash() => r'9cbe994f54f553edf11e23ee4195a658fdd5b533';
+String _$questDetailHash() => r'7f7510cdbff0454c752ba18df024ad7eba1219ad';
 
 final class QuestDetailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<QuestDetail>, String> {

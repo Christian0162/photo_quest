@@ -20,10 +20,13 @@ class QuestParticipantWithPerson {
 }
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited/joined, and inviting more People. See CLAUDE.md §33, §40-41.
+/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+/// §40-41, §60.
 ///
-/// V1 is local-only (CLAUDE.md §54A): inviting a Person immediately marks
-/// them `accepted`, since there is no other device to confirm the invite.
+/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// quest is physically present and shares this phone, so "accepting an
+/// invitation" means tapping your own name on the shared screen before the
+/// quest starts, rather than a remote push notification.
 @riverpod
 class QuestParticipantsViewModel extends _$QuestParticipantsViewModel {
   @override
@@ -54,13 +57,18 @@ class QuestParticipantsViewModel extends _$QuestParticipantsViewModel {
     if (current.any((p) => p.person.id == personId)) return;
 
     await questRepo.inviteParticipant(questId: questId, personId: personId);
-    final participants = await questRepo.getParticipants(questId);
-    final justAdded = participants.firstWhere((p) => p.personId == personId);
-    await questRepo.respondToInvitation(
-      participantId: justAdded.id,
-      accepted: true,
-    );
+    state = AsyncData(await _load());
+  }
 
+  /// Records whether this participant confirmed (`accepted`) or won't be
+  /// joining (`declined`). See CLAUDE.md §16A.
+  Future<void> respond({
+    required String participantId,
+    required bool accepted,
+  }) async {
+    await ref
+        .read(questRepositoryProvider)
+        .respondToInvitation(participantId: participantId, accepted: accepted);
     state = AsyncData(await _load());
   }
 

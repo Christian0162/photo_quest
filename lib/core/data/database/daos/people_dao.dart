@@ -15,6 +15,11 @@ class PeopleDao extends DatabaseAccessor<AppDatabase> with _$PeopleDaoMixin {
   Future<PeopleData?> getPersonById(String id) =>
       (select(people)..where((p) => p.id.equals(id))).getSingleOrNull();
 
+  /// The device owner (`type == 'self'`), if one has been added yet. See
+  /// CLAUDE.md §18 note, §54A.
+  Future<PeopleData?> getSelfPerson() =>
+      (select(people)..where((p) => p.type.equals('self'))).getSingleOrNull();
+
   Future<void> insertPerson(PeopleCompanion person) =>
       into(people).insert(person);
 

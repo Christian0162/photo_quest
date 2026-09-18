@@ -9,19 +9,25 @@ part of 'quest_participants_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited/joined, and inviting more People. See CLAUDE.md §33, §40-41.
+/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+/// §40-41, §60.
 ///
-/// V1 is local-only (CLAUDE.md §54A): inviting a Person immediately marks
-/// them `accepted`, since there is no other device to confirm the invite.
+/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// quest is physically present and shares this phone, so "accepting an
+/// invitation" means tapping your own name on the shared screen before the
+/// quest starts, rather than a remote push notification.
 
 @ProviderFor(QuestParticipantsViewModel)
 final questParticipantsViewModelProvider = QuestParticipantsViewModelFamily._();
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited/joined, and inviting more People. See CLAUDE.md §33, §40-41.
+/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+/// §40-41, §60.
 ///
-/// V1 is local-only (CLAUDE.md §54A): inviting a Person immediately marks
-/// them `accepted`, since there is no other device to confirm the invite.
+/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// quest is physically present and shares this phone, so "accepting an
+/// invitation" means tapping your own name on the shared screen before the
+/// quest starts, rather than a remote push notification.
 final class QuestParticipantsViewModelProvider
     extends
         $AsyncNotifierProvider<
@@ -29,10 +35,13 @@ final class QuestParticipantsViewModelProvider
           List<QuestParticipantWithPerson>
         > {
   /// Drives the participant list on the Quest Introduction screen: who's
-  /// invited/joined, and inviting more People. See CLAUDE.md §33, §40-41.
+  /// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+  /// §40-41, §60.
   ///
-  /// V1 is local-only (CLAUDE.md §54A): inviting a Person immediately marks
-  /// them `accepted`, since there is no other device to confirm the invite.
+  /// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+  /// quest is physically present and shares this phone, so "accepting an
+  /// invitation" means tapping your own name on the shared screen before the
+  /// quest starts, rather than a remote push notification.
   QuestParticipantsViewModelProvider._({
     required QuestParticipantsViewModelFamily super.from,
     required String super.argument,
@@ -71,13 +80,16 @@ final class QuestParticipantsViewModelProvider
 }
 
 String _$questParticipantsViewModelHash() =>
-    r'fa6a984dc078fb063a122caf01974e26e5675e2e';
+    r'874ffdb6004001db007783b71e43bd29d0fcbbfe';
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited/joined, and inviting more People. See CLAUDE.md §33, §40-41.
+/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+/// §40-41, §60.
 ///
-/// V1 is local-only (CLAUDE.md §54A): inviting a Person immediately marks
-/// them `accepted`, since there is no other device to confirm the invite.
+/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// quest is physically present and shares this phone, so "accepting an
+/// invitation" means tapping your own name on the shared screen before the
+/// quest starts, rather than a remote push notification.
 
 final class QuestParticipantsViewModelFamily extends $Family
     with
@@ -98,10 +110,13 @@ final class QuestParticipantsViewModelFamily extends $Family
       );
 
   /// Drives the participant list on the Quest Introduction screen: who's
-  /// invited/joined, and inviting more People. See CLAUDE.md §33, §40-41.
+  /// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+  /// §40-41, §60.
   ///
-  /// V1 is local-only (CLAUDE.md §54A): inviting a Person immediately marks
-  /// them `accepted`, since there is no other device to confirm the invite.
+  /// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+  /// quest is physically present and shares this phone, so "accepting an
+  /// invitation" means tapping your own name on the shared screen before the
+  /// quest starts, rather than a remote push notification.
 
   QuestParticipantsViewModelProvider call(String questId) =>
       QuestParticipantsViewModelProvider._(argument: questId, from: this);
@@ -111,10 +126,13 @@ final class QuestParticipantsViewModelFamily extends $Family
 }
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited/joined, and inviting more People. See CLAUDE.md §33, §40-41.
+/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+/// §40-41, §60.
 ///
-/// V1 is local-only (CLAUDE.md §54A): inviting a Person immediately marks
-/// them `accepted`, since there is no other device to confirm the invite.
+/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// quest is physically present and shares this phone, so "accepting an
+/// invitation" means tapping your own name on the shared screen before the
+/// quest starts, rather than a remote push notification.
 
 abstract class _$QuestParticipantsViewModel
     extends $AsyncNotifier<List<QuestParticipantWithPerson>> {

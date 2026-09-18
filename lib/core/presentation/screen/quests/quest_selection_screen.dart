@@ -19,7 +19,16 @@ class QuestSelectionScreen extends ConsumerWidget {
     final quests = ref.watch(questListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Choose a Quest')),
+      appBar: AppBar(
+        title: const Text('Choose a Quest'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_rounded),
+            tooltip: 'Create a Quest',
+            onPressed: () => context.push('/quests/create'),
+          ),
+        ],
+      ),
       body: quests.when(
         loading: () => const LoadingIndicator(),
         error: (error, stack) => const EmptyState(

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../widget/atoms/primary_button.dart';
+import '../../widget/atoms/person_avatar.dart';
 import '../../widget/molecules/empty_state.dart';
 import '../../widget/atoms/loading_indicator.dart';
 import '../../widget/organisms/quest_participants_section.dart';
@@ -37,11 +38,15 @@ class _QuestIntroScreenState extends ConsumerState<QuestIntroScreen> {
       final participants = await ref.read(
         questParticipantsViewModelProvider(widget.questId).future,
       );
+      final confirmed = participants
+          .where((p) => p.participant.status == 'accepted')
+          .map((p) => p.person.id)
+          .toList();
       await memoryRepo.createMemory(
         questSessionId: sessionId,
         title: detail.quest.title,
         capturedAt: DateTime.now(),
-        personIds: participants.map((p) => p.person.id).toList(),
+        personIds: confirmed,
       );
 
       if (!mounted) return;
@@ -54,6 +59,9 @@ class _QuestIntroScreenState extends ConsumerState<QuestIntroScreen> {
   @override
   Widget build(BuildContext context) {
     final detail = ref.watch(questDetailProvider(widget.questId));
+    final participants = ref.watch(
+      questParticipantsViewModelProvider(widget.questId),
+    );
 
     return Scaffold(
       appBar: AppBar(),
@@ -65,6 +73,13 @@ class _QuestIntroScreenState extends ConsumerState<QuestIntroScreen> {
           message: 'Please go back and try again.',
         ),
         data: (data) {
+          final pending =
+              participants.value
+                  ?.where((p) => p.participant.status == 'invited')
+                  .isNotEmpty ??
+              false;
+          final canStart = data.quest.type == 'solo' || !pending;
+
           return Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: Column(
@@ -75,14 +90,34 @@ class _QuestIntroScreenState extends ConsumerState<QuestIntroScreen> {
                   const SizedBox(height: AppSpacing.sm),
                   Text(data.quest.description!, style: AppTypography.bodyMuted),
                 ],
+                if (data.creator != null) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Row(
+                    children: [
+                      PersonAvatar(person: data.creator!, radius: 12),
+                      const SizedBox(width: AppSpacing.xs),
+                      Text(
+                        'Created by ${data.creator!.name}',
+                        style: AppTypography.bodyMuted,
+                      ),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.md),
                 Text('${data.shots.length} shots', style: AppTypography.body),
                 const SizedBox(height: AppSpacing.lg),
-                QuestParticipantsSection(questId: widget.questId),
+                QuestParticipantsSection(quest: data.quest),
                 const Spacer(),
+                if (pending) ...[
+                  Text(
+                    'Everyone needs to confirm before you start.',
+                    style: AppTypography.bodyMuted,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
                 PrimaryButton(
                   label: _starting ? 'Starting…' : 'Start This Quest',
-                  onPressed: _starting ? null : _startQuest,
+                  onPressed: (_starting || !canStart) ? null : _startQuest,
                 ),
               ],
             ),

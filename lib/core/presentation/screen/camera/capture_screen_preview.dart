@@ -3,6 +3,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../widget/template/app_widget_preview.dart';
+import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
 import '../../view_model/camera/capture_view_model.dart';
@@ -17,6 +18,23 @@ Quest _fakeQuest(DateTime now) => Quest(
   createdAt: now,
   updatedAt: now,
 );
+
+List<Person> _fakeParticipants(DateTime now) => [
+  Person(
+    id: 'p1',
+    name: 'Christian',
+    type: 'self',
+    createdAt: now,
+    updatedAt: now,
+  ),
+  Person(
+    id: 'p2',
+    name: 'Sam',
+    type: 'partner',
+    createdAt: now,
+    updatedAt: now,
+  ),
+];
 
 List<QuestShot> _fakeShots() => const [
   QuestShot(
@@ -47,6 +65,7 @@ class _FakeCaptureViewModel extends CaptureViewModel {
       quest: _fakeQuest(now),
       shots: _fakeShots(),
       memoryId: 'memory-1',
+      participants: _fakeParticipants(now),
       currentIndex: 0,
       phase: _phase,
       countdownValue: 2,

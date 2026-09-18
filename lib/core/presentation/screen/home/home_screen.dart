@@ -7,7 +7,10 @@ import '../../../../config/constant/app_typography.dart';
 import '../../widget/atoms/primary_button.dart';
 import '../../widget/atoms/loading_indicator.dart';
 import '../../view_model/memories/memory_list_view_model.dart';
+import '../../view_model/quests/quests_needing_confirmation_view_model.dart';
+import '../../widget/molecules/section_header.dart';
 import '../../widget/organisms/memory_card.dart';
+import '../../widget/organisms/pending_quest_card.dart';
 import '../../widget/organisms/recent_memories_section.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -23,6 +26,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final memories = ref.watch(memoryListProvider);
+    final pendingQuests = ref.watch(questsNeedingConfirmationProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -45,8 +49,40 @@ class HomeScreen extends ConsumerWidget {
                 icon: Icons.auto_awesome_rounded,
                 onPressed: () => context.push('/quests'),
               ),
+              const SizedBox(height: AppSpacing.sm),
+              TextButton.icon(
+                onPressed: () => context.push('/quests/create'),
+                icon: const Icon(Icons.add_rounded, size: 18),
+                label: const Text('Create your own Quest'),
+              ),
+              pendingQuests.maybeWhen(
+                data: (list) => list.isEmpty
+                    ? const SizedBox.shrink()
+                    : Padding(
+                        padding: const EdgeInsets.only(top: AppSpacing.lg),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SectionHeader(title: "Needs everyone's OK"),
+                            const SizedBox(height: AppSpacing.sm),
+                            for (final entry in list)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: AppSpacing.sm,
+                                ),
+                                child: PendingQuestCard(
+                                  entry: entry,
+                                  onTap: () =>
+                                      context.push('/quests/${entry.quest.id}'),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                orElse: () => const SizedBox.shrink(),
+              ),
               const SizedBox(height: AppSpacing.xl),
-              Text('Recent Memories', style: AppTypography.heading3),
+              const SectionHeader(title: 'Recent Memories'),
               const SizedBox(height: AppSpacing.sm),
               memories.when(
                 data: (list) => RecentMemoriesSection(

@@ -22,6 +22,11 @@ class PeopleRepository {
     return row == null ? null : _toEntity(row);
   }
 
+  Future<Person?> getSelfPerson() async {
+    final row = await _dao.getSelfPerson();
+    return row == null ? null : _toEntity(row);
+  }
+
   Future<void> createPerson(Person person) {
     return _dao.insertPerson(
       db.PeopleCompanion.insert(
