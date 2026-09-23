@@ -40,6 +40,13 @@ class PhotoStorageService {
     return file.path;
   }
 
+  /// The generated strip for [memoryId], or null if none exists yet.
+  Future<String?> findPhotoStrip(String memoryId) async {
+    final strips = await _ensureDir(_stripsDir);
+    final file = File(p.join(strips.path, '$memoryId.jpg'));
+    return await file.exists() ? file.path : null;
+  }
+
   Future<void> deletePhoto(String photoId) async {
     final originals = await _ensureDir(_originalsDir);
     final thumbnails = await _ensureDir(_thumbnailsDir);

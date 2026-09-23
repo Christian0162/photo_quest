@@ -159,6 +159,10 @@ class MemoryRepository {
     );
   }
 
+  /// Removes a photo record so its shot can be retaken. The caller deletes
+  /// the files through `PhotoStorageService`. See CLAUDE.md §35.
+  Future<void> deletePhoto(String id) => _dao.deletePhoto(id);
+
   Future<void> deleteMemory(String id) => _dao.deleteMemory(id);
 
   Memory _toEntity(db.Memory row) {

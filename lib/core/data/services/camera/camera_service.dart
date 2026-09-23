@@ -11,9 +11,14 @@ class CameraService {
 
   CameraController? get controller => _controller;
   bool get isInitialized => _controller?.value.isInitialized ?? false;
+  bool get canSwitchCamera => _cameras.length > 1;
 
   Future<void> initialize() async {
-    _cameras = await availableCameras();
+    try {
+      _cameras = await availableCameras();
+    } on CameraException catch (e) {
+      throw _toFailure(e);
+    }
     if (_cameras.isEmpty) {
       throw const CameraFailure("No camera is available on this device.");
     }
@@ -42,6 +47,7 @@ class CameraService {
 
   Future<void> _startController(CameraDescription description) async {
     await _controller?.dispose();
+    _controller = null;
     final controller = CameraController(
       description,
       ResolutionPreset.high,
@@ -49,10 +55,17 @@ class CameraService {
     );
     try {
       await controller.initialize();
-    } on CameraException {
-      throw const CameraFailure();
+    } on CameraException catch (e) {
+      await controller.dispose();
+      throw _toFailure(e);
     }
     _controller = controller;
+  }
+
+  static AppFailure _toFailure(CameraException e) {
+    return e.code.startsWith('CameraAccess')
+        ? const CameraPermissionFailure()
+        : const CameraFailure();
   }
 
   Future<void> dispose() async {

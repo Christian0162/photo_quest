@@ -22,6 +22,14 @@ class CameraFailure extends AppFailure {
   const CameraFailure([super.message = "The camera couldn't be started."]);
 }
 
+class CameraPermissionFailure extends AppFailure {
+  const CameraPermissionFailure([
+    super.message =
+        'Photo Quest needs your camera to capture this memory. You can turn '
+        "camera access on in your phone's settings.",
+  ]);
+}
+
 class NotFoundFailure extends AppFailure {
   const NotFoundFailure([
     super.message = "We couldn't find what you were looking for.",
