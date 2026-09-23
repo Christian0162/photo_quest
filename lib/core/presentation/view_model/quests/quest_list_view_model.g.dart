@@ -47,3 +47,44 @@ final class QuestListProvider
 }
 
 String _$questListHash() => r'e59f6857be2710f1eb2aafc1639f446f4a862e11';
+
+@ProviderFor(questShelves)
+final questShelvesProvider = QuestShelvesProvider._();
+
+final class QuestShelvesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<QuestCategoryShelf>>,
+          List<QuestCategoryShelf>,
+          FutureOr<List<QuestCategoryShelf>>
+        >
+    with
+        $FutureModifier<List<QuestCategoryShelf>>,
+        $FutureProvider<List<QuestCategoryShelf>> {
+  QuestShelvesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'questShelvesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$questShelvesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<QuestCategoryShelf>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<QuestCategoryShelf>> create(Ref ref) {
+    return questShelves(ref);
+  }
+}
+
+String _$questShelvesHash() => r'86a4e32808bb9a52de1d9092a4e27d6269b2cbae';

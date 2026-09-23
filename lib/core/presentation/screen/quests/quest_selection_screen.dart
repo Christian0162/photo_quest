@@ -2,84 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../widget/molecules/empty_state.dart';
-import '../../widget/atoms/loading_indicator.dart';
-import '../../../domain/quests/entities/quest.dart';
+import '../../../../config/routes/app_router.dart';
 import '../../view_model/quests/quest_list_view_model.dart';
-import '../../widget/organisms/quest_card.dart';
+import '../../widget/template/quest_selection_template.dart';
 
-/// Inspirational Quest picker, grouped by category. See CLAUDE.md §33.
+/// Choose a Quest. Design lives in [QuestSelectionTemplate].
+/// See CLAUDE.md §33.
 class QuestSelectionScreen extends ConsumerWidget {
   const QuestSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final quests = ref.watch(questListProvider);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Choose a Quest'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_rounded),
-            tooltip: 'Create a Quest',
-            onPressed: () => context.push('/quests/create'),
-          ),
-        ],
-      ),
-      body: quests.when(
-        loading: () => const LoadingIndicator(),
-        error: (error, stack) => const EmptyState(
-          icon: Icons.error_outline_rounded,
-          title: "Couldn't load Quests",
-          message: 'Please try again in a moment.',
-        ),
-        data: (list) {
-          if (list.isEmpty) {
-            return const EmptyState(
-              icon: Icons.auto_awesome_rounded,
-              title: 'No Quests yet',
-              message: 'Quests you create will show up here.',
-            );
-          }
-
-          final grouped = <String, List<Quest>>{};
-          for (final quest in list) {
-            grouped.putIfAbsent(quest.category, () => []).add(quest);
-          }
-
-          return ListView(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            children: [
-              for (final entry in grouped.entries) ...[
-                Text(entry.key, style: AppTypography.heading3),
-                const SizedBox(height: AppSpacing.sm),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: AppSpacing.sm,
-                    crossAxisSpacing: AppSpacing.sm,
-                    childAspectRatio: 0.85,
-                  ),
-                  itemCount: entry.value.length,
-                  itemBuilder: (context, index) {
-                    final quest = entry.value[index];
-                    return QuestCard(
-                      quest: quest,
-                      onTap: () => context.push('/quests/${quest.id}'),
-                    );
-                  },
-                ),
-                const SizedBox(height: AppSpacing.lg),
-              ],
-            ],
-          );
-        },
-      ),
+    return QuestSelectionTemplate(
+      shelves: ref.watch(questShelvesProvider),
+      onRetry: () => ref.invalidate(questListProvider),
+      onCreateQuest: () => context.push(AppRoutes.createQuest),
+      onOpenQuest: (quest) => context.push(AppRoutes.questDetailPath(quest.id)),
     );
   }
 }

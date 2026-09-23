@@ -1,0 +1,230 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../config/constant/app_colors.dart';
+import '../../../../config/constant/app_constants.dart';
+import '../../../../config/constant/app_spacing.dart';
+import '../../../../config/constant/app_typography.dart';
+import '../../types/display_labels.dart';
+import '../../view_model/quests/quest_detail_view_model.dart';
+import '../../view_model/quests/quest_intro_view_model.dart';
+import '../../view_model/quests/quest_participants_view_model.dart';
+import '../atoms/local_photo.dart';
+import '../atoms/person_avatar.dart';
+import '../atoms/primary_button.dart';
+import '../atoms/skeleton_box.dart';
+import '../molecules/empty_state.dart';
+import '../molecules/section_header.dart';
+import '../organisms/app_scaffold.dart';
+import '../organisms/quest_card.dart';
+import '../organisms/quest_participants_section.dart';
+import '../organisms/quest_shot_list.dart';
+
+/// Introduces a Quest before capture: what we're doing, who's joining, which
+/// photos we'll take — then one primary action to begin. See CLAUDE.md §59,
+/// design system §16, §23.
+class QuestIntroTemplate extends StatelessWidget {
+  const QuestIntroTemplate({
+    super.key,
+    required this.detail,
+    required this.participants,
+    required this.readiness,
+    required this.isStarting,
+    required this.onRetry,
+    required this.onStart,
+    required this.onInvite,
+    required this.onConfirmParticipant,
+    required this.onRemoveParticipant,
+  });
+
+  final AsyncValue<QuestDetail> detail;
+  final AsyncValue<List<QuestParticipantWithPerson>> participants;
+  final QuestStartReadiness readiness;
+  final bool isStarting;
+  final VoidCallback onRetry;
+  final VoidCallback onStart;
+  final VoidCallback onInvite;
+  final ValueChanged<QuestParticipantWithPerson> onConfirmParticipant;
+  final ValueChanged<QuestParticipantWithPerson> onRemoveParticipant;
+
+  @override
+  Widget build(BuildContext context) {
+    final data = detail.value;
+
+    return AppScaffold(
+      showAppBar: true,
+      bottomAction: data == null
+          ? null
+          : _StartAction(
+              hint: readiness.hint,
+              canStart: readiness.canStart,
+              starting: isStarting,
+              onStart: onStart,
+            ),
+      body: detail.when(
+        loading: () => const Padding(
+          padding: EdgeInsets.all(AppSpacing.gutter),
+          child: Column(
+            children: [
+              SkeletonBox(height: 220, radius: AppRadius.photo),
+              SizedBox(height: AppSpacing.lg),
+              SkeletonBox(height: 32),
+              SizedBox(height: AppSpacing.sm),
+              SkeletonBox(height: 64),
+            ],
+          ),
+        ),
+        error: (error, stack) => EmptyState.error(
+          title: "We couldn't open this quest",
+          message: 'It may no longer be available.',
+          onRetry: onRetry,
+        ),
+        data: (data) {
+          final quest = data.quest;
+
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.gutter,
+              0,
+              AppSpacing.gutter,
+              AppSpacing.xl,
+            ),
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadius.photo),
+                child: AspectRatio(
+                  aspectRatio: 16 / 10,
+                  child: quest.coverImagePath != null
+                      ? LocalPhoto(path: quest.coverImagePath)
+                      : QuestCoverArt(category: quest.category),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(quest.category.toUpperCase(), style: AppTypography.overline),
+              const SizedBox(height: AppSpacing.xs),
+              Semantics(
+                header: true,
+                child: Text(quest.title, style: AppTypography.heading1),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Wrap(
+                spacing: AppSpacing.md,
+                runSpacing: AppSpacing.xs,
+                children: [
+                  _Fact(
+                    icon: questTypeIcon(quest.type),
+                    label: questTypeLabel(quest.type),
+                  ),
+                  _Fact(
+                    icon: Icons.photo_camera_outlined,
+                    label: data.shots.length == 1
+                        ? '1 photo'
+                        : '${data.shots.length} photos',
+                  ),
+                ],
+              ),
+              if (quest.description != null) ...[
+                const SizedBox(height: AppSpacing.md),
+                Text(quest.description!, style: AppTypography.bodyLarge),
+              ],
+              if (data.creator != null) ...[
+                const SizedBox(height: AppSpacing.md),
+                Row(
+                  children: [
+                    PersonAvatar(person: data.creator!, radius: 14),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      data.creator!.type == 'self'
+                          ? 'Created by you'
+                          : 'Created by ${data.creator!.name}',
+                      style: AppTypography.bodyMuted,
+                    ),
+                  ],
+                ),
+              ],
+              if (quest.type != 'solo') ...[
+                const SizedBox(height: AppSpacing.xl),
+                QuestParticipantsSection(
+                  participants: participants,
+                  limit:
+                      quest.maxParticipants ??
+                      AppConstants.defaultGroupQuestParticipantLimit,
+                  onInvite: onInvite,
+                  onConfirm: onConfirmParticipant,
+                  onRemove: onRemoveParticipant,
+                ),
+              ],
+              if (data.shots.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.xl),
+                const SectionHeader(
+                  title: "What you'll capture",
+                  subtitle: 'The photobooth walks you through each one.',
+                ),
+                const SizedBox(height: AppSpacing.ms),
+                QuestShotList(shots: data.shots),
+              ],
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _Fact extends StatelessWidget {
+  const _Fact({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: AppIconSizes.sm, color: AppColors.textMuted),
+        const SizedBox(width: AppSpacing.xs),
+        Text(
+          label,
+          style: AppTypography.label.copyWith(color: AppColors.textMuted),
+        ),
+      ],
+    );
+  }
+}
+
+/// The pinned "Let's start", with a line on what happens next.
+class _StartAction extends StatelessWidget {
+  const _StartAction({
+    required this.hint,
+    required this.canStart,
+    required this.starting,
+    required this.onStart,
+  });
+
+  final String? hint;
+  final bool canStart;
+  final bool starting;
+  final VoidCallback onStart;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          hint ?? "Next up: the photobooth. We'll ask to use your camera.",
+          textAlign: TextAlign.center,
+          style: AppTypography.bodyMuted,
+        ),
+        const SizedBox(height: AppSpacing.ms),
+        PrimaryButton(
+          label: starting ? 'Getting ready…' : "Let's start",
+          icon: Icons.photo_camera_rounded,
+          loading: starting,
+          onPressed: canStart ? onStart : null,
+        ),
+      ],
+    );
+  }
+}

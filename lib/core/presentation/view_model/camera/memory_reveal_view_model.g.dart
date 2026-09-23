@@ -73,7 +73,7 @@ final class MemoryRevealProvider
   }
 }
 
-String _$memoryRevealHash() => r'8f2e15d49ecf940b8505cdda6bc3f6d6ee93dd62';
+String _$memoryRevealHash() => r'afe35ad87e1b525d862ceec0f3d1d46edc980dca';
 
 /// Composes the finished photo strip for a just-completed session and
 /// returns the memory it belongs to. See CLAUDE.md §36-37.

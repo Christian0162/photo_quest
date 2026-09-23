@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 
+import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 
-/// A consistent "Section Title  ·  optional trailing" heading, used above
-/// Home/Quest sections instead of ad hoc Text+Row pairs. See CLAUDE.md
-/// §27, design system §13.
+/// A consistent section heading with an optional supporting line and a
+/// trailing widget (count, "See all"). Marked as a header for screen
+/// readers. See CLAUDE.md §27, design system §13.
 class SectionHeader extends StatelessWidget {
-  const SectionHeader({super.key, required this.title, this.trailing});
+  const SectionHeader({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+  });
 
   final String title;
+  final String? subtitle;
   final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(title, style: AppTypography.heading3),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Semantics(
+                header: true,
+                child: Text(title, style: AppTypography.heading3),
+              ),
+              if (subtitle != null) ...[
+                const SizedBox(height: AppSpacing.xxs),
+                Text(subtitle!, style: AppTypography.bodyMuted),
+              ],
+            ],
+          ),
+        ),
         ?trailing,
       ],
     );

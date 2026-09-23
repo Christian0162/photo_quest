@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
+import '../../widget/template/settings_template.dart';
 
+/// Settings. Design lives in [SettingsTemplate]. See CLAUDE.md §56.
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
-      body: const Padding(
-        padding: EdgeInsets.all(AppSpacing.md),
-        child: Text(
-          'Your memories live only on this device. Nothing is uploaded '
-          'anywhere.',
-          style: AppTypography.bodyMuted,
-        ),
-      ),
+    return SettingsTemplate(
+      onOpenLicenses: () =>
+          showLicensePage(context: context, applicationName: 'Photo Quest'),
     );
   }
 }

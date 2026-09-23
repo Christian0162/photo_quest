@@ -1,71 +1,82 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/quests/quest_participants_view_model.dart';
+import '../../../domain/people/entities/person.dart';
+import '../../../domain/quests/entities/quest.dart';
+import '../../types/display_labels.dart';
+import '../atoms/local_photo.dart';
 import '../atoms/participant_avatar_stack.dart';
 import '../molecules/app_card.dart';
-import '../../../domain/quests/entities/quest.dart';
 
-/// A Quest template/instance card. Shows participants only for a
-/// user-created pair/group Quest that actually has them — built-in
-/// templates stay simple. See design system §15.
-class QuestCard extends ConsumerWidget {
-  const QuestCard({super.key, required this.quest, required this.onTap});
+/// A Quest as an inspiring, tappable card: cover, title, the real-life idea
+/// in one or two lines, and who it's for. Participants show only for a
+/// user-created pair/group Quest that has them. See design system §15.
+class QuestCard extends StatelessWidget {
+  const QuestCard({
+    super.key,
+    required this.quest,
+    required this.onTap,
+    this.people = const [],
+  });
 
   final Quest quest;
   final VoidCallback onTap;
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final showsParticipants = quest.type != 'solo' && quest.creatorId != null;
-    final participants = showsParticipants
-        ? ref.watch(questParticipantsViewModelProvider(quest.id))
-        : null;
+  /// Who's joining, shown as a small avatar stack when not empty.
+  final List<Person> people;
 
+  @override
+  Widget build(BuildContext context) {
     return AppCard(
       onTap: onTap,
-      color: AppColors.softPeach,
       padding: EdgeInsets.zero,
+      semanticLabel: [
+        quest.title,
+        questTypeLabel(quest.type),
+        ?quest.description,
+      ].join('. '),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
-            aspectRatio: 16 / 10,
+            aspectRatio: 4 / 3,
             child: quest.coverImagePath != null
-                ? Image.file(File(quest.coverImagePath!), fit: BoxFit.cover)
-                : const _QuestCoverPlaceholder(),
+                ? LocalPhoto(path: quest.coverImagePath)
+                : QuestCoverArt(category: quest.category),
           ),
           Padding(
-            padding: const EdgeInsets.all(AppSpacing.md),
+            padding: const EdgeInsets.all(AppSpacing.ms),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   quest.title,
                   style: AppTypography.heading3,
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                participants?.maybeWhen(
-                      data: (people) => people.isEmpty
-                          ? const SizedBox.shrink()
-                          : Padding(
-                              padding: const EdgeInsets.only(
-                                top: AppSpacing.xs,
-                              ),
-                              child: ParticipantAvatarStack(
-                                people: people.map((p) => p.person).toList(),
-                                radius: 12,
-                              ),
-                            ),
-                      orElse: () => const SizedBox.shrink(),
-                    ) ??
-                    const SizedBox.shrink(),
+                const SizedBox(height: AppSpacing.xs),
+                Row(
+                  children: [
+                    Icon(
+                      questTypeIcon(quest.type),
+                      size: AppIconSizes.sm,
+                      color: AppColors.textMuted,
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    Expanded(
+                      child: Text(
+                        questTypeLabel(quest.type),
+                        style: AppTypography.caption,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (people.isNotEmpty)
+                      ParticipantAvatarStack(people: people, radius: 10),
+                  ],
+                ),
               ],
             ),
           ),
@@ -75,19 +86,47 @@ class QuestCard extends ConsumerWidget {
   }
 }
 
-class _QuestCoverPlaceholder extends StatelessWidget {
-  const _QuestCoverPlaceholder();
+/// Illustrated stand-in cover for a Quest without a photo: a warm tint and
+/// the category's icon, so cards still feel distinct. See CLAUDE.md §30.
+class QuestCoverArt extends StatelessWidget {
+  const QuestCoverArt({super.key, required this.category});
+
+  final String category;
+
+  static const _tints = [
+    AppColors.filmYellow,
+    AppColors.softPeach,
+    AppColors.softGreen,
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
-      color: AppColors.filmYellow,
-      child: Center(
-        child: Icon(
-          Icons.camera_alt_rounded,
-          size: 32,
-          color: AppColors.warmCharcoal,
-        ),
+    final tint = _tints[category.length % _tints.length];
+    return ColoredBox(
+      color: tint,
+      child: Stack(
+        children: [
+          // A soft film-frame corner for a bit of photobooth character.
+          Positioned(
+            right: -24,
+            bottom: -24,
+            child: Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                color: AppColors.paper.withValues(alpha: 0.35),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Center(
+            child: Icon(
+              questCategoryIcon(category),
+              size: AppIconSizes.hero,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ],
       ),
     );
   }

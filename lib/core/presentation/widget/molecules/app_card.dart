@@ -1,43 +1,48 @@
 import 'package:flutter/material.dart';
 
 import '../../../../config/constant/app_colors.dart';
+import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
+import '../atoms/pressable_scale.dart';
 
-/// Shared rounded, soft-shadow surface used by memory/quest/person cards.
-/// Keeps card styling in one place instead of scattered BoxDecorations.
-/// See CLAUDE.md §27, §30.
+/// Shared rounded surface for memory/quest/person cards — a photo print on
+/// the cream table. Tappable cards get press feedback and a button role.
+/// See CLAUDE.md §27, §30, design system §10.
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
     required this.child,
     this.onTap,
-    this.color = AppColors.warmCream,
+    this.color = AppColors.paper,
     this.padding = const EdgeInsets.all(AppSpacing.md),
+    this.radius = AppRadius.lg,
+    this.elevated = true,
+    this.semanticLabel,
   });
 
   final Widget child;
   final VoidCallback? onTap;
   final Color color;
   final EdgeInsetsGeometry padding;
+  final double radius;
+  final bool elevated;
 
-  static const _radius = AppSpacing.md + AppSpacing.xs;
+  /// Replaces the card's inner semantics with one clear label when tapped
+  /// as a whole (e.g. "Family Day, September 17").
+  final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
+    final borderRadius = BorderRadius.circular(radius);
+
+    Widget card = DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(_radius),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14252323),
-            blurRadius: 12,
-            offset: Offset(0, 4),
-          ),
-        ],
+        borderRadius: borderRadius,
+        boxShadow: elevated ? AppShadows.card : null,
       ),
       child: Material(
         color: color,
-        borderRadius: BorderRadius.circular(_radius),
+        borderRadius: borderRadius,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
@@ -45,5 +50,16 @@ class AppCard extends StatelessWidget {
         ),
       ),
     );
+
+    if (semanticLabel != null) {
+      card = Semantics(
+        button: onTap != null,
+        label: semanticLabel,
+        excludeSemantics: true,
+        child: card,
+      );
+    }
+
+    return PressableScale(enabled: onTap != null, scale: 0.98, child: card);
   }
 }

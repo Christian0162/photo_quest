@@ -51,6 +51,14 @@ class QuestParticipantsViewModel extends _$QuestParticipantsViewModel {
     return result;
   }
 
+  /// People who could still be invited: everyone not already on this Quest.
+  Future<List<Person>> invitablePeople() async {
+    final current = await future;
+    final currentIds = current.map((p) => p.person.id).toSet();
+    final people = await ref.read(peopleRepositoryProvider).getPeople();
+    return people.where((p) => !currentIds.contains(p.id)).toList();
+  }
+
   Future<void> addParticipant(String personId) async {
     final questRepo = ref.read(questRepositoryProvider);
     final current = state.value ?? const [];

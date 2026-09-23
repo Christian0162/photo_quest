@@ -80,7 +80,7 @@ final class QuestParticipantsViewModelProvider
 }
 
 String _$questParticipantsViewModelHash() =>
-    r'874ffdb6004001db007783b71e43bd29d0fcbbfe';
+    r'c6897785ce995e4f48894300098486058ceb04c8';
 
 /// Drives the participant list on the Quest Introduction screen: who's
 /// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,

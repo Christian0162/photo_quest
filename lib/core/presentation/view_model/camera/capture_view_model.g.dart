@@ -56,7 +56,7 @@ final class CaptureViewModelProvider
   }
 }
 
-String _$captureViewModelHash() => r'1c8c9df410ff52b8af5d40410f1e0615f4056726';
+String _$captureViewModelHash() => r'faf5d66af68ee7a8ef62ef1783cef6699939c5e5';
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// -> next shot, one shot at a time. See CLAUDE.md §34-35.
