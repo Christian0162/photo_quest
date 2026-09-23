@@ -85,6 +85,30 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/fonts/OFL-Outfit.txt
+    - assets/fonts/OFL-Inter.txt
+
+  # Bundled (not fetched at runtime) so typography works offline. See
+  # CLAUDE.md §29, §55. Licenses: assets/fonts/OFL-*.txt.
+  fonts:
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/Outfit-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Outfit-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Outfit-Bold.ttf
+          weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

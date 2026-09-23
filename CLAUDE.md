@@ -1174,10 +1174,33 @@ Shared UI components go in `widget/`, classified by atomic-design tier:
 widget/
 │
 ├── atoms/       # PrimaryButton, LoadingIndicator, PersonAvatar
-├── molecules/   # AppCard, EmptyState
-├── organisms/   # QuestCard, MemoryCard, RecentMemoriesSection, ParticipantList
-└── template/    # AppWidgetPreview and other composition scaffolds
+├── molecules/   # AppCard, EmptyState, AppWidgetPreview
+├── organisms/   # AppScaffold, QuestCard, MemoryCard, RecentMemoriesSection, ParticipantList
+└── template/    # one *_template.dart per screen + its *_template_preview.dart,
+                 # preview_samples.dart
 ```
+
+Every screen is split in three:
+
+```text
+Screen     (screen/)            ConsumerWidget: watches ViewModels, wires
+                                callbacks, navigation, dialogs, sheets,
+                                snackbars. No layout, no business logic.
+ViewModel  (view_model/)        state, validation, derived data, actions.
+Template   (widget/template/)   the full page design. Plain data + callbacks
+                                in; never touches `ref`, the router, or
+                                repositories/services.
+```
+
+Templates build on the shared, reusable `AppScaffold`
+(`widget/organisms/app_scaffold.dart`) — app bar, safe area, pinned bottom
+action, back-button interception — and use `showAppMessage` for snackbars.
+Do not assemble a raw `Scaffold` in a screen or template.
+
+Previews live next to their template as `<name>_template_preview.dart` in
+`widget/template/`. They render the template directly (no providers, no
+database) with the shared sample cast in `preview_samples.dart`, so update
+that one file when example data needs to change.
 
 Only create a domain-area subfolder under `screen/` or `view_model/` when
 a screen actually exists for it. Only create a new atomic tier folder
