@@ -67,6 +67,9 @@ class MemoryDao extends DatabaseAccessor<AppDatabase> with _$MemoryDaoMixin {
     );
   }
 
+  Future<void> deletePhoto(String id) =>
+      (delete(photos)..where((p) => p.id.equals(id))).go();
+
   Future<void> deleteMemory(String id) =>
       (delete(memories)..where((m) => m.id.equals(id))).go();
 }

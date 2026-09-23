@@ -2,52 +2,132 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constant/app_colors.dart';
+import '../constant/app_motion.dart';
+import '../constant/app_shadows.dart';
+import '../constant/app_spacing.dart';
+import '../constant/app_typography.dart';
+import 'app_router.dart';
 
-/// Bottom navigation shell shared by Home, Memories and People. Keeps the
-/// primary Quest action visually prominent in the center. See CLAUDE.md §32.
+/// Bottom navigation shell shared by Home, Memories and People, with the
+/// primary Quest action raised in the center: `Home  Memories  [+]  People`.
+/// See CLAUDE.md §32, design system §12.
 class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
+  static const _destinations = [
+    (Icons.home_outlined, Icons.home_rounded, 'Home'),
+    (Icons.photo_library_outlined, Icons.photo_library_rounded, 'Memories'),
+    (Icons.people_outline_rounded, Icons.people_alt_rounded, 'People'),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    Widget destination(int index) {
+      final (icon, selectedIcon, label) = _destinations[index];
+      return Expanded(
+        child: _NavDestination(
+          icon: icon,
+          selectedIcon: selectedIcon,
+          label: label,
+          selected: navigationShell.currentIndex == index,
+          onTap: () => navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: navigationShell,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/quests'),
-        backgroundColor: AppColors.warmCoral,
-        foregroundColor: AppColors.warmCream,
-        elevation: 0,
-        child: const Icon(Icons.add),
+      bottomNavigationBar: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: AppColors.paper,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppRadius.xl),
+          ),
+          boxShadow: AppShadows.floating,
+        ),
+        child: SafeArea(
+          top: false,
+          child: SizedBox(
+            height: 72,
+            child: Row(
+              children: [
+                destination(0),
+                destination(1),
+                Expanded(
+                  child: Center(
+                    child: _CreateQuestButton(
+                      onTap: () => context.push(AppRoutes.quests),
+                    ),
+                  ),
+                ),
+                destination(2),
+              ],
+            ),
+          ),
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        height: 72,
-        color: AppColors.warmCream,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+    );
+  }
+}
+
+class _NavDestination extends StatelessWidget {
+  const _NavDestination({
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final duration = AppMotion.of(context, AppMotion.short);
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      excludeSemantics: true,
+      child: InkResponse(
+        onTap: onTap,
+        radius: AppTouch.minTarget,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _NavButton(
-              icon: Icons.home_rounded,
-              label: 'Home',
-              isSelected: navigationShell.currentIndex == 0,
-              onTap: () => navigationShell.goBranch(0),
+            // Selected = filled icon + pill + bold label, never color alone.
+            AnimatedContainer(
+              duration: duration,
+              curve: AppMotion.standard,
+              width: 56,
+              height: 32,
+              decoration: BoxDecoration(
+                color: selected ? AppColors.softPeach : Colors.transparent,
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+              ),
+              child: Icon(
+                selected ? selectedIcon : icon,
+                size: AppIconSizes.lg,
+                color: AppColors.textPrimary,
+              ),
             ),
-            _NavButton(
-              icon: Icons.photo_library_rounded,
-              label: 'Memories',
-              isSelected: navigationShell.currentIndex == 1,
-              onTap: () => navigationShell.goBranch(1),
-            ),
-            const SizedBox(width: 48),
-            _NavButton(
-              icon: Icons.people_alt_rounded,
-              label: 'People',
-              isSelected: navigationShell.currentIndex == 2,
-              onTap: () => navigationShell.goBranch(2),
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              label,
+              style: AppTypography.caption.copyWith(
+                color: selected ? AppColors.textPrimary : AppColors.textMuted,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+              ),
             ),
           ],
         ),
@@ -56,34 +136,38 @@ class AppShell extends StatelessWidget {
   }
 }
 
-class _NavButton extends StatelessWidget {
-  const _NavButton({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
+/// The raised center action. Coral with charcoal content for contrast
+/// (CLAUDE.md §28, §65).
+class _CreateQuestButton extends StatelessWidget {
+  const _CreateQuestButton({required this.onTap});
 
-  final IconData icon;
-  final String label;
-  final bool isSelected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = isSelected ? AppColors.warmCoral : AppColors.warmCharcoal;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 20),
-            Text(label, style: TextStyle(color: color, fontSize: 10)),
-          ],
+    return Tooltip(
+      message: 'Start a quest',
+      child: Semantics(
+        button: true,
+        label: 'Start a quest',
+        excludeSemantics: true,
+        child: Material(
+          color: AppColors.warmCoral,
+          shape: const CircleBorder(),
+          elevation: 0,
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: onTap,
+            child: const SizedBox(
+              width: 56,
+              height: 56,
+              child: Icon(
+                Icons.add_rounded,
+                size: AppIconSizes.xl,
+                color: AppColors.onCoral,
+              ),
+            ),
+          ),
         ),
       ),
     );

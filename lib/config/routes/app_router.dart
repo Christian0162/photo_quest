@@ -29,6 +29,12 @@ abstract final class AppRoutes {
   static const memoryDetail = '/memory/:memoryId';
   static const people = '/people';
   static const settings = '/settings';
+
+  static String questDetailPath(String questId) => '/quests/$questId';
+  static String capturePath(String sessionId) => '/capture/$sessionId';
+  static String memoryRevealPath(String sessionId) =>
+      '/capture/$sessionId/reveal';
+  static String memoryDetailPath(String memoryId) => '/memory/$memoryId';
 }
 
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
