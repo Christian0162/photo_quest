@@ -12,6 +12,10 @@ class Memories extends Table {
   // Not a FK constraint: photos reference memories, so this stays a plain
   // pointer to avoid a circular table dependency.
   TextColumn get coverPhotoId => text().nullable()();
+
+  /// How the printed keepsake is designed (layout, paper, stickers), as
+  /// JSON, so it can be re-opened and replayed live. Added in schema v4.
+  TextColumn get keepsakeDesign => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 

@@ -16,6 +16,9 @@ class Photos extends Table {
   IntColumn get width => integer()();
   IntColumn get height => integer()();
 
+  /// photo, gif, boomerang or video (`PhotoKind`). Added in schema v3.
+  TextColumn get kind => text().withDefault(const Constant('photo'))();
+
   @override
   Set<Column> get primaryKey => {id};
 }

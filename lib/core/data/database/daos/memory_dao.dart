@@ -61,6 +61,14 @@ class MemoryDao extends DatabaseAccessor<AppDatabase> with _$MemoryDaoMixin {
 
   Future<void> insertPhoto(PhotosCompanion photo) => into(photos).insert(photo);
 
+  Future<void> updateKeepsakeDesign(String memoryId, String design) =>
+      (update(memories)..where((m) => m.id.equals(memoryId))).write(
+        MemoriesCompanion(
+          keepsakeDesign: Value(design),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
+
   Future<void> linkPerson(String memoryId, String personId) {
     return into(memoryPeople).insert(
       MemoryPeopleCompanion.insert(memoryId: memoryId, personId: personId),

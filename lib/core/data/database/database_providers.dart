@@ -4,6 +4,7 @@ import 'app_database.dart';
 import 'daos/memory_dao.dart';
 import 'daos/people_dao.dart';
 import 'daos/quest_dao.dart';
+import 'daos/settings_dao.dart';
 
 part 'database_providers.g.dart';
 
@@ -22,3 +23,6 @@ MemoryDao memoryDao(Ref ref) => ref.watch(appDatabaseProvider).memoryDao;
 
 @riverpod
 PeopleDao peopleDao(Ref ref) => ref.watch(appDatabaseProvider).peopleDao;
+
+@riverpod
+SettingsDao settingsDao(Ref ref) => ref.watch(appDatabaseProvider).settingsDao;

@@ -2483,6 +2483,17 @@ class $MemoriesTable extends Memories with TableInfo<$MemoriesTable, Memory> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _keepsakeDesignMeta = const VerificationMeta(
+    'keepsakeDesign',
+  );
+  @override
+  late final GeneratedColumn<String> keepsakeDesign = GeneratedColumn<String>(
+    'keepsake_design',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -2513,6 +2524,7 @@ class $MemoriesTable extends Memories with TableInfo<$MemoriesTable, Memory> {
     note,
     capturedAt,
     coverPhotoId,
+    keepsakeDesign,
     createdAt,
     updatedAt,
   ];
@@ -2575,6 +2587,15 @@ class $MemoriesTable extends Memories with TableInfo<$MemoriesTable, Memory> {
         ),
       );
     }
+    if (data.containsKey('keepsake_design')) {
+      context.handle(
+        _keepsakeDesignMeta,
+        keepsakeDesign.isAcceptableOrUnknown(
+          data['keepsake_design']!,
+          _keepsakeDesignMeta,
+        ),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -2624,6 +2645,10 @@ class $MemoriesTable extends Memories with TableInfo<$MemoriesTable, Memory> {
         DriftSqlType.string,
         data['${effectivePrefix}cover_photo_id'],
       ),
+      keepsakeDesign: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}keepsake_design'],
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -2648,6 +2673,10 @@ class Memory extends DataClass implements Insertable<Memory> {
   final String? note;
   final DateTime capturedAt;
   final String? coverPhotoId;
+
+  /// How the printed keepsake is designed (layout, paper, stickers), as
+  /// JSON, so it can be re-opened and replayed live. Added in schema v4.
+  final String? keepsakeDesign;
   final DateTime createdAt;
   final DateTime updatedAt;
   const Memory({
@@ -2657,6 +2686,7 @@ class Memory extends DataClass implements Insertable<Memory> {
     this.note,
     required this.capturedAt,
     this.coverPhotoId,
+    this.keepsakeDesign,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -2673,6 +2703,9 @@ class Memory extends DataClass implements Insertable<Memory> {
     if (!nullToAbsent || coverPhotoId != null) {
       map['cover_photo_id'] = Variable<String>(coverPhotoId);
     }
+    if (!nullToAbsent || keepsakeDesign != null) {
+      map['keepsake_design'] = Variable<String>(keepsakeDesign);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -2688,6 +2721,9 @@ class Memory extends DataClass implements Insertable<Memory> {
       coverPhotoId: coverPhotoId == null && nullToAbsent
           ? const Value.absent()
           : Value(coverPhotoId),
+      keepsakeDesign: keepsakeDesign == null && nullToAbsent
+          ? const Value.absent()
+          : Value(keepsakeDesign),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -2705,6 +2741,7 @@ class Memory extends DataClass implements Insertable<Memory> {
       note: serializer.fromJson<String?>(json['note']),
       capturedAt: serializer.fromJson<DateTime>(json['capturedAt']),
       coverPhotoId: serializer.fromJson<String?>(json['coverPhotoId']),
+      keepsakeDesign: serializer.fromJson<String?>(json['keepsakeDesign']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -2719,6 +2756,7 @@ class Memory extends DataClass implements Insertable<Memory> {
       'note': serializer.toJson<String?>(note),
       'capturedAt': serializer.toJson<DateTime>(capturedAt),
       'coverPhotoId': serializer.toJson<String?>(coverPhotoId),
+      'keepsakeDesign': serializer.toJson<String?>(keepsakeDesign),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -2731,6 +2769,7 @@ class Memory extends DataClass implements Insertable<Memory> {
     Value<String?> note = const Value.absent(),
     DateTime? capturedAt,
     Value<String?> coverPhotoId = const Value.absent(),
+    Value<String?> keepsakeDesign = const Value.absent(),
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => Memory(
@@ -2740,6 +2779,9 @@ class Memory extends DataClass implements Insertable<Memory> {
     note: note.present ? note.value : this.note,
     capturedAt: capturedAt ?? this.capturedAt,
     coverPhotoId: coverPhotoId.present ? coverPhotoId.value : this.coverPhotoId,
+    keepsakeDesign: keepsakeDesign.present
+        ? keepsakeDesign.value
+        : this.keepsakeDesign,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -2757,6 +2799,9 @@ class Memory extends DataClass implements Insertable<Memory> {
       coverPhotoId: data.coverPhotoId.present
           ? data.coverPhotoId.value
           : this.coverPhotoId,
+      keepsakeDesign: data.keepsakeDesign.present
+          ? data.keepsakeDesign.value
+          : this.keepsakeDesign,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -2771,6 +2816,7 @@ class Memory extends DataClass implements Insertable<Memory> {
           ..write('note: $note, ')
           ..write('capturedAt: $capturedAt, ')
           ..write('coverPhotoId: $coverPhotoId, ')
+          ..write('keepsakeDesign: $keepsakeDesign, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -2785,6 +2831,7 @@ class Memory extends DataClass implements Insertable<Memory> {
     note,
     capturedAt,
     coverPhotoId,
+    keepsakeDesign,
     createdAt,
     updatedAt,
   );
@@ -2798,6 +2845,7 @@ class Memory extends DataClass implements Insertable<Memory> {
           other.note == this.note &&
           other.capturedAt == this.capturedAt &&
           other.coverPhotoId == this.coverPhotoId &&
+          other.keepsakeDesign == this.keepsakeDesign &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -2809,6 +2857,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
   final Value<String?> note;
   final Value<DateTime> capturedAt;
   final Value<String?> coverPhotoId;
+  final Value<String?> keepsakeDesign;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
@@ -2819,6 +2868,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
     this.note = const Value.absent(),
     this.capturedAt = const Value.absent(),
     this.coverPhotoId = const Value.absent(),
+    this.keepsakeDesign = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -2830,6 +2880,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
     this.note = const Value.absent(),
     required DateTime capturedAt,
     this.coverPhotoId = const Value.absent(),
+    this.keepsakeDesign = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
     this.rowid = const Value.absent(),
@@ -2846,6 +2897,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
     Expression<String>? note,
     Expression<DateTime>? capturedAt,
     Expression<String>? coverPhotoId,
+    Expression<String>? keepsakeDesign,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
@@ -2857,6 +2909,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
       if (note != null) 'note': note,
       if (capturedAt != null) 'captured_at': capturedAt,
       if (coverPhotoId != null) 'cover_photo_id': coverPhotoId,
+      if (keepsakeDesign != null) 'keepsake_design': keepsakeDesign,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
@@ -2870,6 +2923,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
     Value<String?>? note,
     Value<DateTime>? capturedAt,
     Value<String?>? coverPhotoId,
+    Value<String?>? keepsakeDesign,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
@@ -2881,6 +2935,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
       note: note ?? this.note,
       capturedAt: capturedAt ?? this.capturedAt,
       coverPhotoId: coverPhotoId ?? this.coverPhotoId,
+      keepsakeDesign: keepsakeDesign ?? this.keepsakeDesign,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
@@ -2908,6 +2963,9 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
     if (coverPhotoId.present) {
       map['cover_photo_id'] = Variable<String>(coverPhotoId.value);
     }
+    if (keepsakeDesign.present) {
+      map['keepsake_design'] = Variable<String>(keepsakeDesign.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -2929,6 +2987,7 @@ class MemoriesCompanion extends UpdateCompanion<Memory> {
           ..write('note: $note, ')
           ..write('capturedAt: $capturedAt, ')
           ..write('coverPhotoId: $coverPhotoId, ')
+          ..write('keepsakeDesign: $keepsakeDesign, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
@@ -3039,6 +3098,16 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('photo'),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3050,6 +3119,7 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     capturedAt,
     width,
     height,
+    kind,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3136,6 +3206,12 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     } else if (isInserting) {
       context.missing(_heightMeta);
     }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    }
     return context;
   }
 
@@ -3181,6 +3257,10 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
         DriftSqlType.int,
         data['${effectivePrefix}height'],
       )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
     );
   }
 
@@ -3200,6 +3280,9 @@ class Photo extends DataClass implements Insertable<Photo> {
   final DateTime capturedAt;
   final int width;
   final int height;
+
+  /// photo, gif, boomerang or video (`PhotoKind`). Added in schema v3.
+  final String kind;
   const Photo({
     required this.id,
     required this.memoryId,
@@ -3210,6 +3293,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     required this.capturedAt,
     required this.width,
     required this.height,
+    required this.kind,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3225,6 +3309,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     map['captured_at'] = Variable<DateTime>(capturedAt);
     map['width'] = Variable<int>(width);
     map['height'] = Variable<int>(height);
+    map['kind'] = Variable<String>(kind);
     return map;
   }
 
@@ -3241,6 +3326,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       capturedAt: Value(capturedAt),
       width: Value(width),
       height: Value(height),
+      kind: Value(kind),
     );
   }
 
@@ -3259,6 +3345,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       capturedAt: serializer.fromJson<DateTime>(json['capturedAt']),
       width: serializer.fromJson<int>(json['width']),
       height: serializer.fromJson<int>(json['height']),
+      kind: serializer.fromJson<String>(json['kind']),
     );
   }
   @override
@@ -3274,6 +3361,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       'capturedAt': serializer.toJson<DateTime>(capturedAt),
       'width': serializer.toJson<int>(width),
       'height': serializer.toJson<int>(height),
+      'kind': serializer.toJson<String>(kind),
     };
   }
 
@@ -3287,6 +3375,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     DateTime? capturedAt,
     int? width,
     int? height,
+    String? kind,
   }) => Photo(
     id: id ?? this.id,
     memoryId: memoryId ?? this.memoryId,
@@ -3297,6 +3386,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     capturedAt: capturedAt ?? this.capturedAt,
     width: width ?? this.width,
     height: height ?? this.height,
+    kind: kind ?? this.kind,
   );
   Photo copyWithCompanion(PhotosCompanion data) {
     return Photo(
@@ -3315,6 +3405,7 @@ class Photo extends DataClass implements Insertable<Photo> {
           : this.capturedAt,
       width: data.width.present ? data.width.value : this.width,
       height: data.height.present ? data.height.value : this.height,
+      kind: data.kind.present ? data.kind.value : this.kind,
     );
   }
 
@@ -3329,7 +3420,8 @@ class Photo extends DataClass implements Insertable<Photo> {
           ..write('position: $position, ')
           ..write('capturedAt: $capturedAt, ')
           ..write('width: $width, ')
-          ..write('height: $height')
+          ..write('height: $height, ')
+          ..write('kind: $kind')
           ..write(')'))
         .toString();
   }
@@ -3345,6 +3437,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     capturedAt,
     width,
     height,
+    kind,
   );
   @override
   bool operator ==(Object other) =>
@@ -3358,7 +3451,8 @@ class Photo extends DataClass implements Insertable<Photo> {
           other.position == this.position &&
           other.capturedAt == this.capturedAt &&
           other.width == this.width &&
-          other.height == this.height);
+          other.height == this.height &&
+          other.kind == this.kind);
 }
 
 class PhotosCompanion extends UpdateCompanion<Photo> {
@@ -3371,6 +3465,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
   final Value<DateTime> capturedAt;
   final Value<int> width;
   final Value<int> height;
+  final Value<String> kind;
   final Value<int> rowid;
   const PhotosCompanion({
     this.id = const Value.absent(),
@@ -3382,6 +3477,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     this.capturedAt = const Value.absent(),
     this.width = const Value.absent(),
     this.height = const Value.absent(),
+    this.kind = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PhotosCompanion.insert({
@@ -3394,6 +3490,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     required DateTime capturedAt,
     required int width,
     required int height,
+    this.kind = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        memoryId = Value(memoryId),
@@ -3413,6 +3510,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Expression<DateTime>? capturedAt,
     Expression<int>? width,
     Expression<int>? height,
+    Expression<String>? kind,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3425,6 +3523,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       if (capturedAt != null) 'captured_at': capturedAt,
       if (width != null) 'width': width,
       if (height != null) 'height': height,
+      if (kind != null) 'kind': kind,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3439,6 +3538,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Value<DateTime>? capturedAt,
     Value<int>? width,
     Value<int>? height,
+    Value<String>? kind,
     Value<int>? rowid,
   }) {
     return PhotosCompanion(
@@ -3451,6 +3551,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       capturedAt: capturedAt ?? this.capturedAt,
       width: width ?? this.width,
       height: height ?? this.height,
+      kind: kind ?? this.kind,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3485,6 +3586,9 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     if (height.present) {
       map['height'] = Variable<int>(height.value);
     }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3503,6 +3607,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
           ..write('capturedAt: $capturedAt, ')
           ..write('width: $width, ')
           ..write('height: $height, ')
+          ..write('kind: $kind, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3734,6 +3839,214 @@ class MemoryPeopleCompanion extends UpdateCompanion<MemoryPeopleData> {
   }
 }
 
+class $AppSettingsTable extends AppSettings
+    with TableInfo<$AppSettingsTable, AppSetting> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AppSettingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+    'key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String> value = GeneratedColumn<String>(
+    'value',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [key, value];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'app_settings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AppSetting> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('key')) {
+      context.handle(
+        _keyMeta,
+        key.isAcceptableOrUnknown(data['key']!, _keyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+        _valueMeta,
+        value.isAcceptableOrUnknown(data['value']!, _valueMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {key};
+  @override
+  AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AppSetting(
+      key: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key'],
+      )!,
+      value: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}value'],
+      )!,
+    );
+  }
+
+  @override
+  $AppSettingsTable createAlias(String alias) {
+    return $AppSettingsTable(attachedDatabase, alias);
+  }
+}
+
+class AppSetting extends DataClass implements Insertable<AppSetting> {
+  final String key;
+  final String value;
+  const AppSetting({required this.key, required this.value});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['key'] = Variable<String>(key);
+    map['value'] = Variable<String>(value);
+    return map;
+  }
+
+  AppSettingsCompanion toCompanion(bool nullToAbsent) {
+    return AppSettingsCompanion(key: Value(key), value: Value(value));
+  }
+
+  factory AppSetting.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AppSetting(
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<String>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<String>(value),
+    };
+  }
+
+  AppSetting copyWith({String? key, String? value}) =>
+      AppSetting(key: key ?? this.key, value: value ?? this.value);
+  AppSetting copyWithCompanion(AppSettingsCompanion data) {
+    return AppSetting(
+      key: data.key.present ? data.key.value : this.key,
+      value: data.value.present ? data.value.value : this.value,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppSetting(')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(key, value);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AppSetting &&
+          other.key == this.key &&
+          other.value == this.value);
+}
+
+class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
+  final Value<String> key;
+  final Value<String> value;
+  final Value<int> rowid;
+  const AppSettingsCompanion({
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AppSettingsCompanion.insert({
+    required String key,
+    required String value,
+    this.rowid = const Value.absent(),
+  }) : key = Value(key),
+       value = Value(value);
+  static Insertable<AppSetting> custom({
+    Expression<String>? key,
+    Expression<String>? value,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AppSettingsCompanion copyWith({
+    Value<String>? key,
+    Value<String>? value,
+    Value<int>? rowid,
+  }) {
+    return AppSettingsCompanion(
+      key: key ?? this.key,
+      value: value ?? this.value,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppSettingsCompanion(')
+          ..write('key: $key, ')
+          ..write('value: $value, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3746,9 +4059,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $MemoriesTable memories = $MemoriesTable(this);
   late final $PhotosTable photos = $PhotosTable(this);
   late final $MemoryPeopleTable memoryPeople = $MemoryPeopleTable(this);
+  late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final QuestDao questDao = QuestDao(this as AppDatabase);
   late final MemoryDao memoryDao = MemoryDao(this as AppDatabase);
   late final PeopleDao peopleDao = PeopleDao(this as AppDatabase);
+  late final SettingsDao settingsDao = SettingsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3762,6 +4077,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     memories,
     photos,
     memoryPeople,
+    appSettings,
   ];
 }
 
@@ -6320,6 +6636,7 @@ typedef $$MemoriesTableCreateCompanionBuilder = MemoriesCompanion Function({
   Value<String?> note,
   required DateTime capturedAt,
   Value<String?> coverPhotoId,
+  Value<String?> keepsakeDesign,
   required DateTime createdAt,
   required DateTime updatedAt,
   Value<int> rowid,
@@ -6331,6 +6648,7 @@ typedef $$MemoriesTableUpdateCompanionBuilder = MemoriesCompanion Function({
   Value<String?> note,
   Value<DateTime> capturedAt,
   Value<String?> coverPhotoId,
+  Value<String?> keepsakeDesign,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
   Value<int> rowid,
@@ -6427,6 +6745,11 @@ class $$MemoriesTableFilterComposer
 
   ColumnFilters<String> get coverPhotoId => $composableBuilder(
     column: $table.coverPhotoId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get keepsakeDesign => $composableBuilder(
+    column: $table.keepsakeDesign,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6548,6 +6871,11 @@ class $$MemoriesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get keepsakeDesign => $composableBuilder(
+    column: $table.keepsakeDesign,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -6607,6 +6935,11 @@ class $$MemoriesTableAnnotationComposer
 
   GeneratedColumn<String> get coverPhotoId => $composableBuilder(
     column: $table.coverPhotoId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get keepsakeDesign => $composableBuilder(
+    column: $table.keepsakeDesign,
     builder: (column) => column,
   );
 
@@ -6728,6 +7061,7 @@ class $$MemoriesTableTableManager
                 Value<String?> note = const Value.absent(),
                 Value<DateTime> capturedAt = const Value.absent(),
                 Value<String?> coverPhotoId = const Value.absent(),
+                Value<String?> keepsakeDesign = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -6738,6 +7072,7 @@ class $$MemoriesTableTableManager
                 note: note,
                 capturedAt: capturedAt,
                 coverPhotoId: coverPhotoId,
+                keepsakeDesign: keepsakeDesign,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
@@ -6750,6 +7085,7 @@ class $$MemoriesTableTableManager
                 Value<String?> note = const Value.absent(),
                 required DateTime capturedAt,
                 Value<String?> coverPhotoId = const Value.absent(),
+                Value<String?> keepsakeDesign = const Value.absent(),
                 required DateTime createdAt,
                 required DateTime updatedAt,
                 Value<int> rowid = const Value.absent(),
@@ -6760,6 +7096,7 @@ class $$MemoriesTableTableManager
                 note: note,
                 capturedAt: capturedAt,
                 coverPhotoId: coverPhotoId,
+                keepsakeDesign: keepsakeDesign,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
@@ -6894,6 +7231,7 @@ typedef $$PhotosTableCreateCompanionBuilder = PhotosCompanion Function({
   required DateTime capturedAt,
   required int width,
   required int height,
+  Value<String> kind,
   Value<int> rowid,
 });
 typedef $$PhotosTableUpdateCompanionBuilder = PhotosCompanion Function({
@@ -6906,6 +7244,7 @@ typedef $$PhotosTableUpdateCompanionBuilder = PhotosCompanion Function({
   Value<DateTime> capturedAt,
   Value<int> width,
   Value<int> height,
+  Value<String> kind,
   Value<int> rowid,
 });
 
@@ -6989,6 +7328,11 @@ class $$PhotosTableFilterComposer
 
   ColumnFilters<int> get height => $composableBuilder(
     column: $table.height,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7083,6 +7427,11 @@ class $$PhotosTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$MemoriesTableOrderingComposer get memoryId {
     final $$MemoriesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -7165,6 +7514,9 @@ class $$PhotosTableAnnotationComposer
 
   GeneratedColumn<int> get height =>
       $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
 
   $$MemoriesTableAnnotationComposer get memoryId {
     final $$MemoriesTableAnnotationComposer composer = $composerBuilder(
@@ -7250,6 +7602,7 @@ class $$PhotosTableTableManager
                 Value<DateTime> capturedAt = const Value.absent(),
                 Value<int> width = const Value.absent(),
                 Value<int> height = const Value.absent(),
+                Value<String> kind = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PhotosCompanion(
                 id: id,
@@ -7261,6 +7614,7 @@ class $$PhotosTableTableManager
                 capturedAt: capturedAt,
                 width: width,
                 height: height,
+                kind: kind,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7274,6 +7628,7 @@ class $$PhotosTableTableManager
                 required DateTime capturedAt,
                 required int width,
                 required int height,
+                Value<String> kind = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PhotosCompanion.insert(
                 id: id,
@@ -7285,6 +7640,7 @@ class $$PhotosTableTableManager
                 capturedAt: capturedAt,
                 width: width,
                 height: height,
+                kind: kind,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -7708,6 +8064,153 @@ typedef $$MemoryPeopleTableProcessedTableManager =
       MemoryPeopleData,
       PrefetchHooks Function({bool memoryId, bool personId})
     >;
+typedef $$AppSettingsTableCreateCompanionBuilder =
+    AppSettingsCompanion Function({
+      required String key,
+      required String value,
+      Value<int> rowid,
+    });
+typedef $$AppSettingsTableUpdateCompanionBuilder =
+    AppSettingsCompanion Function({
+      Value<String> key,
+      Value<String> value,
+      Value<int> rowid,
+    });
+
+class $$AppSettingsTableFilterComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AppSettingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get value => $composableBuilder(
+    column: $table.value,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AppSettingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+}
+
+class $$AppSettingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AppSettingsTable,
+          AppSetting,
+          $$AppSettingsTableFilterComposer,
+          $$AppSettingsTableOrderingComposer,
+          $$AppSettingsTableAnnotationComposer,
+          $$AppSettingsTableCreateCompanionBuilder,
+          $$AppSettingsTableUpdateCompanionBuilder,
+          (
+            AppSetting,
+            BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>,
+          ),
+          AppSetting,
+          PrefetchHooks Function()
+        > {
+  $$AppSettingsTableTableManager(_$AppDatabase db, $AppSettingsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AppSettingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AppSettingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AppSettingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> key = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => AppSettingsCompanion(key: key, value: value, rowid: rowid),
+          createCompanionCallback:
+              ({
+                required String key,
+                required String value,
+                Value<int> rowid = const Value.absent(),
+              }) => AppSettingsCompanion.insert(
+                key: key,
+                value: value,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$AppSettingsTable, AppSetting>(table),
+                  BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AppSettingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AppSettingsTable,
+      AppSetting,
+      $$AppSettingsTableFilterComposer,
+      $$AppSettingsTableOrderingComposer,
+      $$AppSettingsTableAnnotationComposer,
+      $$AppSettingsTableCreateCompanionBuilder,
+      $$AppSettingsTableUpdateCompanionBuilder,
+      (
+        AppSetting,
+        BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>,
+      ),
+      AppSetting,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7728,4 +8231,6 @@ class $AppDatabaseManager {
       $$PhotosTableTableManager(_db, _db.photos);
   $$MemoryPeopleTableTableManager get memoryPeople =>
       $$MemoryPeopleTableTableManager(_db, _db.memoryPeople);
+  $$AppSettingsTableTableManager get appSettings =>
+      $$AppSettingsTableTableManager(_db, _db.appSettings);
 }

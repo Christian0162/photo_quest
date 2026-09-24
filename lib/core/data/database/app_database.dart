@@ -4,7 +4,9 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'daos/memory_dao.dart';
 import 'daos/people_dao.dart';
 import 'daos/quest_dao.dart';
+import 'daos/settings_dao.dart';
 import 'seed/default_quests_seed.dart';
+import 'tables/app_settings_table.dart';
 import 'tables/memories_table.dart';
 import 'tables/memory_people_table.dart';
 import 'tables/people_table.dart';
@@ -26,8 +28,9 @@ part 'app_database.g.dart';
     Memories,
     Photos,
     MemoryPeople,
+    AppSettings,
   ],
-  daos: [QuestDao, MemoryDao, PeopleDao],
+  daos: [QuestDao, MemoryDao, PeopleDao, SettingsDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -35,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -53,6 +56,15 @@ class AppDatabase extends _$AppDatabase {
         await m.addColumn(questShots, questShots.exampleImagePath);
         await m.addColumn(questShots, questShots.required);
         await m.createTable(questParticipants);
+      }
+      // v2 -> v3: GIF, boomerang and 360° shots alongside photos.
+      if (from < 3) {
+        await m.addColumn(photos, photos.kind);
+      }
+      // v3 -> v4: saved keepsake designs and photobooth settings.
+      if (from < 4) {
+        await m.addColumn(memories, memories.keepsakeDesign);
+        await m.createTable(appSettings);
       }
     },
     // Future schema changes add a step here rather than recreating
