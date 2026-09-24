@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../config/routes/app_router.dart';
+import '../../../data/repositories/settings_repository.dart';
 import '../../view_model/camera/capture_view_model.dart';
 import '../../widget/molecules/confirmation_dialog.dart';
 import '../../widget/organisms/app_scaffold.dart';
+import '../../widget/organisms/booth_settings_sheet.dart';
 import '../../widget/template/capture_template.dart';
 
 /// The photobooth. Wires [CaptureViewModel], the leave dialog and
@@ -35,6 +37,12 @@ class CaptureScreen extends ConsumerWidget {
       if (state?.phase == CapturePhase.complete) {
         context.pushReplacement(AppRoutes.memoryRevealPath(sessionId));
       }
+      if (state?.holdTooShort ?? false) {
+        showAppMessage(
+          context,
+          "Hold the button a little longer — let go when you're done.",
+        );
+      }
       if (state?.captureFailed ?? false) {
         showAppMessage(
           context,
@@ -51,9 +59,29 @@ class CaptureScreen extends ConsumerWidget {
       onClose: () => context.pop(),
       onRetry: () => ref.invalidate(provider),
       onCapture: viewModel.startCountdown,
+      onCancelCountdown: viewModel.cancelCountdown,
       onSwitchCamera: viewModel.switchCamera,
       onKeep: viewModel.continueToNextShot,
       onRetake: viewModel.retake,
+      onModeChanged: viewModel.setMode,
+      onLookChanged: viewModel.setLook,
+      onPoseIdea: viewModel.nextPoseIdea,
+      onHidePoseIdea: viewModel.hidePoseIdea,
+      onHoldStart: viewModel.startHold,
+      onHoldEnd: viewModel.endHold,
+      onOpenSettings: () {
+        final current = ref.read(provider).value;
+        if (current == null) return;
+        showBoothSettingsSheet(
+          context,
+          countdownSeconds: current.countdownSeconds,
+          countdownChoices: SettingsRepository.countdownChoices,
+          onCountdownChanged: viewModel.setCountdownSeconds,
+          clipSeconds: current.clipSeconds,
+          clipChoices: SettingsRepository.clipChoices,
+          onClipChanged: viewModel.setClipSeconds,
+        );
+      },
     );
   }
 }

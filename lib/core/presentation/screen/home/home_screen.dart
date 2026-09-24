@@ -21,6 +21,7 @@ class HomeScreen extends ConsumerWidget {
       todayQuest: ref.watch(todayQuestProvider),
       pendingQuests: ref.watch(questsNeedingConfirmationProvider),
       memories: ref.watch(memoryListProvider),
+      onThisDay: ref.watch(onThisDayMemoryProvider),
       onRefresh: () async {
         ref.invalidate(memoryListProvider);
         ref.invalidate(questsNeedingConfirmationProvider);
@@ -28,8 +29,10 @@ class HomeScreen extends ConsumerWidget {
       },
       onOpenSettings: () => context.push(AppRoutes.settings),
       onOpenQuest: (quest) => context.push(AppRoutes.questDetailPath(quest.id)),
-      onOpenMemory: (summary) =>
-          context.push(AppRoutes.memoryDetailPath(summary.memory.id)),
+      onOpenMemory: (summary) => context.push(
+        AppRoutes.memoryDetailPath(summary.memory.id),
+        extra: summary.coverPhoto?.thumbnailPath,
+      ),
       onSeeAllMemories: () => context.go(AppRoutes.memories),
       onBrowseQuests: () => context.push(AppRoutes.quests),
       onCreateQuest: () => context.push(AppRoutes.createQuest),

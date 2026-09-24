@@ -6,6 +6,7 @@ import '../../../../config/routes/app_router.dart';
 import '../../view_model/people/people_list_view_model.dart';
 import '../../view_model/quests/create_quest_view_model.dart';
 import '../../widget/molecules/confirmation_dialog.dart';
+import '../../../utils/app_haptics.dart';
 import '../../widget/organisms/app_scaffold.dart';
 import '../../widget/template/create_quest_template.dart';
 
@@ -61,7 +62,18 @@ class CreateQuestScreen extends ConsumerWidget {
       onTypeChanged: notifier.setType,
       onToggleParticipant: notifier.toggleParticipant,
       onAddShot: notifier.addShot,
-      onRemoveShot: notifier.removeShotAt,
+      onRemoveShot: (index) {
+        final shot = ref.read(createQuestViewModelProvider).shots[index];
+        AppHaptics.remove();
+        notifier.removeShotAt(index);
+        showAppMessage(
+          context,
+          'Shot removed.',
+          actionLabel: 'Undo',
+          onAction: () => notifier.insertShotAt(index, shot),
+        );
+      },
+      onMoveShot: notifier.moveShot,
     );
   }
 }

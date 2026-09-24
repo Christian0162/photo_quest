@@ -6,6 +6,7 @@ import '../../../../config/routes/app_router.dart';
 import '../../view_model/quests/quest_detail_view_model.dart';
 import '../../view_model/quests/quest_intro_view_model.dart';
 import '../../view_model/quests/quest_participants_view_model.dart';
+import '../../../utils/app_haptics.dart';
 import '../../widget/organisms/app_scaffold.dart';
 import '../../widget/organisms/people_picker_sheet.dart';
 import '../../widget/template/quest_intro_template.dart';
@@ -55,9 +56,40 @@ class QuestIntroScreen extends ConsumerWidget {
     await participants.addParticipant(chosen.id);
   }
 
+  /// Removes someone, with a quick way back if it was a slip. Undo invites
+  /// them again and restores their "I'm in". See CLAUDE.md §42.
+  Future<void> _remove(
+    BuildContext context,
+    WidgetRef ref,
+    QuestParticipantWithPerson entry,
+  ) async {
+    final notifier = ref.read(
+      questParticipantsViewModelProvider(questId).notifier,
+    );
+    AppHaptics.remove();
+    await notifier.removeParticipant(entry.participant.id);
+    if (!context.mounted) return;
+    showAppMessage(
+      context,
+      '${entry.person.name} was removed.',
+      actionLabel: 'Undo',
+      onAction: () => notifier.restoreParticipant(entry),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final participants = questParticipantsViewModelProvider(questId);
+
+    // The last person says they're in: celebrate, and point at "Let's start".
+    ref.listen(questStartReadinessProvider(questId), (previous, next) {
+      if (previous != null &&
+          previous.canStart == false &&
+          previous.hint != null &&
+          next.everyoneIn) {
+        AppHaptics.success();
+      }
+    });
 
     return QuestIntroTemplate(
       detail: ref.watch(questDetailProvider(questId)),
@@ -67,12 +99,13 @@ class QuestIntroScreen extends ConsumerWidget {
       onRetry: () => ref.invalidate(questDetailProvider(questId)),
       onStart: () => _start(context, ref),
       onInvite: () => _invite(context, ref),
-      onConfirmParticipant: (entry) => ref
-          .read(participants.notifier)
-          .respond(participantId: entry.participant.id, accepted: true),
-      onRemoveParticipant: (entry) => ref
-          .read(participants.notifier)
-          .removeParticipant(entry.participant.id),
+      onConfirmParticipant: (entry) {
+        AppHaptics.selection();
+        ref
+            .read(participants.notifier)
+            .respond(participantId: entry.participant.id, accepted: true);
+      },
+      onRemoveParticipant: (entry) => _remove(context, ref, entry),
     );
   }
 }

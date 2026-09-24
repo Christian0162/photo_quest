@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
+import '../../../utils/app_haptics.dart';
 import 'pressable_scale.dart';
 
 /// The photobooth shutter: a big white ring around a coral button that
@@ -30,7 +31,12 @@ class CaptureButton extends StatelessWidget {
         enabled: onPressed != null,
         scale: 0.9,
         child: GestureDetector(
-          onTap: onPressed,
+          onTap: onPressed == null
+              ? null
+              : () {
+                  AppHaptics.tap();
+                  onPressed!();
+                },
           child: Container(
             width: size,
             height: size,
