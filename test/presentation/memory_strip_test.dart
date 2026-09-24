@@ -5,8 +5,8 @@ import 'package:photoquest/core/presentation/view_model/memories/keepsake_view_m
 import 'package:photoquest/core/presentation/view_model/memories/memory_detail_view_model.dart';
 import 'package:photoquest/core/presentation/widget/molecules/app_widget_preview.dart';
 import 'package:photoquest/core/presentation/widget/organisms/keepsake_canvas.dart';
-import 'package:photoquest/core/presentation/widget/template/memory_detail_template.dart';
-import 'package:photoquest/core/presentation/widget/template/preview_samples.dart';
+import 'package:photoquest/core/presentation/widget/templates/memory_detail_template.dart';
+import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
 void main() {
   final sample = PreviewSamples.memoryDetail;

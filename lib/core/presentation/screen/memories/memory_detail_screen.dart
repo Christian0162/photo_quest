@@ -9,7 +9,7 @@ import '../../view_model/memories/keepsake_view_model.dart';
 import '../../view_model/memories/memory_detail_view_model.dart';
 import '../../widget/organisms/app_scaffold.dart';
 import '../../widget/organisms/photo_viewer.dart';
-import '../../widget/template/memory_detail_template.dart';
+import '../../widget/templates/memory_detail_template.dart';
 
 /// One Memory. Wires [MemoryDetailViewModel] and navigation into
 /// [MemoryDetailTemplate]. See CLAUDE.md §39.

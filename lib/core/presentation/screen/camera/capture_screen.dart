@@ -8,7 +8,7 @@ import '../../view_model/camera/capture_view_model.dart';
 import '../../widget/molecules/confirmation_dialog.dart';
 import '../../widget/organisms/app_scaffold.dart';
 import '../../widget/organisms/booth_settings_sheet.dart';
-import '../../widget/template/capture_template.dart';
+import '../../widget/templates/capture_template.dart';
 
 /// The photobooth. Wires [CaptureViewModel], the leave dialog and
 /// navigation into [CaptureTemplate]. See CLAUDE.md §34-35.

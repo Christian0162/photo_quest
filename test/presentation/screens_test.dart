@@ -16,8 +16,8 @@ import 'package:photoquest/core/presentation/screen/people/people_screen.dart';
 import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
 import 'package:photoquest/core/presentation/view_model/memories/memory_list_view_model.dart';
 import 'package:photoquest/core/presentation/widget/molecules/quest_prompt_bar.dart';
-import 'package:photoquest/core/presentation/widget/template/memories_template.dart';
-import 'package:photoquest/core/presentation/widget/template/preview_samples.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories_template.dart';
+import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
 Widget _themed(Widget child, {List overrides = const []}) {
   return ProviderScope(

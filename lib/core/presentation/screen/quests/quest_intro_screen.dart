@@ -9,7 +9,7 @@ import '../../view_model/quests/quest_participants_view_model.dart';
 import '../../../utils/app_haptics.dart';
 import '../../widget/organisms/app_scaffold.dart';
 import '../../widget/organisms/people_picker_sheet.dart';
-import '../../widget/template/quest_intro_template.dart';
+import '../../widget/templates/quest_intro_template.dart';
 
 /// Quest Introduction. Wires view models, the invite sheet and navigation
 /// into [QuestIntroTemplate]. See CLAUDE.md §59.

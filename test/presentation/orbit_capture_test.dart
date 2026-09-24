@@ -9,7 +9,7 @@ import 'package:photoquest/core/data/services/service_providers.dart';
 import 'package:photoquest/core/data/services/storage/photo_storage_service.dart';
 import 'package:photoquest/core/errors/app_failure.dart';
 import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
-import 'package:photoquest/core/presentation/widget/template/preview_samples.dart';
+import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
 /// A camera whose clip can't be finished when it's stopped right away —
 /// what Android does with an empty recording.
