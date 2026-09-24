@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/Christian0162/photoquest/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Christian0162/photoquest/actions/workflows/ci.yml/badge.svg" /></a>
   <img alt="Version 1.0.0" src="https://img.shields.io/badge/version-1.0.0-FF6B5F" />
   <img alt="Flutter 3.47+" src="https://img.shields.io/badge/Flutter-3.47%2B-02569B?logo=flutter" />
   <img alt="Dart 3.13+" src="https://img.shields.io/badge/Dart-3.13%2B-0175C2?logo=dart" />
@@ -80,6 +81,11 @@ dart format lib test
 flutter analyze
 flutter test
 ```
+
+[CI](.github/workflows/ci.yml) runs the same checks on every push and pull
+request. It also makes sure the generated code is up to date and builds an
+Android APK, which you can download from the run's artifacts. Dependabot
+opens weekly PRs for package updates.
 
 ## Architecture
 
