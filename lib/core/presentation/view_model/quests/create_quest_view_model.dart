@@ -5,83 +5,13 @@ import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
+import '../../../domain/quests/enum/create_quest_step.dart';
+import '../../types/quests/create_quest_draft.dart';
+import '../../types/quests/draft_shot.dart';
 
 part 'create_quest_view_model.g.dart';
 
 const _uuid = Uuid();
-
-/// A single instruction/photo the creator wants captured. See CLAUDE.md
-/// §17-19.
-class DraftShot {
-  const DraftShot({required this.instruction, this.shotType = 'group'});
-
-  final String instruction;
-  final String shotType;
-}
-
-/// The steps of the guided Create Quest flow, one question each.
-enum CreateQuestStep { what, idea, who, shots, review }
-
-/// The in-progress Quest a creator is building, and where they are in the
-/// flow. See CLAUDE.md §33.
-class CreateQuestDraft {
-  const CreateQuestDraft({
-    this.title = '',
-    this.description = '',
-    this.category = 'Memory',
-    this.type = 'solo',
-    this.participantIds = const [],
-    this.shots = const [],
-    this.step = CreateQuestStep.what,
-    this.isSubmitting = false,
-  });
-
-  final String title;
-  final String description;
-  final String category;
-  final String type; // solo, pair, group
-  final List<String> participantIds;
-  final List<DraftShot> shots;
-  final CreateQuestStep step;
-  final bool isSubmitting;
-
-  bool get canCreate => title.trim().isNotEmpty && shots.isNotEmpty;
-  bool get isFirstStep => step == CreateQuestStep.values.first;
-  bool get isLastStep => step == CreateQuestStep.values.last;
-
-  /// Whether leaving now would lose something the creator wrote.
-  bool get hasWork => title.trim().isNotEmpty || shots.isNotEmpty;
-
-  /// Why the current step can't move on yet, or null when it can.
-  String? get blocker => switch (step) {
-    CreateQuestStep.what when title.trim().isEmpty => 'Give your quest a name.',
-    CreateQuestStep.shots when shots.isEmpty =>
-      'Add at least one photo to take.',
-    _ => null,
-  };
-
-  CreateQuestDraft copyWith({
-    String? title,
-    String? description,
-    String? category,
-    String? type,
-    List<String>? participantIds,
-    List<DraftShot>? shots,
-    CreateQuestStep? step,
-    bool? isSubmitting,
-  }) {
-    return CreateQuestDraft(
-      title: title ?? this.title,
-      description: description ?? this.description,
-      category: category ?? this.category,
-      type: type ?? this.type,
-      participantIds: participantIds ?? this.participantIds,
-      shots: shots ?? this.shots,
-      step: step ?? this.step,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-    );
-  }
-}
 
 /// Drives the guided Create Quest flow: what/description/participants/shots
 /// -> review -> create. See CLAUDE.md §33, design system §17-19.

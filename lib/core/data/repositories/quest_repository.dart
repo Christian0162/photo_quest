@@ -1,11 +1,11 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:uuid/uuid.dart';
 
-import '../database/app_database.dart' as db;
-import '../database/daos/quest_dao.dart';
 import '../../domain/quests/entities/quest.dart';
 import '../../domain/quests/entities/quest_participant.dart';
 import '../../domain/quests/entities/quest_shot.dart';
+import '../database/app_database.dart' as db;
+import '../database/daos/quest_dao.dart';
 
 /// Source of truth for Quest, Quest Shot and Quest Participant data.
 /// ViewModels depend on this, never on [QuestDao] or [db.AppDatabase]

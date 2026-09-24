@@ -3,21 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
 import '../../../domain/people/entities/person.dart';
-import '../../../domain/quests/entities/quest_participant.dart';
+import '../../types/quests/quest_participant_with_person.dart';
 
 part 'quest_participants_view_model.g.dart';
-
-/// A Quest Participant paired with the Person it refers to, for display.
-/// See CLAUDE.md §16A, §20.
-class QuestParticipantWithPerson {
-  const QuestParticipantWithPerson({
-    required this.participant,
-    required this.person,
-  });
-
-  final QuestParticipant participant;
-  final Person person;
-}
 
 /// Drives the participant list on the Quest Introduction screen: who's
 /// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,

@@ -4,7 +4,9 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show compute, visibleForTesting;
 import 'package:image/image.dart' as img;
 
-import '../../../domain/memories/entities/photo_look.dart';
+import '../../../../config/constant/app_image_sizes.dart';
+import '../../../domain/camera/enum/camera_frame_format.dart';
+import '../../../domain/memories/enum/photo_look.dart';
 import '../camera/camera_frame.dart';
 
 /// Reports how far along a long job is, from 0 to 1.
@@ -30,15 +32,6 @@ class AnimationResult {
 /// GIFs and boomerangs, and photo-strip composition. Everything heavy runs
 /// off the UI thread via `compute`. See CLAUDE.md §7, §46.
 class ImageProcessingService {
-  static const thumbnailWidth = 480;
-  static const stripWidth = 800;
-
-  /// Poster frames are kept large enough to print on a keepsake.
-  static const posterWidth = 1080;
-
-  /// Animated frames stay small so GIFs load and share quickly.
-  static const animationWidth = 480;
-
   Future<Uint8List> createThumbnail(Uint8List originalBytes) {
     return compute(_createThumbnail, originalBytes);
   }
@@ -138,8 +131,13 @@ class ImageProcessingService {
   static Uint8List _createThumbnail(Uint8List bytes) {
     final decoded = _tryDecode(bytes);
     if (decoded == null) return bytes;
-    final resized = img.copyResize(decoded, width: thumbnailWidth);
-    return Uint8List.fromList(img.encodeJpg(resized, quality: 85));
+    final resized = img.copyResize(
+      decoded,
+      width: AppImageSizes.thumbnailWidth,
+    );
+    return Uint8List.fromList(
+      img.encodeJpg(resized, quality: AppImageSizes.thumbnailJpegQuality),
+    );
   }
 
   static Uint8List _applyLookJpg((Uint8List, List<double>) request) {
@@ -147,7 +145,9 @@ class ImageProcessingService {
     final decoded = _tryDecode(bytes);
     if (decoded == null) return bytes;
     applyColorMatrix(decoded, matrix);
-    return Uint8List.fromList(img.encodeJpg(decoded, quality: 92));
+    return Uint8List.fromList(
+      img.encodeJpg(decoded, quality: AppImageSizes.originalJpegQuality),
+    );
   }
 
   /// Applies a 4×5 RGBA color [matrix] (offsets in 0–255, the same format
@@ -238,16 +238,16 @@ class ImageProcessingService {
     required int frameCentis,
     required ProgressCallback report,
   }) {
-    final poster = frames.first.width > posterWidth
-        ? img.copyResize(frames.first, width: posterWidth)
+    final poster = frames.first.width > AppImageSizes.posterWidth
+        ? img.copyResize(frames.first, width: AppImageSizes.posterWidth)
         : frames.first;
 
     final encoder = img.GifEncoder(samplingFactor: 20);
     img.Image? first;
     for (var i = 0; i < frames.length; i++) {
       final frame = frames[i];
-      final small = frame.width > animationWidth
-          ? img.copyResize(frame, width: animationWidth)
+      final small = frame.width > AppImageSizes.animationWidth
+          ? img.copyResize(frame, width: AppImageSizes.animationWidth)
           : frame;
       first ??= small;
       encoder.addFrame(small, duration: frameCentis);
@@ -258,7 +258,9 @@ class ImageProcessingService {
     report(1);
     return AnimationResult(
       gif: gif,
-      poster: Uint8List.fromList(img.encodeJpg(poster, quality: 90)),
+      poster: Uint8List.fromList(
+        img.encodeJpg(poster, quality: AppImageSizes.printJpegQuality),
+      ),
       width: first!.width,
       height: first.height,
     );
@@ -316,14 +318,17 @@ class ImageProcessingService {
   static Uint8List _pngToJpg(Uint8List pngBytes) {
     final decoded = img.decodePng(pngBytes);
     if (decoded == null) return pngBytes;
-    return Uint8List.fromList(img.encodeJpg(decoded, quality: 92));
+    return Uint8List.fromList(
+      img.encodeJpg(decoded, quality: AppImageSizes.originalJpegQuality),
+    );
   }
 
   static Uint8List _composePhotoStrip((List<Uint8List>, String) request) {
     final (photos, caption) = request;
-    const margin = 40;
-    const gap = 24;
-    const footerHeight = 176;
+    const margin = AppImageSizes.stripMargin;
+    const gap = AppImageSizes.stripGap;
+    const footerHeight = AppImageSizes.stripFooterHeight;
+    const stripWidth = AppImageSizes.stripWidth;
     const photoWidth = stripWidth - margin * 2;
 
     final decoded = photos
@@ -355,7 +360,9 @@ class ImageProcessingService {
     _drawCentered(strip, 'PHOTO QUEST', img.arial48, footerTop, ink);
     _drawCentered(strip, caption, img.arial24, footerTop + 64, ink);
 
-    return Uint8List.fromList(img.encodeJpg(strip, quality: 90));
+    return Uint8List.fromList(
+      img.encodeJpg(strip, quality: AppImageSizes.printJpegQuality),
+    );
   }
 
   static void _drawCentered(

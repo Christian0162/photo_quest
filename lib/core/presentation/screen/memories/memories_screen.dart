@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../config/routes/app_router.dart';
 import '../../view_model/memories/memory_list_view_model.dart';
-import '../../widget/organisms/photo_viewer.dart';
-import '../../widget/template/memories_template.dart';
+import '../../widget/organisms/md_photo_viewer.dart';
+import '../../widget/templates/memories_template.dart';
 
 /// The memory box. Design lives in [MemoriesTemplate]. See CLAUDE.md §38.
 class MemoriesScreen extends ConsumerWidget {

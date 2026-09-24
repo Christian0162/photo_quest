@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:go_router/go_router.dart';
 
+import '../../core/presentation/widget/atoms/md_fade_slide_in.dart';
+import '../../core/presentation/widget/molecules/md_quest_prompt_bar.dart';
+import '../../core/utils/app_haptics.dart';
 import '../constant/app_colors.dart';
 import '../constant/app_motion.dart';
 import '../constant/app_shadows.dart';
 import '../constant/app_spacing.dart';
-import '../../core/presentation/widget/atoms/fade_slide_in.dart';
-import '../../core/presentation/widget/molecules/quest_prompt_bar.dart';
-import '../../core/utils/app_haptics.dart';
 import 'app_router.dart';
 
 /// Bottom chrome shared by Home, Memories and People: the quest prompt
@@ -90,7 +90,7 @@ class _AppShellState extends State<AppShell> {
               // Rises into place on first show; collapses its space and
               // slides down behind the dock while hidden, so the page gets
               // the room back smoothly.
-              FadeSlideIn(
+              MdFadeSlideIn(
                 order: 2,
                 child: ClipRect(
                   child: AnimatedAlign(
@@ -116,7 +116,7 @@ class _AppShellState extends State<AppShell> {
                             excluding: !_promptShown,
                             child: IgnorePointer(
                               ignoring: !_promptShown,
-                              child: QuestPromptBar(
+                              child: MdQuestPromptBar(
                                 onTap: () {
                                   AppHaptics.tap();
                                   context.push(AppRoutes.quests);

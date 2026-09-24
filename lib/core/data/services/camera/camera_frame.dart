@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import '../../../domain/camera/enum/camera_frame_format.dart';
+
 /// One raw frame from the live camera stream, copied out of the plugin's
 /// reused buffers so it can be processed later (e.g. into a boomerang).
 /// Plain data — safe to send to a background isolate. See CLAUDE.md §7.
@@ -21,14 +23,6 @@ class CameraFrame {
 
   /// Clockwise rotation that turns the sensor image upright (portrait).
   final int rotationDegrees;
-}
-
-enum CameraFrameFormat {
-  /// Android: separate Y, U and V planes.
-  yuv420,
-
-  /// iOS: one interleaved blue-green-red-alpha plane.
-  bgra8888,
 }
 
 class CameraFramePlane {

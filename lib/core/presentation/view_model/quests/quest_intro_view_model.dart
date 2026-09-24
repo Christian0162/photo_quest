@@ -3,28 +3,11 @@ import 'dart:developer' as developer;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../data/repositories/memory_repository_provider.dart';
+import '../../types/quests/quest_start_readiness.dart';
 import 'quest_detail_view_model.dart';
 import 'quest_participants_view_model.dart';
 
 part 'quest_intro_view_model.g.dart';
-
-/// Whether a Quest can begin now, and a short line explaining why not (or
-/// what's next). See CLAUDE.md §16A, §37.
-class QuestStartReadiness {
-  const QuestStartReadiness({
-    required this.canStart,
-    this.hint,
-    this.everyoneIn = false,
-  });
-
-  final bool canStart;
-  final String? hint;
-
-  /// A pair/group Quest whose invited People have all said they're in —
-  /// a moment worth celebrating. See design system §49 ("invitation
-  /// accepted").
-  final bool everyoneIn;
-}
 
 @riverpod
 QuestStartReadiness questStartReadiness(Ref ref, String questId) {

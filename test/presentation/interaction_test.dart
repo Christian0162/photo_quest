@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
-import 'package:photoquest/core/presentation/view_model/quests/create_quest_view_model.dart';
-import 'package:photoquest/core/presentation/widget/molecules/app_widget_preview.dart';
-import 'package:photoquest/core/presentation/widget/template/capture_template.dart';
-import 'package:photoquest/core/presentation/widget/template/create_quest_template.dart';
-import 'package:photoquest/core/presentation/widget/template/preview_samples.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_phase.dart';
+import 'package:photoquest/core/domain/quests/enum/create_quest_step.dart';
+import 'package:photoquest/core/presentation/types/camera/capture_state.dart';
+import 'package:photoquest/core/presentation/types/quests/create_quest_draft.dart';
+import 'package:photoquest/core/presentation/types/quests/draft_shot.dart';
+import 'package:photoquest/core/presentation/widget/molecules/md_app_widget_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/capture_template.dart';
+import 'package:photoquest/core/presentation/widget/templates/create_quest_template.dart';
+import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
 CaptureState _captureState(CapturePhase phase) => CaptureState(
   quest: PreviewSamples.anniversary,
@@ -19,7 +22,7 @@ CaptureState _captureState(CapturePhase phase) => CaptureState(
 );
 
 Widget _capture(CapturePhase phase, {VoidCallback? onCancel}) {
-  return AppWidgetPreview(
+  return MdAppWidgetPreview(
     child: CaptureTemplate(
       capture: AsyncData(_captureState(phase)),
       onLeave: () {},
@@ -46,7 +49,7 @@ Widget _shots({
   ValueChanged<DraftShot>? onAdd,
   ValueChanged<int>? onRemove,
 }) {
-  return AppWidgetPreview(
+  return MdAppWidgetPreview(
     child: CreateQuestTemplate(
       draft: CreateQuestDraft(
         title: 'Beach day',

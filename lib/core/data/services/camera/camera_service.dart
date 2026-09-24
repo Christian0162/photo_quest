@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 
+import '../../../../config/constant/app_camera_constants.dart';
+import '../../../domain/camera/enum/camera_frame_format.dart';
 import '../../../errors/app_failure.dart';
 import 'camera_frame.dart';
 
@@ -66,9 +68,9 @@ class CameraService {
   /// shutter was let go) or after [maxDuration]. [onFrame] hears the count
   /// after each frame.
   Future<List<CameraFrame>> captureFrames({
-    int maxFrames = 20,
-    Duration spacing = const Duration(milliseconds: 90),
-    Duration maxDuration = const Duration(seconds: 2),
+    int maxFrames = AppCameraConstants.burstMaxFrames,
+    Duration spacing = AppCameraConstants.burstFrameSpacing,
+    Duration maxDuration = AppCameraConstants.burstMaxDuration,
     bool Function()? shouldStop,
     void Function(int count)? onFrame,
   }) async {
@@ -97,10 +99,11 @@ class CameraService {
       });
 
       // Also notice a release between frames.
-      final watcher = Stream<void>.periodic(const Duration(milliseconds: 50))
-          .listen((_) {
-            if (shouldStop?.call() ?? false) finish();
-          });
+      final watcher =
+          Stream<void>.periodic(AppCameraConstants.burstReleasePollInterval)
+              .listen((_) {
+                if (shouldStop?.call() ?? false) finish();
+              });
       await done.future.timeout(maxDuration, onTimeout: () {});
       await watcher.cancel();
       await controller.stopImageStream();

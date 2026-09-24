@@ -7,17 +7,20 @@ import 'package:photoquest/config/constant/app_theme.dart';
 import 'package:photoquest/core/data/database/app_database.dart'
     show AppDatabase;
 import 'package:photoquest/core/data/database/database_providers.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_phase.dart';
 import 'package:photoquest/core/domain/memories/entities/photo.dart';
+import 'package:photoquest/core/domain/memories/enum/memory_filter.dart';
 import 'package:photoquest/core/domain/quests/entities/quest.dart';
 import 'package:photoquest/core/domain/quests/entities/quest_shot.dart';
 import 'package:photoquest/core/presentation/screen/camera/capture_screen.dart';
 import 'package:photoquest/core/presentation/screen/memories/memories_screen.dart';
 import 'package:photoquest/core/presentation/screen/people/people_screen.dart';
+import 'package:photoquest/core/presentation/types/camera/capture_state.dart';
 import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
 import 'package:photoquest/core/presentation/view_model/memories/memory_list_view_model.dart';
-import 'package:photoquest/core/presentation/widget/molecules/quest_prompt_bar.dart';
-import 'package:photoquest/core/presentation/widget/template/memories_template.dart';
-import 'package:photoquest/core/presentation/widget/template/preview_samples.dart';
+import 'package:photoquest/core/presentation/widget/molecules/md_quest_prompt_bar.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories_template.dart';
+import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
 Widget _themed(Widget child, {List overrides = const []}) {
   return ProviderScope(
@@ -104,7 +107,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final prompt = find.byType(QuestPromptBar);
+    final prompt = find.byType(MdQuestPromptBar);
     for (final tab in ['People', 'Memories', 'Home']) {
       await tester.tap(find.bySemanticsLabel(tab));
       await tester.pumpAndSettle();
