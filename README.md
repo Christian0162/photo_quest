@@ -1,46 +1,68 @@
-# Photo Quest
+<p align="center">
+  <img src="assets/icon/app_icon.png" alt="Photo Quest app icon" width="120" />
+</p>
 
-> **Do something together. Take the picture. Keep the memory.**
+<h1 align="center">Photo Quest</h1>
 
-Photo Quest is a social, real-life quest and photobooth app for Android and
-iOS, built with Flutter. A **Quest** gets people off their phones to do
-something together. A photobooth-style camera guides them through the shots.
-The photos become a private **Memory** that can be repeated year after year.
+<p align="center">
+  <strong>Do something together. Take the picture. Keep the memory.</strong>
+</p>
 
-```text
-QUEST → PEOPLE → REAL-LIFE ACTIVITY → PHOTOBOOTH → MEMORY
-```
+<p align="center">
+  <img alt="Version 1.0.0" src="https://img.shields.io/badge/version-1.0.0-FF6B5F" />
+  <img alt="Flutter 3.47+" src="https://img.shields.io/badge/Flutter-3.47%2B-02569B?logo=flutter" />
+  <img alt="Dart 3.13+" src="https://img.shields.io/badge/Dart-3.13%2B-0175C2?logo=dart" />
+  <img alt="Android and iOS" src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-252323" />
+</p>
 
-It isn't a social feed: no likes, no followers, no public profiles. V1 is
-**local-first**. There's no account or backend, and everything stays on the
-device.
+Photo Quest turns everyday moments into shared adventures. Pick a quest,
+invite your partner, family or friends, then do it together in real life. A
+playful photobooth guides every shot, and each quest becomes a memory you can
+relive year after year.
 
-The full product and engineering spec is in [CLAUDE.md](CLAUDE.md). Read it
-before building a feature.
+It's private by design: no feed, no likes, no followers. V1 is
+**local-first**, so there's no account and everything stays on the device.
 
----
+<p align="center">
+  <img src="docs/screenshots/launch.png" alt="Launch screen" width="200" />
+  <img src="docs/screenshots/home.png" alt="Home with today's quest" width="200" />
+  <img src="docs/screenshots/memories.png" alt="Memories as journal pages" width="200" />
+  <img src="docs/screenshots/people.png" alt="People grouped by relationship" width="200" />
+</p>
+
+## Features
+
+- **Quests:** guided real-life activities for couples, families, friends,
+  pets or just you, with a new "Today's Quest" every day.
+- **Photobooth:** countdown, pose ideas, and Photo, GIF, Boomerang and 360°
+  modes, with film-style looks.
+- **Memories:** a private journal of fanned prints, filtered by *This day*,
+  *This month* or *All journey*. Tap any photo to view it full screen.
+- **Keepsakes:** printed strips, grids and polaroids you can decorate, save
+  and share.
+- **People:** your circle, grouped as your person, family, friends and pets.
+- **Do it again:** repeat a quest each year and watch the memories grow.
 
 ## Tech stack
 
-| Concern             | Package                                      |
-| ------------------- | -------------------------------------------- |
-| Camera / photobooth | `camera`                                     |
-| Local database      | `drift`, `drift_flutter` (SQLite)            |
-| State & DI          | `flutter_riverpod`, `riverpod_annotation`    |
-| Navigation          | `go_router`                                  |
-| Image processing    | `image`                                      |
-| Files & sharing     | `path_provider`, `share_plus`                |
-| Utilities           | `uuid`, `intl`, `path`                       |
-| Code generation     | `build_runner`, `drift_dev`, `riverpod_generator` |
+| Concern            | Package                                       | Version     |
+| ------------------ | --------------------------------------------- | ----------- |
+| Framework          | Flutter / Dart                                | 3.47 / 3.13 |
+| Camera             | `camera`                                      | ^0.11.0     |
+| Local database     | `drift`, `drift_flutter` (SQLite)             | ^2.20 / ^0.3 |
+| State & DI         | `flutter_riverpod`, `riverpod_annotation`     | ^3.0 / ^4.0 |
+| Navigation         | `go_router`                                   | ^14.6       |
+| Image processing   | `image`                                       | ^4.3        |
+| Video playback     | `video_player`                                | ^2.11       |
+| Files & sharing    | `path_provider`, `share_plus`, `gal`          | ^2.1 / ^10.1 / ^2.3 |
+| Utilities          | `uuid`, `intl`, `path`                        | ^4.5 / ^0.19 / ^1.9 |
+| Code generation    | `build_runner`, `drift_dev`, `riverpod_generator` | dev only |
+| Linting            | `flutter_lints`                               | ^6.0        |
 
-Rule of thumb: **photos are files, memories are data.** Photo binaries live
-on the filesystem. SQLite holds only metadata.
-
----
+Fonts are bundled (SIL OFL): **Outfit** for headings, **Inter** for body
+text and **Caveat** for handwritten touches.
 
 ## Getting started
-
-Requires Flutter 3.47+ (Dart 3.13+).
 
 ```bash
 flutter pub get
@@ -48,10 +70,10 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
-Run `build_runner` again after changing any Drift table or DAO, or any
+Run `build_runner` again after changing a Drift table, a DAO or a
 `@riverpod` provider. Generated `*.g.dart` files are committed.
 
-### Before you commit
+Before every commit, all three must pass:
 
 ```bash
 dart format lib test
@@ -59,99 +81,49 @@ flutter analyze
 flutter test
 ```
 
-All three must pass.
-
----
-
 ## Architecture
 
-Layered, with a one-way dependency: **Presentation → Domain → Data.**
+Layered, one-way: **Presentation → Domain → Data.** Photos are files;
+memories are data (SQLite holds only metadata).
 
 ```text
 lib/
-├── main.dart / app.dart        # bootstrap + root MaterialApp.router
-├── config/
-│   ├── constant/               # AppColors, AppTypography, AppSpacing, AppTheme, …
-│   └── routes/                 # go_router config + bottom-nav shell
+├── config/        # design tokens (AppColors, AppTypography, …) and routing
 └── core/
-    ├── domain/                 # entities (Quest, Person, Memory, Photo, …)
-    ├── data/
-    │   ├── database/           # Drift tables, DAOs, seed data
-    │   ├── repositories/       # source of truth for app data
-    │   └── services/           # camera, storage, image processing, sharing
-    └── presentation/
-        ├── screen/             # thin screens, grouped by area
-        ├── view_model/         # Riverpod view models, grouped by area
-        ├── types/              # display labels / icons
-        └── widget/             # atomic design
-            ├── atoms/
-            ├── molecules/      # … + AppWidgetPreview
-            ├── organisms/      # … + AppScaffold
-            └── template/       # one page design per screen + its preview
+    ├── domain/        # entities: Quest, Person, Memory, Photo, …
+    ├── data/          # Drift database, repositories, services
+    └── presentation/  # screen → view_model → template, atomic widgets
 ```
 
-### Screen → View model → Template
+Each screen is split into a thin **Screen** (wiring and navigation), a
+Riverpod **View model** (state and logic) and a **Template** (pure page
+design with a widget preview). The full product and engineering spec is in
+[CLAUDE.md](CLAUDE.md).
 
-Every screen is split into three parts:
+## Versioning
 
-| Part           | Lives in            | Responsibility |
-| -------------- | ------------------- | -------------- |
-| **Screen**     | `screen/`           | `ConsumerWidget` that watches view models, wires callbacks, and handles navigation, dialogs, sheets and snackbars. No layout, no business logic. |
-| **View model** | `view_model/`       | State, validation, derived data, and actions. Talks to repositories and services. |
-| **Template**   | `widget/template/`  | The full page design. Takes plain data and callbacks, and never touches `ref`, the router, repositories or services. |
+The app follows [Semantic Versioning](https://semver.org). The version lives
+in `pubspec.yaml` as `MAJOR.MINOR.PATCH+BUILD`:
 
-Templates are built on the shared **`AppScaffold`**
-(`widget/organisms/app_scaffold.dart`). It handles the app bar, safe area, a
-pinned bottom action, and back-button interception. Use `showAppMessage()`
-for snackbars. Don't build a raw `Scaffold` in a screen or template.
-
----
-
-## Widget previews
-
-Every template has a `*_template_preview.dart` file next to it. Previews
-render the template directly, with no providers and no database. All of
-them use one shared sample cast from
-[`preview_samples.dart`](lib/core/presentation/widget/template/preview_samples.dart).
-Edit that file to change the example data.
-
-Open them in VS Code (Flutter widget preview) or from the terminal:
-
-```bash
-flutter widget-preview start
+```yaml
+version: 1.0.0+1   # 1.0.0 is the version users see, +1 is the build number
 ```
 
-They appear under the **templates** group.
+- Bump **PATCH** for fixes, **MINOR** for new features, **MAJOR** for
+  breaking changes such as a data migration that can't be undone.
+- Increase the **build number** on every store upload. Android uses it as
+  `versionCode` and iOS as `CFBundleVersion`.
+- Record each release in [CHANGELOG.md](CHANGELOG.md).
 
-The previewer generates a `.widget_preview/` folder inside the project. It's
-gitignored and excluded in `analysis_options.yaml`, and it's safe to delete.
-If previews stop showing up, stop the previewer, run **Dart: Restart
-Analysis Server**, delete `.widget_preview/`, and start it again.
+## App icon and launch screen
 
----
+The master icon is [`assets/icon/app_icon.png`](assets/icon/app_icon.png)
+(1024 × 1024): three fanned photobooth prints on warm coral. Every Android
+and iOS icon size, the Android adaptive icon and both launch screens are
+made from it and committed under `android/` and `ios/`. Replace them all
+together if the icon changes.
 
-## Testing
+## Credits
 
-```text
-test/
-├── config/        # design-system checks (e.g. color contrast)
-├── data/          # repositories, image processing
-└── presentation/  # view models, screens, and a smoke test that renders every template preview
-```
-
-Put business logic in view models or the data layer, so it can be
-unit-tested without widgets.
-
----
-
-## Conventions
-
-- Use the design-system tokens (`AppColors`, `AppSpacing`, `AppRadius`,
-  `AppTypography`). Never hardcode colors or spacing.
-- Write warm, human copy ("You made a memory.", not "Session completed").
-- Keep the vocabulary consistent: **Person, Quest, Quest Participant, Shot,
-  Quest Session, Photo, Memory.**
-- Every schema change goes through a Drift migration.
-- Commits follow `feat:` / `fix:` / `refactor:` / `test:`.
-- Not in V1: backend, auth, cloud sync, push notifications, or social
-  features. See CLAUDE.md §54A.
+Example quest photos are from [Unsplash](https://unsplash.com), listed in
+[`assets/images/quests/CREDITS.md`](assets/images/quests/CREDITS.md).

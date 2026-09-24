@@ -305,9 +305,11 @@ Recommended structure:
 ```text
 app_documents/
     photos/
-        originals/
-        thumbnails/
-        strips/
+        originals/    # still photos
+        thumbnails/   # thumbnails, and poster frames of GIFs/clips
+        motion/       # GIFs and boomerangs
+        videos/       # 360° clips
+        strips/       # printed keepsakes (strip / grid / polaroid)
 ```
 
 Never hardcode platform-specific storage paths.
@@ -939,7 +941,24 @@ position
 captured_at
 width
 height
+kind            -- photo, gif, boomerang, video (schema v3)
 ```
+
+For `gif`, `boomerang` and `video`, `original_path` is the `.gif` / `.mp4`
+and `thumbnail_path` is a still poster frame used by cards and keepsakes.
+
+---
+
+## app_settings
+
+```text
+key     -- e.g. booth.countdown_seconds
+value
+```
+
+On-device preferences (photobooth countdown and 360° clip length). Added in
+schema v4, together with `memories.keepsake_design` (the saved layout,
+paper and stickers of a memory's printed keepsake, as JSON).
 
 ---
 

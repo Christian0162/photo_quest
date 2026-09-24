@@ -4,6 +4,12 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Photo Quest uses your camera to take the photos, GIFs and clips for your quests.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Photo Quest saves the photos and keepsakes you choose to download to your photo library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Quest saves the photos and keepsakes you choose to download to your photo library.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
