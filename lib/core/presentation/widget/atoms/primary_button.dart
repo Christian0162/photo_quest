@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
+import '../../../utils/app_haptics.dart';
 import 'pressable_scale.dart';
 
 /// The app's primary call-to-action. Large, warm, one per screen. Shows an
@@ -28,7 +29,12 @@ class PrimaryButton extends StatelessWidget {
     final enabled = onPressed != null && !loading;
 
     final button = FilledButton(
-      onPressed: enabled ? onPressed : null,
+      onPressed: enabled
+          ? () {
+              AppHaptics.tap();
+              onPressed!();
+            }
+          : null,
       child: _ButtonContent(
         label: label,
         icon: icon,
@@ -67,7 +73,12 @@ class SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final button = OutlinedButton(
-      onPressed: onPressed,
+      onPressed: onPressed == null
+          ? null
+          : () {
+              AppHaptics.selection();
+              onPressed!();
+            },
       style: onDark
           ? OutlinedButton.styleFrom(
               foregroundColor: AppColors.onCamera,

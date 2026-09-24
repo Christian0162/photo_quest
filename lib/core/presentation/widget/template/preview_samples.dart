@@ -1,8 +1,10 @@
 import '../../../domain/memories/entities/memory.dart';
+import '../../../domain/memories/entities/photo.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_participant.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
+import '../../view_model/memories/keepsake_view_model.dart';
 import '../../view_model/memories/memory_detail_view_model.dart';
 import '../../view_model/memories/memory_list_view_model.dart';
 import '../../view_model/quests/quest_detail_view_model.dart';
@@ -145,24 +147,47 @@ abstract final class PreviewSamples {
   // Memories -----------------------------------------------------------
 
   static final memories = [
-    _summary('m-anniversary', 'Our Anniversary', DateTime(2026, 9, 14), [
+    _summary(
+      'm-anniversary',
+      'Our Anniversary',
+      DateTime(2026, 9, 14, 20, 42),
+      [me, jamie],
+      category: 'For Us',
+      note: 'Back at the little café where it all started. Same table, too.',
+    ),
+    _summary('m-park', 'Buddy’s Park Day', DateTime(2026, 9, 3, 17, 18), [
       me,
-      jamie,
-    ]),
-    _summary('m-park', 'Buddy’s Park Day', DateTime(2026, 9, 3), [me, buddy]),
-    _summary('m-lake', 'Lake Weekend', DateTime(2026, 8, 22), [me, maya]),
-    _summary('m-christmas', 'Family Christmas', DateTime(2025, 12, 25), [
-      me,
-      mom,
-      dad,
-    ]),
+      buddy,
+    ], category: 'For Life'),
+    _summary(
+      'm-lake',
+      'Lake Weekend',
+      DateTime(2026, 8, 22, 11, 5),
+      [me, maya],
+      category: 'For Friends',
+      shots: 2,
+    ),
+    _summary(
+      'm-christmas',
+      'Family Christmas',
+      DateTime(2025, 12, 25),
+      [me, mom, dad],
+      category: 'For Family',
+      note: 'Matching sweaters, burnt cookies, and Dad asleep by nine.',
+    ),
+    _summary(
+      'm-birthday',
+      'Maya’s Birthday',
+      DateTime(2025, 9, 17, 19, 30),
+      [me, maya],
+      category: 'For Friends',
+      note: 'Candles, a cake that leaned, and far too much glitter.',
+    ),
   ];
 
-  static final memoryMonths = [
-    MemoryMonth(month: DateTime(2026, 9), memories: memories.sublist(0, 2)),
-    MemoryMonth(month: DateTime(2026, 8), memories: [memories[2]]),
-    MemoryMonth(month: DateTime(2025, 12), memories: [memories[3]]),
-  ];
+  /// The memory box as the Memories screen shows it on [today].
+  static MemoryBox memoryBox([MemoryFilter filter = MemoryFilter.allJourney]) =>
+      MemoryBox.from(memories, filter, today);
 
   static final memoryDetail = MemoryDetail(
     memory: Memory(
@@ -180,7 +205,69 @@ abstract final class PreviewSamples {
     stripPath: null,
   );
 
+  // Keepsakes ----------------------------------------------------------
+
+  /// Four shots of the anniversary — a photo, a GIF, a boomerang and a
+  /// 360° clip — as the print shows them. Paths are empty on purpose, so
+  /// each slot shows the photo placeholder.
+  static final keepsake = KeepsakeDesign(
+    memoryId: 'm-anniversary',
+    title: 'Our Anniversary',
+    capturedAt: DateTime(2026, 9, 14),
+    shots: [
+      _capturedShot('shot-1', PhotoKind.photo, 0),
+      _capturedShot('shot-2', PhotoKind.gif, 1),
+      _capturedShot('shot-3', PhotoKind.boomerang, 2),
+      _capturedShot('shot-4', PhotoKind.video, 3),
+    ],
+    stickers: const [
+      PlacedSticker(id: 's1', type: StickerType.heart, x: 0.82, y: 0.08),
+      PlacedSticker(
+        id: 's2',
+        type: StickerType.bestDay,
+        x: 0.3,
+        y: 0.52,
+        rotation: -0.2,
+      ),
+      PlacedSticker(
+        id: 's3',
+        type: StickerType.sparkle,
+        x: 0.18,
+        y: 0.88,
+        scale: 0.8,
+      ),
+    ],
+    selectedStickerId: 's2',
+  );
+
+  static final gridKeepsake = keepsake.copyWith(
+    layout: KeepsakeLayout.grid,
+    frame: KeepsakeFrame.film,
+    clearSelection: true,
+  );
+
+  static final polaroidKeepsake = keepsake.copyWith(
+    layout: KeepsakeLayout.polaroid,
+    frame: KeepsakeFrame.coral,
+    stickers: const [
+      PlacedSticker(id: 's1', type: StickerType.together, x: 0.5, y: 0.8),
+    ],
+    clearSelection: true,
+  );
+
   // Helpers ------------------------------------------------------------
+
+  static Photo _capturedShot(String id, String kind, int position) => Photo(
+    id: id,
+    memoryId: 'm-anniversary',
+    originalPath: '',
+    thumbnailPath: '',
+    position: position,
+    capturedAt: today,
+    width: 0,
+    height: 0,
+    kind: kind,
+  );
 
   static Person _person(String id, String name, String type) => Person(
     id: id,
@@ -223,17 +310,38 @@ abstract final class PreviewSamples {
     String id,
     String title,
     DateTime capturedAt,
-    List<Person> people,
-  ) => MemorySummary(
-    memory: Memory(
-      id: id,
-      questSessionId: 's-$id',
-      title: title,
-      capturedAt: capturedAt,
-      createdAt: capturedAt,
-      updatedAt: capturedAt,
-    ),
-    coverPhoto: null,
-    people: people,
-  );
+    List<Person> people, {
+    String? category,
+    String? note,
+    int shots = 3,
+  }) {
+    final photos = [
+      for (var i = 0; i < shots; i++)
+        Photo(
+          id: '$id-photo-$i',
+          memoryId: id,
+          originalPath: '',
+          thumbnailPath: '',
+          position: i,
+          capturedAt: capturedAt,
+          width: 0,
+          height: 0,
+        ),
+    ];
+    return MemorySummary(
+      memory: Memory(
+        id: id,
+        questSessionId: 's-$id',
+        title: title,
+        note: note,
+        capturedAt: capturedAt,
+        createdAt: capturedAt,
+        updatedAt: capturedAt,
+      ),
+      coverPhoto: photos.first,
+      people: people,
+      photos: photos,
+      questCategory: category,
+    );
+  }
 }

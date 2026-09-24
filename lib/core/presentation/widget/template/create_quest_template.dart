@@ -8,6 +8,7 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
+import '../../../utils/app_haptics.dart';
 import '../../types/display_labels.dart';
 import '../../view_model/quests/create_quest_view_model.dart';
 import '../atoms/person_avatar.dart';
@@ -49,6 +50,7 @@ class CreateQuestTemplate extends StatefulWidget {
     required this.onToggleParticipant,
     required this.onAddShot,
     required this.onRemoveShot,
+    required this.onMoveShot,
   });
 
   final CreateQuestDraft draft;
@@ -68,6 +70,9 @@ class CreateQuestTemplate extends StatefulWidget {
   final ValueChanged<String> onToggleParticipant;
   final ValueChanged<DraftShot> onAddShot;
   final ValueChanged<int> onRemoveShot;
+
+  /// Moves a shot from one position to its final new position.
+  final void Function(int from, int to) onMoveShot;
 
   @override
   State<CreateQuestTemplate> createState() => _CreateQuestTemplateState();
@@ -194,6 +199,7 @@ class _CreateQuestTemplateState extends State<CreateQuestTemplate> {
                   draft: draft,
                   onAdd: widget.onAddShot,
                   onRemove: widget.onRemoveShot,
+                  onMove: widget.onMoveShot,
                 ),
                 _ReviewStep(
                   draft: draft,
@@ -291,7 +297,10 @@ class _WhatStep extends StatelessWidget {
                 label: Text(suggestion),
                 showCheckmark: false,
                 selected: draft.category == suggestion,
-                onSelected: (_) => onCategoryChanged(suggestion),
+                onSelected: (_) {
+                  AppHaptics.selection();
+                  onCategoryChanged(suggestion);
+                },
               ),
           ],
         ),
@@ -360,7 +369,10 @@ class _WhoStep extends StatelessWidget {
                   label: label,
                   icon: icon,
                   selected: draft.type == value,
-                  onTap: () => onTypeChanged(value),
+                  onTap: () {
+                    AppHaptics.selection();
+                    onTypeChanged(value);
+                  },
                 ),
               ),
               if (value != questTypes.last.$1)
@@ -414,7 +426,10 @@ class _WhoStep extends StatelessWidget {
                           label: Text(person.name),
                           selected: selected,
                           onSelected: selected || !full
-                              ? (_) => onToggleParticipant(person.id)
+                              ? (_) {
+                                  AppHaptics.selection();
+                                  onToggleParticipant(person.id);
+                                }
                               : null,
                         );
                       },
@@ -497,12 +512,14 @@ class _ShotsStep extends StatefulWidget {
     required this.draft,
     required this.onAdd,
     required this.onRemove,
+    required this.onMove,
   });
 
   final TextEditingController controller;
   final CreateQuestDraft draft;
   final ValueChanged<DraftShot> onAdd;
   final ValueChanged<int> onRemove;
+  final void Function(int from, int to) onMove;
 
   @override
   State<_ShotsStep> createState() => _ShotsStepState();
@@ -514,15 +531,26 @@ class _ShotsStepState extends State<_ShotsStep> {
   void _submit() {
     final text = widget.controller.text.trim();
     if (text.isEmpty) return;
+    AppHaptics.selection();
     widget.onAdd(DraftShot(instruction: text, shotType: _shotType));
     widget.controller.clear();
     setState(() {});
+  }
+
+  void _addIdea((String, String) idea) {
+    AppHaptics.selection();
+    widget.onAdd(DraftShot(instruction: idea.$1, shotType: idea.$2));
   }
 
   @override
   Widget build(BuildContext context) {
     final shots = widget.draft.shots;
     final canAdd = widget.controller.text.trim().isNotEmpty;
+    final taken = {for (final shot in shots) shot.instruction};
+    final ideas = [
+      for (final idea in _shotIdeas)
+        if (!taken.contains(idea.$1)) idea,
+    ];
 
     return _StepPage(
       question: 'What pictures should we take?',
@@ -540,7 +568,10 @@ class _ShotsStepState extends State<_ShotsStep> {
                 label: Text(label),
                 showCheckmark: false,
                 selected: _shotType == value,
-                onSelected: (_) => setState(() => _shotType = value),
+                onSelected: (_) {
+                  AppHaptics.selection();
+                  setState(() => _shotType = value);
+                },
               ),
           ],
         ),
@@ -574,50 +605,186 @@ class _ShotsStepState extends State<_ShotsStep> {
             ),
           ],
         ),
-        const SizedBox(height: AppSpacing.lg),
-        for (var i = 0; i < shots.length; i++)
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-            child: AppCard(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.ms,
-                AppSpacing.xs,
-                AppSpacing.xs,
-                AppSpacing.xs,
+        if (ideas.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.md),
+          Text('Need ideas? Tap to add', style: AppTypography.label),
+          const SizedBox(height: AppSpacing.sm),
+          // One scrolling row, so ideas help without pushing your own shots
+          // below the fold.
+          SizedBox(
+            height: AppTouch.minTarget,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
+              itemCount: ideas.length,
+              separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
+              itemBuilder: (context, index) {
+                final idea = ideas[index];
+                return ActionChip(
+                  avatar: Icon(shotTypeIcon(idea.$2), size: AppIconSizes.sm),
+                  label: Text(idea.$1),
+                  onPressed: () => _addIdea(idea),
+                );
+              },
+            ),
+          ),
+        ],
+        if (shots.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  shots.length == 1
+                      ? 'Your shot'
+                      : 'Your ${shots.length} shots',
+                  style: AppTypography.label,
+                ),
               ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 16,
-                    backgroundColor: AppColors.softPeach,
-                    child: Text('${i + 1}', style: AppTypography.label),
+              if (shots.length > 1)
+                Text('Drag to reorder', style: AppTypography.caption),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            buildDefaultDragHandles: false,
+            itemCount: shots.length,
+            onReorderStart: (_) => AppHaptics.selection(),
+            onReorderItem: widget.onMove,
+            proxyDecorator: (child, index, animation) => AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) => Transform.scale(
+                scale: 1 + 0.03 * Curves.easeOut.transform(animation.value),
+                child: child,
+              ),
+              child: Material(color: Colors.transparent, child: child),
+            ),
+            itemBuilder: (context, i) => Padding(
+              key: ObjectKey(shots[i]),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+              child: Dismissible(
+                key: ObjectKey(shots[i]),
+                direction: DismissDirection.endToStart,
+                onDismissed: (_) => widget.onRemove(i),
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: AppSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: AppColors.errorSurface,
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
-                  const SizedBox(width: AppSpacing.ms),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(shots[i].instruction, style: AppTypography.body),
-                        Text(
-                          shotTypeLabel(shots[i].shotType),
-                          style: AppTypography.caption,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.delete_outline_rounded,
+                        color: AppColors.error,
+                      ),
+                      const SizedBox(width: AppSpacing.xs),
+                      Text(
+                        'Remove',
+                        style: AppTypography.label.copyWith(
+                          color: AppColors.error,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    tooltip: 'Remove shot ${i + 1}',
-                    icon: const Icon(
-                      Icons.close_rounded,
-                      size: AppIconSizes.md,
-                    ),
-                    onPressed: () => widget.onRemove(i),
-                  ),
-                ],
+                ),
+                child: _ShotRow(
+                  index: i,
+                  shot: shots[i],
+                  reorderable: shots.length > 1,
+                  onRemove: () => widget.onRemove(i),
+                ),
               ),
             ),
           ),
+        ],
       ],
+    );
+  }
+}
+
+/// Ready-made, playful shot instructions: tap one instead of typing. See
+/// design system §27 ("short, playful, actionable").
+const _shotIdeas = [
+  ('Everyone squeeze together!', 'group'),
+  ('Give your funniest face', 'candid'),
+  ('Copy the pose', 'group'),
+  ('Laugh at something real', 'candid'),
+  ('A close-up of your hands', 'close_up'),
+  ('Show where you are', 'wide'),
+];
+
+/// One shot in the list: its number, instruction and framing, a drag
+/// handle, and a remove button (swiping left removes it too).
+class _ShotRow extends StatelessWidget {
+  const _ShotRow({
+    required this.index,
+    required this.shot,
+    required this.reorderable,
+    required this.onRemove,
+  });
+
+  final int index;
+  final DraftShot shot;
+  final bool reorderable;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xs,
+        AppSpacing.xs,
+        AppSpacing.xs,
+        AppSpacing.xs,
+      ),
+      child: Row(
+        children: [
+          if (reorderable)
+            ReorderableDragStartListener(
+              index: index,
+              child: const Tooltip(
+                message: 'Drag to reorder',
+                child: SizedBox.square(
+                  dimension: AppTouch.minTarget,
+                  child: Icon(
+                    Icons.drag_indicator_rounded,
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ),
+            )
+          else
+            const SizedBox(width: AppSpacing.sm),
+          CircleAvatar(
+            radius: 16,
+            backgroundColor: AppColors.softPeach,
+            child: Text('${index + 1}', style: AppTypography.label),
+          ),
+          const SizedBox(width: AppSpacing.ms),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(shot.instruction, style: AppTypography.body),
+                Text(
+                  shotTypeLabel(shot.shotType),
+                  style: AppTypography.caption,
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            tooltip: 'Remove shot ${index + 1}',
+            icon: const Icon(Icons.close_rounded, size: AppIconSizes.md),
+            onPressed: onRemove,
+          ),
+        ],
+      ),
     );
   }
 }

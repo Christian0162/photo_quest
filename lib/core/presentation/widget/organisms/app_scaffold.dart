@@ -83,6 +83,24 @@ class AppScaffold extends StatelessWidget {
 
 /// Shows a short, friendly message at the bottom of the current screen.
 /// Copy should be human, never a raw error. See CLAUDE.md §42, §57.
-void showAppMessage(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+///
+/// Pass [actionLabel] + [onAction] to offer a way back, e.g. "Undo" after
+/// removing something. A new message replaces the current one instead of
+/// queueing behind it.
+void showAppMessage(
+  BuildContext context,
+  String message, {
+  String? actionLabel,
+  VoidCallback? onAction,
+}) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: actionLabel == null || onAction == null
+            ? null
+            : SnackBarAction(label: actionLabel, onPressed: onAction),
+      ),
+    );
 }

@@ -10,10 +10,14 @@ import 'preview_samples.dart';
 Widget _detail(AsyncValue<MemoryDetail> detail) {
   return AppWidgetPreview(
     child: MemoryDetailTemplate(
+      memoryId: 'memory-1',
       detail: detail,
+      onOpenPhoto: (_, _) {},
       onRetry: () {},
       onShare: (_) {},
       onDoAgain: (_) {},
+      onDecorate: () {},
+      onDownloadStrip: () {},
     ),
   );
 }

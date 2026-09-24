@@ -15,6 +15,7 @@ class LocalPhoto extends StatelessWidget {
     super.key,
     required this.path,
     this.fit = BoxFit.cover,
+    this.alignment = Alignment.center,
     this.decodeWidth,
     this.semanticLabel,
     this.placeholderIcon = Icons.photo_rounded,
@@ -22,6 +23,9 @@ class LocalPhoto extends StatelessWidget {
 
   final String? path;
   final BoxFit fit;
+
+  /// Which part of the photo stays in view when [fit] crops it.
+  final Alignment alignment;
 
   /// Logical width to decode at. Defaults to the laid-out width.
   final double? decodeWidth;
@@ -31,7 +35,9 @@ class LocalPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final path = this.path;
-    if (path == null) return PhotoPlaceholder(icon: placeholderIcon);
+    if (path == null || path.isEmpty) {
+      return PhotoPlaceholder(icon: placeholderIcon);
+    }
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -48,6 +54,7 @@ class LocalPhoto extends StatelessWidget {
         return Image.file(
           File(path),
           fit: fit,
+          alignment: alignment,
           // Cover fills its box; contain sizes to the photo so shadows and
           // borders hug the picture itself.
           width: fit == BoxFit.cover ? double.infinity : null,

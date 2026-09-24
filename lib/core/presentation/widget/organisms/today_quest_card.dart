@@ -5,7 +5,6 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../types/display_labels.dart';
-import '../atoms/local_photo.dart';
 import '../atoms/primary_button.dart';
 import '../molecules/app_card.dart';
 import 'quest_card.dart';
@@ -30,9 +29,7 @@ class TodayQuestCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadius.xl),
             child: AspectRatio(
               aspectRatio: 16 / 10,
-              child: quest.coverImagePath != null
-                  ? LocalPhoto(path: quest.coverImagePath)
-                  : QuestCoverArt(category: quest.category),
+              child: QuestHeroCover(quest: quest),
             ),
           ),
           Padding(

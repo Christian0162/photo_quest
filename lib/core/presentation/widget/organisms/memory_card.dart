@@ -8,6 +8,7 @@ import '../../view_model/memories/memory_list_view_model.dart';
 import '../atoms/local_photo.dart';
 import '../atoms/participant_avatar_stack.dart';
 import '../molecules/app_card.dart';
+import '../molecules/memory_cover_hero.dart';
 
 /// A Memory as a printed photo: the picture dominates, with a white print
 /// border, the quest title, date, and who was there underneath. See
@@ -45,11 +46,14 @@ class MemoryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            child: AspectRatio(
-              aspectRatio: 4 / 5,
-              child: LocalPhoto(path: summary.coverPhoto?.thumbnailPath),
+          MemoryCoverHero(
+            memoryId: memory.id,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              child: AspectRatio(
+                aspectRatio: 4 / 5,
+                child: LocalPhoto(path: summary.coverPhoto?.thumbnailPath),
+              ),
             ),
           ),
           Padding(

@@ -9,6 +9,7 @@ import '../../types/display_labels.dart';
 import '../atoms/local_photo.dart';
 import '../atoms/participant_avatar_stack.dart';
 import '../molecules/app_card.dart';
+import '../molecules/photobooth_print.dart';
 
 /// A Quest as an inspiring, tappable card: cover, title, the real-life idea
 /// in one or two lines, and who it's for. Participants show only for a
@@ -128,6 +129,34 @@ class QuestCoverArt extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A Quest's hero image: its own cover photo if it has one, else an example
+/// photobooth print of its category ("what this kind of memory looks like"), else the
+/// illustrated art. For single, large heroes (Today's Quest, the intro) —
+/// shelf cards keep the art so they don't repeat the category banner. See
+/// design system §14.
+class QuestHeroCover extends StatelessWidget {
+  const QuestHeroCover({super.key, required this.quest});
+
+  final Quest quest;
+
+  @override
+  Widget build(BuildContext context) {
+    if (quest.coverImagePath != null) {
+      return LocalPhoto(path: quest.coverImagePath);
+    }
+    final example = questCategoryExample(quest.category);
+    if (example == null) return QuestCoverArt(category: quest.category);
+
+    return PhotoboothPrint(
+      image: ResizeImage(AssetImage(example.asset), width: 640),
+      focus: example.focus,
+      note: example.tagline,
+      date: DateTime.now(),
+      semanticLabel: 'Example photobooth print for ${quest.title}',
     );
   }
 }

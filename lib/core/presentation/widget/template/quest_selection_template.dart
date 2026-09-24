@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,12 +7,13 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../view_model/quests/quest_list_view_model.dart';
+import '../atoms/fade_slide_in.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/skeleton_box.dart';
 import '../molecules/empty_state.dart';
-import '../molecules/section_header.dart';
 import '../organisms/app_scaffold.dart';
 import '../organisms/quest_card.dart';
+import '../organisms/quest_category_banner.dart';
 
 /// Inspirational Quest picker: large visual cards on one shelf per
 /// category ("For Us", "For Family" …), not a dense list. See CLAUDE.md §33.
@@ -36,6 +39,16 @@ class QuestSelectionTemplate extends StatelessWidget {
       _cardWidth * 3 / 4 +
       AppSpacing.xl +
       MediaQuery.textScalerOf(context).scale(76);
+
+  /// Opens a random quest — for when "anything!" is the answer.
+  void _surprise(List<QuestCategoryShelf> shelves) {
+    final all = [
+      for (final shelf in shelves)
+        for (final item in shelf.quests) item.quest,
+    ];
+    if (all.isEmpty) return;
+    onOpenQuest(all[math.Random().nextInt(all.length)]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,42 +118,64 @@ class QuestSelectionTemplate extends StatelessWidget {
                   ),
                 ),
               ),
-              for (final shelf in list) ...[
+              const SizedBox(height: AppSpacing.md),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.gutter,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SecondaryButton(
+                    label: "Can't decide? Surprise me",
+                    icon: Icons.casino_rounded,
+                    expand: false,
+                    onPressed: () => _surprise(list),
+                  ),
+                ),
+              ),
+              for (final (index, shelf) in list.indexed) ...[
                 const SizedBox(height: AppSpacing.xl),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.gutter,
                   ),
-                  child: SectionHeader(title: shelf.category),
+                  child: QuestCategoryBanner(
+                    category: shelf.category,
+                    questCount: shelf.quests.length,
+                    index: index,
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.ms),
-                SizedBox(
-                  height: _shelfHeight(context),
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    clipBehavior: Clip.none,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.gutter,
-                    ),
-                    itemCount: shelf.quests.length,
-                    separatorBuilder: (_, _) =>
-                        const SizedBox(width: AppSpacing.ms),
-                    itemBuilder: (context, index) {
-                      final item = shelf.quests[index];
-                      // Top-aligned so a card is only as tall as its
-                      // content, not the whole shelf.
-                      return Align(
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          width: _cardWidth,
-                          child: QuestCard(
-                            quest: item.quest,
-                            people: item.participants,
-                            onTap: () => onOpenQuest(item.quest),
+                FadeSlideIn(
+                  order: index + 1,
+                  child: SizedBox(
+                    height: _shelfHeight(context),
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.gutter,
+                      ),
+                      itemCount: shelf.quests.length,
+                      separatorBuilder: (_, _) =>
+                          const SizedBox(width: AppSpacing.ms),
+                      itemBuilder: (context, index) {
+                        final item = shelf.quests[index];
+                        // Top-aligned so a card is only as tall as its
+                        // content, not the whole shelf.
+                        return Align(
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: _cardWidth,
+                            child: QuestCard(
+                              quest: item.quest,
+                              people: item.participants,
+                              onTap: () => onOpenQuest(item.quest),
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
