@@ -48,11 +48,36 @@ abstract final class AppColors {
   static const error = Color(0xFFB3261E);
   static const errorSurface = Color(0xFFFBE4DF);
 
+  // Navigation dock — a charcoal camera-body bar floating on the cream.
+  static const dock = warmCharcoal;
+
+  /// Unselected dock icons. ~7:1 on [dock].
+  static const onDockMuted = Color(0xFFB8AFA8);
+
   // Photobooth (dark) context.
   static const camera = Color(0xFF0E0D0D);
   static const onCamera = Color(0xFFFFFFFF);
   static const onCameraMuted = Color(0xB3FFFFFF);
   static const cameraScrim = Color(0x8C000000);
+
+  // Memory journal.
+  /// The dark well a memory's prints are laid out in, like a booth's tray.
+  static const printWell = warmCharcoal;
+
+  /// Washi tape holding a featured memory to the page.
+  static const tape = Color(0xB3FFD166);
+
+  // Photobooth print.
+  /// The soft beige paper a photobooth print is printed on.
+  static const printPaper = Color(0xFFEFEAE3);
+
+  /// Pen ink for writing and doodles on a print.
+  static const inkBrown = Color(0xFF4A3F38);
+
+  /// Sky and deep-shadow tones of the tiny sample scene each look swatch
+  /// is shown on, so a look's effect on warmth and contrast is visible.
+  static const lookSampleSky = Color(0xFF7FB3D5);
+  static const lookSampleShadow = Color(0xFF8D5B4C);
 
   /// Card/photo shadow tint — charcoal, never pure black.
   static const shadow = Color(0x1F252323);

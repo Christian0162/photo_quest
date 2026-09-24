@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config/constant/app_theme.dart';
 import 'config/routes/app_router.dart';
+import 'core/presentation/widget/organisms/launch_reveal.dart';
 
 class PhotoQuestApp extends ConsumerWidget {
   const PhotoQuestApp({super.key});
@@ -16,6 +17,8 @@ class PhotoQuestApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: router,
+      // Plays once per cold start, over the app as it loads.
+      builder: (context, child) => LaunchReveal(child: child!),
     );
   }
 }

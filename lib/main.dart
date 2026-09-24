@@ -17,6 +17,7 @@ void _registerFontLicenses() {
     for (final (family, asset) in [
       ('Outfit', 'assets/fonts/OFL-Outfit.txt'),
       ('Inter', 'assets/fonts/OFL-Inter.txt'),
+      ('Caveat', 'assets/fonts/OFL-Caveat.txt'),
     ]) {
       yield LicenseEntryWithLineBreaks([
         family,

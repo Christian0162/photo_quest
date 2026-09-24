@@ -14,6 +14,13 @@ abstract final class AppSpacing {
 
   /// Horizontal page gutter for every screen.
   static const gutter = ml;
+
+  /// Bottom padding at the end of a tab screen's scroll, so the last item
+  /// settles comfortably above the quest prompt and dock.
+  static const tabScrollEnd = xl;
+
+  /// Height of the floating navigation dock.
+  static const dockHeight = 64.0;
 }
 
 /// Centralized corner-radius scale. See CLAUDE.md §27, design system §9.

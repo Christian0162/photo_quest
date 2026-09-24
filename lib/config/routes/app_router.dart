@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../core/presentation/screen/camera/capture_screen.dart';
 import '../../core/presentation/screen/camera/memory_reveal_screen.dart';
 import '../../core/presentation/screen/home/home_screen.dart';
+import '../../core/presentation/screen/memories/keepsake_screen.dart';
 import '../../core/presentation/screen/memories/memories_screen.dart';
 import '../../core/presentation/screen/memories/memory_detail_screen.dart';
 import '../../core/presentation/screen/people/people_screen.dart';
@@ -12,6 +13,8 @@ import '../../core/presentation/screen/quests/create_quest_screen.dart';
 import '../../core/presentation/screen/quests/quest_intro_screen.dart';
 import '../../core/presentation/screen/quests/quest_selection_screen.dart';
 import '../../core/presentation/screen/settings/settings_screen.dart';
+import '../constant/app_colors.dart';
+import '../constant/app_motion.dart';
 import 'app_shell.dart';
 
 part 'app_router.g.dart';
@@ -27,6 +30,7 @@ abstract final class AppRoutes {
   static const memoryReveal = '/capture/:sessionId/reveal';
   static const memories = '/memories';
   static const memoryDetail = '/memory/:memoryId';
+  static const keepsake = '/memory/:memoryId/keepsake';
   static const people = '/people';
   static const settings = '/settings';
 
@@ -35,6 +39,7 @@ abstract final class AppRoutes {
   static String memoryRevealPath(String sessionId) =>
       '/capture/$sessionId/reveal';
   static String memoryDetailPath(String memoryId) => '/memory/$memoryId';
+  static String keepsakePath(String memoryId) => '/memory/$memoryId/keepsake';
 }
 
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -90,18 +95,36 @@ GoRouter appRouter(Ref ref) {
       ),
       GoRoute(
         path: AppRoutes.capture,
-        builder: (context, state) =>
-            CaptureScreen(sessionId: state.pathParameters['sessionId']!),
+        pageBuilder: (context, state) => _BoothTransitionPage(
+          key: state.pageKey,
+          context: context,
+          child: CaptureScreen(sessionId: state.pathParameters['sessionId']!),
+        ),
       ),
       GoRoute(
         path: AppRoutes.memoryReveal,
-        builder: (context, state) =>
-            MemoryRevealScreen(sessionId: state.pathParameters['sessionId']!),
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          key: state.pageKey,
+          transitionDuration: AppMotion.of(context, AppMotion.medium),
+          transitionsBuilder: (context, animation, _, child) =>
+              FadeTransition(opacity: animation, child: child),
+          child: MemoryRevealScreen(
+            sessionId: state.pathParameters['sessionId']!,
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.memoryDetail,
+        builder: (context, state) => MemoryDetailScreen(
+          memoryId: state.pathParameters['memoryId']!,
+          // The tapped card's cover, shown while the rest loads.
+          coverPath: state.extra is String ? state.extra! as String : null,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.keepsake,
         builder: (context, state) =>
-            MemoryDetailScreen(memoryId: state.pathParameters['memoryId']!),
+            KeepsakeScreen(memoryId: state.pathParameters['memoryId']!),
       ),
       GoRoute(
         path: AppRoutes.settings,
@@ -109,4 +132,42 @@ GoRouter appRouter(Ref ref) {
       ),
     ],
   );
+}
+
+/// Stepping into the photobooth: the screen dips to dark and the booth
+/// settles in from a slight zoom, like walking behind the curtain. Plain
+/// fade under reduced motion. See design system §49 ("card → camera").
+class _BoothTransitionPage extends CustomTransitionPage<void> {
+  _BoothTransitionPage({
+    super.key,
+    required BuildContext context,
+    required super.child,
+  }) : super(
+         transitionDuration: AppMotion.of(context, AppMotion.medium),
+         reverseTransitionDuration: AppMotion.of(context, AppMotion.short),
+         transitionsBuilder: (context, animation, _, child) {
+           final curved = CurvedAnimation(
+             parent: animation,
+             curve: AppMotion.standard,
+           );
+           return Stack(
+             fit: StackFit.expand,
+             children: [
+               FadeTransition(
+                 opacity: animation,
+                 child: const ColoredBox(color: AppColors.camera),
+               ),
+               FadeTransition(
+                 opacity: curved,
+                 child: AppMotion.reduced(context)
+                     ? child
+                     : ScaleTransition(
+                         scale: Tween(begin: 1.06, end: 1.0).animate(curved),
+                         child: child,
+                       ),
+               ),
+             ],
+           );
+         },
+       );
 }

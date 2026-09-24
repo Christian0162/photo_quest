@@ -9,6 +9,9 @@ abstract final class AppTypography {
   static const headingFamily = 'Outfit';
   static const bodyFamily = 'Inter';
 
+  /// Handwriting — only for captions written on photobooth prints.
+  static const scriptFamily = 'Caveat';
+
   /// Hero moments: greeting, "Quest complete".
   static const TextStyle display = TextStyle(
     fontFamily: headingFamily,
@@ -105,6 +108,25 @@ abstract final class AppTypography {
     height: 1.25,
     fontWeight: FontWeight.w600,
     color: AppColors.onCoral,
+  );
+
+  /// A handwritten note on a photobooth print ("Better together").
+  static const TextStyle script = TextStyle(
+    fontFamily: scriptFamily,
+    fontSize: 22,
+    height: 1.05,
+    fontWeight: FontWeight.w600,
+    color: AppColors.inkBrown,
+  );
+
+  /// Handwritten journal headings in the memory box ("October", "Earlier
+  /// in October").
+  static const TextStyle journal = TextStyle(
+    fontFamily: scriptFamily,
+    fontSize: 26,
+    height: 1.1,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
   );
 
   /// The 3-2-1 photobooth countdown.
