@@ -8,14 +8,18 @@ part of 'memory_reveal_view_model.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Composes the finished photo strip for a just-completed session and
-/// returns the memory it belongs to. See CLAUDE.md §36-37.
+/// Makes sure a just-completed session has a printed strip — composing a
+/// default one only if the memory has none yet, so a decorated keepsake is
+/// never overwritten — and returns the memory it belongs to. See CLAUDE.md
+/// §36-37.
 
 @ProviderFor(memoryReveal)
 final memoryRevealProvider = MemoryRevealFamily._();
 
-/// Composes the finished photo strip for a just-completed session and
-/// returns the memory it belongs to. See CLAUDE.md §36-37.
+/// Makes sure a just-completed session has a printed strip — composing a
+/// default one only if the memory has none yet, so a decorated keepsake is
+/// never overwritten — and returns the memory it belongs to. See CLAUDE.md
+/// §36-37.
 
 final class MemoryRevealProvider
     extends
@@ -27,8 +31,10 @@ final class MemoryRevealProvider
     with
         $FutureModifier<MemoryRevealResult>,
         $FutureProvider<MemoryRevealResult> {
-  /// Composes the finished photo strip for a just-completed session and
-  /// returns the memory it belongs to. See CLAUDE.md §36-37.
+  /// Makes sure a just-completed session has a printed strip — composing a
+  /// default one only if the memory has none yet, so a decorated keepsake is
+  /// never overwritten — and returns the memory it belongs to. See CLAUDE.md
+  /// §36-37.
   MemoryRevealProvider._({
     required MemoryRevealFamily super.from,
     required String super.argument,
@@ -73,10 +79,12 @@ final class MemoryRevealProvider
   }
 }
 
-String _$memoryRevealHash() => r'afe35ad87e1b525d862ceec0f3d1d46edc980dca';
+String _$memoryRevealHash() => r'47562c52b25d6c06faafff135bfec5584d67cd3d';
 
-/// Composes the finished photo strip for a just-completed session and
-/// returns the memory it belongs to. See CLAUDE.md §36-37.
+/// Makes sure a just-completed session has a printed strip — composing a
+/// default one only if the memory has none yet, so a decorated keepsake is
+/// never overwritten — and returns the memory it belongs to. See CLAUDE.md
+/// §36-37.
 
 final class MemoryRevealFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<MemoryRevealResult>, String> {
@@ -89,8 +97,10 @@ final class MemoryRevealFamily extends $Family
         isAutoDispose: true,
       );
 
-  /// Composes the finished photo strip for a just-completed session and
-  /// returns the memory it belongs to. See CLAUDE.md §36-37.
+  /// Makes sure a just-completed session has a printed strip — composing a
+  /// default one only if the memory has none yet, so a decorated keepsake is
+  /// never overwritten — and returns the memory it belongs to. See CLAUDE.md
+  /// §36-37.
 
   MemoryRevealProvider call(String sessionId) =>
       MemoryRevealProvider._(argument: sessionId, from: this);

@@ -3,16 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_constants.dart';
+import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../types/display_labels.dart';
 import '../../view_model/quests/quest_detail_view_model.dart';
 import '../../view_model/quests/quest_intro_view_model.dart';
 import '../../view_model/quests/quest_participants_view_model.dart';
-import '../atoms/local_photo.dart';
+import '../atoms/fade_slide_in.dart';
 import '../atoms/person_avatar.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/skeleton_box.dart';
+import '../atoms/status_pill.dart';
 import '../molecules/empty_state.dart';
 import '../molecules/section_header.dart';
 import '../organisms/app_scaffold.dart';
@@ -57,6 +59,7 @@ class QuestIntroTemplate extends StatelessWidget {
           ? null
           : _StartAction(
               hint: readiness.hint,
+              everyoneIn: readiness.everyoneIn,
               canStart: readiness.canStart,
               starting: isStarting,
               onStart: onStart,
@@ -89,14 +92,12 @@ class QuestIntroTemplate extends StatelessWidget {
               AppSpacing.gutter,
               AppSpacing.xl,
             ),
-            children: [
+            children: FadeSlideIn.staggered([
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppRadius.photo),
                 child: AspectRatio(
                   aspectRatio: 16 / 10,
-                  child: quest.coverImagePath != null
-                      ? LocalPhoto(path: quest.coverImagePath)
-                      : QuestCoverArt(category: quest.category),
+                  child: QuestHeroCover(quest: quest),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -163,7 +164,7 @@ class QuestIntroTemplate extends StatelessWidget {
                 const SizedBox(height: AppSpacing.ms),
                 QuestShotList(shots: data.shots),
               ],
-            ],
+            ]),
           );
         },
       ),
@@ -197,12 +198,14 @@ class _Fact extends StatelessWidget {
 class _StartAction extends StatelessWidget {
   const _StartAction({
     required this.hint,
+    required this.everyoneIn,
     required this.canStart,
     required this.starting,
     required this.onStart,
   });
 
   final String? hint;
+  final bool everyoneIn;
   final bool canStart;
   final bool starting;
   final VoidCallback onStart;
@@ -212,10 +215,22 @@ class _StartAction extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          hint ?? "Next up: the photobooth. We'll ask to use your camera.",
-          textAlign: TextAlign.center,
-          style: AppTypography.bodyMuted,
+        AnimatedSwitcher(
+          duration: AppMotion.of(context, AppMotion.short),
+          child: everyoneIn
+              ? StatusPill(
+                  key: const ValueKey('everyone-in'),
+                  label: hint ?? "Everyone's in",
+                  icon: Icons.celebration_rounded,
+                  tone: StatusTone.positive,
+                )
+              : Text(
+                  hint ??
+                      "Next up: the photobooth. We'll ask to use your camera.",
+                  key: ValueKey(hint),
+                  textAlign: TextAlign.center,
+                  style: AppTypography.bodyMuted,
+                ),
         ),
         const SizedBox(height: AppSpacing.ms),
         PrimaryButton(

@@ -84,4 +84,17 @@ class QuestParticipantsViewModel extends _$QuestParticipantsViewModel {
     await ref.read(questRepositoryProvider).removeParticipant(participantId);
     state = AsyncData(await _load());
   }
+
+  /// Undoes a removal: invites the Person again and, if they had already
+  /// said they're in, keeps them in. See CLAUDE.md §16A.
+  Future<void> restoreParticipant(QuestParticipantWithPerson removed) async {
+    await addParticipant(removed.person.id);
+    if (removed.participant.status != 'accepted') return;
+
+    final restored = state.value
+        ?.where((p) => p.person.id == removed.person.id)
+        .firstOrNull;
+    if (restored == null) return;
+    await respond(participantId: restored.participant.id, accepted: true);
+  }
 }

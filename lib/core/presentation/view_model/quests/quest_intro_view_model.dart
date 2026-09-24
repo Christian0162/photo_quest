@@ -11,10 +11,19 @@ part 'quest_intro_view_model.g.dart';
 /// Whether a Quest can begin now, and a short line explaining why not (or
 /// what's next). See CLAUDE.md §16A, §37.
 class QuestStartReadiness {
-  const QuestStartReadiness({required this.canStart, this.hint});
+  const QuestStartReadiness({
+    required this.canStart,
+    this.hint,
+    this.everyoneIn = false,
+  });
 
   final bool canStart;
   final String? hint;
+
+  /// A pair/group Quest whose invited People have all said they're in —
+  /// a moment worth celebrating. See design system §49 ("invitation
+  /// accepted").
+  final bool everyoneIn;
 }
 
 @riverpod
@@ -26,8 +35,10 @@ QuestStartReadiness questStartReadiness(Ref ref, String questId) {
       ref.watch(questParticipantsViewModelProvider(questId)).value ?? const [];
   final solo = detail.quest.type == 'solo';
   final pending = people.any((p) => p.participant.status == 'invited');
+  final everyoneIn = !solo && !pending && people.isNotEmpty;
 
   return QuestStartReadiness(
+    everyoneIn: everyoneIn,
     // A pair/group Quest waits until everyone invited has said they're in.
     canStart: (solo || !pending) && detail.shots.isNotEmpty,
     hint: solo
@@ -36,7 +47,7 @@ QuestStartReadiness questStartReadiness(Ref ref, String questId) {
         ? 'Everyone taps "I\'m in" before you start.'
         : people.isEmpty
         ? "Tip: invite the people you're doing this with."
-        : null,
+        : "Everyone's in — let's go!",
   );
 }
 

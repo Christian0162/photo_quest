@@ -138,7 +138,7 @@ final class MemoryDetailViewModelProvider
 }
 
 String _$memoryDetailViewModelHash() =>
-    r'a7c2184c19564def10e95471b41cc014bf42176a';
+    r'8a3745f93ab3a383a87c8da5007f260685a81444';
 
 /// Actions on an open Memory; its data lives in [memoryDetailProvider].
 

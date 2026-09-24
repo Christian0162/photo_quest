@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/services/service_providers.dart';
+import '../../../errors/app_failure.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../domain/memories/entities/memory.dart';
@@ -95,5 +96,49 @@ class MemoryDetailViewModel extends _$MemoryDetailViewModel {
       );
       rethrow;
     }
+  }
+
+  /// Shares one shot as it was captured — the photo, the GIF or
+  /// boomerang, or the 360° clip. Throws if sharing couldn't open.
+  Future<void> shareShot(Photo photo, {Rect? origin}) async {
+    final detail = await ref.read(memoryDetailProvider(memoryId).future);
+    final mimeType = photo.isVideo
+        ? 'video/mp4'
+        : photo.isAnimated
+        ? 'image/gif'
+        : 'image/jpeg';
+    try {
+      await ref
+          .read(sharingServiceProvider)
+          .shareFile(
+            photo.originalPath,
+            mimeType: mimeType,
+            text: '${detail.memory.title} · Made with Photo Quest',
+            origin: origin,
+          );
+    } catch (error, stack) {
+      developer.log(
+        'Sharing a shot failed',
+        name: 'photoquest.share',
+        error: error,
+        stackTrace: stack,
+      );
+      rethrow;
+    }
+  }
+
+  /// Saves one shot to the phone's photo library, as it was captured —
+  /// photo, GIF or boomerang, or 360° clip. Throws a friendly failure.
+  Future<void> downloadShot(Photo photo) => ref
+      .read(galleryServiceProvider)
+      .save(photo.originalPath, isVideo: photo.isVideo);
+
+  /// Saves the printed keepsake to the phone's photo library. Throws a
+  /// friendly failure.
+  Future<void> downloadStrip() async {
+    final detail = await ref.read(memoryDetailProvider(memoryId).future);
+    final stripPath = detail.stripPath;
+    if (stripPath == null) throw const GallerySaveFailure();
+    await ref.read(galleryServiceProvider).save(stripPath, isVideo: false);
   }
 }

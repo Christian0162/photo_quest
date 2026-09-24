@@ -9,17 +9,20 @@ part of 'capture_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
-/// -> next shot, one shot at a time. See CLAUDE.md §34-35.
+/// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
+/// shot. See CLAUDE.md §34-35.
 
 @ProviderFor(CaptureViewModel)
 final captureViewModelProvider = CaptureViewModelFamily._();
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
-/// -> next shot, one shot at a time. See CLAUDE.md §34-35.
+/// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
+/// shot. See CLAUDE.md §34-35.
 final class CaptureViewModelProvider
     extends $AsyncNotifierProvider<CaptureViewModel, CaptureState> {
   /// Drives the photobooth capture flow: instruction -> countdown -> shutter
-  /// -> next shot, one shot at a time. See CLAUDE.md §34-35.
+  /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
+  /// shot. See CLAUDE.md §34-35.
   CaptureViewModelProvider._({
     required CaptureViewModelFamily super.from,
     required String super.argument,
@@ -56,10 +59,11 @@ final class CaptureViewModelProvider
   }
 }
 
-String _$captureViewModelHash() => r'faf5d66af68ee7a8ef62ef1783cef6699939c5e5';
+String _$captureViewModelHash() => r'ce6b4313c3e845a64f391cedff8d22ace937be07';
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
-/// -> next shot, one shot at a time. See CLAUDE.md §34-35.
+/// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
+/// shot. See CLAUDE.md §34-35.
 
 final class CaptureViewModelFamily extends $Family
     with
@@ -80,7 +84,8 @@ final class CaptureViewModelFamily extends $Family
       );
 
   /// Drives the photobooth capture flow: instruction -> countdown -> shutter
-  /// -> next shot, one shot at a time. See CLAUDE.md §34-35.
+  /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
+  /// shot. See CLAUDE.md §34-35.
 
   CaptureViewModelProvider call(String sessionId) =>
       CaptureViewModelProvider._(argument: sessionId, from: this);
@@ -90,7 +95,8 @@ final class CaptureViewModelFamily extends $Family
 }
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
-/// -> next shot, one shot at a time. See CLAUDE.md §34-35.
+/// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
+/// shot. See CLAUDE.md §34-35.
 
 abstract class _$CaptureViewModel extends $AsyncNotifier<CaptureState> {
   late final _$args = ref.$arg as String;

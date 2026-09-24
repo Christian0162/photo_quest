@@ -30,34 +30,24 @@ class MemoryRevealResult {
   final String stripPath;
 }
 
-/// Composes the finished photo strip for a just-completed session and
-/// returns the memory it belongs to. See CLAUDE.md §36-37.
+/// Makes sure a just-completed session has a printed strip — composing a
+/// default one only if the memory has none yet, so a decorated keepsake is
+/// never overwritten — and returns the memory it belongs to. See CLAUDE.md
+/// §36-37.
 @riverpod
 Future<MemoryRevealResult> memoryReveal(Ref ref, String sessionId) async {
   final memoryRepo = ref.watch(memoryRepositoryProvider);
   final peopleRepo = ref.watch(peopleRepositoryProvider);
   final storage = ref.watch(photoStorageServiceProvider);
-  final imageProcessing = ref.watch(imageProcessingServiceProvider);
 
   final memory = await memoryRepo.getMemoryForSession(sessionId);
   if (memory == null) {
     throw StateError('No memory exists yet for session $sessionId.');
   }
 
-  final photos = await memoryRepo.getPhotos(memory.id);
-  final photoBytes = <Uint8List>[];
-  for (final photo in photos) {
-    final file = File(photo.originalPath);
-    if (await file.exists()) {
-      photoBytes.add(await file.readAsBytes());
-    }
-  }
-
-  final stripBytes = await imageProcessing.composePhotoStrip(
-    photoBytes,
-    caption: DateFormat.yMMMd().format(memory.capturedAt).toUpperCase(),
-  );
-  final stripPath = await storage.savePhotoStrip(memory.id, stripBytes);
+  final stripPath =
+      await storage.findPhotoStrip(memory.id) ??
+      await _composeDefaultStrip(ref, memory.id, memory.capturedAt);
 
   final people = <Person>[];
   for (final id in await memoryRepo.getPersonIds(memory.id)) {
@@ -72,4 +62,30 @@ Future<MemoryRevealResult> memoryReveal(Ref ref, String sessionId) async {
     people: people,
     stripPath: stripPath,
   );
+}
+
+Future<String> _composeDefaultStrip(
+  Ref ref,
+  String memoryId,
+  DateTime capturedAt,
+) async {
+  final photos = await ref.read(memoryRepositoryProvider).getPhotos(memoryId);
+  final photoBytes = <Uint8List>[];
+  for (final photo in photos) {
+    // Stills only: GIFs and clips contribute their poster frame.
+    final file = File(photo.stillPath);
+    if (await file.exists()) {
+      photoBytes.add(await file.readAsBytes());
+    }
+  }
+
+  final stripBytes = await ref
+      .read(imageProcessingServiceProvider)
+      .composePhotoStrip(
+        photoBytes,
+        caption: DateFormat.yMMMd().format(capturedAt).toUpperCase(),
+      );
+  return ref
+      .read(photoStorageServiceProvider)
+      .savePhotoStrip(memoryId, stripBytes);
 }

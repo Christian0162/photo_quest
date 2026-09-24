@@ -137,6 +137,22 @@ class CreateQuestViewModel extends _$CreateQuestViewModel {
     state = state.copyWith(shots: shots);
   }
 
+  /// Puts a shot back where it was — the "Undo" after removing one.
+  void insertShotAt(int index, DraftShot shot) {
+    final shots = [...state.shots]
+      ..insert(index.clamp(0, state.shots.length), shot);
+    state = state.copyWith(shots: shots);
+  }
+
+  /// Moves a shot so it's taken at [to] (its final position) instead.
+  void moveShot(int from, int to) {
+    if (from == to) return;
+    final shots = [...state.shots];
+    final shot = shots.removeAt(from);
+    shots.insert(to.clamp(0, shots.length), shot);
+    state = state.copyWith(shots: shots);
+  }
+
   /// Creates the Quest, its shots, and invites the chosen participants.
   /// Returns the new Quest's id, or null if it's already being created.
   /// Throws on failure. See CLAUDE.md §16A, §59.
