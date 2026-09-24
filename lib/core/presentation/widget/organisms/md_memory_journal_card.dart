@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../config/constant/app_colors.dart';
+import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../utils/date_labels.dart';
@@ -10,21 +11,24 @@ import '../atoms/md_icon_fact.dart';
 import '../atoms/md_local_photo.dart';
 import '../atoms/md_occasion_chip.dart';
 import '../atoms/md_open_memory_link.dart';
+import '../atoms/md_sticky_note.dart';
 import '../molecules/md_app_card.dart';
 import '../molecules/md_memory_cover_hero.dart';
 
 /// A memory as a journal entry: when it was and what kind of day, the
-/// title, one wide photo with its note written across the bottom, and how
-/// many shots and people it holds. Tap the photo to see the shots full
-/// screen; tap anywhere else to open the memory. See CLAUDE.md §38.
+/// title, one wide photo with its note pinned to the corner like a sticky
+/// note on a photobooth print, and how many shots and people it holds. Tap
+/// the photo to see the shots full screen; tap anywhere else to open the
+/// memory. See CLAUDE.md §2.4, §36, §38.
 ///
 /// ```text
 /// ┌──────────────────────────────┐
 /// │ THURSDAY, OCT 12 · 5:18 PM  (♥ Anniversary) │
 /// │ Golden Hour by the Docks     │
 /// │ ┌──────────────────────────┐ │
-/// │ │          photo           │ │
-/// │ │ Warm chai & a breeze   ♥ │ │
+/// │ │                  📌┌────┐│ │
+/// │ │        photo       │note││ │
+/// │ │                     └────┘│ │
 /// │ └──────────────────────────┘ │
 /// │ ▣ 3 shots  ☺ 2 people  Open memory › │
 /// └──────────────────────────────┘
@@ -86,10 +90,9 @@ class MdMemoryJournalCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: AppSpacing.ms),
+          const SizedBox(height: AppSpacing.md),
           _CoverPhoto(
             summary: summary,
-            occasionIcon: occasionIcon,
             onTap: shots == 0 ? null : () => onViewPhoto(0),
           ),
           const SizedBox(height: AppSpacing.ms),
@@ -126,79 +129,58 @@ class MdMemoryJournalCard extends StatelessWidget {
   }
 }
 
-/// The cover, wide, with the memory's words written across a soft shade at
-/// the bottom and its occasion icon in the corner.
+/// The cover, wide, with the memory's note pinned to its top-right corner
+/// like a sticky note left on the print. The occasion is already shown in
+/// the card's header chip, so the photo itself stays uncluttered.
 class _CoverPhoto extends StatelessWidget {
-  const _CoverPhoto({
-    required this.summary,
-    required this.occasionIcon,
-    required this.onTap,
-  });
+  const _CoverPhoto({required this.summary, required this.onTap});
 
   final MemorySummary summary;
-  final IconData occasionIcon;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final photo = ClipRRect(
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: AspectRatio(
-        aspectRatio: 16 / 10,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            MdMemoryCoverHero(
-              memoryId: summary.memory.id,
-              child: MdLocalPhoto(path: summary.coverPhoto?.thumbnailPath),
-            ),
-            const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, AppColors.cameraScrim],
-                ),
-              ),
-            ),
-            Positioned(
-              left: AppSpacing.ms,
-              right: AppSpacing.ms,
-              bottom: AppSpacing.sm,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Text(
-                      summary.description,
-                      style: AppTypography.script.copyWith(
-                        color: AppColors.onCamera,
-                        fontSize: 20,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Icon(
-                    occasionIcon,
-                    size: AppIconSizes.md,
-                    color: AppColors.onCamera,
-                  ),
-                ],
-              ),
-            ),
-          ],
+    // A white paper border around the shot, like a real photobooth print
+    // sitting on the page, not an edge-to-edge app image.
+    final print = Container(
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      decoration: BoxDecoration(
+        color: AppColors.paper,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.line),
+        boxShadow: AppShadows.print,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: AspectRatio(
+          aspectRatio: 16 / 10,
+          child: MdMemoryCoverHero(
+            memoryId: summary.memory.id,
+            child: MdLocalPhoto(path: summary.coverPhoto?.thumbnailPath),
+          ),
         ),
       ),
     );
 
+    final photo = Stack(
+      clipBehavior: Clip.none,
+      children: [
+        print,
+        Positioned(
+          top: -AppSpacing.sm,
+          right: AppSpacing.md,
+          child: MdStickyNote(text: summary.description),
+        ),
+      ],
+    );
+
     if (onTap == null) return ExcludeSemantics(child: photo);
-    // Its own node, so it's a separate action from the card around it.
+    // Its own node, so it's a separate action from the card around it; the
+    // note is read here too since it's otherwise a decorative overlay.
     return Semantics(
       container: true,
       button: true,
-      label: 'View the photos',
+      label: 'View the photos. ${summary.description}',
       excludeSemantics: true,
       child: GestureDetector(onTap: onTap, child: photo),
     );
