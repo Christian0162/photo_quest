@@ -8,9 +8,12 @@ import 'package:photoquest/core/data/database/app_database.dart'
 import 'package:photoquest/core/data/database/database_providers.dart';
 import 'package:photoquest/core/data/repositories/memory_repository.dart';
 import 'package:photoquest/core/data/services/image/image_processing_service.dart';
-import 'package:photoquest/core/data/services/service_providers.dart';
+import 'package:photoquest/core/data/repositories/service_providers.dart';
 import 'package:photoquest/core/data/services/storage/photo_storage_service.dart';
 import 'package:photoquest/core/presentation/view_model/memories/keepsake_view_model.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_frame.dart';
+import 'package:photoquest/core/domain/memories/enum/sticker_type.dart';
 
 class _MemoryStorage extends PhotoStorageService {
   @override

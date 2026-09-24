@@ -4,35 +4,14 @@ import 'dart:ui' show Rect;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../data/repositories/people_repository_provider.dart';
-import '../../../data/services/service_providers.dart';
+import '../../../data/repositories/service_providers.dart';
 import '../../../errors/app_failure.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../data/repositories/memory_repository_provider.dart';
-import '../../../domain/memories/entities/memory.dart';
 import '../../../domain/memories/entities/photo.dart';
+import '../../types/memories/memory_detail.dart';
 
 part 'memory_detail_view_model.g.dart';
-
-class MemoryDetail {
-  const MemoryDetail({
-    required this.memory,
-    required this.photos,
-    required this.people,
-    required this.questId,
-    required this.stripPath,
-  });
-
-  final Memory memory;
-  final List<Photo> photos;
-  final List<Person> people;
-
-  /// The Quest this Memory's session belongs to, so "Do This Again" can
-  /// start a fresh session on the same Quest. See CLAUDE.md §21, §39.
-  final String? questId;
-
-  /// The generated photobooth strip, if one was made. See CLAUDE.md §36.
-  final String? stripPath;
-}
 
 @riverpod
 Future<MemoryDetail> memoryDetail(Ref ref, String memoryId) async {

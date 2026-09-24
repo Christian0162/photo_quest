@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:photoquest/core/presentation/view_model/memories/keepsake_view_model.dart';
-import 'package:photoquest/core/presentation/view_model/memories/memory_detail_view_model.dart';
 import 'package:photoquest/core/presentation/widget/molecules/app_widget_preview.dart';
 import 'package:photoquest/core/presentation/widget/organisms/keepsake_canvas.dart';
 import 'package:photoquest/core/presentation/widget/templates/memory_detail_template.dart';
 import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
+import 'package:photoquest/core/presentation/types/memories/keepsake_design.dart';
+import 'package:photoquest/core/presentation/types/memories/memory_detail.dart';
 
 void main() {
   final sample = PreviewSamples.memoryDetail;

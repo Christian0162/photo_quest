@@ -8,7 +8,6 @@ import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../utils/app_haptics.dart';
-import '../../view_model/memories/keepsake_view_model.dart';
 import '../atoms/loading_indicator.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/sticker_art.dart';
@@ -16,6 +15,11 @@ import '../molecules/empty_state.dart';
 import '../organisms/app_scaffold.dart';
 import '../organisms/keepsake_canvas.dart';
 import '../organisms/keepsake_snapshot.dart';
+import '../../../domain/memories/enum/keepsake_layout.dart';
+import '../../../domain/memories/enum/keepsake_frame.dart';
+import '../../../domain/memories/enum/sticker_type.dart';
+import '../../types/memories/keepsake_design.dart';
+import '../molecules/option_tile.dart';
 
 /// Makes the printed keepsake yours: pick a layout (strip, grid, polaroid),
 /// a paper, and add stickers you drag, pinch and turn. The print stays in
@@ -234,7 +238,7 @@ class _LayoutTray extends StatelessWidget {
         children: [
           for (final layout in KeepsakeLayout.values) ...[
             Expanded(
-              child: _OptionTile(
+              child: OptionTile(
                 label: layout.label,
                 selected: layout == selected,
                 onTap: () => onChanged(layout),
@@ -268,7 +272,7 @@ class _PaperTray extends StatelessWidget {
         final (paper, ink) = KeepsakeCanvas.colorsOf(frame);
         return SizedBox(
           width: 76,
-          child: _OptionTile(
+          child: OptionTile(
             label: frame.label,
             selected: frame == selected,
             onTap: () => onChanged(frame),
@@ -370,76 +374,3 @@ class _StickerTray extends StatelessWidget {
   }
 }
 
-/// A big, tappable choice. Selected = dark border, tint and a check — never
-/// color alone. See design system §17, CLAUDE.md §65.
-class _OptionTile extends StatelessWidget {
-  const _OptionTile({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    required this.child,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      selected: selected,
-      label: label,
-      excludeSemantics: true,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        onTap: () {
-          AppHaptics.selection();
-          onTap();
-        },
-        child: AnimatedContainer(
-          duration: AppMotion.of(context, AppMotion.short),
-          curve: AppMotion.standard,
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-          decoration: BoxDecoration(
-            color: selected ? AppColors.softPeach : AppColors.paper,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(
-              color: selected ? AppColors.textPrimary : AppColors.line,
-              width: selected ? 2 : 1.5,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              child,
-              const SizedBox(height: AppSpacing.xs),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (selected) ...[
-                    const Icon(Icons.check_rounded, size: AppIconSizes.sm),
-                    const SizedBox(width: AppSpacing.xxs),
-                  ],
-                  Flexible(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.label.copyWith(
-                        fontWeight: selected
-                            ? FontWeight.w600
-                            : FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

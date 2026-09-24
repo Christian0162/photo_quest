@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/memories/keepsake_view_model.dart';
+import '../../../domain/memories/enum/sticker_type.dart';
 
 /// How a sticker looks: icon stickers are die-cut with a white border and a
 /// soft shadow, stamps are handwritten on a little paper tag. Drawn from

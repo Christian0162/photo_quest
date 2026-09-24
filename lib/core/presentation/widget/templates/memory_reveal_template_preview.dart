@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../view_model/camera/memory_reveal_view_model.dart';
-import '../../view_model/memories/keepsake_view_model.dart';
 import '../molecules/app_widget_preview.dart';
 import 'memory_reveal_template.dart';
 import 'preview_samples.dart';
+import '../../types/camera/memory_reveal_result.dart';
+import '../../types/memories/keepsake_design.dart';
 
 Widget _reveal(
   AsyncValue<MemoryRevealResult> reveal, {

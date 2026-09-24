@@ -3,22 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
 import '../../../domain/people/entities/person.dart';
-import '../../../domain/quests/entities/quest.dart';
+import '../../types/quests/quest_needing_confirmation.dart';
 
 part 'quests_needing_confirmation_view_model.g.dart';
-
-/// A Quest you created, still waiting on some participants to confirm.
-class QuestNeedingConfirmation {
-  const QuestNeedingConfirmation({
-    required this.quest,
-    required this.people,
-    required this.pendingCount,
-  });
-
-  final Quest quest;
-  final List<Person> people;
-  final int pendingCount;
-}
 
 /// Quests you created that still have participants who haven't confirmed
 /// they're in. Surfaced on Home so a group quest doesn't quietly stall.

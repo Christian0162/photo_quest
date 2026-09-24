@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:photoquest/core/presentation/view_model/memories/keepsake_view_model.dart';
 import 'package:photoquest/core/presentation/widget/molecules/app_widget_preview.dart';
 import 'package:photoquest/core/presentation/widget/organisms/keepsake_canvas.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
+import 'package:photoquest/core/domain/memories/enum/sticker_type.dart';
+import 'package:photoquest/core/presentation/types/memories/placed_sticker.dart';
+import 'package:photoquest/core/presentation/types/memories/keepsake_design.dart';
 
 final _design = KeepsakeDesign(
   memoryId: 'm',

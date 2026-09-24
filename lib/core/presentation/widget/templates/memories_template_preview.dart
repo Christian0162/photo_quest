@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../view_model/memories/memory_list_view_model.dart';
 import '../molecules/app_widget_preview.dart';
 import 'memories_template.dart';
 import 'preview_samples.dart';
+import '../../../domain/memories/enum/memory_filter.dart';
+import '../../types/memories/memory_box.dart';
 
 Widget _memories(AsyncValue<MemoryBox> box) {
   return AppWidgetPreview(

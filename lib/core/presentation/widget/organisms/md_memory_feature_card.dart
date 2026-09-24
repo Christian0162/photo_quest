@@ -4,13 +4,14 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../types/display_labels.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
+import '../../../utils/date_labels.dart';
 import '../atoms/occasion_chip.dart';
 import '../atoms/open_memory_link.dart';
 import '../atoms/participant_avatar_stack.dart';
 import '../molecules/app_card.dart';
 import '../molecules/memory_cover_hero.dart';
 import '../molecules/photo_fan.dart';
+import '../../types/memories/memory_summary.dart';
 
 /// The first memory of a month, shown like a page taped into a journal:
 /// when it was, the prints fanned out in a dark booth tray, who was there,

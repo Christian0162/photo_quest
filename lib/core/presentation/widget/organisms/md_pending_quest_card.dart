@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/quests/quests_needing_confirmation_view_model.dart';
 import '../atoms/participant_avatar_stack.dart';
 import '../atoms/status_pill.dart';
 import '../molecules/app_card.dart';
+import '../../../domain/quests/enum/status_tone.dart';
+import '../../types/quests/quest_needing_confirmation.dart';
 
 /// One Quest you created that's still waiting on people to say they're in,
 /// shown on Home so a group quest doesn't quietly stall. See design system

@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'camera/camera_service.dart';
-import 'gallery/gallery_service.dart';
-import 'image/image_processing_service.dart';
-import 'sharing/sharing_service.dart';
-import 'storage/photo_storage_service.dart';
+import '../services/camera/camera_service.dart';
+import '../services/gallery/gallery_service.dart';
+import '../services/image/image_processing_service.dart';
+import '../services/sharing/sharing_service.dart';
+import '../services/storage/photo_storage_service.dart';
 
 part 'service_providers.g.dart';
 

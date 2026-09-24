@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
-import '../../view_model/quests/quest_list_view_model.dart';
 import '../atoms/fade_slide_in.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/skeleton_box.dart';
@@ -14,6 +13,7 @@ import '../molecules/empty_state.dart';
 import '../organisms/app_scaffold.dart';
 import '../organisms/quest_card.dart';
 import '../organisms/quest_category_banner.dart';
+import '../../types/quests/quest_category_shelf.dart';
 
 /// Inspirational Quest picker: large visual cards on one shelf per
 /// category ("For Us", "For Family" …), not a dense list. See CLAUDE.md §33.

@@ -6,7 +6,7 @@ import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../utils/app_haptics.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
+import '../../../domain/memories/enum/memory_filter.dart';
 
 /// "This day · This month · All journey" — how to look through the memory
 /// box, each with how many memories it holds. The chosen one fills coral;

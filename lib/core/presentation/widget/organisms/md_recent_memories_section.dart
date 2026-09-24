@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
 import '../atoms/skeleton_box.dart';
 import '../molecules/app_card.dart';
 import 'memory_card.dart';
+import '../../types/memories/memory_summary.dart';
 
 /// Horizontal shelf of recent memories on Home, or a gentle nudge when
 /// there are none yet. See CLAUDE.md §31, §44.

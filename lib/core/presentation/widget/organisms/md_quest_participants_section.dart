@@ -5,13 +5,14 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/quests/quest_participants_view_model.dart';
 import '../atoms/person_avatar.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/skeleton_box.dart';
 import '../atoms/status_pill.dart';
 import '../molecules/app_card.dart';
 import '../molecules/section_header.dart';
+import '../../../domain/quests/enum/status_tone.dart';
+import '../../types/quests/quest_participant_with_person.dart';
 
 /// Shows who's doing this Quest and lets the creator invite more People.
 /// Since V1 is a single shared device (CLAUDE.md §54A), each participant

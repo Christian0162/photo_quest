@@ -4,13 +4,20 @@ import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_participant.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
-import '../../view_model/memories/keepsake_view_model.dart';
-import '../../view_model/memories/memory_detail_view_model.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
-import '../../view_model/quests/quest_detail_view_model.dart';
-import '../../view_model/quests/quest_list_view_model.dart';
-import '../../view_model/quests/quest_participants_view_model.dart';
-import '../../view_model/quests/quests_needing_confirmation_view_model.dart';
+import '../../../domain/memories/enum/keepsake_layout.dart';
+import '../../../domain/memories/enum/keepsake_frame.dart';
+import '../../../domain/memories/enum/sticker_type.dart';
+import '../../../domain/memories/enum/memory_filter.dart';
+import '../../types/memories/placed_sticker.dart';
+import '../../types/memories/keepsake_design.dart';
+import '../../types/memories/memory_detail.dart';
+import '../../types/memories/memory_summary.dart';
+import '../../types/memories/memory_box.dart';
+import '../../types/quests/quest_detail.dart';
+import '../../types/quests/quest_list_item.dart';
+import '../../types/quests/quest_category_shelf.dart';
+import '../../types/quests/quest_participant_with_person.dart';
+import '../../types/quests/quest_needing_confirmation.dart';
 
 /// One consistent, made-up cast and set of Quests/Memories shared by every
 /// `*_template_preview.dart`, so previews tell the same story. Dates are

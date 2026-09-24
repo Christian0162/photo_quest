@@ -9,6 +9,7 @@ import '../../view_model/camera/memory_reveal_view_model.dart';
 import '../../view_model/memories/keepsake_view_model.dart';
 import '../../widget/organisms/app_scaffold.dart';
 import '../../widget/templates/memory_reveal_template.dart';
+import '../../types/camera/memory_reveal_result.dart';
 
 /// Memory reveal. Wires the reveal, the keepsake design and navigation into
 /// [MemoryRevealTemplate]. See CLAUDE.md §36-37.

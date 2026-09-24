@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
 import '../atoms/fade_slide_in.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/skeleton_box.dart';
@@ -14,6 +12,12 @@ import '../molecules/memory_filter_chips.dart';
 import '../organisms/app_scaffold.dart';
 import '../organisms/memory_feature_card.dart';
 import '../organisms/memory_journal_card.dart';
+import '../../../domain/memories/enum/memory_filter.dart';
+import '../../types/memories/memory_summary.dart';
+import '../../types/memories/memory_month.dart';
+import '../../types/memories/memory_box.dart';
+import '../molecules/journal_heading.dart';
+import '../molecules/page_header.dart';
 
 /// The private memory box, kept like a journal:
 ///
@@ -69,7 +73,15 @@ class MemoriesTemplate extends StatelessWidget {
               AppSpacing.gutter,
               AppSpacing.lg,
             ),
-            sliver: SliverToBoxAdapter(child: FadeSlideIn(child: _Header())),
+            sliver: SliverToBoxAdapter(
+              child: FadeSlideIn(
+                child: PageHeader(
+                  overline: 'YOUR MEMORY BOX',
+                  title: 'Memories',
+                  subtitle: 'Just for you and the people who were there.',
+                ),
+              ),
+            ),
           ),
           if (data != null && !data.isEmpty)
             SliverToBoxAdapter(
@@ -164,7 +176,7 @@ class MemoriesTemplate extends StatelessWidget {
 
       add(
         'month-$month',
-        _JournalHeading(title: monthName, trailing: '${month.year}'),
+        JournalHeading(title: monthName, trailing: '${month.year}'),
         gap: AppSpacing.xl,
       );
       add(
@@ -179,7 +191,7 @@ class MemoriesTemplate extends StatelessWidget {
       );
       if (earlier.isEmpty) continue;
 
-      add('earlier-$month', _JournalHeading(title: 'Earlier in $monthName'));
+      add('earlier-$month', JournalHeading(title: 'Earlier in $monthName'));
       for (final summary in earlier) {
         add(
           summary.memory.id,
@@ -194,74 +206,6 @@ class MemoriesTemplate extends StatelessWidget {
     }
 
     return entries;
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('YOUR MEMORY BOX', style: AppTypography.overline),
-        const SizedBox(height: AppSpacing.sm),
-        Semantics(
-          header: true,
-          child: Text('Memories', style: AppTypography.display),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Text(
-          'Just for you and the people who were there.',
-          style: AppTypography.bodyMuted,
-        ),
-      ],
-    );
-  }
-}
-
-/// "• October            2026" — a handwritten journal heading.
-class _JournalHeading extends StatelessWidget {
-  const _JournalHeading({required this.title, this.trailing});
-
-  final String title;
-  final String? trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      header: true,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: const BoxDecoration(
-              color: AppColors.warmCoral,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(
-            child: Text(
-              title,
-              style: AppTypography.journal,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          if (trailing != null)
-            Text(
-              trailing!,
-              style: AppTypography.overline.copyWith(
-                color: AppColors.textMuted,
-              ),
-            ),
-        ],
-      ),
-    );
   }
 }
 

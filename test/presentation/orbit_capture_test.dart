@@ -5,11 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 import 'package:photoquest/core/data/services/camera/camera_service.dart';
-import 'package:photoquest/core/data/services/service_providers.dart';
+import 'package:photoquest/core/data/repositories/service_providers.dart';
 import 'package:photoquest/core/data/services/storage/photo_storage_service.dart';
 import 'package:photoquest/core/errors/app_failure.dart';
 import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
 import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_phase.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_mode.dart';
+import 'package:photoquest/core/presentation/types/camera/capture_state.dart';
 
 /// A camera whose clip can't be finished when it's stopped right away —
 /// what Android does with an empty recording.

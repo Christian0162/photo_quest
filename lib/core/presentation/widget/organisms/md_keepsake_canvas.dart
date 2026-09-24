@@ -7,10 +7,13 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../utils/app_haptics.dart';
 import '../../../domain/memories/entities/photo.dart';
-import '../../view_model/memories/keepsake_view_model.dart';
 import '../atoms/local_photo.dart';
 import '../atoms/sticker_art.dart';
 import '../molecules/shot_media.dart';
+import '../../../domain/memories/enum/keepsake_layout.dart';
+import '../../../domain/memories/enum/keepsake_frame.dart';
+import '../../types/memories/placed_sticker.dart';
+import '../../types/memories/keepsake_design.dart';
 
 /// The printed keepsake — strip, grid or polaroid — on its paper, with the
 /// title handwritten and any stickers on top. Everything is proportional to

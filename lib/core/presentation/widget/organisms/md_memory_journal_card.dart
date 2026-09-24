@@ -4,12 +4,14 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../types/display_labels.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
+import '../../../utils/date_labels.dart';
 import '../atoms/local_photo.dart';
 import '../atoms/occasion_chip.dart';
 import '../atoms/open_memory_link.dart';
 import '../molecules/app_card.dart';
 import '../molecules/memory_cover_hero.dart';
+import '../../types/memories/memory_summary.dart';
+import '../atoms/icon_fact.dart';
 
 /// A memory as a journal entry: when it was and what kind of day, the
 /// title, one wide photo with its note written across the bottom, and how
@@ -102,12 +104,12 @@ class MemoryJournalCard extends StatelessWidget {
                 spacing: AppSpacing.md,
                 runSpacing: AppSpacing.xs,
                 children: [
-                  _Fact(
+                  IconFact(style: AppTypography.caption, 
                     icon: Icons.photo_library_outlined,
                     label: shots == 1 ? '1 shot' : '$shots shots',
                   ),
                   if (people > 0)
-                    _Fact(
+                    IconFact(style: AppTypography.caption, 
                       icon: Icons.people_outline_rounded,
                       label: people == 1 ? '1 person' : '$people people',
                     ),
@@ -201,21 +203,3 @@ class _CoverPhoto extends StatelessWidget {
   }
 }
 
-class _Fact extends StatelessWidget {
-  const _Fact({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: AppIconSizes.sm, color: AppColors.textMuted),
-        const SizedBox(width: AppSpacing.xs),
-        Text(label, style: AppTypography.caption),
-      ],
-    );
-  }
-}

@@ -5,7 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 import 'package:photoquest/core/data/services/camera/camera_frame.dart';
 import 'package:photoquest/core/data/services/image/image_processing_service.dart';
-import 'package:photoquest/core/domain/memories/entities/photo_look.dart';
+import 'package:photoquest/core/domain/memories/enum/photo_look.dart';
+import 'package:photoquest/core/domain/camera/enum/camera_frame_format.dart';
 
 void main() {
   Uint8List photo(int width, int height, {img.Color? color}) {

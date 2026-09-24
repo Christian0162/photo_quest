@@ -10,8 +10,6 @@ import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../utils/app_haptics.dart';
-import '../../view_model/camera/memory_reveal_view_model.dart';
-import '../../view_model/memories/keepsake_view_model.dart';
 import '../atoms/loading_indicator.dart';
 import '../atoms/local_photo.dart';
 import '../atoms/primary_button.dart';
@@ -19,6 +17,10 @@ import '../molecules/empty_state.dart';
 import '../organisms/app_scaffold.dart';
 import '../organisms/keepsake_canvas.dart';
 import '../organisms/keepsake_snapshot.dart';
+import '../../types/camera/memory_reveal_result.dart';
+import '../../types/memories/keepsake_design.dart';
+import '../atoms/appear_transition.dart';
+import '../atoms/developing_print.dart';
 
 /// The payoff after finishing a Quest: the photo strip rises in and
 /// develops like an instant print — pale and grey, then full color — before
@@ -158,7 +160,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
       ),
       child: Column(
         children: [
-          _Appear(
+          AppearTransition(
             animation: _heading,
             child: Column(
               children: [
@@ -198,7 +200,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
                   opacity: _rise.value.clamp(0, 1),
                   child: Transform.translate(
                     offset: Offset(0, (1 - _rise.value) * AppSpacing.jumbo),
-                    child: _Developing(progress: _develop.value, child: child!),
+                    child: DevelopingPrint(progress: _develop.value, child: child!),
                   ),
                 ),
                 child: DecoratedBox(
@@ -233,7 +235,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          _Appear(
+          AppearTransition(
             animation: _details,
             child: Column(
               children: [
@@ -255,7 +257,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          _Appear(
+          AppearTransition(
             animation: _action,
             child: Column(
               children: [
@@ -282,59 +284,3 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
   }
 }
 
-/// Fades and lifts [child] in as [animation] runs 0 → 1.
-class _Appear extends AnimatedWidget {
-  const _Appear({required Animation<double> animation, required this.child})
-    : super(listenable: animation);
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = (listenable as Animation<double>).value;
-    return Opacity(
-      opacity: t.clamp(0, 1),
-      child: Transform.translate(
-        offset: Offset(0, (1 - t) * AppSpacing.sm),
-        child: child,
-      ),
-    );
-  }
-}
-
-/// An instant print developing: starts washed-out and grey, ends in full
-/// color. [progress] runs 0 → 1.
-class _Developing extends StatelessWidget {
-  const _Developing({required this.progress, required this.child});
-
-  final double progress;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    if (progress >= 1) return child;
-
-    final s = progress; // saturation, 0 = greyscale
-    final wash = (1 - progress) * 0.55; // white haze on top
-    const r = 0.2126, g = 0.7152, b = 0.0722;
-    final matrix = <double>[
-      r + (1 - r) * s, g - g * s, b - b * s, 0, 0, //
-      r - r * s, g + (1 - g) * s, b - b * s, 0, 0, //
-      r - r * s, g - g * s, b + (1 - b) * s, 0, 0, //
-      0, 0, 0, 1, 0,
-    ];
-
-    return Stack(
-      children: [
-        ColorFiltered(colorFilter: ColorFilter.matrix(matrix), child: child),
-        Positioned.fill(
-          child: IgnorePointer(
-            child: ColoredBox(
-              color: AppColors.warmCream.withValues(alpha: wash),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}

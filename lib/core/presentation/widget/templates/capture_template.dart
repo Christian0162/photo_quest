@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,7 @@ import '../../../../config/constant/app_typography.dart';
 import '../../../errors/app_failure.dart';
 import '../../../utils/app_haptics.dart';
 import '../../../domain/memories/entities/photo.dart';
-import '../../../domain/memories/entities/photo_look.dart';
-import '../../view_model/camera/capture_view_model.dart';
+import '../../../domain/memories/enum/photo_look.dart';
 import '../atoms/camera_icon_button.dart';
 import '../atoms/capture_button.dart';
 import '../atoms/loading_indicator.dart';
@@ -27,6 +25,14 @@ import '../molecules/pose_idea_card.dart';
 import '../molecules/shot_media.dart';
 import '../molecules/step_progress.dart';
 import '../organisms/app_scaffold.dart';
+import '../../../domain/camera/enum/capture_phase.dart';
+import '../../../domain/camera/enum/capture_mode.dart';
+import '../../types/camera/capture_state.dart';
+import '../atoms/hold_shutter_button.dart';
+import '../atoms/print_pop_in.dart';
+import '../atoms/camera_edge_scrims.dart';
+import '../molecules/booth_countdown.dart';
+import '../molecules/processing_progress.dart';
 
 /// The photobooth: the live camera dominates, with just enough guidance —
 /// shot progress, the instruction and example, a countdown, then Keep or
@@ -268,10 +274,10 @@ class _CaptureBodyState extends State<_CaptureBody>
           const ColoredBox(color: AppColors.camera),
 
         // Legibility scrims behind the top and bottom chrome.
-        const _EdgeScrims(),
+        const CameraEdgeScrims(),
 
         if (phase == CapturePhase.countdown)
-          _Countdown(
+          BoothCountdown(
             value: state.countdownValue,
             instruction: state.currentShot.instruction,
             onCancel: widget.onCancelCountdown,
@@ -357,7 +363,7 @@ class _CaptureBodyState extends State<_CaptureBody>
                     CapturePhase.capturing when holdCapturing => controls,
                     CapturePhase.countdown => const SizedBox.shrink(),
                     CapturePhase.capturing => _CapturingControls(state: state),
-                    CapturePhase.processing => _ProcessingProgress(
+                    CapturePhase.processing => ProcessingProgress(
                       progress: state.processingProgress,
                       message: switch (state.mode) {
                         CaptureMode.gif => 'Making your GIF…',
@@ -396,133 +402,6 @@ class _CaptureBodyState extends State<_CaptureBody>
   }
 }
 
-/// The 3-2-1: a big number inside a ring that drains each second, with the
-/// shot's instruction kept underneath so nobody forgets what to do. Tapping
-/// anywhere cancels. See CLAUDE.md §34-35, design system §28.
-class _Countdown extends StatelessWidget {
-  const _Countdown({
-    required this.value,
-    required this.instruction,
-    required this.onCancel,
-  });
-
-  final int value;
-  final String instruction;
-  final VoidCallback onCancel;
-
-  static const _size = 200.0;
-
-  @override
-  Widget build(BuildContext context) {
-    final reduced = AppMotion.reduced(context);
-
-    return Semantics(
-      button: true,
-      label: '$value. Tap to stop the countdown',
-      excludeSemantics: true,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onCancel,
-        child: SafeArea(
-          child: Column(
-            children: [
-              const Spacer(flex: 3),
-              SizedBox.square(
-                dimension: _size,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Keyed per beat so the ring restarts each second.
-                    TweenAnimationBuilder<double>(
-                      key: ValueKey(value),
-                      tween: Tween(begin: 1, end: reduced ? 1 : 0),
-                      duration: const Duration(seconds: 1),
-                      builder: (context, t, _) => CustomPaint(
-                        size: const Size.square(_size),
-                        painter: _RingPainter(progress: t),
-                      ),
-                    ),
-                    AnimatedSwitcher(
-                      duration: AppMotion.of(context, AppMotion.short),
-                      transitionBuilder: (child, animation) => ScaleTransition(
-                        scale: Tween(begin: 1.4, end: 1.0).animate(animation),
-                        child: FadeTransition(opacity: animation, child: child),
-                      ),
-                      child: Text(
-                        '$value',
-                        key: ValueKey(value),
-                        style: AppTypography.countdown,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.gutter,
-                ),
-                child: Text(
-                  instruction,
-                  textAlign: TextAlign.center,
-                  style: AppTypography.heading2.copyWith(
-                    color: AppColors.onCamera,
-                  ),
-                ),
-              ),
-              const Spacer(flex: 2),
-              Text(
-                'Not ready? Tap anywhere to stop',
-                style: AppTypography.caption.copyWith(
-                  color: AppColors.onCameraMuted,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xxl),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _RingPainter extends CustomPainter {
-  const _RingPainter({required this.progress});
-
-  /// 1 = full ring, 0 = empty.
-  final double progress;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const stroke = 6.0;
-    final rect = (Offset.zero & size).deflate(stroke / 2);
-    canvas.drawArc(
-      rect,
-      0,
-      math.pi * 2,
-      false,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = stroke
-        ..color = AppColors.onCameraMuted.withValues(alpha: 0.35),
-    );
-    canvas.drawArc(
-      rect,
-      -math.pi / 2,
-      math.pi * 2 * progress,
-      false,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = stroke
-        ..strokeCap = StrokeCap.round
-        ..color = AppColors.warmCoral,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_RingPainter old) => old.progress != progress;
-}
-
 /// Fills the screen with the preview (cropping the edges) instead of
 /// letterboxing it, so the booth feels immersive.
 class _CoverPreview extends StatelessWidget {
@@ -543,44 +422,6 @@ class _CoverPreview extends StatelessWidget {
           width: previewSize.height,
           height: previewSize.width,
           child: CameraPreview(controller),
-        ),
-      ),
-    );
-  }
-}
-
-class _EdgeScrims extends StatelessWidget {
-  const _EdgeScrims();
-
-  @override
-  Widget build(BuildContext context) {
-    return const IgnorePointer(
-      child: Column(
-        children: [
-          _Scrim(height: 160, begin: Alignment.topCenter),
-          Spacer(),
-          _Scrim(height: 280, begin: Alignment.bottomCenter),
-        ],
-      ),
-    );
-  }
-}
-
-class _Scrim extends StatelessWidget {
-  const _Scrim({required this.height, required this.begin});
-
-  final double height;
-  final Alignment begin;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: begin,
-          end: -begin,
-          colors: const [AppColors.cameraScrim, Colors.transparent],
         ),
       ),
     );
@@ -782,7 +623,7 @@ class _InstructionControlsState extends State<_InstructionControls> {
                     : null,
               ),
             if (state.mode.isHold)
-              _HoldShutter(
+              HoldShutterButton(
                 progress: state.captureProgress,
                 recording: holding,
                 label: state.mode == CaptureMode.boomerang
@@ -856,135 +697,6 @@ class _CapturingControls extends StatelessWidget {
   }
 }
 
-/// The press-and-hold shutter for boomerangs and 360° clips: capturing
-/// starts the moment it's pressed and finishes when it's let go (or the
-/// ring fills). The ring shows how far along it is. Screen readers get a
-/// plain tap that records hands-free to the full length. See design system
-/// §29, §52-53.
-class _HoldShutter extends StatelessWidget {
-  const _HoldShutter({
-    required this.progress,
-    required this.recording,
-    required this.label,
-    required this.onStart,
-    required this.onEnd,
-  });
-
-  final double progress;
-  final bool recording;
-  final String label;
-  final VoidCallback onStart;
-  final VoidCallback onEnd;
-
-  @override
-  Widget build(BuildContext context) {
-    const size = AppTouch.captureButton;
-
-    return Semantics(
-      button: true,
-      label: recording
-          ? 'Recording $label, ${(progress * 100).round()} percent'
-          : 'Press and hold to record a $label',
-      onTap: recording ? null : onStart,
-      excludeSemantics: true,
-      child: Listener(
-        onPointerDown: (_) {
-          if (recording) return;
-          AppHaptics.shutter();
-          onStart();
-        },
-        onPointerUp: (_) => onEnd(),
-        onPointerCancel: (_) => onEnd(),
-        child: AnimatedScale(
-          scale: recording ? 1.12 : 1,
-          duration: AppMotion.of(context, AppMotion.short),
-          curve: AppMotion.standard,
-          child: SizedBox.square(
-            dimension: size,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CustomPaint(
-                  size: const Size.square(size),
-                  painter: _RingPainter(progress: recording ? progress : 0),
-                ),
-                AnimatedContainer(
-                  duration: AppMotion.of(context, AppMotion.short),
-                  width: recording ? size * 0.36 : size * 0.72,
-                  height: recording ? size * 0.36 : size * 0.72,
-                  decoration: BoxDecoration(
-                    color: AppColors.warmCoral,
-                    borderRadius: BorderRadius.circular(
-                      recording ? AppRadius.sm / 2 : size,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Making the GIF or boomerang: a ring filling up with the percentage in
-/// the middle, so it's clear how long to wait.
-class _ProcessingProgress extends StatelessWidget {
-  const _ProcessingProgress({required this.progress, required this.message});
-
-  final double progress;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final percent = (progress * 100).round();
-    const size = AppTouch.captureButton;
-
-    return Semantics(
-      liveRegion: true,
-      label: '$message $percent percent',
-      excludeSemantics: true,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: AppSpacing.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox.square(
-              dimension: size,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  TweenAnimationBuilder<double>(
-                    tween: Tween(end: progress),
-                    duration: AppMotion.of(context, AppMotion.short),
-                    builder: (context, value, _) => CustomPaint(
-                      size: const Size.square(size),
-                      painter: _RingPainter(progress: value),
-                    ),
-                  ),
-                  Text(
-                    '$percent%',
-                    style: AppTypography.heading3.copyWith(
-                      color: AppColors.onCamera,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: AppTypography.body.copyWith(color: AppColors.onCamera),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 /// Keep / Retake for the photo just taken. Keep is primary; Retake stays
 /// one tap away. See CLAUDE.md §35, design system §30.
 class _ReviewPanel extends StatelessWidget {
@@ -1006,7 +718,7 @@ class _ReviewPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (photo != null)
-          _PrintPopIn(
+          PrintPopIn(
             child: Container(
               height: MediaQuery.sizeOf(context).height * 0.34,
               padding: const EdgeInsets.all(AppSpacing.sm),
@@ -1060,29 +772,3 @@ class _ReviewPanel extends StatelessWidget {
   }
 }
 
-/// The just-taken photo pops out like a fresh print and settles at a small
-/// tilt — a physical, photobooth moment. Static under reduced motion. See
-/// design system §29-30, §49.
-class _PrintPopIn extends StatelessWidget {
-  const _PrintPopIn({required this.child});
-
-  final Widget child;
-
-  static const _restingTilt = -0.02;
-
-  @override
-  Widget build(BuildContext context) {
-    if (AppMotion.reduced(context)) return child;
-
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: 1),
-      duration: AppMotion.reveal,
-      curve: AppMotion.emphasized,
-      builder: (context, t, child) => Transform.rotate(
-        angle: _restingTilt + (1 - t) * 0.08,
-        child: Transform.scale(scale: 0.8 + 0.2 * t, child: child),
-      ),
-      child: child,
-    );
-  }
-}

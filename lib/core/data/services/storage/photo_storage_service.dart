@@ -3,15 +3,11 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../../../../config/constant/app_storage_paths.dart';
+
 /// Owns all photo filesystem behavior. Repositories never touch paths
 /// directly. See CLAUDE.md §6.
 class PhotoStorageService {
-  static const _originalsDir = 'photos/originals';
-  static const _thumbnailsDir = 'photos/thumbnails';
-  static const _motionDir = 'photos/motion';
-  static const _videosDir = 'photos/videos';
-  static const _stripsDir = 'photos/strips';
-
   Future<Directory> _ensureDir(String relativePath) async {
     final root = await getApplicationDocumentsDirectory();
     final dir = Directory(p.join(root.path, relativePath));
@@ -22,7 +18,7 @@ class PhotoStorageService {
   }
 
   Future<String> saveOriginal(String photoId, List<int> bytes) async {
-    final dir = await _ensureDir(_originalsDir);
+    final dir = await _ensureDir(AppStoragePaths.originals);
     final file = File(p.join(dir.path, '$photoId.jpg'));
     await file.writeAsBytes(bytes);
     return file.path;
@@ -31,7 +27,7 @@ class PhotoStorageService {
   /// Saves a still thumbnail — or, for animations and clips, the poster
   /// frame.
   Future<String> saveThumbnail(String photoId, List<int> bytes) async {
-    final dir = await _ensureDir(_thumbnailsDir);
+    final dir = await _ensureDir(AppStoragePaths.thumbnails);
     final file = File(p.join(dir.path, '$photoId.jpg'));
     await file.writeAsBytes(bytes);
     return file.path;
@@ -39,7 +35,7 @@ class PhotoStorageService {
 
   /// Saves a GIF or boomerang.
   Future<String> saveAnimation(String photoId, List<int> gifBytes) async {
-    final dir = await _ensureDir(_motionDir);
+    final dir = await _ensureDir(AppStoragePaths.motion);
     final file = File(p.join(dir.path, '$photoId.gif'));
     await file.writeAsBytes(gifBytes);
     return file.path;
@@ -48,7 +44,7 @@ class PhotoStorageService {
   /// Moves a just-recorded clip from the camera's temporary [sourcePath]
   /// into app storage.
   Future<String> saveVideo(String photoId, String sourcePath) async {
-    final dir = await _ensureDir(_videosDir);
+    final dir = await _ensureDir(AppStoragePaths.videos);
     final target = p.join(dir.path, '$photoId.mp4');
     final source = File(sourcePath);
     await source.copy(target);
@@ -64,7 +60,7 @@ class PhotoStorageService {
   /// Each save gets a new file name, so screens never show a stale cached
   /// image of an earlier design; older versions are removed.
   Future<String> savePhotoStrip(String memoryId, List<int> bytes) async {
-    final dir = await _ensureDir(_stripsDir);
+    final dir = await _ensureDir(AppStoragePaths.strips);
     final previous = await _stripsFor(memoryId);
     final stamp = DateTime.now().microsecondsSinceEpoch;
     final file = File(p.join(dir.path, '$memoryId-$stamp.jpg'));
@@ -86,10 +82,10 @@ class PhotoStorageService {
 
   Future<void> deletePhoto(String photoId) async {
     for (final (dir, extension) in [
-      (_originalsDir, 'jpg'),
-      (_thumbnailsDir, 'jpg'),
-      (_motionDir, 'gif'),
-      (_videosDir, 'mp4'),
+      (AppStoragePaths.originals, 'jpg'),
+      (AppStoragePaths.thumbnails, 'jpg'),
+      (AppStoragePaths.motion, 'gif'),
+      (AppStoragePaths.videos, 'mp4'),
     ]) {
       final folder = await _ensureDir(dir);
       await _deleteIfExists(File(p.join(folder.path, '$photoId.$extension')));
@@ -106,14 +102,14 @@ class PhotoStorageService {
   }
 
   Future<String> getPhotoPath(String photoId, {required bool thumbnail}) async {
-    final dir = await _ensureDir(thumbnail ? _thumbnailsDir : _originalsDir);
+    final dir = await _ensureDir(thumbnail ? AppStoragePaths.thumbnails : AppStoragePaths.originals);
     return p.join(dir.path, '$photoId.jpg');
   }
 
   /// Every keepsake file for [memoryId]: `<id>.jpg` from before versioned
   /// names, and `<id>-<stamp>.jpg`.
   Future<List<File>> _stripsFor(String memoryId) async {
-    final dir = await _ensureDir(_stripsDir);
+    final dir = await _ensureDir(AppStoragePaths.strips);
     return [
       await for (final entity in dir.list())
         if (entity is File &&

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../view_model/quests/quest_detail_view_model.dart';
-import '../../view_model/quests/quest_intro_view_model.dart';
-import '../../view_model/quests/quest_participants_view_model.dart';
 import '../molecules/app_widget_preview.dart';
 import 'preview_samples.dart';
 import 'quest_intro_template.dart';
+import '../../types/quests/quest_detail.dart';
+import '../../types/quests/quest_start_readiness.dart';
+import '../../types/quests/quest_participant_with_person.dart';
 
 Widget _intro({
   required AsyncValue<QuestDetail> detail,

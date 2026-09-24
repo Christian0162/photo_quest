@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
 import '../atoms/local_photo.dart';
 import '../atoms/participant_avatar_stack.dart';
 import '../molecules/app_card.dart';
 import '../molecules/memory_cover_hero.dart';
+import '../../types/memories/memory_summary.dart';
 
 /// A Memory as a printed photo: the picture dominates, with a white print
 /// border, the quest title, date, and who was there underneath. See

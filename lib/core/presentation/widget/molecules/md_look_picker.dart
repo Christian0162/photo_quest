@@ -4,7 +4,7 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../../domain/memories/entities/photo_look.dart';
+import '../../../domain/memories/enum/photo_look.dart';
 import '../../../utils/app_haptics.dart';
 
 /// A small row of looks (filters) over the camera. Each swatch shows a warm

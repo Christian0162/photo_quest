@@ -10,7 +10,6 @@ import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
 import '../../../utils/app_haptics.dart';
 import '../../types/display_labels.dart';
-import '../../view_model/quests/create_quest_view_model.dart';
 import '../atoms/person_avatar.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/skeleton_box.dart';
@@ -19,6 +18,10 @@ import '../molecules/step_progress.dart';
 import '../organisms/app_scaffold.dart';
 import '../organisms/quest_card.dart';
 import '../organisms/quest_shot_list.dart';
+import '../../../domain/quests/enum/create_quest_step.dart';
+import '../../types/quests/draft_shot.dart';
+import '../../types/quests/create_quest_draft.dart';
+import '../molecules/choice_card.dart';
 
 const _categorySuggestions = [
   'Birthday',
@@ -365,7 +368,7 @@ class _WhoStep extends StatelessWidget {
           children: [
             for (final (value, label, icon) in questTypes) ...[
               Expanded(
-                child: _ChoiceCard(
+                child: ChoiceCard(
                   label: label,
                   icon: icon,
                   selected: draft.type == value,
@@ -440,68 +443,6 @@ class _WhoStep extends StatelessWidget {
           ),
         ],
       ],
-    );
-  }
-}
-
-/// A big, tappable option card. Selected = border + filled tint + check,
-/// never color alone. See design system §17, CLAUDE.md §65.
-class _ChoiceCard extends StatelessWidget {
-  const _ChoiceCard({
-    required this.label,
-    required this.icon,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final IconData icon;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      selected: selected,
-      label: label,
-      excludeSemantics: true,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        child: AnimatedContainer(
-          duration: AppMotion.of(context, AppMotion.short),
-          curve: AppMotion.standard,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.sm,
-            vertical: AppSpacing.md,
-          ),
-          decoration: BoxDecoration(
-            color: selected ? AppColors.softPeach : AppColors.paper,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            border: Border.all(
-              color: selected ? AppColors.textPrimary : AppColors.line,
-              width: selected ? 2 : 1.5,
-            ),
-          ),
-          child: Column(
-            children: [
-              Icon(
-                selected ? Icons.check_circle_rounded : icon,
-                size: AppIconSizes.xl,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                style: AppTypography.label.copyWith(
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

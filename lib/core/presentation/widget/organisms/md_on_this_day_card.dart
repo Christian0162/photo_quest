@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
 import '../atoms/local_photo.dart';
 import '../molecules/app_card.dart';
+import '../../types/memories/memory_summary.dart';
 
 /// "1 year ago today" — resurfaces a memory from this date so the app
 /// feels like a time capsule, and nudges "do it again". See CLAUDE.md §21,

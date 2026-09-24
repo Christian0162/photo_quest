@@ -3,22 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
-import '../../view_model/memories/memory_list_view_model.dart';
-import '../../view_model/quests/quests_needing_confirmation_view_model.dart';
 import '../atoms/fade_slide_in.dart';
 import '../atoms/skeleton_box.dart';
-import '../molecules/app_card.dart';
 import '../molecules/section_header.dart';
 import '../organisms/app_scaffold.dart';
 import '../organisms/on_this_day_card.dart';
 import '../organisms/pending_quest_card.dart';
 import '../organisms/recent_memories_section.dart';
 import '../organisms/today_quest_card.dart';
+import '../../types/memories/memory_summary.dart';
+import '../../types/quests/quest_needing_confirmation.dart';
+import '../atoms/round_icon_button.dart';
+import '../atoms/smooth_switch.dart';
+import '../molecules/idea_tile.dart';
 
 /// Answers "What can we do today?" — a greeting, one hero Quest, anything
 /// waiting on people, and a shelf of recent memories. Never a dashboard.
@@ -81,7 +81,7 @@ class HomeTemplate extends StatelessWidget {
       (
         'today',
         _Padded(
-          child: _SmoothSwitch(
+          child: SmoothSwitch(
             child: todayQuest.when(
               loading: () => const SkeletonBox(
                 key: ValueKey('today-loading'),
@@ -154,7 +154,7 @@ class HomeTemplate extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.ms),
-            _SmoothSwitch(
+            SmoothSwitch(
               child: memories.when(
                 loading: () => KeyedSubtree(
                   key: const ValueKey('memories-loading'),
@@ -194,7 +194,7 @@ class HomeTemplate extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                      child: _IdeaTile(
+                      child: IdeaTile(
                         icon: Icons.auto_awesome_rounded,
                         title: 'Browse quests',
                         subtitle: 'For us, family, friends',
@@ -204,7 +204,7 @@ class HomeTemplate extends StatelessWidget {
                     ),
                     const SizedBox(width: AppSpacing.ms),
                     Expanded(
-                      child: _IdeaTile(
+                      child: IdeaTile(
                         icon: Icons.edit_rounded,
                         title: 'Create your own',
                         subtitle: 'Your idea, your people',
@@ -296,121 +296,12 @@ class _Greeting extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        _RoundIconButton(
+        RoundIconButton(
           icon: Icons.settings_outlined,
           tooltip: 'Settings',
           onPressed: onOpenSettings,
         ),
       ],
-    );
-  }
-}
-
-/// A soft paper circle for secondary header actions (settings, add).
-class _RoundIconButton extends StatelessWidget {
-  const _RoundIconButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onPressed,
-  });
-
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: AppShadows.card,
-      ),
-      child: IconButton(
-        tooltip: tooltip,
-        style: IconButton.styleFrom(
-          backgroundColor: AppColors.paper,
-          foregroundColor: AppColors.textPrimary,
-          minimumSize: const Size.square(AppTouch.minTarget),
-        ),
-        icon: Icon(icon),
-        onPressed: onPressed,
-      ),
-    );
-  }
-}
-
-/// A half-width "other ways in" card: an icon badge, a title and one line.
-class _IdeaTile extends StatelessWidget {
-  const _IdeaTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.color,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      color: color,
-      radius: AppRadius.xl,
-      onTap: onTap,
-      semanticLabel: '$title. $subtitle',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: color == AppColors.paper
-                  ? AppColors.sunken
-                  : AppColors.paper,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, size: AppIconSizes.md),
-          ),
-          const SizedBox(height: AppSpacing.ms),
-          Text(title, style: AppTypography.heading3),
-          const SizedBox(height: AppSpacing.xxs),
-          Text(subtitle, style: AppTypography.caption),
-        ],
-      ),
-    );
-  }
-}
-
-/// Cross-fades between loading and loaded content with a gentle size
-/// settle, so the page doesn't jump when data arrives. Children need
-/// distinct keys per state.
-class _SmoothSwitch extends StatelessWidget {
-  const _SmoothSwitch({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final duration = AppMotion.of(context, AppMotion.medium);
-    return AnimatedSize(
-      duration: duration,
-      curve: AppMotion.standard,
-      alignment: Alignment.topCenter,
-      child: AnimatedSwitcher(
-        duration: duration,
-        switchInCurve: AppMotion.standard,
-        switchOutCurve: AppMotion.standard,
-        layoutBuilder: (current, previous) => Stack(
-          alignment: Alignment.topCenter,
-          children: [...previous, ?current],
-        ),
-        child: child,
-      ),
     );
   }
 }

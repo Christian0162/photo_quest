@@ -6,29 +6,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../data/repositories/people_repository_provider.dart';
-import '../../../data/services/service_providers.dart';
+import '../../../data/repositories/service_providers.dart';
 import '../../../domain/people/entities/person.dart';
+import '../../types/camera/memory_reveal_result.dart';
 
 part 'memory_reveal_view_model.g.dart';
-
-class MemoryRevealResult {
-  const MemoryRevealResult({
-    required this.memoryId,
-    required this.title,
-    required this.capturedAt,
-    required this.people,
-    required this.stripPath,
-  });
-
-  final String memoryId;
-  final String title;
-  final DateTime capturedAt;
-
-  /// Who was there — the reveal celebrates people, not just pixels. See
-  /// design system §32.
-  final List<Person> people;
-  final String stripPath;
-}
 
 /// Makes sure a just-completed session has a printed strip — composing a
 /// default one only if the memory has none yet, so a decorated keepsake is

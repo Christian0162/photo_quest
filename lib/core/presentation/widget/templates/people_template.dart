@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../types/display_labels.dart';
 import '../atoms/fade_slide_in.dart';
-import '../atoms/person_avatar.dart';
 import '../atoms/primary_button.dart';
 import '../atoms/skeleton_box.dart';
 import '../molecules/app_card.dart';
 import '../molecules/empty_state.dart';
 import '../organisms/app_scaffold.dart';
+import '../atoms/ringed_avatar.dart';
+import '../molecules/tile_grid.dart';
+import '../molecules/page_header.dart';
+import '../atoms/round_icon_button.dart';
 
 /// The people (and pets) your quests and memories are about, grouped the
 /// way life groups them — your person, family, friends, pets. Private to
@@ -47,7 +49,20 @@ class PeopleTemplate extends StatelessWidget {
               AppSpacing.lg,
             ),
             sliver: SliverToBoxAdapter(
-              child: FadeSlideIn(child: _Header(onAddPerson: onAddPerson)),
+              child: FadeSlideIn(
+                child: PageHeader(
+                  overline: 'YOUR CIRCLE',
+                  title: 'People',
+                  subtitle: 'The people (and pets) your memories are about.',
+                  trailing: RoundIconButton(
+                    icon: Icons.person_add_alt_1_rounded,
+                    tooltip: 'Add someone',
+                    backgroundColor: AppColors.warmCoral,
+                    foregroundColor: AppColors.onCoral,
+                    onPressed: onAddPerson,
+                  ),
+                ),
+              ),
             ),
           ),
           ...people.when(
@@ -108,56 +123,6 @@ class PeopleTemplate extends StatelessWidget {
   }
 }
 
-class _Header extends StatelessWidget {
-  const _Header({required this.onAddPerson});
-
-  final VoidCallback onAddPerson;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('YOUR CIRCLE', style: AppTypography.overline),
-              const SizedBox(height: AppSpacing.sm),
-              Semantics(
-                header: true,
-                child: Text('People', style: AppTypography.display),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                'The people (and pets) your memories are about.',
-                style: AppTypography.bodyMuted,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        DecoratedBox(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            boxShadow: AppShadows.card,
-          ),
-          child: IconButton(
-            tooltip: 'Add someone',
-            style: IconButton.styleFrom(
-              backgroundColor: AppColors.warmCoral,
-              foregroundColor: AppColors.onCoral,
-              minimumSize: const Size.square(AppTouch.minTarget),
-            ),
-            icon: const Icon(Icons.person_add_alt_1_rounded),
-            onPressed: onAddPerson,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 /// "You" up top, then one group per relationship, then a way to add
 /// someone. Built eagerly — a private circle is a handful of people — so
 /// the stagger plays once instead of replaying on scroll.
@@ -199,7 +164,7 @@ class _PeopleGroups extends StatelessWidget {
             child: _GroupHeader(type: type, count: members.length),
           ),
           const SizedBox(height: AppSpacing.ms),
-          _TileGrid(
+          TileGrid(
             children: [
               for (final person in members)
                 FadeSlideIn(
@@ -244,7 +209,7 @@ class _SelfCard extends StatelessWidget {
       semanticLabel: '${person.name}, you. $circle',
       child: Row(
         children: [
-          _RingedAvatar(person: person, radius: 30, ring: AppColors.paper),
+          RingedAvatar(person: person, radius: 30, ring: AppColors.paper),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
@@ -302,36 +267,6 @@ class _GroupHeader extends StatelessWidget {
   }
 }
 
-/// Lays tiles out in even columns that fit the width (3 on most phones).
-class _TileGrid extends StatelessWidget {
-  const _TileGrid({required this.children});
-
-  final List<Widget> children;
-
-  static const _maxTileWidth = 128.0;
-  static const _gap = AppSpacing.ms;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final columns = ((constraints.maxWidth + _gap) / (_maxTileWidth + _gap))
-            .ceil()
-            .clamp(2, 6);
-        final width = (constraints.maxWidth - _gap * (columns - 1)) / columns;
-        return Wrap(
-          spacing: _gap,
-          runSpacing: _gap,
-          children: [
-            for (final child in children)
-              SizedBox(key: child.key, width: width, child: child),
-          ],
-        );
-      },
-    );
-  }
-}
-
 /// A small photo-print: the face first, the name written underneath.
 class _PersonTile extends StatelessWidget {
   const _PersonTile({required this.person});
@@ -350,7 +285,7 @@ class _PersonTile extends StatelessWidget {
       semanticLabel: '${person.name}, ${personTypeLabel(person.type)}',
       child: Column(
         children: [
-          _RingedAvatar(person: person, radius: 32, ring: AppColors.sunken),
+          RingedAvatar(person: person, radius: 32, ring: AppColors.sunken),
           const SizedBox(height: AppSpacing.sm),
           Text(
             person.name,
@@ -407,28 +342,6 @@ class _AddPersonCard extends StatelessWidget {
   }
 }
 
-/// [PersonAvatar] inside a soft ring, like a photo in a round frame.
-class _RingedAvatar extends StatelessWidget {
-  const _RingedAvatar({
-    required this.person,
-    required this.radius,
-    required this.ring,
-  });
-
-  final Person person;
-  final double radius;
-  final Color ring;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.xs),
-      decoration: BoxDecoration(color: ring, shape: BoxShape.circle),
-      child: PersonAvatar(person: person, radius: radius),
-    );
-  }
-}
-
 class _Chip extends StatelessWidget {
   const _Chip({required this.label, required this.icon});
 
@@ -472,7 +385,7 @@ class _LoadingPeople extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
           const SkeletonBox(width: 120, height: 20),
           const SizedBox(height: AppSpacing.ms),
-          _TileGrid(
+          TileGrid(
             children: [
               for (var i = 0; i < 6; i++) const SkeletonBox(height: 124),
             ],

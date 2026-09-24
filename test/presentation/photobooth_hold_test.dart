@@ -9,10 +9,14 @@ import 'package:photoquest/core/data/repositories/memory_repository.dart';
 import 'package:photoquest/core/data/repositories/settings_repository.dart';
 import 'package:photoquest/core/data/repositories/settings_repository_provider.dart';
 import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
-import 'package:photoquest/core/presentation/view_model/memories/keepsake_view_model.dart';
 import 'package:photoquest/core/presentation/widget/molecules/app_widget_preview.dart';
 import 'package:photoquest/core/presentation/widget/templates/capture_template.dart';
 import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_phase.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_mode.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_frame.dart';
+import 'package:photoquest/core/presentation/types/camera/capture_state.dart';
 
 CaptureState _booth(
   CapturePhase phase, {

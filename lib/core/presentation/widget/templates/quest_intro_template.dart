@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_constants.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../types/display_labels.dart';
-import '../../view_model/quests/quest_detail_view_model.dart';
-import '../../view_model/quests/quest_intro_view_model.dart';
-import '../../view_model/quests/quest_participants_view_model.dart';
 import '../atoms/fade_slide_in.dart';
 import '../atoms/person_avatar.dart';
 import '../atoms/primary_button.dart';
@@ -21,6 +17,11 @@ import '../organisms/app_scaffold.dart';
 import '../organisms/quest_card.dart';
 import '../organisms/quest_participants_section.dart';
 import '../organisms/quest_shot_list.dart';
+import '../../../domain/quests/enum/status_tone.dart';
+import '../../types/quests/quest_detail.dart';
+import '../../types/quests/quest_start_readiness.dart';
+import '../../types/quests/quest_participant_with_person.dart';
+import '../atoms/icon_fact.dart';
 
 /// Introduces a Quest before capture: what we're doing, who's joining, which
 /// photos we'll take — then one primary action to begin. See CLAUDE.md §59,
@@ -112,11 +113,11 @@ class QuestIntroTemplate extends StatelessWidget {
                 spacing: AppSpacing.md,
                 runSpacing: AppSpacing.xs,
                 children: [
-                  _Fact(
+                  IconFact(
                     icon: questTypeIcon(quest.type),
                     label: questTypeLabel(quest.type),
                   ),
-                  _Fact(
+                  IconFact(
                     icon: Icons.photo_camera_outlined,
                     label: data.shots.length == 1
                         ? '1 photo'
@@ -168,28 +169,6 @@ class QuestIntroTemplate extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-}
-
-class _Fact extends StatelessWidget {
-  const _Fact({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: AppIconSizes.sm, color: AppColors.textMuted),
-        const SizedBox(width: AppSpacing.xs),
-        Text(
-          label,
-          style: AppTypography.label.copyWith(color: AppColors.textMuted),
-        ),
-      ],
     );
   }
 }

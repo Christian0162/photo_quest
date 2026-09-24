@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-
-enum StatusTone { waiting, positive, neutral }
+import '../../../domain/quests/enum/status_tone.dart';
 
 /// A small icon + word status ("Waiting", "Joined"). Always carries text
 /// and an icon so status never depends on color alone. See CLAUDE.md §65,
