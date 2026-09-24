@@ -4,9 +4,9 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/camera_icon_button.dart';
 import '../../../domain/memories/entities/photo.dart';
-import '../molecules/shot_media.dart';
+import '../atoms/md_camera_icon_button.dart';
+import '../molecules/md_shot_media.dart';
 
 /// Opens [photos] full screen on black: swipe between shots, pinch or
 /// double-tap to zoom, swipe down or tap close to go back. GIFs play and
@@ -131,7 +131,7 @@ class _PhotoViewerState extends State<_PhotoViewer> {
                     maxScale: 4,
                     onInteractionEnd: (_) => setState(() {}),
                     child: Center(
-                      child: ShotMedia(
+                      child: MdShotMedia(
                         photo: widget.photos[index],
                         fit: BoxFit.contain,
                         semanticLabel:
@@ -148,7 +148,7 @@ class _PhotoViewerState extends State<_PhotoViewer> {
               padding: const EdgeInsets.all(AppSpacing.sm),
               child: Row(
                 children: [
-                  CameraIconButton(
+                  MdCameraIconButton(
                     icon: Icons.close_rounded,
                     tooltip: 'Close',
                     onPressed: () => Navigator.of(context).pop(),
@@ -163,7 +163,7 @@ class _PhotoViewerState extends State<_PhotoViewer> {
                     ),
                   const SizedBox(width: AppSpacing.md),
                   if (widget.onDownload != null) ...[
-                    CameraIconButton(
+                    MdCameraIconButton(
                       icon: Icons.download_rounded,
                       tooltip: 'Save to photos',
                       onPressed: () => widget.onDownload!(widget.photos[_page]),
@@ -172,7 +172,7 @@ class _PhotoViewerState extends State<_PhotoViewer> {
                   ],
                   if (widget.onShare != null)
                     Builder(
-                      builder: (context) => CameraIconButton(
+                      builder: (context) => MdCameraIconButton(
                         icon: Icons.ios_share_rounded,
                         tooltip: 'Share this shot',
                         onPressed: () {

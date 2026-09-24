@@ -6,8 +6,8 @@ import '../../../../config/constant/app_spacing.dart';
 
 /// A soft circle for header actions (settings, add). Paper by default;
 /// pass coral colors when it is the page's main action.
-class RoundIconButton extends StatelessWidget {
-  const RoundIconButton({
+class MdRoundIconButton extends StatelessWidget {
+  const MdRoundIconButton({
     super.key,
     required this.icon,
     required this.tooltip,

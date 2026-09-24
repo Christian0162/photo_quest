@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/progress_ring_painter.dart';
+import '../atoms/md_progress_ring_painter.dart';
 
 /// Making the GIF or boomerang: a ring filling up with the percentage in
 /// the middle, so it's clear how long to wait.
-class ProcessingProgress extends StatelessWidget {
-  const ProcessingProgress({super.key, required this.progress, required this.message});
+class MdProcessingProgress extends StatelessWidget {
+  const MdProcessingProgress({
+    super.key,
+    required this.progress,
+    required this.message,
+  });
 
   final double progress;
   final String message;
@@ -37,7 +42,7 @@ class ProcessingProgress extends StatelessWidget {
                     duration: AppMotion.of(context, AppMotion.short),
                     builder: (context, value, _) => CustomPaint(
                       size: const Size.square(size),
-                      painter: ProgressRingPainter(progress: value),
+                      painter: MdProgressRingPainter(progress: value),
                     ),
                   ),
                   Text(

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../utils/app_haptics.dart';
-import 'pressable_scale.dart';
+import 'md_pressable_scale.dart';
 
 /// The app's primary call-to-action. Large, warm, one per screen. Shows an
 /// inline spinner (and ignores taps) while [loading]. See CLAUDE.md §64,
 /// design system §46, §58.
-class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({
+class MdPrimaryButton extends StatelessWidget {
+  const MdPrimaryButton({
     super.key,
     required this.label,
     required this.onPressed,
@@ -43,17 +43,17 @@ class PrimaryButton extends StatelessWidget {
       ),
     );
 
-    return PressableScale(
+    return MdPressableScale(
       enabled: enabled,
       child: expand ? SizedBox(width: double.infinity, child: button) : button,
     );
   }
 }
 
-/// The quieter companion to [PrimaryButton]: Retake, Decline, Back, Cancel.
+/// The quieter companion to [MdPrimaryButton]: Retake, Decline, Back, Cancel.
 /// See design system §46.
-class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({
+class MdSecondaryButton extends StatelessWidget {
+  const MdSecondaryButton({
     super.key,
     required this.label,
     required this.onPressed,
@@ -89,7 +89,7 @@ class SecondaryButton extends StatelessWidget {
       child: _ButtonContent(label: label, icon: icon),
     );
 
-    return PressableScale(
+    return MdPressableScale(
       enabled: onPressed != null,
       child: expand ? SizedBox(width: double.infinity, child: button) : button,
     );

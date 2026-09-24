@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/people/entities/person.dart';
-import 'person_avatar.dart';
+import 'md_person_avatar.dart';
 
 /// Overlapping "👤 👤 👤 +2" avatar row used to show quest participants at
 /// a glance. Reads as "With Sam, Mom and 2 others" to screen readers. See
 /// design system §15, §21.
-class ParticipantAvatarStack extends StatelessWidget {
-  const ParticipantAvatarStack({
+class MdParticipantAvatarStack extends StatelessWidget {
+  const MdParticipantAvatarStack({
     super.key,
     required this.people,
     this.radius = 16,
@@ -57,7 +57,9 @@ class ParticipantAvatarStack extends StatelessWidget {
             for (var i = 0; i < shown.length; i++)
               Positioned(
                 left: step * i,
-                child: _ringed(PersonAvatar(person: shown[i], radius: radius)),
+                child: _ringed(
+                  MdPersonAvatar(person: shown[i], radius: radius),
+                ),
               ),
             if (overflow > 0)
               Positioned(

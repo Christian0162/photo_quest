@@ -5,8 +5,8 @@ import '../../../../config/constant/app_motion.dart';
 /// Scales its child down slightly while pressed so key actions feel
 /// physical, like a photobooth button. Skipped under reduced motion. See
 /// design system §29, §48-50.
-class PressableScale extends StatefulWidget {
-  const PressableScale({
+class MdPressableScale extends StatefulWidget {
+  const MdPressableScale({
     super.key,
     required this.child,
     required this.enabled,
@@ -18,10 +18,10 @@ class PressableScale extends StatefulWidget {
   final double scale;
 
   @override
-  State<PressableScale> createState() => _PressableScaleState();
+  State<MdPressableScale> createState() => _MdPressableScaleState();
 }
 
-class _PressableScaleState extends State<PressableScale> {
+class _MdPressableScaleState extends State<MdPressableScale> {
   bool _pressed = false;
 
   void _set(bool pressed) {

@@ -5,19 +5,19 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
 import '../../types/display_labels.dart';
-import '../atoms/local_photo.dart';
-import '../molecules/app_card.dart';
+import '../atoms/md_local_photo.dart';
+import '../molecules/md_app_card.dart';
 
 /// The numbered photos a Quest asks for, so everyone knows what pictures
 /// they're about to take. See CLAUDE.md §33, design system §16.
-class QuestShotList extends StatelessWidget {
-  const QuestShotList({super.key, required this.shots});
+class MdQuestShotList extends StatelessWidget {
+  const MdQuestShotList({super.key, required this.shots});
 
   final List<QuestShot> shots;
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return MdAppCard(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Column(
         children: [
@@ -92,7 +92,7 @@ class _ShotRow extends StatelessWidget {
                 child: SizedBox(
                   width: 48,
                   height: 64,
-                  child: LocalPhoto(
+                  child: MdLocalPhoto(
                     path: shot.exampleImagePath,
                     semanticLabel: 'Example photo',
                   ),

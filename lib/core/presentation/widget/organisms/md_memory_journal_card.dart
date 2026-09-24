@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../types/display_labels.dart';
 import '../../../utils/date_labels.dart';
-import '../atoms/local_photo.dart';
-import '../atoms/occasion_chip.dart';
-import '../atoms/open_memory_link.dart';
-import '../molecules/app_card.dart';
-import '../molecules/memory_cover_hero.dart';
+import '../../types/display_labels.dart';
 import '../../types/memories/memory_summary.dart';
-import '../atoms/icon_fact.dart';
+import '../atoms/md_icon_fact.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_occasion_chip.dart';
+import '../atoms/md_open_memory_link.dart';
+import '../molecules/md_app_card.dart';
+import '../molecules/md_memory_cover_hero.dart';
 
 /// A memory as a journal entry: when it was and what kind of day, the
 /// title, one wide photo with its note written across the bottom, and how
@@ -29,8 +29,8 @@ import '../atoms/icon_fact.dart';
 /// │ ▣ 3 shots  ☺ 2 people  Open memory › │
 /// └──────────────────────────────┘
 /// ```
-class MemoryJournalCard extends StatelessWidget {
-  const MemoryJournalCard({
+class MdMemoryJournalCard extends StatelessWidget {
+  const MdMemoryJournalCard({
     super.key,
     required this.summary,
     required this.onOpen,
@@ -53,7 +53,7 @@ class MemoryJournalCard extends StatelessWidget {
         : summary.photos.length;
     final people = summary.people.length;
 
-    return AppCard(
+    return MdAppCard(
       onTap: onOpen,
       radius: AppRadius.xl,
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -75,7 +75,7 @@ class MemoryJournalCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Flexible(
-                child: OccasionChip(label: occasion, icon: occasionIcon),
+                child: MdOccasionChip(label: occasion, icon: occasionIcon),
               ),
             ],
           ),
@@ -104,18 +104,20 @@ class MemoryJournalCard extends StatelessWidget {
                 spacing: AppSpacing.md,
                 runSpacing: AppSpacing.xs,
                 children: [
-                  IconFact(style: AppTypography.caption, 
+                  MdIconFact(
+                    style: AppTypography.caption,
                     icon: Icons.photo_library_outlined,
                     label: shots == 1 ? '1 shot' : '$shots shots',
                   ),
                   if (people > 0)
-                    IconFact(style: AppTypography.caption, 
+                    MdIconFact(
+                      style: AppTypography.caption,
                       icon: Icons.people_outline_rounded,
                       label: people == 1 ? '1 person' : '$people people',
                     ),
                 ],
               ),
-              const OpenMemoryLink(),
+              const MdOpenMemoryLink(),
             ],
           ),
         ],
@@ -146,9 +148,9 @@ class _CoverPhoto extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            MemoryCoverHero(
+            MdMemoryCoverHero(
               memoryId: summary.memory.id,
-              child: LocalPhoto(path: summary.coverPhoto?.thumbnailPath),
+              child: MdLocalPhoto(path: summary.coverPhoto?.thumbnailPath),
             ),
             const DecoratedBox(
               decoration: BoxDecoration(
@@ -202,4 +204,3 @@ class _CoverPhoto extends StatelessWidget {
     );
   }
 }
-

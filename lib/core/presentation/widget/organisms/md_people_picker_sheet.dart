@@ -4,7 +4,7 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../types/display_labels.dart';
-import '../atoms/person_avatar.dart';
+import '../atoms/md_person_avatar.dart';
 
 /// Bottom sheet for inviting one Person to a Quest. Resolves to the chosen
 /// Person, or null if dismissed. See CLAUDE.md §40, design system §20, §44.
@@ -46,7 +46,7 @@ Future<Person?> showPeoplePickerSheet(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.gutter,
                       ),
-                      leading: PersonAvatar(person: person, radius: 22),
+                      leading: MdPersonAvatar(person: person, radius: 22),
                       title: Text(person.name),
                       subtitle: Text(personTypeLabel(person.type)),
                       trailing: const Icon(Icons.add_circle_outline_rounded),

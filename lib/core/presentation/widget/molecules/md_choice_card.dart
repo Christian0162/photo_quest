@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
@@ -6,8 +7,9 @@ import '../../../../config/constant/app_typography.dart';
 
 /// A big, tappable option card. Selected = border + filled tint + check,
 /// never color alone. See design system §17, CLAUDE.md §65.
-class ChoiceCard extends StatelessWidget {
-  const ChoiceCard({super.key, 
+class MdChoiceCard extends StatelessWidget {
+  const MdChoiceCard({
+    super.key,
     required this.label,
     required this.icon,
     required this.selected,

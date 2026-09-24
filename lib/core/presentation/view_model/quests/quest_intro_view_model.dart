@@ -3,9 +3,9 @@ import 'dart:developer' as developer;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../data/repositories/memory_repository_provider.dart';
+import '../../types/quests/quest_start_readiness.dart';
 import 'quest_detail_view_model.dart';
 import 'quest_participants_view_model.dart';
-import '../../types/quests/quest_start_readiness.dart';
 
 part 'quest_intro_view_model.g.dart';
 

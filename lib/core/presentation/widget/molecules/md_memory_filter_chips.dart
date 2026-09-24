@@ -5,14 +5,14 @@ import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../../utils/app_haptics.dart';
 import '../../../domain/memories/enum/memory_filter.dart';
+import '../../../utils/app_haptics.dart';
 
 /// "This day · This month · All journey" — how to look through the memory
 /// box, each with how many memories it holds. The chosen one fills coral;
 /// selection is also announced and never relies on color alone.
-class MemoryFilterChips extends StatelessWidget {
-  const MemoryFilterChips({
+class MdMemoryFilterChips extends StatelessWidget {
+  const MdMemoryFilterChips({
     super.key,
     required this.selected,
     required this.counts,

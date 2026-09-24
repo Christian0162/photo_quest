@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_spacing.dart';
 
 /// Lays tiles out in even columns that fit the width (3 on most phones).
-class TileGrid extends StatelessWidget {
-  const TileGrid({super.key, required this.children});
+class MdTileGrid extends StatelessWidget {
+  const MdTileGrid({super.key, required this.children});
 
   final List<Widget> children;
 

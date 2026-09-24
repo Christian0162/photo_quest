@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../domain/memories/entities/photo.dart';
 import '../../../utils/app_haptics.dart';
-import '../atoms/local_photo.dart';
-import '../molecules/memory_cover_hero.dart';
-import '../molecules/shot_media.dart';
-import '../atoms/page_dots.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_page_dots.dart';
+import '../molecules/md_memory_cover_hero.dart';
+import '../molecules/md_shot_media.dart';
 
 /// Swipeable photos that open on the memory's cover. The thumbnail that was
 /// just flown in stays underneath while the full-size original fades in on
 /// top, so the album sharpens instead of blinking. Tap to view full screen.
-class PhotoAlbum extends StatefulWidget {
-  const PhotoAlbum({super.key, 
+class MdPhotoAlbum extends StatefulWidget {
+  const MdPhotoAlbum({
+    super.key,
     required this.memoryId,
     required this.photos,
     required this.coverPhotoId,
@@ -32,10 +34,10 @@ class PhotoAlbum extends StatefulWidget {
   final ValueChanged<int> onOpen;
 
   @override
-  State<PhotoAlbum> createState() => _PhotoAlbumState();
+  State<MdPhotoAlbum> createState() => _MdPhotoAlbumState();
 }
 
-class _PhotoAlbumState extends State<PhotoAlbum> {
+class _MdPhotoAlbumState extends State<MdPhotoAlbum> {
   late final int _coverIndex = () {
     final index = widget.photos.indexWhere((p) => p.id == widget.coverPhotoId);
     return index < 0 ? 0 : index;
@@ -75,18 +77,18 @@ class _PhotoAlbumState extends State<PhotoAlbum> {
                   itemBuilder: (context, index) {
                     final photo = widget.photos[index];
                     // Photos, GIFs and boomerangs play here; 360° clips loop.
-                    Widget image = ShotMedia(
+                    Widget image = MdShotMedia(
                       photo: photo,
                       semanticLabel:
                           'Shot ${index + 1} of $count from ${widget.title}',
                     );
                     if (index == _coverIndex) {
-                      image = MemoryCoverHero(
+                      image = MdMemoryCoverHero(
                         memoryId: widget.memoryId,
                         child: Stack(
                           fit: StackFit.expand,
                           children: [
-                            LocalPhoto(
+                            MdLocalPhoto(
                               path: widget.coverPath ?? photo.thumbnailPath,
                             ),
                             image,
@@ -131,7 +133,7 @@ class _PhotoAlbumState extends State<PhotoAlbum> {
         ),
         if (count > 1) ...[
           const SizedBox(height: AppSpacing.ms),
-          PageDots(count: count, current: _page),
+          MdPageDots(count: count, current: _page),
         ],
       ],
     );

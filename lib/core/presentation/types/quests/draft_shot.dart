@@ -1,4 +1,3 @@
-
 /// A single instruction/photo the creator wants captured. See CLAUDE.md
 /// §17-19.
 class DraftShot {

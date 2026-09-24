@@ -4,10 +4,10 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 
 /// Localized loading indicator, optionally with a short human message.
-/// Prefer a [SkeletonBox] layout when the shape of the content is known.
+/// Prefer a [MdSkeletonBox] layout when the shape of the content is known.
 /// See CLAUDE.md §43.
-class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator({
+class MdLoadingIndicator extends StatelessWidget {
+  const MdLoadingIndicator({
     super.key,
     this.size = AppIconSizes.lg,
     this.message,

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../molecules/app_card.dart';
-import '../organisms/app_scaffold.dart';
+import '../molecules/md_app_card.dart';
+import '../organisms/md_app_scaffold.dart';
 
 /// Quiet, short settings: mostly reassurance that memories are private and
 /// stay on this device. See CLAUDE.md §56.
@@ -15,7 +15,7 @@ class SettingsTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return MdAppScaffold(
       showAppBar: true,
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
@@ -30,7 +30,7 @@ class SettingsTemplate extends StatelessWidget {
             child: Text('Settings', style: AppTypography.heading1),
           ),
           const SizedBox(height: AppSpacing.lg),
-          AppCard(
+          MdAppCard(
             color: AppColors.softPeach,
             elevated: false,
             padding: const EdgeInsets.all(AppSpacing.ml),
@@ -58,7 +58,7 @@ class SettingsTemplate extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          AppCard(
+          MdAppCard(
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
             child: ListTile(
               leading: const Icon(Icons.description_outlined),

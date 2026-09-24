@@ -8,8 +8,8 @@ import '../../../domain/memories/enum/sticker_type.dart';
 /// soft shadow, stamps are handwritten on a little paper tag. Drawn from
 /// the app's icon set and fonts — never emoji — so every sticker looks the
 /// same on every phone. [size] is the sticker's width.
-class StickerArt extends StatelessWidget {
-  const StickerArt({super.key, required this.type, required this.size});
+class MdStickerArt extends StatelessWidget {
+  const MdStickerArt({super.key, required this.type, required this.size});
 
   final StickerType type;
   final double size;

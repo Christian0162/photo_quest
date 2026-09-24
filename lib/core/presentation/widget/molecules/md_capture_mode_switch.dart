@@ -10,8 +10,8 @@ import '../../../utils/app_haptics.dart';
 /// Tap-only (no swipe, so it never fights the system back gesture), 48px
 /// tall targets, and the chosen mode is bold with a dot, never color alone.
 /// Sits over the camera. See design system §24, §52.
-class CaptureModeSwitch<T> extends StatelessWidget {
-  const CaptureModeSwitch({
+class MdCaptureModeSwitch<T> extends StatelessWidget {
+  const MdCaptureModeSwitch({
     super.key,
     required this.modes,
     required this.selected,

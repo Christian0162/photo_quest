@@ -5,8 +5,8 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 
 /// A small muted icon + word fact: "The two of us", "4 photos".
-class IconFact extends StatelessWidget {
-  const IconFact({
+class MdIconFact extends StatelessWidget {
+  const MdIconFact({
     super.key,
     required this.icon,
     required this.label,

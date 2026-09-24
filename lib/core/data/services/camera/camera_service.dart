@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 
 import '../../../../config/constant/app_camera_constants.dart';
+import '../../../domain/camera/enum/camera_frame_format.dart';
 import '../../../errors/app_failure.dart';
 import 'camera_frame.dart';
-import '../../../domain/camera/enum/camera_frame_format.dart';
 
 /// Owns camera hardware behavior. Knows how to operate the camera; knows
 /// nothing about Quests or Memories. See CLAUDE.md §17, §46.
@@ -99,12 +99,11 @@ class CameraService {
       });
 
       // Also notice a release between frames.
-      final watcher = Stream<void>.periodic(
-        AppCameraConstants.burstReleasePollInterval,
-      )
-          .listen((_) {
-            if (shouldStop?.call() ?? false) finish();
-          });
+      final watcher =
+          Stream<void>.periodic(AppCameraConstants.burstReleasePollInterval)
+              .listen((_) {
+                if (shouldStop?.call() ?? false) finish();
+              });
       await done.future.timeout(maxDuration, onTimeout: () {});
       await watcher.cancel();
       await controller.stopImageStream();

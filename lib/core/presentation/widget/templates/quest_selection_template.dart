@@ -6,14 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
-import '../atoms/fade_slide_in.dart';
-import '../atoms/primary_button.dart';
-import '../atoms/skeleton_box.dart';
-import '../molecules/empty_state.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/quest_card.dart';
-import '../organisms/quest_category_banner.dart';
 import '../../types/quests/quest_category_shelf.dart';
+import '../atoms/md_fade_slide_in.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_skeleton_box.dart';
+import '../molecules/md_empty_state.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_quest_card.dart';
+import '../organisms/md_quest_category_banner.dart';
 
 /// Inspirational Quest picker: large visual cards on one shelf per
 /// category ("For Us", "For Family" …), not a dense list. See CLAUDE.md §33.
@@ -52,7 +52,7 @@ class QuestSelectionTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return MdAppScaffold(
       showAppBar: true,
       actions: [
         TextButton.icon(
@@ -67,24 +67,24 @@ class QuestSelectionTemplate extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacing.gutter),
           physics: const NeverScrollableScrollPhysics(),
           children: const [
-            SkeletonBox(width: 220, height: 36),
+            MdSkeletonBox(width: 220, height: 36),
             SizedBox(height: AppSpacing.lg),
-            SkeletonBox(height: 276),
+            MdSkeletonBox(height: 276),
             SizedBox(height: AppSpacing.lg),
-            SkeletonBox(height: 276),
+            MdSkeletonBox(height: 276),
           ],
         ),
-        error: (error, stack) => EmptyState.error(
+        error: (error, stack) => MdEmptyState.error(
           title: "We couldn't load quests",
           onRetry: onRetry,
         ),
         data: (list) {
           if (list.isEmpty) {
-            return EmptyState(
+            return MdEmptyState(
               icon: Icons.auto_awesome_rounded,
               title: 'No quests yet',
               message: 'Create something fun and invite someone to join you.',
-              action: PrimaryButton(
+              action: MdPrimaryButton(
                 label: 'Create a quest',
                 expand: false,
                 onPressed: onCreateQuest,
@@ -125,7 +125,7 @@ class QuestSelectionTemplate extends StatelessWidget {
                 ),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: SecondaryButton(
+                  child: MdSecondaryButton(
                     label: "Can't decide? Surprise me",
                     icon: Icons.casino_rounded,
                     expand: false,
@@ -139,14 +139,14 @@ class QuestSelectionTemplate extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.gutter,
                   ),
-                  child: QuestCategoryBanner(
+                  child: MdQuestCategoryBanner(
                     category: shelf.category,
                     questCount: shelf.quests.length,
                     index: index,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.ms),
-                FadeSlideIn(
+                MdFadeSlideIn(
                   order: index + 1,
                   child: SizedBox(
                     height: _shelfHeight(context),
@@ -167,7 +167,7 @@ class QuestSelectionTemplate extends StatelessWidget {
                           alignment: Alignment.topCenter,
                           child: SizedBox(
                             width: _cardWidth,
-                            child: QuestCard(
+                            child: MdQuestCard(
                               quest: item.quest,
                               people: item.participants,
                               onTap: () => onOpenQuest(item.quest),

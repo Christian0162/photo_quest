@@ -6,8 +6,8 @@ import '../../../../config/constant/app_spacing.dart';
 /// Eases its child up and in once, when first shown. Give sibling sections
 /// increasing [order]s for a short stagger that guides the eye down the
 /// screen. Shown instantly under reduced motion. See design system §48-50.
-class FadeSlideIn extends StatefulWidget {
-  const FadeSlideIn({super.key, required this.child, this.order = 0});
+class MdFadeSlideIn extends StatefulWidget {
+  const MdFadeSlideIn({super.key, required this.child, this.order = 0});
 
   final Widget child;
 
@@ -19,7 +19,7 @@ class FadeSlideIn extends StatefulWidget {
   /// Spacers count too, which keeps the rhythm even.
   static List<Widget> staggered(List<Widget> children) => [
     for (final (index, child) in children.indexed)
-      index == 0 ? child : FadeSlideIn(order: (index + 1) ~/ 2, child: child),
+      index == 0 ? child : MdFadeSlideIn(order: (index + 1) ~/ 2, child: child),
   ];
 
   /// Delay between staggered items, capped so long lists never feel slow.
@@ -27,10 +27,10 @@ class FadeSlideIn extends StatefulWidget {
   static const _maxOrder = 6;
 
   @override
-  State<FadeSlideIn> createState() => _FadeSlideInState();
+  State<MdFadeSlideIn> createState() => _MdFadeSlideInState();
 }
 
-class _FadeSlideInState extends State<FadeSlideIn>
+class _MdFadeSlideInState extends State<MdFadeSlideIn>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _progress;
@@ -39,7 +39,7 @@ class _FadeSlideInState extends State<FadeSlideIn>
   void initState() {
     super.initState();
     final delay =
-        FadeSlideIn._step * widget.order.clamp(0, FadeSlideIn._maxOrder);
+        MdFadeSlideIn._step * widget.order.clamp(0, MdFadeSlideIn._maxOrder);
     final total = delay + AppMotion.medium;
     _controller = AnimationController(vsync: this, duration: total);
     // One controller, no timers: the delay is the start of the interval.

@@ -10,8 +10,8 @@ import '../../../../config/constant/app_spacing.dart';
 /// full original), fades in once decoded, and shows a gentle placeholder if
 /// the file is missing or corrupted instead of a broken-image error. See
 /// CLAUDE.md §42, §46.
-class LocalPhoto extends StatelessWidget {
-  const LocalPhoto({
+class MdLocalPhoto extends StatelessWidget {
+  const MdLocalPhoto({
     super.key,
     required this.path,
     this.fit = BoxFit.cover,
@@ -36,7 +36,7 @@ class LocalPhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     final path = this.path;
     if (path == null || path.isEmpty) {
-      return PhotoPlaceholder(icon: placeholderIcon);
+      return MdPhotoPlaceholder(icon: placeholderIcon);
     }
 
     return LayoutBuilder(
@@ -71,7 +71,7 @@ class LocalPhoto extends StatelessWidget {
             );
           },
           errorBuilder: (context, error, stack) =>
-              PhotoPlaceholder(icon: Icons.broken_image_outlined),
+              MdPhotoPlaceholder(icon: Icons.broken_image_outlined),
         );
       },
     );
@@ -79,8 +79,8 @@ class LocalPhoto extends StatelessWidget {
 }
 
 /// Soft peach stand-in for a photo that isn't there (yet).
-class PhotoPlaceholder extends StatelessWidget {
-  const PhotoPlaceholder({
+class MdPhotoPlaceholder extends StatelessWidget {
+  const MdPhotoPlaceholder({
     super.key,
     this.icon = Icons.photo_rounded,
     this.color = AppColors.softPeach,

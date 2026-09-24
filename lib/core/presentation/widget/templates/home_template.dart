@@ -6,19 +6,19 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
-import '../atoms/fade_slide_in.dart';
-import '../atoms/skeleton_box.dart';
-import '../molecules/section_header.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/on_this_day_card.dart';
-import '../organisms/pending_quest_card.dart';
-import '../organisms/recent_memories_section.dart';
-import '../organisms/today_quest_card.dart';
 import '../../types/memories/memory_summary.dart';
 import '../../types/quests/quest_needing_confirmation.dart';
-import '../atoms/round_icon_button.dart';
-import '../atoms/smooth_switch.dart';
-import '../molecules/idea_tile.dart';
+import '../atoms/md_fade_slide_in.dart';
+import '../atoms/md_round_icon_button.dart';
+import '../atoms/md_skeleton_box.dart';
+import '../atoms/md_smooth_switch.dart';
+import '../molecules/md_idea_tile.dart';
+import '../molecules/md_section_header.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_on_this_day_card.dart';
+import '../organisms/md_pending_quest_card.dart';
+import '../organisms/md_recent_memories_section.dart';
+import '../organisms/md_today_quest_card.dart';
 
 /// Answers "What can we do today?" — a greeting, one hero Quest, anything
 /// waiting on people, and a shelf of recent memories. Never a dashboard.
@@ -81,9 +81,9 @@ class HomeTemplate extends StatelessWidget {
       (
         'today',
         _Padded(
-          child: SmoothSwitch(
+          child: MdSmoothSwitch(
             child: todayQuest.when(
-              loading: () => const SkeletonBox(
+              loading: () => const MdSkeletonBox(
                 key: ValueKey('today-loading'),
                 height: 460,
                 radius: AppRadius.photo,
@@ -91,7 +91,7 @@ class HomeTemplate extends StatelessWidget {
               error: (error, stack) => const SizedBox.shrink(),
               data: (quest) => quest == null
                   ? const SizedBox.shrink()
-                  : TodayQuestCard(
+                  : MdTodayQuestCard(
                       key: ValueKey(quest.id),
                       quest: quest,
                       onStart: () => onOpenQuest(quest),
@@ -104,7 +104,7 @@ class HomeTemplate extends StatelessWidget {
         (
           'on-this-day',
           _Padded(
-            child: OnThisDayCard(
+            child: MdOnThisDayCard(
               summary: onThisDaySummary,
               today: today,
               onTap: () => onOpenMemory(onThisDaySummary),
@@ -119,7 +119,7 @@ class HomeTemplate extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: AppSpacing.sm),
-                const SectionHeader(
+                const MdSectionHeader(
                   title: "Needs everyone's OK",
                   subtitle: 'Get your people to say they’re in.',
                 ),
@@ -127,7 +127,7 @@ class HomeTemplate extends StatelessWidget {
                 for (final entry in pending)
                   Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                    child: PendingQuestCard(
+                    child: MdPendingQuestCard(
                       entry: entry,
                       onTap: () => onOpenQuest(entry.quest),
                     ),
@@ -143,7 +143,7 @@ class HomeTemplate extends StatelessWidget {
           children: [
             const SizedBox(height: AppSpacing.sm),
             _Padded(
-              child: SectionHeader(
+              child: MdSectionHeader(
                 title: 'Recent memories',
                 trailing: memories.value?.isNotEmpty ?? false
                     ? TextButton(
@@ -154,11 +154,11 @@ class HomeTemplate extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.ms),
-            SmoothSwitch(
+            MdSmoothSwitch(
               child: memories.when(
                 loading: () => KeyedSubtree(
                   key: const ValueKey('memories-loading'),
-                  child: RecentMemoriesSection.skeleton(context),
+                  child: MdRecentMemoriesSection.skeleton(context),
                 ),
                 error: (error, stack) => const _Padded(
                   key: ValueKey('memories-error'),
@@ -167,7 +167,7 @@ class HomeTemplate extends StatelessWidget {
                     style: AppTypography.bodyMuted,
                   ),
                 ),
-                data: (list) => RecentMemoriesSection(
+                data: (list) => MdRecentMemoriesSection(
                   key: const ValueKey('memories'),
                   memories: list.take(_recentMemoryCount).toList(),
                   onOpen: onOpenMemory,
@@ -184,7 +184,7 @@ class HomeTemplate extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: AppSpacing.sm),
-              const SectionHeader(
+              const MdSectionHeader(
                 title: 'Something else in mind?',
                 subtitle: 'Pick another quest, or make your own.',
               ),
@@ -194,7 +194,7 @@ class HomeTemplate extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                      child: IdeaTile(
+                      child: MdIdeaTile(
                         icon: Icons.auto_awesome_rounded,
                         title: 'Browse quests',
                         subtitle: 'For us, family, friends',
@@ -204,7 +204,7 @@ class HomeTemplate extends StatelessWidget {
                     ),
                     const SizedBox(width: AppSpacing.ms),
                     Expanded(
-                      child: IdeaTile(
+                      child: MdIdeaTile(
                         icon: Icons.edit_rounded,
                         title: 'Create your own',
                         subtitle: 'Your idea, your people',
@@ -221,7 +221,7 @@ class HomeTemplate extends StatelessWidget {
       ),
     ];
 
-    return AppScaffold(
+    return MdAppScaffold(
       body: RefreshIndicator(
         onRefresh: onRefresh,
         color: AppColors.coralInk,
@@ -235,7 +235,7 @@ class HomeTemplate extends StatelessWidget {
               Padding(
                 key: ValueKey(id),
                 padding: EdgeInsets.only(top: index == 0 ? 0 : AppSpacing.lg),
-                child: FadeSlideIn(order: index, child: section),
+                child: MdFadeSlideIn(order: index, child: section),
               ),
           ],
         ),
@@ -296,7 +296,7 @@ class _Greeting extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        RoundIconButton(
+        MdRoundIconButton(
           icon: Icons.settings_outlined,
           tooltip: 'Settings',
           onPressed: onOpenSettings,

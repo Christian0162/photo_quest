@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:photoquest/core/presentation/widget/molecules/app_widget_preview.dart';
-import 'package:photoquest/core/presentation/widget/organisms/keepsake_canvas.dart';
-import 'package:photoquest/core/presentation/widget/templates/memory_detail_template.dart';
-import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
 import 'package:photoquest/core/presentation/types/memories/keepsake_design.dart';
 import 'package:photoquest/core/presentation/types/memories/memory_detail.dart';
+import 'package:photoquest/core/presentation/widget/molecules/md_app_widget_preview.dart';
+import 'package:photoquest/core/presentation/widget/organisms/md_keepsake_canvas.dart';
+import 'package:photoquest/core/presentation/widget/templates/memory_detail_template.dart';
+import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
 void main() {
   final sample = PreviewSamples.memoryDetail;
@@ -25,7 +25,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
-      AppWidgetPreview(
+      MdAppWidgetPreview(
         child: MemoryDetailTemplate(
           memoryId: sample.memory.id,
           detail: AsyncData(withPrint),
@@ -48,12 +48,14 @@ void main() {
     // No saved design: the live print would be a default strip, not the
     // grid that was actually kept.
     await show(tester, PreviewSamples.keepsake.copyWith(isSaved: false));
-    expect(find.byType(KeepsakeCanvas), findsNothing);
+    expect(find.byType(MdKeepsakeCanvas), findsNothing);
   });
 
   testWidgets('a saved design plays live in its own layout', (tester) async {
     await show(tester, PreviewSamples.gridKeepsake.copyWith(isSaved: true));
-    final canvas = tester.widget<KeepsakeCanvas>(find.byType(KeepsakeCanvas));
+    final canvas = tester.widget<MdKeepsakeCanvas>(
+      find.byType(MdKeepsakeCanvas),
+    );
     expect(canvas.design.layout, KeepsakeLayout.grid);
     expect(canvas.live, isTrue);
   });

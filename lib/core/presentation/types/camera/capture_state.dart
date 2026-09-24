@@ -1,11 +1,12 @@
 import 'package:camera/camera.dart' show CameraController;
+
+import '../../../domain/camera/enum/capture_mode.dart';
+import '../../../domain/camera/enum/capture_phase.dart';
 import '../../../domain/memories/entities/photo.dart';
 import '../../../domain/memories/enum/photo_look.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
-import '../../../domain/camera/enum/capture_phase.dart';
-import '../../../domain/camera/enum/capture_mode.dart';
 
 class CaptureState {
   const CaptureState({

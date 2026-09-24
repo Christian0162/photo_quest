@@ -3,11 +3,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
-import '../../../domain/people/entities/person.dart';
 import '../../../domain/memories/enum/memory_filter.dart';
-import '../../types/memories/memory_summary.dart';
-import '../../types/memories/memory_month.dart';
+import '../../../domain/people/entities/person.dart';
 import '../../types/memories/memory_box.dart';
+import '../../types/memories/memory_month.dart';
+import '../../types/memories/memory_summary.dart';
 
 part 'memory_list_view_model.g.dart';
 

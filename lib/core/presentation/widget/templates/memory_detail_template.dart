@@ -6,19 +6,19 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/fade_slide_in.dart';
-import '../atoms/local_photo.dart';
-import '../atoms/person_avatar.dart';
-import '../atoms/primary_button.dart';
-import '../atoms/skeleton_box.dart';
-import '../molecules/empty_state.dart';
-import '../molecules/memory_cover_hero.dart';
-import '../molecules/section_header.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/keepsake_canvas.dart';
 import '../../types/memories/keepsake_design.dart';
 import '../../types/memories/memory_detail.dart';
-import '../organisms/photo_album.dart';
+import '../atoms/md_fade_slide_in.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_person_avatar.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_skeleton_box.dart';
+import '../molecules/md_empty_state.dart';
+import '../molecules/md_memory_cover_hero.dart';
+import '../molecules/md_section_header.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_keepsake_canvas.dart';
+import '../organisms/md_photo_album.dart';
 
 /// Opening a memory should feel like opening a photo album: the photos
 /// dominate, then the quest, the date, who was there, the printed strip,
@@ -70,7 +70,7 @@ class MemoryDetailTemplate extends StatelessWidget {
     final data = detail.value;
     final questId = data?.questId;
 
-    return AppScaffold(
+    return MdAppScaffold(
       showAppBar: true,
       actions: [
         if (data?.stripPath != null)
@@ -91,7 +91,7 @@ class MemoryDetailTemplate extends StatelessWidget {
       ],
       bottomAction: questId == null
           ? null
-          : PrimaryButton(
+          : MdPrimaryButton(
               label: 'Do this again',
               icon: Icons.replay_rounded,
               onPressed: () => onDoAgain(questId),
@@ -109,21 +109,21 @@ class MemoryDetailTemplate extends StatelessWidget {
               AspectRatio(
                 aspectRatio: 4 / 5,
                 child: coverPath == null
-                    ? const SkeletonBox(radius: AppRadius.photo)
-                    : MemoryCoverHero(
+                    ? const MdSkeletonBox(radius: AppRadius.photo)
+                    : MdMemoryCoverHero(
                         memoryId: memoryId,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(AppRadius.photo),
-                          child: LocalPhoto(path: coverPath),
+                          child: MdLocalPhoto(path: coverPath),
                         ),
                       ),
               ),
               const SizedBox(height: AppSpacing.lg),
-              const SkeletonBox(height: 32),
+              const MdSkeletonBox(height: 32),
             ],
           ),
         ),
-        error: (error, stack) => EmptyState.error(
+        error: (error, stack) => MdEmptyState.error(
           title: "We couldn't open this memory",
           onRetry: onRetry,
         ),
@@ -144,7 +144,7 @@ class MemoryDetailTemplate extends StatelessWidget {
               AppSpacing.gutter,
               AppSpacing.xl,
             ),
-            children: FadeSlideIn.staggered([
+            children: MdFadeSlideIn.staggered([
               if (data.photos.isEmpty)
                 const AspectRatio(
                   aspectRatio: 4 / 5,
@@ -152,11 +152,11 @@ class MemoryDetailTemplate extends StatelessWidget {
                     borderRadius: BorderRadius.all(
                       Radius.circular(AppRadius.photo),
                     ),
-                    child: PhotoPlaceholder(),
+                    child: MdPhotoPlaceholder(),
                   ),
                 )
               else
-                PhotoAlbum(
+                MdPhotoAlbum(
                   memoryId: memory.id,
                   photos: data.photos,
                   coverPhotoId: memory.coverPhotoId,
@@ -180,7 +180,7 @@ class MemoryDetailTemplate extends StatelessWidget {
               ],
               if (data.people.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.xl),
-                const SectionHeader(title: 'Who was there'),
+                const MdSectionHeader(title: 'Who was there'),
                 const SizedBox(height: AppSpacing.ms),
                 Wrap(
                   spacing: AppSpacing.md,
@@ -191,7 +191,7 @@ class MemoryDetailTemplate extends StatelessWidget {
                         width: 72,
                         child: Column(
                           children: [
-                            PersonAvatar(person: person, radius: 28),
+                            MdPersonAvatar(person: person, radius: 28),
                             const SizedBox(height: AppSpacing.xs),
                             Text(
                               person.name,
@@ -210,7 +210,7 @@ class MemoryDetailTemplate extends StatelessWidget {
               ],
               if (data.stripPath != null) ...[
                 const SizedBox(height: AppSpacing.xl),
-                SectionHeader(
+                MdSectionHeader(
                   title: 'Your photo strip',
                   subtitle: 'Straight from the booth.',
                   trailing: TextButton.icon(
@@ -231,7 +231,7 @@ class MemoryDetailTemplate extends StatelessWidget {
                         boxShadow: AppShadows.print,
                       ),
                       child: liveKeepsake == null
-                          ? LocalPhoto(
+                          ? MdLocalPhoto(
                               path: data.stripPath,
                               fit: BoxFit.contain,
                               semanticLabel: 'Photo strip for ${memory.title}',
@@ -239,7 +239,7 @@ class MemoryDetailTemplate extends StatelessWidget {
                           : Semantics(
                               image: true,
                               label: 'Photo strip for ${memory.title}',
-                              child: KeepsakeCanvas(
+                              child: MdKeepsakeCanvas(
                                 design: liveKeepsake,
                                 live: true,
                               ),
@@ -249,7 +249,7 @@ class MemoryDetailTemplate extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Center(
-                  child: SecondaryButton(
+                  child: MdSecondaryButton(
                     label: 'Save to photos',
                     icon: Icons.download_rounded,
                     expand: false,
@@ -264,4 +264,3 @@ class MemoryDetailTemplate extends StatelessWidget {
     );
   }
 }
-

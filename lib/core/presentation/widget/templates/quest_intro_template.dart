@@ -5,23 +5,23 @@ import '../../../../config/constant/app_constants.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../types/display_labels.dart';
-import '../atoms/fade_slide_in.dart';
-import '../atoms/person_avatar.dart';
-import '../atoms/primary_button.dart';
-import '../atoms/skeleton_box.dart';
-import '../atoms/status_pill.dart';
-import '../molecules/empty_state.dart';
-import '../molecules/section_header.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/quest_card.dart';
-import '../organisms/quest_participants_section.dart';
-import '../organisms/quest_shot_list.dart';
 import '../../../domain/quests/enum/status_tone.dart';
+import '../../types/display_labels.dart';
 import '../../types/quests/quest_detail.dart';
-import '../../types/quests/quest_start_readiness.dart';
 import '../../types/quests/quest_participant_with_person.dart';
-import '../atoms/icon_fact.dart';
+import '../../types/quests/quest_start_readiness.dart';
+import '../atoms/md_fade_slide_in.dart';
+import '../atoms/md_icon_fact.dart';
+import '../atoms/md_person_avatar.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_skeleton_box.dart';
+import '../atoms/md_status_pill.dart';
+import '../molecules/md_empty_state.dart';
+import '../molecules/md_section_header.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_quest_card.dart';
+import '../organisms/md_quest_participants_section.dart';
+import '../organisms/md_quest_shot_list.dart';
 
 /// Introduces a Quest before capture: what we're doing, who's joining, which
 /// photos we'll take — then one primary action to begin. See CLAUDE.md §59,
@@ -54,7 +54,7 @@ class QuestIntroTemplate extends StatelessWidget {
   Widget build(BuildContext context) {
     final data = detail.value;
 
-    return AppScaffold(
+    return MdAppScaffold(
       showAppBar: true,
       bottomAction: data == null
           ? null
@@ -70,15 +70,15 @@ class QuestIntroTemplate extends StatelessWidget {
           padding: EdgeInsets.all(AppSpacing.gutter),
           child: Column(
             children: [
-              SkeletonBox(height: 220, radius: AppRadius.photo),
+              MdSkeletonBox(height: 220, radius: AppRadius.photo),
               SizedBox(height: AppSpacing.lg),
-              SkeletonBox(height: 32),
+              MdSkeletonBox(height: 32),
               SizedBox(height: AppSpacing.sm),
-              SkeletonBox(height: 64),
+              MdSkeletonBox(height: 64),
             ],
           ),
         ),
-        error: (error, stack) => EmptyState.error(
+        error: (error, stack) => MdEmptyState.error(
           title: "We couldn't open this quest",
           message: 'It may no longer be available.',
           onRetry: onRetry,
@@ -93,12 +93,12 @@ class QuestIntroTemplate extends StatelessWidget {
               AppSpacing.gutter,
               AppSpacing.xl,
             ),
-            children: FadeSlideIn.staggered([
+            children: MdFadeSlideIn.staggered([
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppRadius.photo),
                 child: AspectRatio(
                   aspectRatio: 16 / 10,
-                  child: QuestHeroCover(quest: quest),
+                  child: MdQuestHeroCover(quest: quest),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -113,11 +113,11 @@ class QuestIntroTemplate extends StatelessWidget {
                 spacing: AppSpacing.md,
                 runSpacing: AppSpacing.xs,
                 children: [
-                  IconFact(
+                  MdIconFact(
                     icon: questTypeIcon(quest.type),
                     label: questTypeLabel(quest.type),
                   ),
-                  IconFact(
+                  MdIconFact(
                     icon: Icons.photo_camera_outlined,
                     label: data.shots.length == 1
                         ? '1 photo'
@@ -133,7 +133,7 @@ class QuestIntroTemplate extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
                 Row(
                   children: [
-                    PersonAvatar(person: data.creator!, radius: 14),
+                    MdPersonAvatar(person: data.creator!, radius: 14),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
                       data.creator!.type == 'self'
@@ -146,7 +146,7 @@ class QuestIntroTemplate extends StatelessWidget {
               ],
               if (quest.type != 'solo') ...[
                 const SizedBox(height: AppSpacing.xl),
-                QuestParticipantsSection(
+                MdQuestParticipantsSection(
                   participants: participants,
                   limit:
                       quest.maxParticipants ??
@@ -158,12 +158,12 @@ class QuestIntroTemplate extends StatelessWidget {
               ],
               if (data.shots.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.xl),
-                const SectionHeader(
+                const MdSectionHeader(
                   title: "What you'll capture",
                   subtitle: 'The photobooth walks you through each one.',
                 ),
                 const SizedBox(height: AppSpacing.ms),
-                QuestShotList(shots: data.shots),
+                MdQuestShotList(shots: data.shots),
               ],
             ]),
           );
@@ -197,7 +197,7 @@ class _StartAction extends StatelessWidget {
         AnimatedSwitcher(
           duration: AppMotion.of(context, AppMotion.short),
           child: everyoneIn
-              ? StatusPill(
+              ? MdStatusPill(
                   key: const ValueKey('everyone-in'),
                   label: hint ?? "Everyone's in",
                   icon: Icons.celebration_rounded,
@@ -212,7 +212,7 @@ class _StartAction extends StatelessWidget {
                 ),
         ),
         const SizedBox(height: AppSpacing.ms),
-        PrimaryButton(
+        MdPrimaryButton(
           label: starting ? 'Getting ready…' : "Let's start",
           icon: Icons.photo_camera_rounded,
           loading: starting,

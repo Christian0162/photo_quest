@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 
 /// An instant print developing: starts washed-out and grey, ends in full
 /// color. [progress] runs 0 → 1.
-class DevelopingPrint extends StatelessWidget {
-  const DevelopingPrint({super.key, required this.progress, required this.child});
+class MdDevelopingPrint extends StatelessWidget {
+  const MdDevelopingPrint({
+    super.key,
+    required this.progress,
+    required this.child,
+  });
 
   final double progress;
   final Widget child;

@@ -6,8 +6,8 @@ import '../../../../config/constant/app_typography.dart';
 /// A consistent section heading with an optional supporting line and a
 /// trailing widget (count, "See all"). Marked as a header for screen
 /// readers. See CLAUDE.md §27, design system §13.
-class SectionHeader extends StatelessWidget {
-  const SectionHeader({
+class MdSectionHeader extends StatelessWidget {
+  const MdSectionHeader({
     super.key,
     required this.title,
     this.subtitle,

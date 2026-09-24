@@ -8,8 +8,8 @@ import '../../../domain/memories/entities/photo.dart';
 /// "GIF", "Boomerang", "360°" — a small label over a moving shot so it's
 /// clear what it is. Icon + word, never color alone. Shows nothing for a
 /// plain photo. See CLAUDE.md §65.
-class ShotKindBadge extends StatelessWidget {
-  const ShotKindBadge({super.key, required this.kind});
+class MdShotKindBadge extends StatelessWidget {
+  const MdShotKindBadge({super.key, required this.kind});
 
   /// A [PhotoKind].
   final String kind;

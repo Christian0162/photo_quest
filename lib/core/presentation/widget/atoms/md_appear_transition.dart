@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_spacing.dart';
 
 /// Fades and lifts [child] in as [animation] runs 0 → 1.
-class AppearTransition extends AnimatedWidget {
-  const AppearTransition({super.key, required Animation<double> animation, required this.child})
-    : super(listenable: animation);
+class MdAppearTransition extends AnimatedWidget {
+  const MdAppearTransition({
+    super.key,
+    required Animation<double> animation,
+    required this.child,
+  }) : super(listenable: animation);
 
   final Widget child;
 

@@ -4,20 +4,20 @@ import 'package:intl/intl.dart';
 
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/fade_slide_in.dart';
-import '../atoms/primary_button.dart';
-import '../atoms/skeleton_box.dart';
-import '../molecules/empty_state.dart';
-import '../molecules/memory_filter_chips.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/memory_feature_card.dart';
-import '../organisms/memory_journal_card.dart';
 import '../../../domain/memories/enum/memory_filter.dart';
-import '../../types/memories/memory_summary.dart';
-import '../../types/memories/memory_month.dart';
 import '../../types/memories/memory_box.dart';
-import '../molecules/journal_heading.dart';
-import '../molecules/page_header.dart';
+import '../../types/memories/memory_month.dart';
+import '../../types/memories/memory_summary.dart';
+import '../atoms/md_fade_slide_in.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_skeleton_box.dart';
+import '../molecules/md_empty_state.dart';
+import '../molecules/md_journal_heading.dart';
+import '../molecules/md_memory_filter_chips.dart';
+import '../molecules/md_page_header.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_memory_feature_card.dart';
+import '../organisms/md_memory_journal_card.dart';
 
 /// The private memory box, kept like a journal:
 ///
@@ -63,7 +63,7 @@ class MemoriesTemplate extends StatelessWidget {
   Widget build(BuildContext context) {
     final data = box.value;
 
-    return AppScaffold(
+    return MdAppScaffold(
       body: CustomScrollView(
         slivers: [
           const SliverPadding(
@@ -74,8 +74,8 @@ class MemoriesTemplate extends StatelessWidget {
               AppSpacing.lg,
             ),
             sliver: SliverToBoxAdapter(
-              child: FadeSlideIn(
-                child: PageHeader(
+              child: MdFadeSlideIn(
+                child: MdPageHeader(
                   overline: 'YOUR MEMORY BOX',
                   title: 'Memories',
                   subtitle: 'Just for you and the people who were there.',
@@ -85,9 +85,9 @@ class MemoriesTemplate extends StatelessWidget {
           ),
           if (data != null && !data.isEmpty)
             SliverToBoxAdapter(
-              child: FadeSlideIn(
+              child: MdFadeSlideIn(
                 order: 1,
-                child: MemoryFilterChips(
+                child: MdMemoryFilterChips(
                   selected: data.filter,
                   counts: data.counts,
                   onSelected: onFilterChanged,
@@ -103,14 +103,14 @@ class MemoriesTemplate extends StatelessWidget {
                   separatorBuilder: (_, _) =>
                       const SizedBox(height: AppSpacing.lg),
                   itemBuilder: (_, _) =>
-                      const SkeletonBox(height: 420, radius: AppRadius.xl),
+                      const MdSkeletonBox(height: 420, radius: AppRadius.xl),
                 ),
               ),
             ],
             error: (error, stack) => [
               SliverFillRemaining(
                 hasScrollBody: false,
-                child: EmptyState.error(
+                child: MdEmptyState.error(
                   title: "We couldn't open your memories",
                   onRetry: onRetry,
                 ),
@@ -120,11 +120,11 @@ class MemoriesTemplate extends StatelessWidget {
                 ? [
                     SliverFillRemaining(
                       hasScrollBody: false,
-                      child: EmptyState(
+                      child: MdEmptyState(
                         icon: Icons.photo_album_outlined,
                         title: 'Your memories will live here',
                         message: 'Ready to make the first one?',
-                        action: PrimaryButton(
+                        action: MdPrimaryButton(
                           label: 'Start a quest',
                           icon: Icons.auto_awesome_rounded,
                           expand: false,
@@ -161,7 +161,7 @@ class MemoriesTemplate extends StatelessWidget {
         Padding(
           key: ValueKey('${box.filter.name}-$id'),
           padding: EdgeInsets.only(top: gap),
-          child: FadeSlideIn(order: order++, child: child),
+          child: MdFadeSlideIn(order: order++, child: child),
         ),
       );
     }
@@ -176,12 +176,12 @@ class MemoriesTemplate extends StatelessWidget {
 
       add(
         'month-$month',
-        JournalHeading(title: monthName, trailing: '${month.year}'),
+        MdJournalHeading(title: monthName, trailing: '${month.year}'),
         gap: AppSpacing.xl,
       );
       add(
         featured.memory.id,
-        MemoryFeatureCard(
+        MdMemoryFeatureCard(
           summary: featured,
           now: now,
           onOpen: () => onOpenMemory(featured),
@@ -191,11 +191,11 @@ class MemoriesTemplate extends StatelessWidget {
       );
       if (earlier.isEmpty) continue;
 
-      add('earlier-$month', JournalHeading(title: 'Earlier in $monthName'));
+      add('earlier-$month', MdJournalHeading(title: 'Earlier in $monthName'));
       for (final summary in earlier) {
         add(
           summary.memory.id,
-          MemoryJournalCard(
+          MdMemoryJournalCard(
             summary: summary,
             onOpen: () => onOpenMemory(summary),
             onViewPhoto: (index) => onViewPhoto(summary, index),

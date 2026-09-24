@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../molecules/app_widget_preview.dart';
+import '../../types/memories/memory_detail.dart';
+import '../molecules/md_app_widget_preview.dart';
 import 'memory_detail_template.dart';
 import 'preview_samples.dart';
-import '../../types/memories/memory_detail.dart';
 
 Widget _detail(AsyncValue<MemoryDetail> detail) {
-  return AppWidgetPreview(
+  return MdAppWidgetPreview(
     child: MemoryDetailTemplate(
       memoryId: 'memory-1',
       detail: detail,

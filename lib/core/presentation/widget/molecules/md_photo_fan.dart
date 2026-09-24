@@ -6,7 +6,7 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
-import '../atoms/local_photo.dart';
+import '../atoms/md_local_photo.dart';
 
 /// Up to three photos fanned out like a hand of prints: the first stands
 /// upright on top, the next two tilt out behind it. They deal out once when
@@ -21,8 +21,8 @@ import '../atoms/local_photo.dart';
 /// ```
 ///
 /// See CLAUDE.md §2.5 (nostalgic, physical), design system §33-35.
-class PhotoFan extends StatelessWidget {
-  const PhotoFan({
+class MdPhotoFan extends StatelessWidget {
+  const MdPhotoFan({
     super.key,
     required this.paths,
     required this.onOpen,
@@ -125,8 +125,8 @@ class _Print extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppRadius.sm),
         child: AspectRatio(
-          aspectRatio: 1 / PhotoFan._printRatio,
-          child: LocalPhoto(path: path),
+          aspectRatio: 1 / MdPhotoFan._printRatio,
+          child: MdLocalPhoto(path: path),
         ),
       ),
     );

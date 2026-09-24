@@ -8,20 +8,20 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
+import '../../../domain/quests/enum/create_quest_step.dart';
 import '../../../utils/app_haptics.dart';
 import '../../types/display_labels.dart';
-import '../atoms/person_avatar.dart';
-import '../atoms/primary_button.dart';
-import '../atoms/skeleton_box.dart';
-import '../molecules/app_card.dart';
-import '../molecules/step_progress.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/quest_card.dart';
-import '../organisms/quest_shot_list.dart';
-import '../../../domain/quests/enum/create_quest_step.dart';
-import '../../types/quests/draft_shot.dart';
 import '../../types/quests/create_quest_draft.dart';
-import '../molecules/choice_card.dart';
+import '../../types/quests/draft_shot.dart';
+import '../atoms/md_person_avatar.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_skeleton_box.dart';
+import '../molecules/md_app_card.dart';
+import '../molecules/md_choice_card.dart';
+import '../molecules/md_step_progress.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_quest_card.dart';
+import '../organisms/md_quest_shot_list.dart';
 
 const _categorySuggestions = [
   'Birthday',
@@ -62,7 +62,7 @@ class CreateQuestTemplate extends StatefulWidget {
   final AsyncValue<List<Person>> people;
   final VoidCallback onClose;
 
-  /// Back one step — also what system back does, via [AppScaffold].
+  /// Back one step — also what system back does, via [MdAppScaffold].
   final VoidCallback onBack;
   final VoidCallback onContinue;
   final VoidCallback onCreate;
@@ -120,7 +120,7 @@ class _CreateQuestTemplateState extends State<CreateQuestTemplate> {
     final blocker = draft.blocker;
     final isLast = draft.isLastStep;
 
-    return AppScaffold(
+    return MdAppScaffold(
       showAppBar: true,
       title: 'New quest',
       leading: IconButton(
@@ -143,7 +143,7 @@ class _CreateQuestTemplateState extends State<CreateQuestTemplate> {
           Row(
             children: [
               if (!draft.isFirstStep) ...[
-                SecondaryButton(
+                MdSecondaryButton(
                   label: 'Back',
                   expand: false,
                   onPressed: widget.onBack,
@@ -151,7 +151,7 @@ class _CreateQuestTemplateState extends State<CreateQuestTemplate> {
                 const SizedBox(width: AppSpacing.sm),
               ],
               Expanded(
-                child: PrimaryButton(
+                child: MdPrimaryButton(
                   label: isLast ? 'Create quest' : 'Continue',
                   icon: isLast ? Icons.auto_awesome_rounded : null,
                   loading: draft.isSubmitting,
@@ -170,7 +170,7 @@ class _CreateQuestTemplateState extends State<CreateQuestTemplate> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-            child: StepProgress(
+            child: MdStepProgress(
               label: 'Step',
               current: draft.step.index,
               total: CreateQuestStep.values.length,
@@ -368,7 +368,7 @@ class _WhoStep extends StatelessWidget {
           children: [
             for (final (value, label, icon) in questTypes) ...[
               Expanded(
-                child: ChoiceCard(
+                child: MdChoiceCard(
                   label: label,
                   icon: icon,
                   selected: draft.type == value,
@@ -403,7 +403,7 @@ class _WhoStep extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.ms),
           people.when(
-            loading: () => const SkeletonBox(height: 48),
+            loading: () => const MdSkeletonBox(height: 48),
             error: (error, stack) => const SizedBox.shrink(),
             data: (others) {
               if (others.isEmpty) {
@@ -425,7 +425,7 @@ class _WhoStep extends StatelessWidget {
                         return FilterChip(
                           avatar: selected
                               ? null
-                              : PersonAvatar(person: person, radius: 12),
+                              : MdPersonAvatar(person: person, radius: 12),
                           label: Text(person.name),
                           selected: selected,
                           onSelected: selected || !full
@@ -676,7 +676,7 @@ class _ShotRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return MdAppCard(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.xs,
         AppSpacing.xs,
@@ -746,14 +746,14 @@ class _ReviewStep extends StatelessWidget {
       question: 'Looking good?',
       helper: 'You can start it right away once it’s created.',
       children: [
-        AppCard(
+        MdAppCard(
           padding: EdgeInsets.zero,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AspectRatio(
                 aspectRatio: 16 / 7,
-                child: QuestCoverArt(category: draft.category),
+                child: MdQuestCoverArt(category: draft.category),
               ),
               Padding(
                 padding: const EdgeInsets.all(AppSpacing.md),
@@ -798,7 +798,7 @@ class _ReviewStep extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
         Text('The photos', style: AppTypography.label),
         const SizedBox(height: AppSpacing.sm),
-        QuestShotList(
+        MdQuestShotList(
           shots: [
             for (var i = 0; i < draft.shots.length; i++)
               QuestShot(

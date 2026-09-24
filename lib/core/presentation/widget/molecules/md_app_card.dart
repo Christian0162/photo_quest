@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
-import '../atoms/pressable_scale.dart';
+import '../atoms/md_pressable_scale.dart';
 
 /// Shared rounded surface for memory/quest/person cards — a photo print on
 /// the cream table. Tappable cards get press feedback and a button role.
 /// See CLAUDE.md §27, §30, design system §10.
-class AppCard extends StatelessWidget {
-  const AppCard({
+class MdAppCard extends StatelessWidget {
+  const MdAppCard({
     super.key,
     required this.child,
     this.onTap,
@@ -60,6 +60,6 @@ class AppCard extends StatelessWidget {
       );
     }
 
-    return PressableScale(enabled: onTap != null, scale: 0.98, child: card);
+    return MdPressableScale(enabled: onTap != null, scale: 0.98, child: card);
   }
 }

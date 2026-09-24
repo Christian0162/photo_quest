@@ -1,7 +1,7 @@
 import '../../../domain/memories/enum/memory_filter.dart';
-import 'memory_summary.dart';
-import 'memory_month.dart';
 import '../../view_model/memories/memory_list_view_model.dart';
+import 'memory_month.dart';
+import 'memory_summary.dart';
 
 /// The memory box as the Memories screen shows it: the chosen filter, how
 /// many memories each filter holds, and the matching memories by month.

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../molecules/app_widget_preview.dart';
+import '../../types/memories/keepsake_design.dart';
+import '../molecules/md_app_widget_preview.dart';
 import 'keepsake_template.dart';
 import 'preview_samples.dart';
-import '../../types/memories/keepsake_design.dart';
 
 Widget _keepsake(AsyncValue<KeepsakeDesign> design) {
-  return AppWidgetPreview(
+  return MdAppWidgetPreview(
     child: KeepsakeTemplate(
       design: design,
       doneLabel: 'Save keepsake',

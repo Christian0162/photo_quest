@@ -6,8 +6,8 @@ import '../../../../config/constant/app_typography.dart';
 
 /// "Open memory ›" at the foot of a memory card. The whole card is
 /// tappable; this just says so. Decorative for screen readers.
-class OpenMemoryLink extends StatelessWidget {
-  const OpenMemoryLink({super.key});
+class MdOpenMemoryLink extends StatelessWidget {
+  const MdOpenMemoryLink({super.key});
 
   @override
   Widget build(BuildContext context) {

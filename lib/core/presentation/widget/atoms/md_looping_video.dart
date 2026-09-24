@@ -6,15 +6,15 @@ import 'package:video_player/video_player.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
-import 'local_photo.dart';
+import 'md_local_photo.dart';
 
 /// Plays a saved 360° clip muted, on loop, filling its box — like a living
 /// photo. Tap to pause or play. With reduced motion it waits for a tap
 /// instead of starting on its own. Shows [posterPath] until the clip is
 /// ready, and keeps showing it if the clip can't be read. See CLAUDE.md §42,
 /// design system §50.
-class LoopingVideo extends StatefulWidget {
-  const LoopingVideo({
+class MdLoopingVideo extends StatefulWidget {
+  const MdLoopingVideo({
     super.key,
     required this.path,
     this.posterPath,
@@ -28,10 +28,10 @@ class LoopingVideo extends StatefulWidget {
   final String? semanticLabel;
 
   @override
-  State<LoopingVideo> createState() => _LoopingVideoState();
+  State<MdLoopingVideo> createState() => _MdLoopingVideoState();
 }
 
-class _LoopingVideoState extends State<LoopingVideo> {
+class _MdLoopingVideoState extends State<MdLoopingVideo> {
   VideoPlayerController? _controller;
   bool _ready = false;
 
@@ -42,7 +42,7 @@ class _LoopingVideoState extends State<LoopingVideo> {
   }
 
   @override
-  void didUpdateWidget(covariant LoopingVideo oldWidget) {
+  void didUpdateWidget(covariant MdLoopingVideo oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.path != widget.path) {
       _controller?.dispose();
@@ -98,7 +98,7 @@ class _LoopingVideoState extends State<LoopingVideo> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            LocalPhoto(path: widget.posterPath, fit: widget.fit),
+            MdLocalPhoto(path: widget.posterPath, fit: widget.fit),
             if (_ready && controller != null)
               FittedBox(
                 fit: widget.fit,

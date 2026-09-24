@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/progress_ring_painter.dart';
+import '../atoms/md_progress_ring_painter.dart';
 
 /// The 3-2-1: a big number inside a ring that drains each second, with the
 /// shot's instruction kept underneath so nobody forgets what to do. Tapping
 /// anywhere cancels. See CLAUDE.md §34-35, design system §28.
-class BoothCountdown extends StatelessWidget {
-  const BoothCountdown({super.key, 
+class MdBoothCountdown extends StatelessWidget {
+  const MdBoothCountdown({
+    super.key,
     required this.value,
     required this.instruction,
     required this.onCancel,
@@ -48,7 +50,7 @@ class BoothCountdown extends StatelessWidget {
                       duration: const Duration(seconds: 1),
                       builder: (context, t, _) => CustomPaint(
                         size: const Size.square(_size),
-                        painter: ProgressRingPainter(progress: t),
+                        painter: MdProgressRingPainter(progress: t),
                       ),
                     ),
                     AnimatedSwitcher(

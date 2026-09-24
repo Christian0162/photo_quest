@@ -102,7 +102,9 @@ class PhotoStorageService {
   }
 
   Future<String> getPhotoPath(String photoId, {required bool thumbnail}) async {
-    final dir = await _ensureDir(thumbnail ? AppStoragePaths.thumbnails : AppStoragePaths.originals);
+    final dir = await _ensureDir(
+      thumbnail ? AppStoragePaths.thumbnails : AppStoragePaths.originals,
+    );
     return p.join(dir.path, '$photoId.jpg');
   }
 

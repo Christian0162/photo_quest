@@ -4,14 +4,14 @@ import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../types/display_labels.dart';
-import '../molecules/photobooth_print.dart';
+import '../molecules/md_photobooth_print.dart';
 
 /// A category's header on Choose a Quest: its name, and an example of that
 /// kind of memory as a photobooth print laid on the table at a slight
 /// angle (alternating per shelf, like prints tossed down). Falls back to
 /// just the name when there's no example photo. See CLAUDE.md §33, §36.
-class QuestCategoryBanner extends StatelessWidget {
-  const QuestCategoryBanner({
+class MdQuestCategoryBanner extends StatelessWidget {
+  const MdQuestCategoryBanner({
     super.key,
     required this.category,
     required this.questCount,
@@ -62,7 +62,7 @@ class QuestCategoryBanner extends StatelessWidget {
               decoration: const BoxDecoration(boxShadow: AppShadows.print),
               child: AspectRatio(
                 aspectRatio: 16 / 10.5,
-                child: PhotoboothPrint(
+                child: MdPhotoboothPrint(
                   image: ResizeImage(AssetImage(example.asset), width: 640),
                   focus: example.focus,
                   note: example.tagline,

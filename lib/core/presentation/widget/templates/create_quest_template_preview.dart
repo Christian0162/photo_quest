@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../molecules/app_widget_preview.dart';
+import '../../../domain/quests/enum/create_quest_step.dart';
+import '../../types/quests/create_quest_draft.dart';
+import '../../types/quests/draft_shot.dart';
+import '../molecules/md_app_widget_preview.dart';
 import 'create_quest_template.dart';
 import 'preview_samples.dart';
-import '../../../domain/quests/enum/create_quest_step.dart';
-import '../../types/quests/draft_shot.dart';
-import '../../types/quests/create_quest_draft.dart';
 
 final _filledDraft = CreateQuestDraft(
   title: 'Sunday at Mom & Dad’s',
@@ -25,7 +25,7 @@ final _filledDraft = CreateQuestDraft(
 );
 
 Widget _create(CreateQuestDraft draft) {
-  return AppWidgetPreview(
+  return MdAppWidgetPreview(
     child: CreateQuestTemplate(
       draft: draft,
       people: AsyncData(PreviewSamples.invitable),

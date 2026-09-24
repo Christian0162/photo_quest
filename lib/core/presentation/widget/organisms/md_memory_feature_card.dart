@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../types/display_labels.dart';
 import '../../../utils/date_labels.dart';
-import '../atoms/occasion_chip.dart';
-import '../atoms/open_memory_link.dart';
-import '../atoms/participant_avatar_stack.dart';
-import '../molecules/app_card.dart';
-import '../molecules/memory_cover_hero.dart';
-import '../molecules/photo_fan.dart';
+import '../../types/display_labels.dart';
 import '../../types/memories/memory_summary.dart';
+import '../atoms/md_occasion_chip.dart';
+import '../atoms/md_open_memory_link.dart';
+import '../atoms/md_participant_avatar_stack.dart';
+import '../molecules/md_app_card.dart';
+import '../molecules/md_memory_cover_hero.dart';
+import '../molecules/md_photo_fan.dart';
 
 /// The first memory of a month, shown like a page taped into a journal:
 /// when it was, the prints fanned out in a dark booth tray, who was there,
@@ -34,8 +34,8 @@ import '../../types/memories/memory_summary.dart';
 /// │                Open memory › │
 /// └──────────────────────────────┘
 /// ```
-class MemoryFeatureCard extends StatelessWidget {
-  const MemoryFeatureCard({
+class MdMemoryFeatureCard extends StatelessWidget {
+  const MdMemoryFeatureCard({
     super.key,
     required this.summary,
     required this.now,
@@ -60,10 +60,10 @@ class MemoryFeatureCard extends StatelessWidget {
     final photos = summary.photos.isEmpty
         ? [?summary.coverPhoto]
         : summary.photos;
-    final withWhom = ParticipantAvatarStack.describe(summary.people);
+    final withWhom = MdParticipantAvatarStack.describe(summary.people);
     final category = summary.questCategory;
 
-    final card = AppCard(
+    final card = MdAppCard(
       onTap: onOpen,
       radius: AppRadius.xl,
       padding: const EdgeInsets.fromLTRB(
@@ -113,13 +113,13 @@ class MemoryFeatureCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PhotoFan(
+                  MdPhotoFan(
                     // Thumbnails keep a long list light; the viewer opens
                     // the full-size shots.
                     paths: [for (final photo in photos) photo.thumbnailPath],
                     onOpen: onViewPhoto,
                     front: (print) =>
-                        MemoryCoverHero(memoryId: memory.id, child: print),
+                        MdMemoryCoverHero(memoryId: memory.id, child: print),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   _TrayLabel(
@@ -175,9 +175,9 @@ class MemoryFeatureCard extends StatelessWidget {
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: [
-              OccasionChip(label: occasion, icon: occasionIcon),
+              MdOccasionChip(label: occasion, icon: occasionIcon),
               if (category != null)
-                OccasionChip(
+                MdOccasionChip(
                   label: category,
                   icon: questCategoryIcon(category),
                   color: AppColors.sunken,
@@ -187,7 +187,7 @@ class MemoryFeatureCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.ms),
           const Align(
             alignment: Alignment.centerRight,
-            child: OpenMemoryLink(),
+            child: MdOpenMemoryLink(),
           ),
         ],
       ),

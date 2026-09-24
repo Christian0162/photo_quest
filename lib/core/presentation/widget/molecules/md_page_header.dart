@@ -11,8 +11,8 @@ import '../../../../config/constant/app_typography.dart';
 /// Memories                    (+)
 /// Just for you and the people who were there.
 /// ```
-class PageHeader extends StatelessWidget {
-  const PageHeader({
+class MdPageHeader extends StatelessWidget {
+  const MdPageHeader({
     super.key,
     required this.overline,
     required this.title,

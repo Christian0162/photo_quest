@@ -6,8 +6,8 @@ import '../../../../config/constant/app_typography.dart';
 
 /// A small tag on a memory: "Anniversary", "Birthday", "For Us", "3 of
 /// us". Icon plus word, so it never relies on the icon alone.
-class OccasionChip extends StatelessWidget {
-  const OccasionChip({
+class MdOccasionChip extends StatelessWidget {
+  const MdOccasionChip({
     super.key,
     required this.label,
     required this.icon,

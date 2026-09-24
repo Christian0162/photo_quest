@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
@@ -7,8 +8,9 @@ import '../../../utils/app_haptics.dart';
 
 /// A big, tappable choice. Selected = dark border, tint and a check — never
 /// color alone. See design system §17, CLAUDE.md §65.
-class OptionTile extends StatelessWidget {
-  const OptionTile({super.key, 
+class MdOptionTile extends StatelessWidget {
+  const MdOptionTile({
+    super.key,
     required this.label,
     required this.selected,
     required this.onTap,

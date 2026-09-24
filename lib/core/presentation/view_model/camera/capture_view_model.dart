@@ -10,15 +10,15 @@ import 'package:uuid/uuid.dart';
 import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
+import '../../../data/repositories/service_providers.dart';
 import '../../../data/repositories/settings_repository_provider.dart';
 import '../../../data/services/image/image_processing_service.dart'
     show AnimationResult, ProgressCallback;
-import '../../../data/repositories/service_providers.dart';
+import '../../../domain/camera/enum/capture_mode.dart';
+import '../../../domain/camera/enum/capture_phase.dart';
 import '../../../domain/memories/enum/photo_look.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/pose_ideas.dart';
-import '../../../domain/camera/enum/capture_phase.dart';
-import '../../../domain/camera/enum/capture_mode.dart';
 import '../../types/camera/capture_state.dart';
 
 part 'capture_view_model.g.dart';

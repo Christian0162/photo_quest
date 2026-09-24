@@ -8,8 +8,8 @@ import '../../../domain/quests/enum/status_tone.dart';
 /// A small icon + word status ("Waiting", "Joined"). Always carries text
 /// and an icon so status never depends on color alone. See CLAUDE.md §65,
 /// design system §39.
-class StatusPill extends StatelessWidget {
-  const StatusPill({
+class MdStatusPill extends StatelessWidget {
+  const MdStatusPill({
     super.key,
     required this.label,
     required this.icon,

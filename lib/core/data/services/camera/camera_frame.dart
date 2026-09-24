@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import '../../../domain/camera/enum/camera_frame_format.dart';
 
 /// One raw frame from the live camera stream, copied out of the plugin's

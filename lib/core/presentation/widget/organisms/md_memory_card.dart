@@ -4,17 +4,17 @@ import 'package:intl/intl.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/local_photo.dart';
-import '../atoms/participant_avatar_stack.dart';
-import '../molecules/app_card.dart';
-import '../molecules/memory_cover_hero.dart';
 import '../../types/memories/memory_summary.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_participant_avatar_stack.dart';
+import '../molecules/md_app_card.dart';
+import '../molecules/md_memory_cover_hero.dart';
 
 /// A Memory as a printed photo: the picture dominates, with a white print
 /// border, the quest title, date, and who was there underneath. See
 /// CLAUDE.md §38, design system §35.
-class MemoryCard extends StatelessWidget {
-  const MemoryCard({super.key, required this.summary, required this.onTap});
+class MdMemoryCard extends StatelessWidget {
+  const MdMemoryCard({super.key, required this.summary, required this.onTap});
 
   final MemorySummary summary;
   final VoidCallback onTap;
@@ -32,9 +32,9 @@ class MemoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final memory = summary.memory;
     final date = DateFormat.yMMMd().format(memory.capturedAt);
-    final withWhom = ParticipantAvatarStack.describe(summary.people);
+    final withWhom = MdParticipantAvatarStack.describe(summary.people);
 
-    return AppCard(
+    return MdAppCard(
       onTap: onTap,
       padding: const EdgeInsets.all(AppSpacing.sm),
       semanticLabel: [
@@ -46,13 +46,13 @@ class MemoryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          MemoryCoverHero(
+          MdMemoryCoverHero(
             memoryId: memory.id,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(AppRadius.md),
               child: AspectRatio(
                 aspectRatio: 4 / 5,
-                child: LocalPhoto(path: summary.coverPhoto?.thumbnailPath),
+                child: MdLocalPhoto(path: summary.coverPhoto?.thumbnailPath),
               ),
             ),
           ),
@@ -86,7 +86,7 @@ class MemoryCard extends StatelessWidget {
                   ),
                 ),
                 if (summary.people.isNotEmpty)
-                  ParticipantAvatarStack(
+                  MdParticipantAvatarStack(
                     people: summary.people,
                     radius: 11,
                     max: 2,

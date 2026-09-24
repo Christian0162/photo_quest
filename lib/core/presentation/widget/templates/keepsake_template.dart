@@ -7,19 +7,19 @@ import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../../utils/app_haptics.dart';
-import '../atoms/loading_indicator.dart';
-import '../atoms/primary_button.dart';
-import '../atoms/sticker_art.dart';
-import '../molecules/empty_state.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/keepsake_canvas.dart';
-import '../organisms/keepsake_snapshot.dart';
-import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/keepsake_frame.dart';
+import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/sticker_type.dart';
+import '../../../utils/app_haptics.dart';
 import '../../types/memories/keepsake_design.dart';
-import '../molecules/option_tile.dart';
+import '../atoms/md_loading_indicator.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_sticker_art.dart';
+import '../molecules/md_empty_state.dart';
+import '../molecules/md_option_tile.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_keepsake_canvas.dart';
+import '../organisms/md_keepsake_snapshot.dart';
 
 /// Makes the printed keepsake yours: pick a layout (strip, grid, polaroid),
 /// a paper, and add stickers you drag, pinch and turn. The print stays in
@@ -72,7 +72,7 @@ class KeepsakeTemplate extends StatefulWidget {
 enum _Tray { layout, paper, stickers }
 
 class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
-  final _snapshot = KeepsakeSnapshotController();
+  final _snapshot = MdKeepsakeSnapshotController();
   var _tray = _Tray.layout;
 
   /// True while rendering, so selection outlines aren't printed.
@@ -91,7 +91,7 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
   Widget build(BuildContext context) {
     final design = widget.design.value;
 
-    return AppScaffold(
+    return MdAppScaffold(
       showAppBar: true,
       title: 'Make it yours',
       leading: IconButton(
@@ -101,7 +101,7 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
       ),
       bottomAction: design == null
           ? null
-          : PrimaryButton(
+          : MdPrimaryButton(
               label: widget.doneLabel,
               icon: Icons.check_rounded,
               loading: design.isSaving,
@@ -109,8 +109,8 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
             ),
       body: widget.design.when(
         loading: () =>
-            const LoadingIndicator(message: 'Laying out your print…'),
-        error: (error, stack) => EmptyState.error(
+            const MdLoadingIndicator(message: 'Laying out your print…'),
+        error: (error, stack) => MdEmptyState.error(
           title: "We couldn't open this keepsake",
           onRetry: widget.onRetry,
         ),
@@ -129,9 +129,9 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
                         BoxShadow(color: AppColors.shadow, blurRadius: 16),
                       ],
                     ),
-                    child: KeepsakeSnapshot(
+                    child: MdKeepsakeSnapshot(
                       controller: _snapshot,
-                      child: KeepsakeCanvas(
+                      child: MdKeepsakeCanvas(
                         design: design,
                         editable: !_capturing && !design.isSaving,
                         onSelectSticker: widget.onSelectSticker,
@@ -238,7 +238,7 @@ class _LayoutTray extends StatelessWidget {
         children: [
           for (final layout in KeepsakeLayout.values) ...[
             Expanded(
-              child: OptionTile(
+              child: MdOptionTile(
                 label: layout.label,
                 selected: layout == selected,
                 onTap: () => onChanged(layout),
@@ -269,10 +269,10 @@ class _PaperTray extends StatelessWidget {
       separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
       itemBuilder: (context, index) {
         final frame = KeepsakeFrame.values[index];
-        final (paper, ink) = KeepsakeCanvas.colorsOf(frame);
+        final (paper, ink) = MdKeepsakeCanvas.colorsOf(frame);
         return SizedBox(
           width: 76,
-          child: OptionTile(
+          child: MdOptionTile(
             label: frame.label,
             selected: frame == selected,
             onTap: () => onChanged(frame),
@@ -361,7 +361,7 @@ class _StickerTray extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
                       alignment: Alignment.center,
-                      child: StickerArt(type: type, size: 40),
+                      child: MdStickerArt(type: type, size: 40),
                     ),
                   ),
                 ),
@@ -373,4 +373,3 @@ class _StickerTray extends StatelessWidget {
     );
   }
 }
-

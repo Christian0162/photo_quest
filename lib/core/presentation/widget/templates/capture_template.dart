@@ -1,4 +1,3 @@
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,31 +7,31 @@ import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../../errors/app_failure.dart';
-import '../../../utils/app_haptics.dart';
+import '../../../domain/camera/enum/capture_mode.dart';
+import '../../../domain/camera/enum/capture_phase.dart';
 import '../../../domain/memories/entities/photo.dart';
 import '../../../domain/memories/enum/photo_look.dart';
-import '../atoms/camera_icon_button.dart';
-import '../atoms/capture_button.dart';
-import '../atoms/loading_indicator.dart';
-import '../atoms/local_photo.dart';
-import '../atoms/participant_avatar_stack.dart';
-import '../atoms/primary_button.dart';
-import '../molecules/capture_mode_switch.dart';
-import '../molecules/empty_state.dart';
-import '../molecules/look_picker.dart';
-import '../molecules/pose_idea_card.dart';
-import '../molecules/shot_media.dart';
-import '../molecules/step_progress.dart';
-import '../organisms/app_scaffold.dart';
-import '../../../domain/camera/enum/capture_phase.dart';
-import '../../../domain/camera/enum/capture_mode.dart';
+import '../../../errors/app_failure.dart';
+import '../../../utils/app_haptics.dart';
 import '../../types/camera/capture_state.dart';
-import '../atoms/hold_shutter_button.dart';
-import '../atoms/print_pop_in.dart';
-import '../atoms/camera_edge_scrims.dart';
-import '../molecules/booth_countdown.dart';
-import '../molecules/processing_progress.dart';
+import '../atoms/md_camera_edge_scrims.dart';
+import '../atoms/md_camera_icon_button.dart';
+import '../atoms/md_capture_button.dart';
+import '../atoms/md_hold_shutter_button.dart';
+import '../atoms/md_loading_indicator.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_participant_avatar_stack.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_print_pop_in.dart';
+import '../molecules/md_booth_countdown.dart';
+import '../molecules/md_capture_mode_switch.dart';
+import '../molecules/md_empty_state.dart';
+import '../molecules/md_look_picker.dart';
+import '../molecules/md_pose_idea_card.dart';
+import '../molecules/md_processing_progress.dart';
+import '../molecules/md_shot_media.dart';
+import '../molecules/md_step_progress.dart';
+import '../organisms/md_app_scaffold.dart';
 
 /// The photobooth: the live camera dominates, with just enough guidance —
 /// shot progress, the instruction and example, a countdown, then Keep or
@@ -89,19 +88,19 @@ class CaptureTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return MdAppScaffold(
       backgroundColor: AppColors.camera,
       safeArea: false,
       onBackBlocked: onLeave,
       body: capture.when(
-        loading: () => const LoadingIndicator(
+        loading: () => const MdLoadingIndicator(
           message: 'Preparing your photobooth…',
           color: AppColors.onCamera,
         ),
         error: (error, stack) => SafeArea(
           child: Stack(
             children: [
-              EmptyState.error(
+              MdEmptyState.error(
                 title: error is CameraPermissionFailure
                     ? 'Camera access needed'
                     : "The photobooth didn't start",
@@ -114,7 +113,7 @@ class CaptureTemplate extends StatelessWidget {
               Positioned(
                 top: AppSpacing.sm,
                 left: AppSpacing.sm,
-                child: CameraIconButton(
+                child: MdCameraIconButton(
                   icon: Icons.close_rounded,
                   tooltip: 'Close',
                   onPressed: onClose,
@@ -274,10 +273,10 @@ class _CaptureBodyState extends State<_CaptureBody>
           const ColoredBox(color: AppColors.camera),
 
         // Legibility scrims behind the top and bottom chrome.
-        const CameraEdgeScrims(),
+        const MdCameraEdgeScrims(),
 
         if (phase == CapturePhase.countdown)
-          BoothCountdown(
+          MdBoothCountdown(
             value: state.countdownValue,
             instruction: state.currentShot.instruction,
             onCancel: widget.onCancelCountdown,
@@ -298,7 +297,7 @@ class _CaptureBodyState extends State<_CaptureBody>
               ),
               child: Row(
                 children: [
-                  CameraIconButton(
+                  MdCameraIconButton(
                     icon: Icons.close_rounded,
                     tooltip: 'Leave quest',
                     onPressed: phase == CapturePhase.finishing
@@ -307,7 +306,7 @@ class _CaptureBodyState extends State<_CaptureBody>
                   ),
                   const SizedBox(width: AppSpacing.ms),
                   Expanded(
-                    child: StepProgress(
+                    child: MdStepProgress(
                       label: 'Shot',
                       current: state.currentIndex,
                       total: state.totalShots,
@@ -316,7 +315,7 @@ class _CaptureBodyState extends State<_CaptureBody>
                   ),
                   if (state.participants.isNotEmpty) ...[
                     const SizedBox(width: AppSpacing.ms),
-                    ParticipantAvatarStack(
+                    MdParticipantAvatarStack(
                       people: state.participants,
                       radius: 14,
                       max: 3,
@@ -324,7 +323,7 @@ class _CaptureBodyState extends State<_CaptureBody>
                     ),
                   ],
                   const SizedBox(width: AppSpacing.sm),
-                  CameraIconButton(
+                  MdCameraIconButton(
                     icon: Icons.tune_rounded,
                     tooltip: 'Booth settings',
                     onPressed: phase == CapturePhase.instruction
@@ -363,7 +362,7 @@ class _CaptureBodyState extends State<_CaptureBody>
                     CapturePhase.capturing when holdCapturing => controls,
                     CapturePhase.countdown => const SizedBox.shrink(),
                     CapturePhase.capturing => _CapturingControls(state: state),
-                    CapturePhase.processing => ProcessingProgress(
+                    CapturePhase.processing => MdProcessingProgress(
                       progress: state.processingProgress,
                       message: switch (state.mode) {
                         CaptureMode.gif => 'Making your GIF…',
@@ -379,7 +378,7 @@ class _CaptureBodyState extends State<_CaptureBody>
                     CapturePhase.finishing ||
                     CapturePhase.complete => const Padding(
                       padding: EdgeInsets.only(bottom: AppSpacing.xxl),
-                      child: LoadingIndicator(
+                      child: MdLoadingIndicator(
                         message: 'Wrapping up your memory…',
                         color: AppColors.onCamera,
                       ),
@@ -521,7 +520,7 @@ class _InstructionControlsState extends State<_InstructionControls> {
                   )
                 : Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacing.ms),
-                    child: PoseIdeaCard(
+                    child: MdPoseIdeaCard(
                       idea: idea,
                       onAnother: widget.onPoseIdea,
                       onClose: widget.onHidePoseIdea,
@@ -542,7 +541,7 @@ class _InstructionControlsState extends State<_InstructionControls> {
                     border: Border.all(color: AppColors.onCamera, width: 2),
                   ),
                   clipBehavior: Clip.antiAlias,
-                  child: LocalPhoto(
+                  child: MdLocalPhoto(
                     path: shot.exampleImagePath,
                     semanticLabel: 'Example of this shot',
                   ),
@@ -565,7 +564,7 @@ class _InstructionControlsState extends State<_InstructionControls> {
           const SizedBox(height: AppSpacing.ms),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: CaptureModeSwitch<CaptureMode>(
+            child: MdCaptureModeSwitch<CaptureMode>(
               modes: CaptureMode.values,
               selected: state.mode,
               labelOf: (mode) => mode.label,
@@ -578,7 +577,7 @@ class _InstructionControlsState extends State<_InstructionControls> {
             child: _showLooks && looksAvailable
                 ? Padding(
                     padding: const EdgeInsets.only(top: AppSpacing.sm),
-                    child: LookPicker(
+                    child: MdLookPicker(
                       selected: state.look,
                       onChanged: widget.onLookChanged,
                     ),
@@ -609,7 +608,7 @@ class _InstructionControlsState extends State<_InstructionControls> {
             if (holding)
               const SizedBox.square(dimension: AppTouch.minTarget)
             else
-              CameraIconButton(
+              MdCameraIconButton(
                 icon: _showLooks && looksAvailable
                     ? Icons.close_rounded
                     : Icons.auto_fix_high_rounded,
@@ -623,7 +622,7 @@ class _InstructionControlsState extends State<_InstructionControls> {
                     : null,
               ),
             if (state.mode.isHold)
-              HoldShutterButton(
+              MdHoldShutterButton(
                 progress: state.captureProgress,
                 recording: holding,
                 label: state.mode == CaptureMode.boomerang
@@ -633,14 +632,14 @@ class _InstructionControlsState extends State<_InstructionControls> {
                 onEnd: widget.onHoldEnd,
               )
             else
-              CaptureButton(
+              MdCaptureButton(
                 onPressed: widget.onCapture,
                 semanticLabel: state.mode == CaptureMode.gif
                     ? 'Start the GIF'
                     : 'Take the photo',
               ),
             if (widget.canSwitchCamera && !holding)
-              CameraIconButton(
+              MdCameraIconButton(
                 icon: Icons.cameraswitch_rounded,
                 tooltip: 'Flip camera',
                 onPressed: widget.onSwitchCamera,
@@ -718,7 +717,7 @@ class _ReviewPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (photo != null)
-          PrintPopIn(
+          MdPrintPopIn(
             child: Container(
               height: MediaQuery.sizeOf(context).height * 0.34,
               padding: const EdgeInsets.all(AppSpacing.sm),
@@ -734,11 +733,11 @@ class _ReviewPanel extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                   child: photo.kind == PhotoKind.photo
-                      ? LocalPhoto(
+                      ? MdLocalPhoto(
                           path: photo.thumbnailPath,
                           semanticLabel: 'The photo you just took',
                         )
-                      : ShotMedia(
+                      : MdShotMedia(
                           photo: photo,
                           semanticLabel: 'What you just captured',
                         ),
@@ -755,13 +754,13 @@ class _ReviewPanel extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.md),
-        PrimaryButton(
+        MdPrimaryButton(
           label: state.isLastShot ? 'Keep it & finish' : 'Keep it',
           icon: Icons.check_rounded,
           onPressed: onKeep,
         ),
         const SizedBox(height: AppSpacing.sm),
-        SecondaryButton(
+        MdSecondaryButton(
           label: 'Retake',
           icon: Icons.replay_rounded,
           onDark: true,
@@ -771,4 +770,3 @@ class _ReviewPanel extends StatelessWidget {
     );
   }
 }
-

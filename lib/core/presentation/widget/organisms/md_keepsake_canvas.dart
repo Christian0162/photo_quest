@@ -5,15 +5,15 @@ import 'package:intl/intl.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../../../utils/app_haptics.dart';
 import '../../../domain/memories/entities/photo.dart';
-import '../atoms/local_photo.dart';
-import '../atoms/sticker_art.dart';
-import '../molecules/shot_media.dart';
-import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/keepsake_frame.dart';
-import '../../types/memories/placed_sticker.dart';
+import '../../../domain/memories/enum/keepsake_layout.dart';
+import '../../../utils/app_haptics.dart';
 import '../../types/memories/keepsake_design.dart';
+import '../../types/memories/placed_sticker.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_sticker_art.dart';
+import '../molecules/md_shot_media.dart';
 
 /// The printed keepsake — strip, grid or polaroid — on its paper, with the
 /// title handwritten and any stickers on top. Everything is proportional to
@@ -22,8 +22,8 @@ import '../../types/memories/keepsake_design.dart';
 /// dragged, pinched and rotated. When [live], GIFs and boomerangs play in
 /// their frames and 360° clips loop — the saved image always uses shots.
 /// See CLAUDE.md §36, design system §34.
-class KeepsakeCanvas extends StatelessWidget {
-  const KeepsakeCanvas({
+class MdKeepsakeCanvas extends StatelessWidget {
+  const MdKeepsakeCanvas({
     super.key,
     required this.design,
     this.editable = false,
@@ -202,11 +202,11 @@ class _SlotMedia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final shot = this.shot;
-    if (shot == null) return const LocalPhoto(path: null);
+    if (shot == null) return const MdLocalPhoto(path: null);
     if (live && shot.kind != PhotoKind.photo) {
-      return ShotMedia(photo: shot);
+      return MdShotMedia(photo: shot);
     }
-    return LocalPhoto(
+    return MdLocalPhoto(
       path: shot.stillPath,
       // Faces tend to sit above center.
       alignment: const Alignment(0, -0.25),
@@ -309,7 +309,7 @@ class _PlacedStickerViewState extends State<_PlacedStickerView> {
     // A halo around the art: a comfortable touch area for small stickers,
     // with room for the remove button fully inside it.
     const halo = AppTouch.minTarget / 2;
-    Widget art = StickerArt(type: s.type, size: size);
+    Widget art = MdStickerArt(type: s.type, size: size);
     if (widget.selected) {
       art = DecoratedBox(
         position: DecorationPosition.foreground,

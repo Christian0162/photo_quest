@@ -5,11 +5,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../data/repositories/service_providers.dart';
-import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/keepsake_frame.dart';
+import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/sticker_type.dart';
-import '../../types/memories/placed_sticker.dart';
 import '../../types/memories/keepsake_design.dart';
+import '../../types/memories/placed_sticker.dart';
 
 part 'keepsake_view_model.g.dart';
 

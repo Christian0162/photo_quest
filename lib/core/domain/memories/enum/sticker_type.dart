@@ -1,4 +1,3 @@
-
 /// Stickers and props that can be placed on a keepsake. Icon stickers use
 /// the app's icon set, stamps use the handwriting face — never emoji.
 enum StickerType {

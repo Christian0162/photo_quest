@@ -1,4 +1,3 @@
-
 /// The paper the keepsake is printed on.
 enum KeepsakeFrame {
   cream('Classic'),

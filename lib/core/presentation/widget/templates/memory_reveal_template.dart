@@ -10,17 +10,17 @@ import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../utils/app_haptics.dart';
-import '../atoms/loading_indicator.dart';
-import '../atoms/local_photo.dart';
-import '../atoms/primary_button.dart';
-import '../molecules/empty_state.dart';
-import '../organisms/app_scaffold.dart';
-import '../organisms/keepsake_canvas.dart';
-import '../organisms/keepsake_snapshot.dart';
 import '../../types/camera/memory_reveal_result.dart';
 import '../../types/memories/keepsake_design.dart';
-import '../atoms/appear_transition.dart';
-import '../atoms/developing_print.dart';
+import '../atoms/md_appear_transition.dart';
+import '../atoms/md_developing_print.dart';
+import '../atoms/md_loading_indicator.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_primary_button.dart';
+import '../molecules/md_empty_state.dart';
+import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_keepsake_canvas.dart';
+import '../organisms/md_keepsake_snapshot.dart';
 
 /// The payoff after finishing a Quest: the photo strip rises in and
 /// develops like an instant print — pale and grey, then full color — before
@@ -54,11 +54,11 @@ class MemoryRevealTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return MdAppScaffold(
       body: reveal.when(
         loading: () =>
-            const LoadingIndicator(message: 'Printing your photo strip…'),
-        error: (error, stack) => EmptyState.error(
+            const MdLoadingIndicator(message: 'Printing your photo strip…'),
+        error: (error, stack) => MdEmptyState.error(
           title: "We couldn't finish your photo strip",
           message: 'Your photos are safe. Please try again.',
           onRetry: onRetry,
@@ -94,7 +94,7 @@ class _Reveal extends StatefulWidget {
 class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
   static const _duration = Duration(milliseconds: 2200);
 
-  final _snapshot = KeepsakeSnapshotController();
+  final _snapshot = MdKeepsakeSnapshotController();
 
   /// True while saving: the print shows stills, since moving clips can't
   /// be captured into an image.
@@ -160,7 +160,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
       ),
       child: Column(
         children: [
-          AppearTransition(
+          MdAppearTransition(
             animation: _heading,
             child: Column(
               children: [
@@ -200,7 +200,10 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
                   opacity: _rise.value.clamp(0, 1),
                   child: Transform.translate(
                     offset: Offset(0, (1 - _rise.value) * AppSpacing.jumbo),
-                    child: DevelopingPrint(progress: _develop.value, child: child!),
+                    child: MdDevelopingPrint(
+                      progress: _develop.value,
+                      child: child!,
+                    ),
                   ),
                 ),
                 child: DecoratedBox(
@@ -211,7 +214,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(AppRadius.sm),
                     child: widget.keepsake == null
-                        ? LocalPhoto(
+                        ? MdLocalPhoto(
                             path: result.stripPath,
                             fit: BoxFit.contain,
                             semanticLabel:
@@ -221,9 +224,9 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
                             image: true,
                             label: 'Your photo strip for ${result.title}',
                             excludeSemantics: true,
-                            child: KeepsakeSnapshot(
+                            child: MdKeepsakeSnapshot(
                               controller: _snapshot,
-                              child: KeepsakeCanvas(
+                              child: MdKeepsakeCanvas(
                                 design: widget.keepsake!,
                                 live: !_capturing,
                               ),
@@ -235,7 +238,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          AppearTransition(
+          MdAppearTransition(
             animation: _details,
             child: Column(
               children: [
@@ -257,11 +260,11 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          AppearTransition(
+          MdAppearTransition(
             animation: _action,
             child: Column(
               children: [
-                PrimaryButton(
+                MdPrimaryButton(
                   label: 'Keep this memory',
                   icon: Icons.favorite_rounded,
                   loading: widget.keepsake?.isSaving ?? false,
@@ -269,7 +272,7 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
                 ),
                 if (widget.keepsake != null) ...[
                   const SizedBox(height: AppSpacing.sm),
-                  SecondaryButton(
+                  MdSecondaryButton(
                     label: 'Decorate your print',
                     icon: Icons.auto_awesome_rounded,
                     onPressed: widget.onDecorate,
@@ -283,4 +286,3 @@ class _RevealState extends State<_Reveal> with SingleTickerProviderStateMixin {
     );
   }
 }
-

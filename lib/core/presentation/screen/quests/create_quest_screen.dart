@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../config/routes/app_router.dart';
+import '../../../utils/app_haptics.dart';
 import '../../view_model/people/people_list_view_model.dart';
 import '../../view_model/quests/create_quest_view_model.dart';
-import '../../widget/molecules/confirmation_dialog.dart';
-import '../../../utils/app_haptics.dart';
-import '../../widget/organisms/app_scaffold.dart';
+import '../../widget/molecules/md_confirmation_dialog.dart';
+import '../../widget/organisms/md_app_scaffold.dart';
 import '../../widget/templates/create_quest_template.dart';
 
 /// Create Quest. Wires [CreateQuestViewModel], the discard dialog and

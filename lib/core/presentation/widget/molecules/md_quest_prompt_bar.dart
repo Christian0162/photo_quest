@@ -5,7 +5,7 @@ import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_shadows.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/pressable_scale.dart';
+import '../atoms/md_pressable_scale.dart';
 
 /// The app's one primary action, floating above the navigation dock on
 /// every tab. Every memory comes from a quest's photobooth, so tapping
@@ -23,8 +23,8 @@ import '../atoms/pressable_scale.dart';
 /// To catch the eye without nagging, the "+" sends out a soft ripple a few
 /// times when the bar first appears, then rests. Skipped under reduced
 /// motion (design system §48-50).
-class QuestPromptBar extends StatelessWidget {
-  const QuestPromptBar({super.key, required this.onTap});
+class MdQuestPromptBar extends StatelessWidget {
+  const MdQuestPromptBar({super.key, required this.onTap});
 
   static const _title = 'Start a quest';
   static const _subtitle = 'Do it together. Keep the memory.';
@@ -39,7 +39,7 @@ class QuestPromptBar extends StatelessWidget {
       button: true,
       label: '$_title. $_subtitle',
       excludeSemantics: true,
-      child: PressableScale(
+      child: MdPressableScale(
         enabled: true,
         scale: 0.98,
         child: DecoratedBox(

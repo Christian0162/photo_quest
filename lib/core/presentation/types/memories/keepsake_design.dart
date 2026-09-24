@@ -1,7 +1,8 @@
 import 'dart:convert';
+
 import '../../../domain/memories/entities/photo.dart';
-import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/keepsake_frame.dart';
+import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/sticker_type.dart';
 import 'placed_sticker.dart';
 

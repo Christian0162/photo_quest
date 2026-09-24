@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../view_model/people/people_list_view_model.dart';
-import '../../widget/organisms/add_person_sheet.dart';
-import '../../widget/organisms/app_scaffold.dart';
+import '../../widget/organisms/md_add_person_sheet.dart';
+import '../../widget/organisms/md_app_scaffold.dart';
 import '../../widget/templates/people_template.dart';
 
 /// People. Wires [PeopleList] and the add-someone sheet into

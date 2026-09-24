@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import 'app_card.dart';
+import 'md_app_card.dart';
 
 /// A half-width "other ways in" card: an icon badge, a title and one line.
-class IdeaTile extends StatelessWidget {
-  const IdeaTile({super.key, 
+class MdIdeaTile extends StatelessWidget {
+  const MdIdeaTile({
+    super.key,
     required this.icon,
     required this.title,
     required this.subtitle,
@@ -22,7 +24,7 @@ class IdeaTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return MdAppCard(
       color: color,
       radius: AppRadius.xl,
       onTap: onTap,

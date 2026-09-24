@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_motion.dart';
 
 /// Cross-fades between loading and loaded content with a gentle size
 /// settle, so the page doesn't jump when data arrives. Children need
 /// distinct keys per state.
-class SmoothSwitch extends StatelessWidget {
-  const SmoothSwitch({super.key, required this.child});
+class MdSmoothSwitch extends StatelessWidget {
+  const MdSmoothSwitch({super.key, required this.child});
 
   final Widget child;
 

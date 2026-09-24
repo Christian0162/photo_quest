@@ -3,12 +3,12 @@ import 'dart:ui' show Rect;
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/service_providers.dart';
-import '../../../errors/app_failure.dart';
-import '../../../domain/people/entities/person.dart';
-import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../domain/memories/entities/photo.dart';
+import '../../../domain/people/entities/person.dart';
+import '../../../errors/app_failure.dart';
 import '../../types/memories/memory_detail.dart';
 
 part 'memory_detail_view_model.g.dart';

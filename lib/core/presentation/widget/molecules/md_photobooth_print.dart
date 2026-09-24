@@ -10,8 +10,8 @@ import '../../../../config/constant/app_typography.dart';
 /// a vertical "PHOTOBOOTH" stamp, a handwritten note and the date. Each
 /// frame is a different crop of [image], so a single example photo reads
 /// like a burst from the booth. See CLAUDE.md §2.4, §36.
-class PhotoboothPrint extends StatelessWidget {
-  const PhotoboothPrint({
+class MdPhotoboothPrint extends StatelessWidget {
+  const MdPhotoboothPrint({
     super.key,
     required this.image,
     required this.note,

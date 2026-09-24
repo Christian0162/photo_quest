@@ -10,8 +10,8 @@ import '../../../domain/people/entities/person.dart';
 /// per person so faces are easier to tell apart at a glance; the initial
 /// still carries identity on its own. Decorative for screen readers —
 /// callers show the name next to it. See CLAUDE.md §40.
-class PersonAvatar extends StatelessWidget {
-  const PersonAvatar({super.key, required this.person, this.radius = 28});
+class MdPersonAvatar extends StatelessWidget {
+  const MdPersonAvatar({super.key, required this.person, this.radius = 28});
 
   final Person person;
   final double radius;

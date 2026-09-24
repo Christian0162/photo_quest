@@ -1,6 +1,6 @@
-import '../../../domain/people/entities/person.dart';
 import '../../../domain/memories/entities/memory.dart';
 import '../../../domain/memories/entities/photo.dart';
+import '../../../domain/people/entities/person.dart';
 
 class MemoryDetail {
   const MemoryDetail({

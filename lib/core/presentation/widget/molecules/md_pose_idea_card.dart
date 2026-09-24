@@ -7,8 +7,8 @@ import '../../../../config/constant/app_typography.dart';
 /// "Need an idea?" answered: one short, playful pose over the camera, with
 /// another idea one tap away. Read out when it changes. See CLAUDE.md §2.4,
 /// design system §27.
-class PoseIdeaCard extends StatelessWidget {
-  const PoseIdeaCard({
+class MdPoseIdeaCard extends StatelessWidget {
+  const MdPoseIdeaCard({
     super.key,
     required this.idea,
     required this.onAnother,

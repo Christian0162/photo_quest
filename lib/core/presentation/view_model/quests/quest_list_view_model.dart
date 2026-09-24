@@ -3,9 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
-import 'quest_participants_view_model.dart';
-import '../../types/quests/quest_list_item.dart';
 import '../../types/quests/quest_category_shelf.dart';
+import '../../types/quests/quest_list_item.dart';
+import 'quest_participants_view_model.dart';
 
 part 'quest_list_view_model.g.dart';
 

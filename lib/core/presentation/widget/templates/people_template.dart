@@ -6,16 +6,16 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../types/display_labels.dart';
-import '../atoms/fade_slide_in.dart';
-import '../atoms/primary_button.dart';
-import '../atoms/skeleton_box.dart';
-import '../molecules/app_card.dart';
-import '../molecules/empty_state.dart';
-import '../organisms/app_scaffold.dart';
-import '../atoms/ringed_avatar.dart';
-import '../molecules/tile_grid.dart';
-import '../molecules/page_header.dart';
-import '../atoms/round_icon_button.dart';
+import '../atoms/md_fade_slide_in.dart';
+import '../atoms/md_primary_button.dart';
+import '../atoms/md_ringed_avatar.dart';
+import '../atoms/md_round_icon_button.dart';
+import '../atoms/md_skeleton_box.dart';
+import '../molecules/md_app_card.dart';
+import '../molecules/md_empty_state.dart';
+import '../molecules/md_page_header.dart';
+import '../molecules/md_tile_grid.dart';
+import '../organisms/md_app_scaffold.dart';
 
 /// The people (and pets) your quests and memories are about, grouped the
 /// way life groups them — your person, family, friends, pets. Private to
@@ -38,7 +38,7 @@ class PeopleTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return MdAppScaffold(
       body: CustomScrollView(
         slivers: [
           SliverPadding(
@@ -49,12 +49,12 @@ class PeopleTemplate extends StatelessWidget {
               AppSpacing.lg,
             ),
             sliver: SliverToBoxAdapter(
-              child: FadeSlideIn(
-                child: PageHeader(
+              child: MdFadeSlideIn(
+                child: MdPageHeader(
                   overline: 'YOUR CIRCLE',
                   title: 'People',
                   subtitle: 'The people (and pets) your memories are about.',
-                  trailing: RoundIconButton(
+                  trailing: MdRoundIconButton(
                     icon: Icons.person_add_alt_1_rounded,
                     tooltip: 'Add someone',
                     backgroundColor: AppColors.warmCoral,
@@ -75,7 +75,7 @@ class PeopleTemplate extends StatelessWidget {
             error: (error, stack) => [
               SliverFillRemaining(
                 hasScrollBody: false,
-                child: EmptyState.error(
+                child: MdEmptyState.error(
                   title: "We couldn't load your people",
                   onRetry: onRetry,
                 ),
@@ -85,13 +85,13 @@ class PeopleTemplate extends StatelessWidget {
                 ? [
                     SliverFillRemaining(
                       hasScrollBody: false,
-                      child: EmptyState(
+                      child: MdEmptyState(
                         icon: Icons.people_alt_rounded,
                         title: 'Who do you make memories with?',
                         message:
                             'Add your partner, family, friends — or your '
                             'dog. You can invite them to quests.',
-                        action: PrimaryButton(
+                        action: MdPrimaryButton(
                           label: 'Add someone',
                           icon: Icons.person_add_alt_1_rounded,
                           expand: false,
@@ -150,7 +150,7 @@ class _PeopleGroups extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (self != null) ...[
-          FadeSlideIn(
+          MdFadeSlideIn(
             key: ValueKey(self.id),
             order: order++,
             child: _SelfCard(person: self, circleSize: others.length),
@@ -158,16 +158,16 @@ class _PeopleGroups extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
         ],
         for (final (type, members) in groups) ...[
-          FadeSlideIn(
+          MdFadeSlideIn(
             key: ValueKey('group-$type'),
             order: order++,
             child: _GroupHeader(type: type, count: members.length),
           ),
           const SizedBox(height: AppSpacing.ms),
-          TileGrid(
+          MdTileGrid(
             children: [
               for (final person in members)
-                FadeSlideIn(
+                MdFadeSlideIn(
                   key: ValueKey(person.id),
                   order: order++,
                   child: _PersonTile(person: person),
@@ -176,7 +176,7 @@ class _PeopleGroups extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xl),
         ],
-        FadeSlideIn(
+        MdFadeSlideIn(
           key: const ValueKey('add-person'),
           order: order,
           child: _AddPersonCard(onTap: onAddPerson),
@@ -202,14 +202,14 @@ class _SelfCard extends StatelessWidget {
       _ => '$circleSize people in your circle',
     };
 
-    return AppCard(
+    return MdAppCard(
       color: AppColors.softPeach,
       elevated: false,
       radius: AppRadius.xl,
       semanticLabel: '${person.name}, you. $circle',
       child: Row(
         children: [
-          RingedAvatar(person: person, radius: 30, ring: AppColors.paper),
+          MdRingedAvatar(person: person, radius: 30, ring: AppColors.paper),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
@@ -275,7 +275,7 @@ class _PersonTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return MdAppCard(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.sm,
         AppSpacing.md,
@@ -285,7 +285,7 @@ class _PersonTile extends StatelessWidget {
       semanticLabel: '${person.name}, ${personTypeLabel(person.type)}',
       child: Column(
         children: [
-          RingedAvatar(person: person, radius: 32, ring: AppColors.sunken),
+          MdRingedAvatar(person: person, radius: 32, ring: AppColors.sunken),
           const SizedBox(height: AppSpacing.sm),
           Text(
             person.name,
@@ -307,7 +307,7 @@ class _AddPersonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return MdAppCard(
       onTap: onTap,
       color: AppColors.sunken,
       elevated: false,
@@ -381,13 +381,13 @@ class _LoadingPeople extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SkeletonBox(height: 96, radius: AppRadius.xl),
+          const MdSkeletonBox(height: 96, radius: AppRadius.xl),
           const SizedBox(height: AppSpacing.xl),
-          const SkeletonBox(width: 120, height: 20),
+          const MdSkeletonBox(width: 120, height: 20),
           const SizedBox(height: AppSpacing.ms),
-          TileGrid(
+          MdTileGrid(
             children: [
-              for (var i = 0; i < 6; i++) const SkeletonBox(height: 124),
+              for (var i = 0; i < 6; i++) const MdSkeletonBox(height: 124),
             ],
           ),
         ],

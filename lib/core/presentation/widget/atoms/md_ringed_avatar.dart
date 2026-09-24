@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_spacing.dart';
 import '../../../domain/people/entities/person.dart';
-import 'person_avatar.dart';
+import 'md_person_avatar.dart';
 
-/// [PersonAvatar] inside a soft ring, like a photo in a round frame.
-class RingedAvatar extends StatelessWidget {
-  const RingedAvatar({super.key, 
+/// [MdPersonAvatar] inside a soft ring, like a photo in a round frame.
+class MdRingedAvatar extends StatelessWidget {
+  const MdRingedAvatar({
+    super.key,
     required this.person,
     required this.radius,
     required this.ring,
@@ -20,7 +22,7 @@ class RingedAvatar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xs),
       decoration: BoxDecoration(color: ring, shape: BoxShape.circle),
-      child: PersonAvatar(person: person, radius: radius),
+      child: MdPersonAvatar(person: person, radius: radius),
     );
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_motion.dart';
 import '../../../../config/constant/app_spacing.dart';
 
 /// "● ○ ○" — where you are in the album. The current dot stretches into a
 /// pill, so position doesn't rely on color alone.
-class PageDots extends StatelessWidget {
-  const PageDots({super.key, required this.count, required this.current});
+class MdPageDots extends StatelessWidget {
+  const MdPageDots({super.key, required this.count, required this.current});
 
   final int count;
   final int current;

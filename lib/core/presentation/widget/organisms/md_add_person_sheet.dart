@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../types/display_labels.dart';
-import '../atoms/primary_button.dart';
+import '../atoms/md_primary_button.dart';
 
 /// Asks for a name + relationship as a friendly sheet instead of a cramped
 /// dialog. Resolves to `(name, type)`, or null if dismissed. See CLAUDE.md
@@ -86,7 +86,7 @@ class _AddPersonSheetState extends State<_AddPersonSheet> {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
-              PrimaryButton(
+              MdPrimaryButton(
                 label: name.isEmpty ? 'Add' : 'Add $name',
                 onPressed: name.isEmpty ? null : _submit,
               ),

@@ -1,4 +1,3 @@
-
 /// The three ways to look through the memory box.
 enum MemoryFilter {
   /// Today's date in any year — today, and this day a year ago, and so on.

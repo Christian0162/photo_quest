@@ -1,4 +1,3 @@
-
 enum CameraFrameFormat {
   /// Android: separate Y, U and V planes.
   yuv420,

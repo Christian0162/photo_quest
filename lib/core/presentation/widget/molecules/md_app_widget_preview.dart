@@ -9,8 +9,8 @@ const previewPhoneSize = Size(390, 844);
 /// Wraps a template for `flutter widget-preview` with the app's themed
 /// [MaterialApp]. Previews feed templates plain sample data from
 /// `preview_samples.dart` — no providers or database needed.
-class AppWidgetPreview extends StatelessWidget {
-  const AppWidgetPreview({super.key, required this.child});
+class MdAppWidgetPreview extends StatelessWidget {
+  const MdAppWidgetPreview({super.key, required this.child});
 
   final Widget child;
 

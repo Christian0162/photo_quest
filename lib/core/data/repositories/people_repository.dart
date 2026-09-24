@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:uuid/uuid.dart';
 
+import '../../domain/people/entities/person.dart';
 import '../database/app_database.dart' as db;
 import '../database/daos/people_dao.dart';
-import '../../domain/people/entities/person.dart';
 
 /// Source of truth for Person data. See CLAUDE.md §16.
 class PeopleRepository {

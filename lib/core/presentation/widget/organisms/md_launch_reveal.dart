@@ -25,8 +25,8 @@ import '../../../../config/constant/app_typography.dart';
 /// Best practice for launch screens: under two seconds, never blocks
 /// loading, any tap skips it, and reduced motion skips it entirely. See
 /// CLAUDE.md §2.5, §45, design system §48-50.
-class LaunchReveal extends StatefulWidget {
-  const LaunchReveal({super.key, required this.child});
+class MdLaunchReveal extends StatefulWidget {
+  const MdLaunchReveal({super.key, required this.child});
 
   /// The app, built and loading beneath the reveal.
   final Widget child;
@@ -36,10 +36,10 @@ class LaunchReveal extends StatefulWidget {
   static const artSize = 240.0;
 
   @override
-  State<LaunchReveal> createState() => _LaunchRevealState();
+  State<MdLaunchReveal> createState() => _MdLaunchRevealState();
 }
 
-class _LaunchRevealState extends State<LaunchReveal>
+class _MdLaunchRevealState extends State<MdLaunchReveal>
     with SingleTickerProviderStateMixin {
   static const _duration = Duration(milliseconds: 1800);
 
@@ -171,7 +171,7 @@ class _Stage extends StatelessWidget {
           Transform.translate(
             offset: Offset(0, -rise),
             child: SizedBox.square(
-              dimension: LaunchReveal.artSize,
+              dimension: MdLaunchReveal.artSize,
               child: _Prints(open: open, twinkle: twinkle),
             ),
           ),
@@ -235,7 +235,7 @@ class _Prints extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const size = LaunchReveal.artSize;
+    const size = MdLaunchReveal.artSize;
     const w = size * _printWidth;
     final spread = size * _spread * (1 + 0.18 * open);
     final tilt = _tilt * (1 + 0.35 * open);
@@ -278,7 +278,7 @@ class _Print extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const w = LaunchReveal.artSize * _Prints._printWidth;
+    const w = MdLaunchReveal.artSize * _Prints._printWidth;
     return Container(
       width: w,
       height: w * 1.25,

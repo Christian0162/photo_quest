@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../molecules/bottom_action_bar.dart';
+import '../molecules/md_bottom_action_bar.dart';
 
 /// The one page shell every template is built on: an optional app bar, safe
 /// area insets, an optional pinned bottom action, and back-button
 /// interception. Templates fill the slots instead of re-assembling a
 /// [Scaffold] each time. See CLAUDE.md §25, §66.
-class AppScaffold extends StatelessWidget {
-  const AppScaffold({
+class MdAppScaffold extends StatelessWidget {
+  const MdAppScaffold({
     super.key,
     required this.body,
     this.showAppBar = false,
@@ -28,7 +28,7 @@ class AppScaffold extends StatelessWidget {
   final Widget? leading;
   final List<Widget>? actions;
 
-  /// Pinned under the body in a [BottomActionBar], so the primary action is
+  /// Pinned under the body in a [MdBottomActionBar], so the primary action is
   /// always one thumb away and rides above the keyboard.
   final Widget? bottomAction;
   final Color? backgroundColor;
@@ -48,7 +48,7 @@ class AppScaffold extends StatelessWidget {
       content = Column(
         children: [
           Expanded(child: content),
-          BottomActionBar(child: bottomAction!),
+          MdBottomActionBar(child: bottomAction!),
         ],
       );
     }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../molecules/app_widget_preview.dart';
+import '../../types/quests/quest_detail.dart';
+import '../../types/quests/quest_participant_with_person.dart';
+import '../../types/quests/quest_start_readiness.dart';
+import '../molecules/md_app_widget_preview.dart';
 import 'preview_samples.dart';
 import 'quest_intro_template.dart';
-import '../../types/quests/quest_detail.dart';
-import '../../types/quests/quest_start_readiness.dart';
-import '../../types/quests/quest_participant_with_person.dart';
 
 Widget _intro({
   required AsyncValue<QuestDetail> detail,
@@ -15,7 +15,7 @@ Widget _intro({
   QuestStartReadiness readiness = const QuestStartReadiness(canStart: true),
   bool isStarting = false,
 }) {
-  return AppWidgetPreview(
+  return MdAppWidgetPreview(
     child: QuestIntroTemplate(
       detail: detail,
       participants: AsyncData(participants),

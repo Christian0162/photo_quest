@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../config/constant/app_spacing.dart';
-import '../atoms/primary_button.dart';
+import '../atoms/md_primary_button.dart';
 
 /// Asks for explicit confirmation before an action that loses something
 /// ("Leave quest?"). The safe choice is the primary button. Resolves to
@@ -28,12 +28,12 @@ Future<bool> showConfirmationDialog(
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            PrimaryButton(
+            MdPrimaryButton(
               label: cancelLabel,
               onPressed: () => Navigator.of(context).pop(false),
             ),
             const SizedBox(height: AppSpacing.sm),
-            SecondaryButton(
+            MdSecondaryButton(
               label: confirmLabel,
               onPressed: () => Navigator.of(context).pop(true),
             ),

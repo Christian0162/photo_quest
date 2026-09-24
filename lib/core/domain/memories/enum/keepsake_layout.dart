@@ -1,4 +1,3 @@
-
 /// How the shots are laid out on the printed keepsake. See CLAUDE.md §36.
 enum KeepsakeLayout {
   /// The classic tall photobooth strip.

@@ -1,9 +1,11 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 
-class ProgressRingPainter extends CustomPainter {
-  const ProgressRingPainter({required this.progress});
+class MdProgressRingPainter extends CustomPainter {
+  const MdProgressRingPainter({required this.progress});
 
   /// 1 = full ring, 0 = empty.
   final double progress;
@@ -36,5 +38,5 @@ class ProgressRingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(ProgressRingPainter old) => old.progress != progress;
+  bool shouldRepaint(MdProgressRingPainter old) => old.progress != progress;
 }

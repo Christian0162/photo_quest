@@ -6,8 +6,8 @@ import '../../../data/repositories/quest_repository_provider.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_shot.dart';
 import '../../../domain/quests/enum/create_quest_step.dart';
-import '../../types/quests/draft_shot.dart';
 import '../../types/quests/create_quest_draft.dart';
+import '../../types/quests/draft_shot.dart';
 
 part 'create_quest_view_model.g.dart';
 

@@ -5,21 +5,25 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../types/display_labels.dart';
-import '../atoms/primary_button.dart';
-import '../molecules/app_card.dart';
-import 'quest_card.dart';
+import '../atoms/md_primary_button.dart';
+import '../molecules/md_app_card.dart';
+import 'md_quest_card.dart';
 
 /// Home's hero: one inviting Quest for today with a prominent example image
 /// and a single "Start" action. See CLAUDE.md §31, design system §14.
-class TodayQuestCard extends StatelessWidget {
-  const TodayQuestCard({super.key, required this.quest, required this.onStart});
+class MdTodayQuestCard extends StatelessWidget {
+  const MdTodayQuestCard({
+    super.key,
+    required this.quest,
+    required this.onStart,
+  });
 
   final Quest quest;
   final VoidCallback onStart;
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return MdAppCard(
       padding: const EdgeInsets.all(AppSpacing.ms),
       radius: AppRadius.photo,
       child: Column(
@@ -29,7 +33,7 @@ class TodayQuestCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadius.xl),
             child: AspectRatio(
               aspectRatio: 16 / 10,
-              child: QuestHeroCover(quest: quest),
+              child: MdQuestHeroCover(quest: quest),
             ),
           ),
           Padding(
@@ -72,7 +76,7 @@ class TodayQuestCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.md),
-                PrimaryButton(
+                MdPrimaryButton(
                   label: "Let's do it",
                   icon: Icons.photo_camera_rounded,
                   onPressed: onStart,

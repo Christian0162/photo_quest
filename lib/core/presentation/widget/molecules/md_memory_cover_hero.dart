@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 /// Home and Memories live in separate, always-mounted tabs; the inactive
 /// tab has tickers off, and its heroes are switched off too so two cards
 /// never claim the same tag.
-class MemoryCoverHero extends StatelessWidget {
-  const MemoryCoverHero({
+class MdMemoryCoverHero extends StatelessWidget {
+  const MdMemoryCoverHero({
     super.key,
     required this.memoryId,
     required this.child,

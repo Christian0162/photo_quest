@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../molecules/app_widget_preview.dart';
+import '../molecules/md_app_widget_preview.dart';
 import 'home_template.dart';
 import 'preview_samples.dart';
 
@@ -33,12 +33,12 @@ HomeTemplate _home({bool withMemories = true, bool loading = false}) {
   group: 'templates',
   size: previewPhoneSize,
 )
-Widget homeTemplatePreview() => AppWidgetPreview(child: _home());
+Widget homeTemplatePreview() => MdAppWidgetPreview(child: _home());
 
 @Preview(name: 'Home — first day', group: 'templates', size: previewPhoneSize)
 Widget homeTemplateFirstDayPreview() =>
-    AppWidgetPreview(child: _home(withMemories: false));
+    MdAppWidgetPreview(child: _home(withMemories: false));
 
 @Preview(name: 'Home — loading', group: 'templates', size: previewPhoneSize)
 Widget homeTemplateLoadingPreview() =>
-    AppWidgetPreview(child: _home(loading: true));
+    MdAppWidgetPreview(child: _home(loading: true));

@@ -6,16 +6,16 @@ import '../../../../config/constant/app_typography.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../types/display_labels.dart';
-import '../atoms/local_photo.dart';
-import '../atoms/participant_avatar_stack.dart';
-import '../molecules/app_card.dart';
-import '../molecules/photobooth_print.dart';
+import '../atoms/md_local_photo.dart';
+import '../atoms/md_participant_avatar_stack.dart';
+import '../molecules/md_app_card.dart';
+import '../molecules/md_photobooth_print.dart';
 
 /// A Quest as an inspiring, tappable card: cover, title, the real-life idea
 /// in one or two lines, and who it's for. Participants show only for a
 /// user-created pair/group Quest that has them. See design system §15.
-class QuestCard extends StatelessWidget {
-  const QuestCard({
+class MdQuestCard extends StatelessWidget {
+  const MdQuestCard({
     super.key,
     required this.quest,
     required this.onTap,
@@ -30,7 +30,7 @@ class QuestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return MdAppCard(
       onTap: onTap,
       padding: EdgeInsets.zero,
       semanticLabel: [
@@ -44,8 +44,8 @@ class QuestCard extends StatelessWidget {
           AspectRatio(
             aspectRatio: 4 / 3,
             child: quest.coverImagePath != null
-                ? LocalPhoto(path: quest.coverImagePath)
-                : QuestCoverArt(category: quest.category),
+                ? MdLocalPhoto(path: quest.coverImagePath)
+                : MdQuestCoverArt(category: quest.category),
           ),
           Padding(
             padding: const EdgeInsets.all(AppSpacing.ms),
@@ -75,7 +75,7 @@ class QuestCard extends StatelessWidget {
                       ),
                     ),
                     if (people.isNotEmpty)
-                      ParticipantAvatarStack(people: people, radius: 10),
+                      MdParticipantAvatarStack(people: people, radius: 10),
                   ],
                 ),
               ],
@@ -89,8 +89,8 @@ class QuestCard extends StatelessWidget {
 
 /// Illustrated stand-in cover for a Quest without a photo: a warm tint and
 /// the category's icon, so cards still feel distinct. See CLAUDE.md §30.
-class QuestCoverArt extends StatelessWidget {
-  const QuestCoverArt({super.key, required this.category});
+class MdQuestCoverArt extends StatelessWidget {
+  const MdQuestCoverArt({super.key, required this.category});
 
   final String category;
 
@@ -138,20 +138,20 @@ class QuestCoverArt extends StatelessWidget {
 /// illustrated art. For single, large heroes (Today's Quest, the intro) —
 /// shelf cards keep the art so they don't repeat the category banner. See
 /// design system §14.
-class QuestHeroCover extends StatelessWidget {
-  const QuestHeroCover({super.key, required this.quest});
+class MdQuestHeroCover extends StatelessWidget {
+  const MdQuestHeroCover({super.key, required this.quest});
 
   final Quest quest;
 
   @override
   Widget build(BuildContext context) {
     if (quest.coverImagePath != null) {
-      return LocalPhoto(path: quest.coverImagePath);
+      return MdLocalPhoto(path: quest.coverImagePath);
     }
     final example = questCategoryExample(quest.category);
-    if (example == null) return QuestCoverArt(category: quest.category);
+    if (example == null) return MdQuestCoverArt(category: quest.category);
 
-    return PhotoboothPrint(
+    return MdPhotoboothPrint(
       image: ResizeImage(AssetImage(example.asset), width: 640),
       focus: example.focus,
       note: example.tagline,

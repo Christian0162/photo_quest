@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
-import '../atoms/primary_button.dart';
+import '../atoms/md_primary_button.dart';
 
 /// Warm, encouraging empty state — never a bare "No data found." The
-/// [EmptyState.error] variant says what happened and offers a retry, never
+/// [MdEmptyState.error] variant says what happened and offers a retry, never
 /// a raw exception. See CLAUDE.md §42, §44, design system §40-42.
-class EmptyState extends StatelessWidget {
-  const EmptyState({
+class MdEmptyState extends StatelessWidget {
+  const MdEmptyState({
     super.key,
     required this.icon,
     required this.title,
@@ -19,7 +19,7 @@ class EmptyState extends StatelessWidget {
   });
 
   /// A friendly failure with an optional "Try again" action.
-  EmptyState.error({
+  MdEmptyState.error({
     Key? key,
     required String title,
     String message = 'Something went wrong. Please try again.',
@@ -33,7 +33,7 @@ class EmptyState extends StatelessWidget {
          onDark: onDark,
          action: onRetry == null
              ? null
-             : SecondaryButton(
+             : MdSecondaryButton(
                  label: 'Try again',
                  icon: Icons.refresh_rounded,
                  expand: false,

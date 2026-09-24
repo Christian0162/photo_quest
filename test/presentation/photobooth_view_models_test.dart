@@ -1,19 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_mode.dart';
+import 'package:photoquest/core/domain/camera/enum/capture_phase.dart';
 import 'package:photoquest/core/domain/memories/entities/photo.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_frame.dart';
+import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
 import 'package:photoquest/core/domain/memories/enum/photo_look.dart';
+import 'package:photoquest/core/domain/memories/enum/sticker_type.dart';
 import 'package:photoquest/core/domain/quests/entities/quest.dart';
 import 'package:photoquest/core/domain/quests/entities/quest_shot.dart';
 import 'package:photoquest/core/domain/quests/pose_ideas.dart';
-import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
-import 'package:photoquest/core/presentation/view_model/memories/keepsake_view_model.dart';
-import 'package:photoquest/core/domain/camera/enum/capture_phase.dart';
-import 'package:photoquest/core/domain/camera/enum/capture_mode.dart';
-import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
-import 'package:photoquest/core/domain/memories/enum/keepsake_frame.dart';
-import 'package:photoquest/core/domain/memories/enum/sticker_type.dart';
 import 'package:photoquest/core/presentation/types/camera/capture_state.dart';
 import 'package:photoquest/core/presentation/types/memories/keepsake_design.dart';
+import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
+import 'package:photoquest/core/presentation/view_model/memories/keepsake_view_model.dart';
 
 final _now = DateTime(2026, 9, 17);
 

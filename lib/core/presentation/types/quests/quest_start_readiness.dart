@@ -1,4 +1,3 @@
-
 /// Whether a Quest can begin now, and a short line explaining why not (or
 /// what's next). See CLAUDE.md §16A, §37.
 class QuestStartReadiness {

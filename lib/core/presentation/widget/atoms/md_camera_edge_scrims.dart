@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../../../../config/constant/app_colors.dart';
 
-class CameraEdgeScrims extends StatelessWidget {
-  const CameraEdgeScrims({super.key});
+class MdCameraEdgeScrims extends StatelessWidget {
+  const MdCameraEdgeScrims({super.key});
 
   @override
   Widget build(BuildContext context) {
