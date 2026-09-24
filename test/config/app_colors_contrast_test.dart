@@ -35,6 +35,8 @@ void main() {
       AppColors.successSurface,
     ),
     'error on cream': (AppColors.error, AppColors.background),
+    'muted icons on the nav dock': (AppColors.onDockMuted, AppColors.dock),
+    'selected tab on cream pill': (AppColors.textPrimary, AppColors.warmCream),
     'cream on charcoal (snackbar)': (
       AppColors.warmCream,
       AppColors.warmCharcoal,

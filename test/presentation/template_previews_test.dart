@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:photoquest/core/presentation/widget/template/capture_template_preview.dart';
 import 'package:photoquest/core/presentation/widget/template/create_quest_template_preview.dart';
 import 'package:photoquest/core/presentation/widget/template/home_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/template/keepsake_template_preview.dart';
 import 'package:photoquest/core/presentation/widget/template/memories_template_preview.dart';
 import 'package:photoquest/core/presentation/widget/template/memory_detail_template_preview.dart';
 import 'package:photoquest/core/presentation/widget/template/memory_reveal_template_preview.dart';
@@ -31,6 +32,15 @@ void main() {
     'create quest review': createQuestTemplateReviewPreview,
     'capture instruction': captureTemplateInstructionPreview,
     'capture countdown': captureTemplateCountdownPreview,
+    'capture pose idea': captureTemplatePoseIdeaPreview,
+    'capture GIF burst': captureTemplateGifPreview,
+    'capture 360 recording': captureTemplateOrbitPreview,
+    'capture processing': captureTemplateProcessingPreview,
+    'capture boomerang hold': captureTemplateBoomerangHoldPreview,
+    'keepsake strip': keepsakeTemplatePreview,
+    'keepsake grid': keepsakeTemplateGridPreview,
+    'keepsake polaroid': keepsakeTemplatePolaroidPreview,
+    'keepsake loading': keepsakeTemplateLoadingPreview,
     'capture captured': captureTemplateCapturedPreview,
     'capture permission': captureTemplatePermissionPreview,
     'memory reveal': memoryRevealTemplatePreview,

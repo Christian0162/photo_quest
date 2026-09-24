@@ -95,6 +95,24 @@ void main() {
 
     CreateQuestDraft draft() => container.read(createQuestViewModelProvider);
 
+    test('shots can be reordered and a removed shot put back', () {
+      const a = DraftShot(instruction: 'A');
+      const b = DraftShot(instruction: 'B');
+      const c = DraftShot(instruction: 'C');
+      viewModel
+        ..addShot(a)
+        ..addShot(b)
+        ..addShot(c)
+        ..moveShot(0, 2);
+      expect([for (final s in draft().shots) s.instruction], ['B', 'C', 'A']);
+
+      viewModel.removeShotAt(1);
+      expect([for (final s in draft().shots) s.instruction], ['B', 'A']);
+
+      viewModel.insertShotAt(1, c);
+      expect([for (final s in draft().shots) s.instruction], ['B', 'C', 'A']);
+    });
+
     test('a quest needs a name before moving on', () {
       expect(draft().blocker, 'Give your quest a name.');
       viewModel.nextStep();
@@ -171,13 +189,28 @@ void main() {
       expect(readiness.canStart, isTrue);
     });
 
+    test('everyone being in is called out, not just allowed', () async {
+      final readiness = await _readiness(
+        type: 'group',
+        participants: [_participant('accepted')],
+      );
+      expect(readiness.everyoneIn, isTrue);
+      expect(readiness.hint, contains("Everyone's in"));
+
+      final waiting = await _readiness(
+        type: 'group',
+        participants: [_participant('invited')],
+      );
+      expect(waiting.everyoneIn, isFalse);
+    });
+
     test('a quest without shots cannot start', () async {
       final readiness = await _readiness(type: 'solo', shots: const []);
       expect(readiness.canStart, isFalse);
     });
   });
 
-  test('memories are grouped by month, newest first', () async {
+  test('memories are grouped by month, newest first', () {
     MemorySummary summary(String id, DateTime at) => MemorySummary(
       memory: Memory(
         id: id,
@@ -191,20 +224,11 @@ void main() {
       people: const [],
     );
 
-    final container = ProviderContainer(
-      overrides: [
-        memoryListProvider.overrideWith(
-          (ref) => [
-            summary('a', DateTime(2026, 9, 20)),
-            summary('b', DateTime(2026, 9, 2)),
-            summary('c', DateTime(2025, 12, 24)),
-          ],
-        ),
-      ],
-    );
-    addTearDown(container.dispose);
-
-    final months = await container.read(memoriesByMonthProvider.future);
+    final months = groupByMonth([
+      summary('a', DateTime(2026, 9, 20)),
+      summary('b', DateTime(2026, 9, 2)),
+      summary('c', DateTime(2025, 12, 24)),
+    ]);
 
     expect(
       [for (final m in months) m.month],
@@ -212,4 +236,97 @@ void main() {
     );
     expect([for (final s in months.first.memories) s.memory.id], ['a', 'b']);
   });
+
+  test('the memory box filters by this day, this month, or all', () async {
+    final now = DateTime.now();
+    MemorySummary summary(String id, DateTime at) => MemorySummary(
+      memory: Memory(
+        id: id,
+        questSessionId: 'session-$id',
+        title: id,
+        capturedAt: at,
+        createdAt: at,
+        updatedAt: at,
+      ),
+      coverPhoto: null,
+      people: const [],
+    );
+    // Earlier today, this day last year, and two months ago.
+    final memories = [
+      summary('today', now),
+      summary('last-year', DateTime(now.year - 1, now.month, now.day)),
+      summary(
+        'earlier',
+        DateTime(now.year - 1, now.month, 1).subtract(const Duration(days: 40)),
+      ),
+    ];
+    final container = ProviderContainer(
+      overrides: [memoryListProvider.overrideWith((ref) => memories)],
+    );
+    addTearDown(container.dispose);
+    await container.read(memoryListProvider.future);
+
+    MemoryBox box() => container.read(memoryBoxProvider).requireValue;
+    List<String> ids() => [
+      for (final month in box().months)
+        for (final s in month.memories) s.memory.id,
+    ];
+
+    expect(box().filter, MemoryFilter.allJourney);
+    expect(ids(), ['today', 'last-year', 'earlier']);
+
+    container
+        .read(memoryFilterSelectionProvider.notifier)
+        .select(MemoryFilter.thisDay);
+    expect(ids(), ['today', 'last-year']);
+
+    container
+        .read(memoryFilterSelectionProvider.notifier)
+        .select(MemoryFilter.thisMonth);
+    expect(ids(), ['today']);
+
+    expect(box().counts, {
+      MemoryFilter.thisDay: 2,
+      MemoryFilter.thisMonth: 1,
+      MemoryFilter.allJourney: 3,
+    });
+  });
+
+  test(
+    'on this day resurfaces a memory from this date in a past year',
+    () async {
+      final today = DateTime.now();
+      MemorySummary summary(String id, DateTime at) => MemorySummary(
+        memory: Memory(
+          id: id,
+          questSessionId: 'session-$id',
+          title: id,
+          capturedAt: at,
+          createdAt: at,
+          updatedAt: at,
+        ),
+        coverPhoto: null,
+        people: const [],
+      );
+
+      ProviderContainer containerWith(List<MemorySummary> memories) {
+        final container = ProviderContainer(
+          overrides: [memoryListProvider.overrideWith((ref) => memories)],
+        );
+        addTearDown(container.dispose);
+        return container;
+      }
+
+      final lastYear = DateTime(today.year - 1, today.month, today.day);
+      final found = await containerWith([
+        summary('today', today),
+        summary('last-year', lastYear),
+      ]).read(onThisDayMemoryProvider.future);
+      expect(found?.memory.id, 'last-year');
+
+      final none = await containerWith([summary('today', today)])
+          .read(onThisDayMemoryProvider.future);
+      expect(none, isNull);
+    },
+  );
 }

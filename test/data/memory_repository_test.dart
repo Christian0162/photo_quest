@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:photoquest/core/data/database/app_database.dart';
 import 'package:photoquest/core/data/repositories/memory_repository.dart';
+import 'package:photoquest/core/domain/memories/entities/photo.dart';
 
 void main() {
   late AppDatabase db;
@@ -64,5 +65,25 @@ void main() {
 
     expect(first, isNot(second));
     expect(await repo.getMemories(), hasLength(2));
+  });
+
+  test('a GIF, boomerang or 360° shot keeps its kind and poster', () async {
+    final memoryId = await startMemory();
+    await repo.addPhoto(
+      id: 'spin',
+      memoryId: memoryId,
+      originalPath: '/videos/spin.mp4',
+      thumbnailPath: '/thumbnails/spin.jpg',
+      position: 0,
+      width: 720,
+      height: 1280,
+      kind: PhotoKind.video,
+    );
+    await addPhoto(memoryId, 'still', 1);
+
+    final photos = await repo.getPhotos(memoryId);
+    expect(photos.map((p) => p.kind), [PhotoKind.video, PhotoKind.photo]);
+    expect(photos.first.stillPath, '/thumbnails/spin.jpg');
+    expect(photos.last.stillPath, '/originals/still.jpg');
   });
 }

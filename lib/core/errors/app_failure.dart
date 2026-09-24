@@ -35,3 +35,17 @@ class NotFoundFailure extends AppFailure {
     super.message = "We couldn't find what you were looking for.",
   ]);
 }
+
+class GalleryAccessFailure extends AppFailure {
+  const GalleryAccessFailure([
+    super.message =
+        "Photo Quest can't save to your photos yet. You can allow it in your "
+        "phone's settings.",
+  ]);
+}
+
+class GallerySaveFailure extends AppFailure {
+  const GallerySaveFailure([
+    super.message = "We couldn't save that to your photos. Please try again.",
+  ]);
+}
