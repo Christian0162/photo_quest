@@ -38,10 +38,19 @@ class MemoryRepository {
             capturedAt: r.capturedAt,
             width: r.width,
             height: r.height,
+            kind: r.kind,
           ),
         )
         .toList();
   }
+
+  /// The saved keepsake design for [memoryId] (JSON), or null if it was
+  /// never decorated.
+  Future<String?> getKeepsakeDesign(String memoryId) async =>
+      (await _dao.getMemoryById(memoryId))?.keepsakeDesign;
+
+  Future<void> saveKeepsakeDesign(String memoryId, String design) =>
+      _dao.updateKeepsakeDesign(memoryId, design);
 
   Future<List<String>> getPersonIds(String memoryId) =>
       _dao.getPersonIdsForMemory(memoryId);
@@ -129,6 +138,7 @@ class MemoryRepository {
     required int position,
     required int width,
     required int height,
+    String kind = PhotoKind.photo,
   }) async {
     final capturedAt = DateTime.now();
 
@@ -143,6 +153,7 @@ class MemoryRepository {
         capturedAt: capturedAt,
         width: width,
         height: height,
+        kind: Value(kind),
       ),
     );
 
@@ -156,6 +167,7 @@ class MemoryRepository {
       capturedAt: capturedAt,
       width: width,
       height: height,
+      kind: kind,
     );
   }
 

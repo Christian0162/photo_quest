@@ -105,6 +105,47 @@ final class ImageProcessingServiceProvider
 String _$imageProcessingServiceHash() =>
     r'70b24a2fc7a9a8ac60990befec4e62a717668ca4';
 
+@ProviderFor(galleryService)
+final galleryServiceProvider = GalleryServiceProvider._();
+
+final class GalleryServiceProvider
+    extends $FunctionalProvider<GalleryService, GalleryService, GalleryService>
+    with $Provider<GalleryService> {
+  GalleryServiceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'galleryServiceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$galleryServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<GalleryService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GalleryService create(Ref ref) {
+    return galleryService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GalleryService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GalleryService>(value),
+    );
+  }
+}
+
+String _$galleryServiceHash() => r'83fa68da4700c06c4e4e5146f3ead0b0d3e1b222';
+
 @ProviderFor(sharingService)
 final sharingServiceProvider = SharingServiceProvider._();
 

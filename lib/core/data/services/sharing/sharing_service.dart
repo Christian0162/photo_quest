@@ -6,13 +6,19 @@ import 'package:share_plus/share_plus.dart';
 /// the person explicitly taps Share — nothing is uploaded by the app itself.
 /// See CLAUDE.md §11, §56.
 class SharingService {
-  Future<void> sharePhoto(
+  Future<void> sharePhoto(String path, {required String text, Rect? origin}) =>
+      shareFile(path, mimeType: 'image/jpeg', text: text, origin: origin);
+
+  /// Shares any saved keepsake file — a photo strip, a GIF or boomerang,
+  /// or a 360° clip.
+  Future<void> shareFile(
     String path, {
+    required String mimeType,
     required String text,
     Rect? origin,
   }) async {
     await Share.shareXFiles(
-      [XFile(path, mimeType: 'image/jpeg')],
+      [XFile(path, mimeType: mimeType)],
       text: text,
       sharePositionOrigin: origin,
     );
