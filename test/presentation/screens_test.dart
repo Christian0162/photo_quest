@@ -226,7 +226,9 @@ void main() {
     await tester.drag(page, const Offset(0, -200));
     await tester.pumpAndSettle();
     // Only one journal entry in the samples, so one cover to open.
-    await tester.tap(find.bySemanticsLabel('View the photos'));
+    await tester.tap(
+      find.bySemanticsLabel('View the photos. You and Buddy, together.'),
+    );
     expect(viewed, ('Buddy’s Park Day', 0));
 
     await tester.ensureVisible(find.text('Buddy’s Park Day'));

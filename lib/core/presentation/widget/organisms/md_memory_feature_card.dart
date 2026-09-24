@@ -9,27 +9,27 @@ import '../../types/memories/memory_summary.dart';
 import '../atoms/md_occasion_chip.dart';
 import '../atoms/md_open_memory_link.dart';
 import '../atoms/md_participant_avatar_stack.dart';
+import '../atoms/md_sticky_note.dart';
 import '../molecules/md_app_card.dart';
 import '../molecules/md_memory_cover_hero.dart';
 import '../molecules/md_photo_fan.dart';
 
 /// The first memory of a month, shown like a page taped into a journal:
-/// when it was, the prints fanned out in a dark booth tray, who was there,
-/// the title, a few words, and its tags. Tap a print to see it full screen;
-/// tap anywhere else to open the memory. See CLAUDE.md §36-38, design
-/// system §33-35.
+/// when it was, the prints fanned out in a dark booth tray with the note
+/// clipped on top like a sticky note, who was there, the title and its
+/// tags. Tap a print to see it full screen; tap anywhere else to open the
+/// memory. See CLAUDE.md §2.5, §36-38, design system §33-35.
 ///
 /// ```text
 ///            ▭ tape
 /// ┌──────────────────────────────┐
 /// │ SATURDAY, OCT 14 · 8:42 PM   ⟲ 2 weeks ago │
-/// │ ┌──────────────────────────┐ │
+/// │ ┌──────────────────────────📎[note]│
 /// │ │     ╱▭╲ ┌──┐ ╱▭╲         │ │
 /// │ │ ▣ 3 shots                │ │
 /// │ └──────────────────────────┘ │
 /// │ With Jamie                   │
 /// │ Our Anniversary ♥            │
-/// │ Back at the little café…     │
 /// │ (♥ Anniversary) (For Us)     │
 /// │                Open memory › │
 /// └──────────────────────────────┘
@@ -96,40 +96,56 @@ class MdMemoryFeatureCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.ms),
-          // The prints lie in a dark tray, like fresh from the booth.
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: AppColors.printWell,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.md,
-                AppSpacing.lg,
-                AppSpacing.md,
-                AppSpacing.ms,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MdPhotoFan(
-                    // Thumbnails keep a long list light; the viewer opens
-                    // the full-size shots.
-                    paths: [for (final photo in photos) photo.thumbnailPath],
-                    onOpen: onViewPhoto,
-                    front: (print) =>
-                        MdMemoryCoverHero(memoryId: memory.id, child: print),
+          const SizedBox(height: AppSpacing.lg),
+          // The prints lie in a dark tray, like fresh from the booth, with
+          // the memory's note clipped on like a sticky note fresh off the
+          // shoot. See CLAUDE.md §2.5, §36.
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.printWell,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.md,
+                    AppSpacing.lg,
+                    AppSpacing.md,
+                    AppSpacing.ms,
                   ),
-                  const SizedBox(height: AppSpacing.sm),
-                  _TrayLabel(
-                    label: photos.length == 1
-                        ? '1 shot'
-                        : '${photos.length} shots',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MdPhotoFan(
+                        // Thumbnails keep a long list light; the viewer
+                        // opens the full-size shots.
+                        paths: [
+                          for (final photo in photos) photo.thumbnailPath,
+                        ],
+                        onOpen: onViewPhoto,
+                        front: (print) => MdMemoryCoverHero(
+                          memoryId: memory.id,
+                          child: print,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      _TrayLabel(
+                        label: photos.length == 1
+                            ? '1 shot'
+                            : '${photos.length} shots',
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              Positioned(
+                top: -AppSpacing.md,
+                right: AppSpacing.sm,
+                child: MdStickyNote(text: summary.description),
+              ),
+            ],
           ),
           if (withWhom.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.sm),
@@ -162,13 +178,6 @@ class MdMemoryFeatureCard extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            summary.description,
-            style: AppTypography.bodyLarge.copyWith(color: AppColors.textMuted),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: AppSpacing.md),
           Wrap(
