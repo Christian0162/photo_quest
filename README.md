@@ -94,16 +94,76 @@ memories are data (SQLite holds only metadata).
 
 ```text
 lib/
-├── config/        # design tokens (AppColors, AppTypography, …) and routing
+├── main.dart              # bootstraps app.dart only
+├── app.dart               # root MaterialApp.router
+├── config/
+│   ├── constant/          # AppColors, AppTypography, AppSpacing, AppConstants, AppTheme
+│   └── routes/            # app_router.dart, app_shell.dart — all navigation lives here
 └── core/
-    ├── domain/        # entities: Quest, Person, Memory, Photo, …
-    ├── data/          # Drift database, repositories, services
-    └── presentation/  # screen → view_model → template, atomic widgets
+    ├── domain/                # one folder per domain area
+    │   ├── quests/entities/
+    │   ├── memories/entities/
+    │   └── people/entities/
+    ├── data/
+    │   ├── database/          # app_database.dart, tables/, daos/, seed/
+    │   ├── services/          # camera/, storage/, image/, sharing/, gallery/
+    │   └── repositories/      # flat: one repository (+ provider) per aggregate
+    └── presentation/
+        ├── screen/            # one subfolder per domain area (home, quests, camera, memories, people, settings)
+        ├── view_model/        # mirrors screen/, one ViewModel per screen
+        ├── types/             # UI-only state/type helpers, mirrors screen/
+        └── widget/            # shared, atomic-design tiers
+            ├── atoms/         # PrimaryButton, PersonAvatar, …
+            ├── molecules/     # AppCard, EmptyState, …
+            ├── organisms/     # AppScaffold, QuestCard, MemoryCard, …
+            └── templates/     # one *_template.dart per screen + *_template_preview.dart
 ```
 
-Each screen is split into a thin **Screen** (wiring and navigation), a
-Riverpod **View model** (state and logic) and a **Template** (pure page
-design with a widget preview). The full product and engineering spec is in
+Each screen is split into three files that live in matching subfolders,
+and each one has exactly one job:
+
+- **Screen** (`screen/<area>/`) — **logic lives here.** A
+  `ConsumerWidget` that watches ViewModels, wires callbacks, navigation,
+  dialogs, sheets and snackbars. No layout.
+- **View model** (`view_model/<area>/`) — state, validation, derived
+  data and actions (Riverpod `Notifier`/`AsyncNotifier`).
+- **Template** (`widget/template/`) — **no logic, ever.** The full page
+  layout as plain data + callbacks in; it never touches `ref`, the
+  router, or a repository/service. If it needs to know something, it's
+  passed in as a parameter, not looked up.
+
+Only create a domain-area subfolder, or a new atomic-tier entry, when a
+screen or component actually exists for it — don't scaffold empty
+folders ahead of need. See [CLAUDE.md §22–23](CLAUDE.md) for the full
+rationale.
+
+### Naming conventions
+
+| What          | Convention             | Example                          |
+| ------------- | ----------------------- | --------------------------------- |
+| Files         | `snake_case.dart`        | `memory_detail_view_model.dart`  |
+| Classes       | `PascalCase`             | `MemoryDetailViewModel`          |
+| Variables     | `camelCase`              | `selectedParticipants`           |
+| Screens (logic)   | `<name>_screen.dart` | `memory_detail_screen.dart`      |
+| View models   | `<name>_view_model.dart` | `memory_detail_view_model.dart`  |
+| Templates (no logic) | `<name>_template.dart` | `memory_detail_template.dart` |
+| Template previews | `<name>_template_preview.dart` | `memory_detail_template_preview.dart` |
+| Atoms         | `md_<name>.dart` in `widget/atoms/` | `md_primary_button.dart` → `MdPrimaryButton` |
+| Molecules     | `md_<name>.dart` in `widget/molecules/` | `md_app_card.dart` → `MdAppCard` |
+| Organisms     | `md_<name>.dart` in `widget/organisms/` | `md_app_scaffold.dart` → `MdAppScaffold` |
+| Repositories  | `<aggregate>_repository.dart` | `quest_repository.dart`    |
+| Drift tables  | `<name>_table.dart`      | `quest_shots_table.dart`         |
+| DAOs          | `<name>_dao.dart`        | `quests_dao.dart`                |
+
+Atoms, molecules and organisms all carry an `md_` file prefix (classes:
+`Md` + `PascalCase`, e.g. `MdPrimaryButton`) regardless of tier — the
+tier is expressed only by which folder the file lives in, not by a
+different prefix per tier. A screen, its ViewModel and its template
+always share the same base name
+(`memory_detail_*`) across their three folders, so they're easy to find
+side by side. Avoid vague names like `helper.dart`, `manager.dart` or
+`utils2.dart` — prefer specific ones (`photo_storage_service.dart`, not
+`storage_helper.dart`). The full product and engineering spec is in
 [CLAUDE.md](CLAUDE.md).
 
 ## Versioning
