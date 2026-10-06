@@ -135,7 +135,10 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pump(const Duration(milliseconds: 900));
+    // The reveal advances at most 50ms per frame, so pump frame by frame.
+    for (var i = 0; i < 44; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
     expect(
       find.text('Do something together. Keep the memory.'),
       findsOneWidget,
@@ -144,7 +147,9 @@ void main() {
     // A tap jumps to the outro instead of waiting out the whole reveal.
     await tester.tapAt(const Offset(10, 10));
     await tester.pump(); // the outro starts on this frame
-    await tester.pump(const Duration(milliseconds: 420));
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
     await tester.pump();
     expect(find.text('Do something together. Keep the memory.'), findsNothing);
     expect(find.text("TODAY'S QUEST"), findsOneWidget);
