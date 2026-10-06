@@ -74,7 +74,11 @@ text and **Caveat** for handwritten touches.
    **platform-tools** (this is where `adb` lives) and **command-line tools**.
    Without Android Studio, download the
    [command-line tools](https://developer.android.com/studio#command-line-tools-only)
-   and run `sdkmanager "platform-tools" "platforms;android-34"`.
+   and run `sdkmanager "platform-tools"`. Then install the Android platform
+   your Flutter SDK requires with `sdkmanager "platforms;android-<N>"`
+   (it's the `compileSdk` value the build asks for; if you skip this, Gradle
+   downloads the missing platform on the first `flutter run` once the licenses
+   are accepted).
 3. Accept the licenses and check everything:
 
    ```bash
