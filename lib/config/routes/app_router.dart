@@ -25,7 +25,7 @@ import 'app_shell.dart';
 part 'app_router.g.dart';
 
 /// Centralized route paths. Screens navigate through these constants
-/// instead of hardcoding path strings. See CLAUDE.md §10.
+/// instead of hardcoding path strings.
 abstract final class AppRoutes {
   static const home = '/';
   static const quests = '/quests';
@@ -240,7 +240,7 @@ GoRouter appRouter(Ref ref) {
 
 /// Stepping into the photobooth: the screen dips to dark and the booth
 /// settles in from a slight zoom, like walking behind the curtain. Plain
-/// fade under reduced motion. See design system §49 ("card → camera").
+/// fade under reduced motion.
 class _BoothTransitionPage extends CustomTransitionPage<void> {
   _BoothTransitionPage({
     super.key,

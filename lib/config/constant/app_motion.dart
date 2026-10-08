@@ -1,34 +1,27 @@
 import 'package:flutter/widgets.dart';
 
-/// Animation durations and curves. See CLAUDE.md §45, design system §48-50.
+/// Animation durations and curves.
 abstract final class AppMotion {
-  /// Press feedback, toggles.
   static const micro = Duration(milliseconds: 140);
 
-  /// Small state changes (selection, chips).
   static const short = Duration(milliseconds: 220);
 
-  /// Page-level transitions.
   static const medium = Duration(milliseconds: 320);
 
-  /// Emotional reveals (quest complete, memory reveal).
   static const reveal = Duration(milliseconds: 560);
 
-  /// Stickers and badges landing with a wobble.
   static const pop = Duration(milliseconds: 640);
 
   static const standard = Curves.easeOutCubic;
   static const emphasized = Curves.easeOutBack;
 
-  /// Springy settle after a release or a pop-in; overshoots and wobbles.
   static const spring = Curves.elasticOut;
 
   /// Whether the person asked the OS to reduce motion. Essential state
-  /// feedback stays; movement and scale are dropped. See design system §50.
+  /// feedback stays; movement and scale are dropped.
   static bool reduced(BuildContext context) =>
       MediaQuery.maybeDisableAnimationsOf(context) ?? false;
 
-  /// [duration], or zero when reduced motion is on.
   static Duration of(BuildContext context, Duration duration) =>
       reduced(context) ? Duration.zero : duration;
 }

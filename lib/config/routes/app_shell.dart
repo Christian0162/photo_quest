@@ -13,21 +13,6 @@ import '../constant/app_shadows.dart';
 import '../constant/app_spacing.dart';
 import 'app_router.dart';
 
-/// Bottom chrome shared by Home, Memories and People: the quest prompt
-/// floating over a charcoal dock of three tabs, like the body of a camera:
-///
-/// ```text
-/// ╭────────────────────────────────────╮
-/// │ (✦) Start a quest              (+) │
-/// ╰────────────────────────────────────╯
-/// ╭────────────────────────────────────╮
-/// │     (⌂)        ▢        👥         │
-/// ╰────────────────────────────────────╯
-/// ```
-///
-/// The prompt is the app's primary action (start a quest). It tucks away
-/// while you scroll down to read, and comes back as soon as you scroll up
-/// or switch tabs. See CLAUDE.md §32, design system §12, §58.
 class AppShell extends StatefulWidget {
   const AppShell({super.key, required this.navigationShell});
 
@@ -162,7 +147,7 @@ class _AppShellState extends State<AppShell> {
 /// The dock's tabs: equal slots with one cream bubble behind the selected
 /// icon. On a switch the bubble glides to the new tab, stretching a little
 /// mid-flight like a drop of liquid, then settles. Selection is also shown
-/// by the filled icon, never by color alone (CLAUDE.md §65); under reduced
+/// by the filled icon, never by color alone; under reduced
 /// motion the bubble jumps.
 class _DockTabs extends StatefulWidget {
   const _DockTabs({
@@ -183,7 +168,6 @@ class _DockTabsState extends State<_DockTabs>
     with SingleTickerProviderStateMixin {
   static const _bubbleWidth = 56.0;
 
-  /// How much wider the bubble gets at the middle of its glide.
   static const _stretch = 0.55;
 
   late final AnimationController _controller = AnimationController(
@@ -195,7 +179,6 @@ class _DockTabsState extends State<_DockTabs>
 
   double get _progress => Curves.easeInOutCubic.transform(_controller.value);
 
-  /// Where the bubble is right now, in tab slots.
   double get _position => _from + (_to - _from) * _progress;
 
   @override
