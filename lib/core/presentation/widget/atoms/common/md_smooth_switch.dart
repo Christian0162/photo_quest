@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_motion.dart';
 
 /// Cross-fades between loading and loaded content with a gentle size
 /// settle, so the page doesn't jump when data arrives. Children need

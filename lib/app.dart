@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config/constant/app_theme.dart';
 import 'config/routes/app_router.dart';
-import 'core/presentation/widget/organisms/md_launch_reveal.dart';
+import 'core/presentation/widget/organisms/common/md_launch_reveal.dart';
 
 class PhotoQuestApp extends ConsumerWidget {
   const PhotoQuestApp({super.key});

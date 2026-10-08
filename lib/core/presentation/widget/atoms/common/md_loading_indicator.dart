@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
 
 /// Localized loading indicator, optionally with a short human message.
 /// Prefer a [MdSkeletonBox] layout when the shape of the content is known.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
 
 /// Pins a screen's primary action to the bottom so it's always one thumb
 /// away, above the home indicator. See design system §58.

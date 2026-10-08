@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_motion.dart';
 
 /// Scales its child down slightly while pressed so key actions feel
 /// physical, like a photobooth button. Skipped under reduced motion. See

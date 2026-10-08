@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../molecules/md_bottom_action_bar.dart';
+import '../../molecules/common/md_bottom_action_bar.dart';
 
 /// The one page shell every template is built on: an optional app bar, safe
 /// area insets, an optional pinned bottom action, and back-button

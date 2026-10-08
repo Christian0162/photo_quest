@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:go_router/go_router.dart';
 
-import '../../core/presentation/widget/atoms/md_fade_slide_in.dart';
-import '../../core/presentation/widget/molecules/md_quest_prompt_bar.dart';
+import '../../core/presentation/widget/atoms/common/md_fade_slide_in.dart';
+import '../../core/presentation/widget/molecules/quests/md_quest_prompt_bar.dart';
 import '../../core/utils/app_haptics.dart';
 import '../constant/app_colors.dart';
 import '../constant/app_motion.dart';

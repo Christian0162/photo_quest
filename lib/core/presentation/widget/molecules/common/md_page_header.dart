@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
 
 /// The top of a tab page: a small kicker, the page title and one muted
 /// line, with an optional action on the right.

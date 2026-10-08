@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
 
 /// Eases its child up and in once, when first shown. Give sibling sections
 /// increasing [order]s for a short stagger that guides the eye down the

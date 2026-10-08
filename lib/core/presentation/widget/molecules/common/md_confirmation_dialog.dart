@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../atoms/md_primary_button.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../atoms/common/md_primary_button.dart';
 
 /// Asks for explicit confirmation before an action that loses something
 /// ("Leave quest?"). The safe choice is the primary button. Resolves to

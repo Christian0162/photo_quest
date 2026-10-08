@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_spacing.dart';
 
 /// Fades and lifts [child] in as [animation] runs 0 → 1.
 class MdAppearTransition extends AnimatedWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../utils/app_haptics.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../utils/app_haptics.dart';
 import 'md_pressable_scale.dart';
 
 /// The app's primary call-to-action. Large, warm, one per screen. Shows an

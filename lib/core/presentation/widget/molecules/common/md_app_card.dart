@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_shadows.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../atoms/md_pressable_scale.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_shadows.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../atoms/common/md_pressable_scale.dart';
 
 /// Shared rounded surface for memory/quest/person cards — a photo print on
 /// the cream table. Tappable cards get press feedback and a button role.

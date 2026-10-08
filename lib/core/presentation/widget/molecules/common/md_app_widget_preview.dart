@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_theme.dart';
+import '../../../../../config/constant/app_theme.dart';
 
 /// The phone frame every template preview renders at (`@Preview` only
 /// accepts literals and public symbols).
