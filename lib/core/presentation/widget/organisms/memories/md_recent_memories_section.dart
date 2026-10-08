@@ -23,7 +23,7 @@ class MdRecentMemoriesSection extends StatelessWidget {
   static const _cardWidth = 168.0;
 
   static double _shelfHeight(BuildContext context) =>
-      MdMemoryCard.heightFor(_cardWidth, MediaQuery.textScalerOf(context));
+      MdMemoryCard.heightFor(_cardWidth);
 
   /// Placeholder shelf with the same footprint, so nothing jumps on load.
   static Widget skeleton(BuildContext context) {

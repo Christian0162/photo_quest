@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../domain/memories/enum/memory_filter.dart';
 import '../../../types/memories/memory_box.dart';
@@ -43,6 +44,7 @@ class MemoriesTemplate extends StatelessWidget {
     required this.now,
     required this.onFilterChanged,
     required this.onRetry,
+    required this.onRefresh,
     required this.onStartQuest,
     required this.onOpenMemory,
     required this.onViewPhoto,
@@ -55,6 +57,9 @@ class MemoriesTemplate extends StatelessWidget {
   final DateTime now;
   final ValueChanged<MemoryFilter> onFilterChanged;
   final VoidCallback onRetry;
+
+  /// Pull down to fetch the memories again.
+  final Future<void> Function() onRefresh;
   final VoidCallback onStartQuest;
   final ValueChanged<MemorySummary> onOpenMemory;
 
@@ -69,102 +74,108 @@ class MemoriesTemplate extends StatelessWidget {
     final data = box.value;
 
     return MdAppScaffold(
-      body: CustomScrollView(
-        slivers: [
-          const SliverPadding(
-            padding: EdgeInsets.fromLTRB(
-              AppSpacing.gutter,
-              AppSpacing.md,
-              AppSpacing.gutter,
-              AppSpacing.lg,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: MdFadeSlideIn(
-                child: MdPageHeader(
-                  overline: 'YOUR MEMORY BOX',
-                  title: 'Memories',
-                  subtitle: 'Just for you and the people who were there.',
+      body: RefreshIndicator(
+        onRefresh: onRefresh,
+        color: AppColors.coralInk,
+        child: CustomScrollView(
+          // Always scrollable, so the pull works on a short or empty page.
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            const SliverPadding(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.gutter,
+                AppSpacing.md,
+                AppSpacing.gutter,
+                AppSpacing.lg,
+              ),
+              sliver: SliverToBoxAdapter(
+                child: MdFadeSlideIn(
+                  child: MdPageHeader(
+                    overline: 'Your memory box',
+                    title: 'Memories',
+                    subtitle: 'Just for you and the people who were there.',
+                  ),
                 ),
               ),
             ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.gutter,
-              0,
-              AppSpacing.gutter,
-              AppSpacing.md,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: MdFadeSlideIn(
-                order: 1,
-                child: MdSharedWithYouRow(onTap: onOpenShared),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.gutter,
+                0,
+                AppSpacing.gutter,
+                AppSpacing.md,
               ),
-            ),
-          ),
-          if (data != null && !data.isEmpty)
-            SliverToBoxAdapter(
-              child: MdFadeSlideIn(
-                order: 1,
-                child: MdMemoryFilterChips(
-                  selected: data.filter,
-                  counts: data.counts,
-                  onSelected: onFilterChanged,
+              sliver: SliverToBoxAdapter(
+                child: MdFadeSlideIn(
+                  order: 1,
+                  child: MdSharedWithYouRow(onTap: onOpenShared),
                 ),
               ),
             ),
-          ...box.when(
-            loading: () => [
-              SliverPadding(
-                padding: const EdgeInsets.all(AppSpacing.gutter),
-                sliver: SliverList.separated(
-                  itemCount: 2,
-                  separatorBuilder: (_, _) =>
-                      const SizedBox(height: AppSpacing.lg),
-                  itemBuilder: (_, _) =>
-                      const MdSkeletonBox(height: 420, radius: AppRadius.xl),
+            if (data != null && !data.isEmpty)
+              SliverToBoxAdapter(
+                child: MdFadeSlideIn(
+                  order: 1,
+                  child: MdMemoryFilterChips(
+                    selected: data.filter,
+                    counts: data.counts,
+                    onSelected: onFilterChanged,
+                  ),
                 ),
               ),
-            ],
-            error: (error, stack) => [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: MdEmptyState.error(
-                  title: "We couldn't open your memories",
-                  onRetry: onRetry,
+            ...box.when(
+              loading: () => [
+                SliverPadding(
+                  padding: const EdgeInsets.all(AppSpacing.gutter),
+                  sliver: SliverList.separated(
+                    itemCount: 2,
+                    separatorBuilder: (_, _) =>
+                        const SizedBox(height: AppSpacing.lg),
+                    itemBuilder: (_, _) =>
+                        const MdSkeletonBox(height: 420, radius: AppRadius.xl),
+                  ),
                 ),
-              ),
-            ],
-            data: (box) => box.isEmpty
-                ? [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: MdEmptyState(
-                        icon: Icons.photo_album_outlined,
-                        title: 'Your memories will live here',
-                        message: 'Ready to make the first one?',
-                        action: MdPrimaryButton(
-                          label: 'Start a quest',
-                          icon: Icons.auto_awesome_rounded,
-                          expand: false,
-                          onPressed: onStartQuest,
+              ],
+              error: (error, stack) => [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: MdEmptyState.error(
+                    title: "We couldn't open your memories",
+                    onRetry: onRetry,
+                  ),
+                ),
+              ],
+              data: (box) => box.isEmpty
+                  ? [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: MdEmptyState(
+                          icon: Icons.photo_album_outlined,
+                          title: 'Your memories will live here',
+                          message: 'Ready to make the first one?',
+                          action: MdPrimaryButton(
+                            label: 'Start a quest',
+                            icon: Icons.auto_awesome_rounded,
+                            expand: false,
+                            onPressed: onStartQuest,
+                          ),
                         ),
                       ),
-                    ),
-                  ]
-                : [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.gutter,
+                    ]
+                  : [
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.gutter,
+                        ),
+                        sliver: SliverList.list(children: _entries(box)),
                       ),
-                      sliver: SliverList.list(children: _entries(box)),
-                    ),
-                  ],
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: AppSpacing.tabScrollEnd),
-          ),
-        ],
+                    ],
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: AppSpacing.tabScrollEnd),
+            ),
+          ],
+        ),
       ),
     );
   }

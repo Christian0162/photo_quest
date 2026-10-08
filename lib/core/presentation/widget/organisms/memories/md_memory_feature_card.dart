@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_shadows.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../../../utils/date_labels.dart';
 import '../../../types/display_labels.dart';
 import '../../../types/memories/memory_summary.dart';
-import '../../atoms/quests/md_occasion_chip.dart';
+import '../../atoms/common/md_sticker.dart';
 import '../../atoms/memories/md_open_memory_link.dart';
-import '../../atoms/people/md_participant_avatar_stack.dart';
 import '../../atoms/memories/md_sticky_note.dart';
-import '../../molecules/common/md_app_card.dart';
+import '../../atoms/people/md_participant_avatar_stack.dart';
 import '../../molecules/memories/md_memory_cover_hero.dart';
 import '../../molecules/memories/md_photo_fan.dart';
 
-/// The first memory of a month, shown like a page taped into a journal:
-/// when it was, the prints fanned out in a dark booth tray with the note
-/// clipped on top like a sticky note, who was there, the title and its
-/// tags. Tap a print to see it full screen; tap anywhere else to open the
-/// memory. See CLAUDE.md §2.5, §36-38, design system §33-35.
+/// The first memory of a month, shown like a page taped into a journal: a
+/// dark booth tray with the prints fanned out and the note clipped on like
+/// a sticky note, and the kind of day, who was there, the title and the
+/// link to open it all inside the card. Tap a print to see it full screen;
+/// tap anywhere else to open the memory. See CLAUDE.md §2.5, §36-38, design
+/// system §33-35.
 ///
 /// ```text
 ///            ▭ tape
 /// ┌──────────────────────────────┐
-/// │ SATURDAY, OCT 14 · 8:42 PM   ⟲ 2 weeks ago │
-/// │ ┌──────────────────────────📎[note]│
-/// │ │     ╱▭╲ ┌──┐ ╱▭╲         │ │
-/// │ │ ▣ 3 shots                │ │
-/// │ └──────────────────────────┘ │
+/// │ (♥ Anniversary)   ⟲ 2 weeks ago │
+/// │       ╱▭╲ ┌──┐ ╱▭╲   [note]  │
+/// │ ▣ 3 shots                    │
 /// │ With Jamie                   │
-/// │ Our Anniversary ♥            │
-/// │ (♥ Anniversary) (For Us)     │
+/// │ Our Anniversary              │
+/// │ SATURDAY, OCT 14 · Date Night│
 /// │                Open memory › │
 /// └──────────────────────────────┘
 /// ```
@@ -61,144 +60,143 @@ class MdMemoryFeatureCard extends StatelessWidget {
         ? [?summary.coverPhoto]
         : summary.photos;
     final withWhom = MdParticipantAvatarStack.describe(summary.people);
-    final category = summary.questCategory;
+    final moment = memoryMoment(memory.capturedAt);
 
-    final card = MdAppCard(
-      onTap: onOpen,
-      radius: AppRadius.xl,
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.md,
-        AppSpacing.ml,
-        AppSpacing.md,
-        AppSpacing.md,
+    final card = DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: AppShadows.print,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: _MomentChip(label: memoryMoment(memory.capturedAt)),
-                ),
+      child: Material(
+        color: AppColors.printWell,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        clipBehavior: Clip.antiAlias,
+        child: Semantics(
+          button: true,
+          label: [
+            memory.title,
+            moment,
+            withWhom,
+          ].where((s) => s.isNotEmpty).join('. '),
+          child: InkWell(
+            onTap: onOpen,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.ml,
+                AppSpacing.md,
+                AppSpacing.md,
               ),
-              const SizedBox(width: AppSpacing.sm),
-              const Icon(
-                Icons.history_rounded,
-                size: AppIconSizes.sm,
-                color: AppColors.textMuted,
-              ),
-              const SizedBox(width: AppSpacing.xs),
-              Text(
-                relativeDay(memory.capturedAt, now),
-                style: AppTypography.caption,
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          // The prints lie in a dark tray, like fresh from the booth, with
-          // the memory's note clipped on like a sticky note fresh off the
-          // shoot. See CLAUDE.md §2.5, §36.
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.printWell,
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.md,
-                    AppSpacing.lg,
-                    AppSpacing.md,
-                    AppSpacing.ms,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // A Wrap, so a long "11 months ago" drops below the sticker
+                  // instead of squeezing it.
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
                     children: [
-                      MdPhotoFan(
-                        // Thumbnails keep a long list light; the viewer
-                        // opens the full-size shots.
-                        paths: [
-                          for (final photo in photos) photo.thumbnailPath,
-                        ],
-                        onOpen: onViewPhoto,
-                        front: (print) => MdMemoryCoverHero(
-                          memoryId: memory.id,
-                          child: print,
-                        ),
+                      MdSticker(
+                        label: occasion,
+                        icon: occasionIcon,
+                        tilt: -0.04,
                       ),
-                      const SizedBox(height: AppSpacing.sm),
-                      _TrayLabel(
-                        label: photos.length == 1
-                            ? '1 shot'
-                            : '${photos.length} shots',
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.history_rounded,
+                            size: AppIconSizes.sm,
+                            color: AppColors.warmCream,
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          Text(
+                            relativeDay(memory.capturedAt, now),
+                            style: AppTypography.caption.copyWith(
+                              color: AppColors.warmCream,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: AppSpacing.lg),
+                  // The prints lie in the tray, like fresh from the booth,
+                  // with the memory's note clipped on like a sticky note.
+                  // See CLAUDE.md §2.5, §36.
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MdPhotoFan(
+                            // Thumbnails keep a long list light; the viewer
+                            // opens the full-size shots.
+                            paths: [
+                              for (final photo in photos) photo.thumbnailPath,
+                            ],
+                            onOpen: onViewPhoto,
+                            front: (print) => MdMemoryCoverHero(
+                              memoryId: memory.id,
+                              child: print,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          _TrayLabel(
+                            label: photos.length == 1
+                                ? '1 shot'
+                                : '${photos.length} shots',
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        top: -AppSpacing.md,
+                        right: 0,
+                        child: MdStickyNote(text: summary.description),
+                      ),
+                    ],
+                  ),
+                  if (withWhom.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      withWhom,
+                      style: AppTypography.script.copyWith(
+                        fontSize: 20,
+                        color: AppColors.filmYellow,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    memory.title,
+                    style: AppTypography.heading1.copyWith(
+                      color: AppColors.warmCream,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    moment,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColors.warmCream,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.ms),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: MdOpenMemoryLink(onDark: true),
+                  ),
+                ],
               ),
-              Positioned(
-                top: -AppSpacing.md,
-                right: AppSpacing.sm,
-                child: MdStickyNote(text: summary.description),
-              ),
-            ],
-          ),
-          if (withWhom.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              withWhom,
-              style: AppTypography.script.copyWith(fontSize: 20),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
-          ],
-          const SizedBox(height: AppSpacing.sm),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Text(
-                  memory.title,
-                  style: AppTypography.heading1,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.xs),
-                child: Icon(
-                  occasionIcon,
-                  size: AppIconSizes.lg,
-                  color: AppColors.coralInk,
-                ),
-              ),
-            ],
           ),
-          const SizedBox(height: AppSpacing.md),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
-            children: [
-              MdOccasionChip(label: occasion, icon: occasionIcon),
-              if (category != null)
-                MdOccasionChip(
-                  label: category,
-                  icon: questCategoryIcon(category),
-                  color: AppColors.sunken,
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.ms),
-          const Align(
-            alignment: Alignment.centerRight,
-            child: MdOpenMemoryLink(),
-          ),
-        ],
+        ),
       ),
     );
 
@@ -229,33 +227,6 @@ class MdMemoryFeatureCard extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// "SATURDAY, OCT 14 · 8:42 PM" on a soft pill.
-class _MomentChip extends StatelessWidget {
-  const _MomentChip({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.ms,
-        vertical: AppSpacing.xs,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.sunken,
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-      ),
-      child: Text(
-        label,
-        style: AppTypography.caption.copyWith(letterSpacing: 0.6),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
     );
   }
 }

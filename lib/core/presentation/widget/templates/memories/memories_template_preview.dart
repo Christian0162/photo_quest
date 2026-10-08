@@ -15,6 +15,7 @@ Widget _memories(AsyncValue<MemoryBox> box) {
       now: PreviewSamples.today,
       onFilterChanged: (_) {},
       onRetry: () {},
+      onRefresh: () async {},
       onStartQuest: () {},
       onOpenMemory: (_) {},
       onViewPhoto: (_, _) {},
