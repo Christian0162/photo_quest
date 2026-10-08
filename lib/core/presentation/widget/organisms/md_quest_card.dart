@@ -41,12 +41,11 @@ class MdQuestCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AspectRatio(
-            aspectRatio: 4 / 3,
-            child: quest.coverImagePath != null
-                ? MdLocalPhoto(path: quest.coverImagePath)
-                : MdQuestCoverArt(category: quest.category),
-          ),
+          if (quest.coverImagePath != null)
+            AspectRatio(
+              aspectRatio: 4 / 3,
+              child: MdLocalPhoto(path: quest.coverImagePath),
+            ),
           Padding(
             padding: const EdgeInsets.all(AppSpacing.ms),
             child: Column(

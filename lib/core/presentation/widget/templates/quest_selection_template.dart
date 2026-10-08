@@ -7,12 +7,10 @@ import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../types/quests/quest_category_shelf.dart';
-import '../atoms/md_fade_slide_in.dart';
 import '../atoms/md_primary_button.dart';
 import '../atoms/md_skeleton_box.dart';
 import '../molecules/md_empty_state.dart';
 import '../organisms/md_app_scaffold.dart';
-import '../organisms/md_quest_card.dart';
 import '../organisms/md_quest_category_banner.dart';
 
 /// Inspirational Quest picker: large visual cards on one shelf per
@@ -26,19 +24,10 @@ class QuestSelectionTemplate extends StatelessWidget {
     required this.onOpenQuest,
   });
 
-  static const _cardWidth = 216.0;
-
   final AsyncValue<List<QuestCategoryShelf>> shelves;
   final VoidCallback onRetry;
   final VoidCallback onCreateQuest;
   final ValueChanged<Quest> onOpenQuest;
-
-  /// Cover (4:3) + padding, plus room for the title and type line that
-  /// grows with the person's text size.
-  static double _shelfHeight(BuildContext context) =>
-      _cardWidth * 3 / 4 +
-      AppSpacing.xl +
-      MediaQuery.textScalerOf(context).scale(76);
 
   /// Opens a random quest — for when "anything!" is the answer.
   void _surprise(List<QuestCategoryShelf> shelves) {
@@ -48,6 +37,41 @@ class QuestSelectionTemplate extends StatelessWidget {
     ];
     if (all.isEmpty) return;
     onOpenQuest(all[math.Random().nextInt(all.length)]);
+  }
+
+  /// One quest opens straight away; several let the person pick.
+  Future<void> _openShelf(
+    BuildContext context,
+    QuestCategoryShelf shelf,
+  ) async {
+    if (shelf.quests.length == 1) {
+      onOpenQuest(shelf.quests.single.quest);
+      return;
+    }
+    final picked = await showModalBottomSheet<Quest>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final item in shelf.quests)
+              ListTile(
+                title: Text(item.quest.title, style: AppTypography.heading3),
+                subtitle: item.quest.description == null
+                    ? null
+                    : Text(
+                        item.quest.description!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                onTap: () => Navigator.of(sheetContext).pop(item.quest),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (picked != null) onOpenQuest(picked);
   }
 
   @override
@@ -143,39 +167,7 @@ class QuestSelectionTemplate extends StatelessWidget {
                     category: shelf.category,
                     questCount: shelf.quests.length,
                     index: index,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.ms),
-                MdFadeSlideIn(
-                  order: index + 1,
-                  child: SizedBox(
-                    height: _shelfHeight(context),
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      clipBehavior: Clip.none,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.gutter,
-                      ),
-                      itemCount: shelf.quests.length,
-                      separatorBuilder: (_, _) =>
-                          const SizedBox(width: AppSpacing.ms),
-                      itemBuilder: (context, index) {
-                        final item = shelf.quests[index];
-                        // Top-aligned so a card is only as tall as its
-                        // content, not the whole shelf.
-                        return Align(
-                          alignment: Alignment.topCenter,
-                          child: SizedBox(
-                            width: _cardWidth,
-                            child: MdQuestCard(
-                              quest: item.quest,
-                              people: item.participants,
-                              onTap: () => onOpenQuest(item.quest),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    onTap: () => _openShelf(context, shelf),
                   ),
                 ),
               ],

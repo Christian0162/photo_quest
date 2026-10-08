@@ -17,9 +17,13 @@ class MdQuestCategoryBanner extends StatelessWidget {
     required this.questCount,
     this.index = 0,
     this.today,
+    this.onTap,
   });
 
   final String category;
+
+  /// Opens this category's quest(s); the print is tappable when set.
+  final VoidCallback? onTap;
   final int questCount;
 
   /// Position of the shelf, so neighbouring prints tilt opposite ways.
@@ -46,7 +50,9 @@ class MdQuestCategoryBanner extends StatelessWidget {
       ],
     );
 
-    if (example == null) return header;
+    if (example == null) {
+      return GestureDetector(onTap: onTap, child: header);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -62,12 +68,18 @@ class MdQuestCategoryBanner extends StatelessWidget {
               decoration: const BoxDecoration(boxShadow: AppShadows.print),
               child: AspectRatio(
                 aspectRatio: 16 / 10.5,
-                child: MdPhotoboothPrint(
-                  image: ResizeImage(AssetImage(example.asset), width: 640),
-                  focus: example.focus,
-                  note: example.tagline,
-                  date: today ?? DateTime.now(),
-                  semanticLabel: 'Example $category photobooth print',
+                child: Semantics(
+                  button: onTap != null,
+                  child: GestureDetector(
+                    onTap: onTap,
+                    child: MdPhotoboothPrint(
+                      image: ResizeImage(AssetImage(example.asset), width: 640),
+                      focus: example.focus,
+                      note: example.tagline,
+                      date: today ?? DateTime.now(),
+                      semanticLabel: 'Example $category photobooth print',
+                    ),
+                  ),
                 ),
               ),
             ),
