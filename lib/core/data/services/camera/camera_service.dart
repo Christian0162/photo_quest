@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, compute, defaultTargetPlatform;
+import 'package:image/image.dart' as img;
 
 import '../../../../config/constant/app_camera_constants.dart';
+import '../../../../config/constant/app_image_sizes.dart';
 import '../../../domain/camera/enum/camera_frame_format.dart';
 import '../../../errors/app_failure.dart';
 import 'camera_frame.dart';
@@ -44,8 +49,43 @@ class CameraService {
     await controller.setFlashMode(mode);
   }
 
+  /// Takes a still that looks like the preview. Android shows the front
+  /// camera mirrored like a selfie but saves it unmirrored, so those stills
+  /// are flipped to match what the user framed.
   Future<XFile> capturePhoto() async {
-    return _guard((controller) => controller.takePicture());
+    return _guard((controller) async {
+      final file = await controller.takePicture();
+      final isFront =
+          controller.description.lensDirection == CameraLensDirection.front;
+      if (isFront && defaultTargetPlatform == TargetPlatform.android) {
+        await _mirrorInPlace(file.path);
+      }
+      return file;
+    });
+  }
+
+  static Future<void> _mirrorInPlace(String path) async {
+    final file = File(path);
+    final mirrored = await compute(_mirrorJpg, await file.readAsBytes());
+    if (mirrored != null) await file.writeAsBytes(mirrored);
+  }
+
+  /// Bakes the EXIF rotation in first, so the flip is left-right as seen
+  /// upright. Null (file left as is) when the image can't be read.
+  static Uint8List? _mirrorJpg(Uint8List bytes) {
+    try {
+      final decoded = img.decodeImage(bytes);
+      if (decoded == null) return null;
+      final upright = img.bakeOrientation(decoded);
+      return Uint8List.fromList(
+        img.encodeJpg(
+          img.flipHorizontal(upright),
+          quality: AppImageSizes.originalJpegQuality,
+        ),
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Starts recording a silent clip (no microphone needed).
