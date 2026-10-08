@@ -85,7 +85,7 @@ final class BackupViewModelProvider
   }
 }
 
-String _$backupViewModelHash() => r'd2cf7e8fbe3c0b1ca3431d17e36de01baea529c8';
+String _$backupViewModelHash() => r'2cdeb7dfb1f78023b8229a6cd0b34bc3bd35e33f';
 
 /// The backup switch, the storage meter and "Back up now" in Settings.
 

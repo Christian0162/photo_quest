@@ -573,7 +573,7 @@ final class SharedMemoryViewModelProvider
 }
 
 String _$sharedMemoryViewModelHash() =>
-    r'77881bbca47ee0b99fb81619b7214269da44b5c6';
+    r'071febc1e3fa4171b20d640f9d417892c79a6468';
 
 /// Actions on a memory somebody shared with me. The state is true while the
 /// person's own photos are being added.
