@@ -30,13 +30,10 @@ class FakeAuthRepository implements AuthRepository {
   final _changes = StreamController<AccountUser?>.broadcast(sync: true);
   AccountUser? _user;
 
-  /// What the app asked this fake to do, in order.
   final calls = <String>[];
 
-  /// Makes the next call fail with this failure (then clears itself).
   AuthFailure? failNext;
 
-  /// Makes the next [updatePassword] fail (then clears itself).
   AuthFailure? failUpdatePassword;
 
   void registerConfirmed(String email, String password) {
@@ -182,13 +179,10 @@ class FakeProfileRepository extends ProfileRepository {
 
   String? displayName;
 
-  /// What happened when the account was deleted.
   int deleteCalls = 0;
 
-  /// Makes the next [deleteMyAccount] fail (then clears itself).
   AppFailure? deleteError;
 
-  /// Runs when the account is deleted, e.g. to clear the fake session.
   Future<void> Function()? onDeleted;
 
   @override

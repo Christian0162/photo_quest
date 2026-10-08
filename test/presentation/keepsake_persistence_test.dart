@@ -44,7 +44,6 @@ void main() {
   });
   tearDown(() => db.close());
 
-  /// A fresh app session on the same database — like opening the memory.
   ProviderContainer session() {
     final container = ProviderContainer(
       overrides: [

@@ -17,7 +17,7 @@ double contrast(Color a, Color b) {
 
 void main() {
   // Every text role on every surface it is used on must stay readable
-  // (4.5:1). See CLAUDE.md §65.
+  // (4.5:1).
   const textPairs = {
     'primary text on cream': (AppColors.textPrimary, AppColors.background),
     'primary text on paper': (AppColors.textPrimary, AppColors.paper),

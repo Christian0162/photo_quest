@@ -20,7 +20,6 @@ void main() {
     return Uint8List.fromList(img.encodeJpg(image));
   }
 
-  /// A tiny iOS-style BGRA frame, filled with one color.
   CameraFrame bgraFrame(int width, int height, {int rotation = 90}) {
     final bytes = Uint8List(width * height * 4);
     for (var i = 0; i < bytes.length; i += 4) {
@@ -60,7 +59,6 @@ void main() {
     );
   }
 
-  /// A frame of one grey level, as a boomerang frame.
   CameraFrame greyFrame(int level) {
     final frame = bgraFrame(8, 6);
     final bytes = frame.planes.first.bytes;
@@ -70,7 +68,6 @@ void main() {
     return frame;
   }
 
-  /// The slow, obvious way: build the full frame, rotate it, flip it.
   img.Image reference(CameraFrame frame, {required bool mirror}) {
     final plane = frame.planes.first;
     final full = img.Image(width: frame.width, height: frame.height);
@@ -92,7 +89,6 @@ void main() {
     return mirror ? img.flipHorizontal(upright) : upright;
   }
 
-  /// Left half red, right half blue — as a JPEG.
   Uint8List redBlue(int width, int height) {
     final image = img.Image(width: width, height: height);
     for (final p in image) {

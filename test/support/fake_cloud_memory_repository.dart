@@ -17,19 +17,14 @@ import 'package:photoquest/core/errors/app_failure.dart';
 /// An in-memory stand-in for the cloud: what a friend shared, who can see my
 /// memories, and which invite codes work. Records what the app asked for.
 class FakeCloudMemoryRepository implements CloudMemoryRepository {
-  /// What happened, in order.
   final calls = <String>[];
 
-  /// Codes that work, by the plain 10-character form, to what they are for.
   final validCodes = <String, InviteTarget>{};
 
-  /// What [createInvite] hands back.
   String inviteCode = 'ABCDE-FGHJK';
 
-  /// Makes the next call fail with this (then clears itself).
   AppFailure? failNext;
 
-  /// Makes backing up one particular memory fail, every time.
   final failuresByMemory = <String, AppFailure>{};
 
   /// When set, [createInvite] waits for it after reporting half way, so a
@@ -45,7 +40,6 @@ class FakeCloudMemoryRepository implements CloudMemoryRepository {
     quotaBytes: 100 * 1024 * 1024,
   );
 
-  /// Photos handed to [addPhotosToMemory].
   final addedPhotos = <Uint8List>[];
 
   void _maybeFail() {
@@ -313,7 +307,6 @@ class FakeCloudFriendsRepository implements CloudFriendsRepository {
   AppFailure? failNext;
   List<Friend> friends = [];
 
-  /// Friend codes (the plain 10 characters) that work, by who they belong to.
   final validCodes = <String, FriendRequestResult>{};
 
   void _maybeFail() {

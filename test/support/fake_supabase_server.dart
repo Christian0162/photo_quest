@@ -28,31 +28,26 @@ class FakeSupabaseServer {
 
   late final SupabaseClient client;
 
-  /// Rows by table name.
   final tables = <String, List<Map<String, dynamic>>>{};
 
   /// What happened, in order: `insert quests`, `upload photos/<path>`,
   /// `update memories`, `rpc create_memory_invite`, ...
   final log = <String>[];
 
-  /// Uploaded files by `bucket/path`, with their sizes.
   final uploads = <String, int>{};
 
   /// What an RPC returns, by function name. An [RpcError] is answered as
   /// that error.
   final rpcResults = <String, Object?>{};
 
-  /// Parameters each RPC was called with.
   final rpcParams = <String, Map<String, dynamic>>{};
 
-  /// Fails any request whose log entry this accepts, with a server error.
   bool Function(String entry)? failWhen;
 
   /// The status [failWhen] answers with (500 by default; 403 is what Storage
   /// says when a policy refuses an upload).
   int failStatus = 500;
 
-  /// Makes every request fail as if the phone were offline.
   bool offline = false;
 
   List<Map<String, dynamic>> table(String name) =>
@@ -61,7 +56,6 @@ class FakeSupabaseServer {
   Iterable<String> inserts(String table) =>
       log.where((entry) => entry == 'insert $table');
 
-  /// The real client reads `response.request`, so every answer carries it.
   Future<http.Response> _handle(http.Request request) async {
     final response = await _route(request);
     return http.Response.bytes(
@@ -197,7 +191,6 @@ class FakeSupabaseServer {
     return http.Response('{}', 405, headers: _json);
   }
 
-  /// Applies `column=eq.value` and `column=in.(a,b)` filters.
   List<Map<String, dynamic>> _filter(
     List<Map<String, dynamic>> rows,
     Map<String, String> query,
@@ -225,7 +218,6 @@ class FakeSupabaseServer {
     return true;
   }
 
-  /// Lists the files and folders directly under a prefix, like Storage does.
   http.Response _list(http.Request request, String bucket) {
     final body = jsonDecode(request.body) as Map;
     final prefix = '$bucket/${body['prefix']}/';
