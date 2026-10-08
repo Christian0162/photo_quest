@@ -6,20 +6,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_motion.dart';
 import '../../../../../config/constant/app_spacing.dart';
-import '../../../../../config/constant/app_typography.dart';
 import '../../../../domain/memories/enum/keepsake_frame.dart';
 import '../../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../../domain/memories/enum/sticker_type.dart';
-import '../../../../utils/app_haptics.dart';
 import '../../../types/memories/keepsake_design.dart';
 import '../../atoms/common/md_loading_indicator.dart';
 import '../../atoms/common/md_primary_button.dart';
-import '../../atoms/memories/md_sticker_art.dart';
 import '../../molecules/common/md_empty_state.dart';
-import '../../molecules/common/md_option_tile.dart';
 import '../../organisms/common/md_app_scaffold.dart';
 import '../../organisms/memories/md_keepsake_canvas.dart';
 import '../../organisms/memories/md_keepsake_snapshot.dart';
+import '../../molecules/memories/md_keepsake_tray_tabs.dart';
+import '../../molecules/memories/md_keepsake_layout_tray.dart';
+import '../../molecules/memories/md_keepsake_paper_tray.dart';
+import '../../molecules/memories/md_keepsake_sticker_tray.dart';
 
 /// Makes the printed keepsake yours: pick a layout (strip, grid, polaroid),
 /// a paper, and add stickers you drag, pinch and turn. The print stays in
@@ -69,11 +69,9 @@ class KeepsakeTemplate extends StatefulWidget {
   State<KeepsakeTemplate> createState() => _KeepsakeTemplateState();
 }
 
-enum _Tray { layout, paper, stickers }
-
 class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
   final _snapshot = MdKeepsakeSnapshotController();
-  var _tray = _Tray.layout;
+  var _tray = KeepsakeTray.layout;
 
   /// True while rendering, so selection outlines aren't printed.
   bool _capturing = false;
@@ -143,7 +141,7 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
                 ),
               ),
             ),
-            _TrayTabs(
+            MdKeepsakeTrayTabs(
               selected: _tray,
               onChanged: (tray) => setState(() => _tray = tray),
             ),
@@ -154,15 +152,15 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
                 child: KeyedSubtree(
                   key: ValueKey(_tray),
                   child: switch (_tray) {
-                    _Tray.layout => _LayoutTray(
+                    KeepsakeTray.layout => MdKeepsakeLayoutTray(
                       selected: design.layout,
                       onChanged: widget.onLayoutChanged,
                     ),
-                    _Tray.paper => _PaperTray(
+                    KeepsakeTray.paper => MdKeepsakePaperTray(
                       selected: design.frame,
                       onChanged: widget.onFrameChanged,
                     ),
-                    _Tray.stickers => _StickerTray(
+                    KeepsakeTray.stickers => MdKeepsakeStickerTray(
                       canAdd: design.canAddSticker,
                       onAdd: widget.onAddSticker,
                     ),
@@ -173,203 +171,6 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Layout · Paper · Stickers.
-class _TrayTabs extends StatelessWidget {
-  const _TrayTabs({required this.selected, required this.onChanged});
-
-  final _Tray selected;
-  final ValueChanged<_Tray> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-      child: Row(
-        children: [
-          for (final (tray, label, icon) in const [
-            (_Tray.layout, 'Layout', Icons.dashboard_customize_rounded),
-            (_Tray.paper, 'Paper', Icons.palette_rounded),
-            (_Tray.stickers, 'Stickers', Icons.emoji_emotions_rounded),
-          ]) ...[
-            Expanded(
-              child: ChoiceChip(
-                avatar: Icon(icon, size: AppIconSizes.sm),
-                label: SizedBox(
-                  width: double.infinity,
-                  child: Text(label, textAlign: TextAlign.center),
-                ),
-                showCheckmark: false,
-                selected: tray == selected,
-                onSelected: (_) {
-                  AppHaptics.selection();
-                  onChanged(tray);
-                },
-              ),
-            ),
-            if (tray != _Tray.stickers) const SizedBox(width: AppSpacing.sm),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _LayoutTray extends StatelessWidget {
-  const _LayoutTray({required this.selected, required this.onChanged});
-
-  final KeepsakeLayout selected;
-  final ValueChanged<KeepsakeLayout> onChanged;
-
-  static IconData _icon(KeepsakeLayout layout) => switch (layout) {
-    KeepsakeLayout.strip => Icons.view_agenda_rounded,
-    KeepsakeLayout.grid => Icons.grid_view_rounded,
-    KeepsakeLayout.polaroid => Icons.crop_portrait_rounded,
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.gutter),
-      child: Row(
-        children: [
-          for (final layout in KeepsakeLayout.values) ...[
-            Expanded(
-              child: MdOptionTile(
-                label: layout.label,
-                selected: layout == selected,
-                onTap: () => onChanged(layout),
-                child: Icon(_icon(layout), size: AppIconSizes.lg),
-              ),
-            ),
-            if (layout != KeepsakeLayout.values.last)
-              const SizedBox(width: AppSpacing.sm),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _PaperTray extends StatelessWidget {
-  const _PaperTray({required this.selected, required this.onChanged});
-
-  final KeepsakeFrame selected;
-  final ValueChanged<KeepsakeFrame> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.all(AppSpacing.gutter),
-      itemCount: KeepsakeFrame.values.length,
-      separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
-      itemBuilder: (context, index) {
-        final frame = KeepsakeFrame.values[index];
-        final (paper, ink) = MdKeepsakeCanvas.colorsOf(frame);
-        return SizedBox(
-          width: 76,
-          child: MdOptionTile(
-            label: frame.label,
-            selected: frame == selected,
-            onTap: () => onChanged(frame),
-            child: Container(
-              width: 28,
-              height: 28,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: paper,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.line),
-              ),
-              child: Text(
-                'Aa',
-                style: AppTypography.caption.copyWith(
-                  color: ink,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _StickerTray extends StatelessWidget {
-  const _StickerTray({required this.canAdd, required this.onAdd});
-
-  final bool canAdd;
-  final ValueChanged<StickerType> onAdd;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.gutter,
-            AppSpacing.sm,
-            AppSpacing.gutter,
-            0,
-          ),
-          child: Text(
-            canAdd
-                ? 'Tap to add · drag to move · pinch to resize and turn'
-                : "That's plenty of stickers! Remove one to add another.",
-            style: AppTypography.caption,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Expanded(
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.gutter,
-              vertical: AppSpacing.sm,
-            ),
-            itemCount: StickerType.values.length,
-            separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
-            itemBuilder: (context, index) {
-              final type = StickerType.values[index];
-              return Semantics(
-                button: true,
-                enabled: canAdd,
-                label: 'Add ${type.label} sticker',
-                excludeSemantics: true,
-                child: Opacity(
-                  opacity: canAdd ? 1 : 0.4,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                    onTap: canAdd
-                        ? () {
-                            AppHaptics.selection();
-                            onAdd(type);
-                          }
-                        : null,
-                    child: Container(
-                      constraints: const BoxConstraints(
-                        minWidth: AppTouch.minTarget + AppSpacing.md,
-                      ),
-                      padding: const EdgeInsets.all(AppSpacing.sm),
-                      decoration: BoxDecoration(
-                        color: AppColors.sunken,
-                        borderRadius: BorderRadius.circular(AppRadius.md),
-                      ),
-                      alignment: Alignment.center,
-                      child: MdStickerArt(type: type, size: 40),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
     );
   }
 }

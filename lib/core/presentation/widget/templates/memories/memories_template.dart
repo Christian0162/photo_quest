@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../config/constant/app_spacing.dart';
-import '../../../../../config/constant/app_typography.dart';
 import '../../../../domain/memories/enum/memory_filter.dart';
 import '../../../types/memories/memory_box.dart';
 import '../../../types/memories/memory_month.dart';
@@ -18,6 +17,7 @@ import '../../molecules/common/md_page_header.dart';
 import '../../organisms/common/md_app_scaffold.dart';
 import '../../organisms/memories/md_memory_feature_card.dart';
 import '../../organisms/memories/md_memory_journal_card.dart';
+import '../../molecules/memories/md_empty_memory_filter.dart';
 
 /// The private memory box, kept like a journal:
 ///
@@ -167,7 +167,11 @@ class MemoriesTemplate extends StatelessWidget {
     }
 
     if (box.months.isEmpty) {
-      add('nothing', _NothingHere(filter: box.filter), gap: AppSpacing.xl);
+      add(
+        'nothing',
+        MdEmptyMemoryFilter(filter: box.filter),
+        gap: AppSpacing.xl,
+      );
     }
 
     for (final MemoryMonth(:month, :memories) in box.months) {
@@ -206,36 +210,5 @@ class MemoriesTemplate extends StatelessWidget {
     }
 
     return entries;
-  }
-}
-
-/// When a filter has nothing in it — "This day" on a day with no history.
-class _NothingHere extends StatelessWidget {
-  const _NothingHere({required this.filter});
-
-  final MemoryFilter filter;
-
-  @override
-  Widget build(BuildContext context) {
-    final (title, message) = switch (filter) {
-      MemoryFilter.thisDay => (
-        'Nothing on this day yet',
-        'Make today one you’ll look back on next year.',
-      ),
-      MemoryFilter.thisMonth => (
-        'No memories this month yet',
-        'There’s still time to make one.',
-      ),
-      MemoryFilter.allJourney => ('', ''),
-    };
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: AppTypography.journal),
-        const SizedBox(height: AppSpacing.xs),
-        Text(message, style: AppTypography.bodyMuted),
-      ],
-    );
   }
 }
