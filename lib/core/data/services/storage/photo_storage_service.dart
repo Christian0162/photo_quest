@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -46,10 +47,25 @@ class PhotoStorageService {
   Future<String> saveVideo(String photoId, String sourcePath) async {
     final dir = await _ensureDir(AppStoragePaths.videos);
     final target = p.join(dir.path, '$photoId.mp4');
-    final source = File(sourcePath);
-    await source.copy(target);
-    await _deleteIfExists(source);
+    await moveFile(File(sourcePath), target);
     return target;
+  }
+
+  /// Moves [source] to [target]: an instant rename when both are on the same
+  /// volume, otherwise (rename fails across volumes) a copy then delete.
+  /// [rename] is only swapped out in tests.
+  @visibleForTesting
+  static Future<void> moveFile(
+    File source,
+    String target, {
+    Future<File> Function(File source, String target)? rename,
+  }) async {
+    try {
+      await (rename ?? (file, to) => file.rename(to))(source, target);
+    } on FileSystemException {
+      await source.copy(target);
+      if (await source.exists()) await source.delete();
+    }
   }
 
   /// Deletes a temporary camera file that won't be kept (e.g. a clip

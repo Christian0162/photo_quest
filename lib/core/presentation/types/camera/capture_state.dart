@@ -36,7 +36,7 @@ class CaptureState {
   static const gifFrames = 4;
 
   /// Most frames in a boomerang, and the fewest that make a good one.
-  static const boomerangMaxFrames = 20;
+  static const boomerangMaxFrames = 16;
   static const boomerangMinFrames = 4;
 
   /// Longest boomerang hold.

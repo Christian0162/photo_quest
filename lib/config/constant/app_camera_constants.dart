@@ -2,7 +2,7 @@
 /// (boomerangs). Used by `CameraService`. See CLAUDE.md §47.
 abstract final class AppCameraConstants {
   /// Most frames kept from one burst.
-  static const burstMaxFrames = 20;
+  static const burstMaxFrames = 16;
 
   /// Shortest gap between two kept frames.
   static const burstFrameSpacing = Duration(milliseconds: 90);

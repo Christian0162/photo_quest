@@ -3,7 +3,6 @@ import 'dart:developer' as developer;
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart' show XFile;
-import 'package:image/image.dart' as img;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -12,13 +11,15 @@ import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
 import '../../../data/repositories/service_providers.dart';
 import '../../../data/repositories/settings_repository_provider.dart';
+import '../../../data/services/camera/camera_service.dart' show CameraService;
 import '../../../data/services/image/image_processing_service.dart'
-    show AnimationResult, ProgressCallback;
+    show AnimationResult, ImageProcessingService, ProgressCallback;
 import '../../../domain/camera/enum/capture_mode.dart';
 import '../../../domain/camera/enum/capture_phase.dart';
 import '../../../domain/memories/enum/photo_look.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/pose_ideas.dart';
+import '../../../utils/stage_timer.dart';
 import '../../types/camera/capture_state.dart';
 
 part 'capture_view_model.g.dart';
@@ -226,7 +227,7 @@ class CaptureViewModel extends _$CaptureViewModel {
       final file = await camera.capturePhoto();
       final raw = await file.readAsBytes();
       final bytes = await imageProcessing.applyLook(raw, current.effectiveLook);
-      final size = _sizeOf(bytes);
+      final size = ImageProcessingService.sizeOf(bytes);
 
       return (
         originalPath: await storage.saveOriginal(photoId, bytes),
@@ -236,6 +237,7 @@ class CaptureViewModel extends _$CaptureViewModel {
         ),
         width: size.$1,
         height: size.$2,
+        mirrored: false,
       );
     });
   }
@@ -245,14 +247,20 @@ class CaptureViewModel extends _$CaptureViewModel {
     await _saveShot(current, photoId, () async {
       final camera = ref.read(cameraServiceProvider);
       final imageProcessing = ref.read(imageProcessingServiceProvider);
+      final timer = StageTimer(); // TIMING
 
+      // Frames are kept as the camera saved them; the front-camera flip
+      // happens after they are shrunk, inside createGif.
+      final mirror = camera.needsFrontMirror;
       final photos = <Uint8List>[];
       for (var i = 1; i <= CaptureState.gifFrames; i++) {
         state = AsyncData(
           current.copyWith(phase: CapturePhase.capturing, burstFrame: i),
         );
-        final file = await camera.capturePhoto();
+        final captureWatch = Stopwatch()..start(); // TIMING
+        final file = await camera.capturePhoto(mirrorFront: false);
         photos.add(await file.readAsBytes());
+        timer.add('capture', captureWatch.elapsed); // TIMING
         if (!ref.mounted || run != _run) throw const _Abandoned();
         // A beat to change pose before the next flash.
         if (i < CaptureState.gifFrames) {
@@ -261,11 +269,18 @@ class CaptureViewModel extends _$CaptureViewModel {
       }
 
       state = AsyncData(current.copyWith(phase: CapturePhase.processing));
+      final processing = Stopwatch()..start(); // TIMING
       final gif = await imageProcessing.createGif(
         photos,
         look: current.effectiveLook,
+        mirror: mirror,
         onProgress: _reportProcessing(current),
       );
+      _logTiming(
+        'GIF',
+        '${timer.summary()} | processing=${processing.elapsedMilliseconds}ms '
+            '| ${gif?.timings}',
+      ); // TIMING
       return _saveAnimation(photoId, gif);
     });
   }
@@ -294,6 +309,7 @@ class CaptureViewModel extends _$CaptureViewModel {
       state = AsyncData(
         current.copyWith(phase: CapturePhase.capturing, captureProgress: 0),
       );
+      final captureWatch = Stopwatch()..start(); // TIMING
       final frames = await camera.captureFrames(
         maxFrames: CaptureState.boomerangMaxFrames,
         maxDuration: CaptureState.boomerangMaxHold,
@@ -308,6 +324,7 @@ class CaptureViewModel extends _$CaptureViewModel {
           );
         },
       );
+      final captureMs = captureWatch.elapsedMilliseconds; // TIMING
       if (!ref.mounted) throw const _Abandoned();
       if (frames.length < CaptureState.boomerangMinFrames) {
         throw const _TooShort();
@@ -320,11 +337,20 @@ class CaptureViewModel extends _$CaptureViewModel {
           processingProgress: 0,
         ),
       );
+      final processing = Stopwatch()..start(); // TIMING
       final boomerang = await imageProcessing.createBoomerang(
         frames,
         look: current.effectiveLook,
+        mirror: camera.needsFrontMirror,
         onProgress: _reportProcessing(current),
       );
+      _logTiming(
+        'Boomerang',
+        'capture=${captureMs}ms '
+            'frames=${frames.length} '
+            'processing=${processing.elapsedMilliseconds}ms '
+            '| ${boomerang?.timings}',
+      ); // TIMING
       return _saveAnimation(photoId, boomerang);
     });
   }
@@ -335,18 +361,19 @@ class CaptureViewModel extends _$CaptureViewModel {
       final camera = ref.read(cameraServiceProvider);
       final storage = ref.read(photoStorageServiceProvider);
       final imageProcessing = ref.read(imageProcessingServiceProvider);
+      final timer = StageTimer(); // TIMING
 
       state = AsyncData(
         current.copyWith(phase: CapturePhase.capturing, captureProgress: 0),
       );
-      // A still first, for cards and the keepsake.
-      final posterFile = await camera.capturePhoto();
-      final posterBytes = await posterFile.readAsBytes();
-      final size = _sizeOf(posterBytes);
-
-      // Let go while the still was being taken: nothing to film.
+      // Let go before filming could start: nothing to film.
       if (_holdReleased) throw const _TooShort();
+
+      // Film straight away; the poster still is taken once the clip is done
+      // (a photo can't safely be taken while recording on every phone).
+      final startWatch = Stopwatch()..start(); // TIMING
       await camera.startVideoRecording();
+      timer.add('record-start', startWatch.elapsed); // TIMING
       final started = DateTime.now();
       final maxLength = Duration(seconds: current.clipSeconds);
       const tick = Duration(milliseconds: 100);
@@ -385,16 +412,66 @@ class CaptureViewModel extends _$CaptureViewModel {
           processingProgress: 0.5,
         ),
       );
-      return (
-        originalPath: await storage.saveVideo(photoId, clip.path),
-        thumbnailPath: await storage.saveThumbnail(
-          photoId,
-          await imageProcessing.createThumbnail(posterBytes),
+      // The poster and moving the clip into place don't depend on each other.
+      final mirror = camera.needsFrontMirror;
+      final (poster, videoPath) = await (
+        _timed(
+          timer,
+          'poster',
+          () => _takePoster(camera, imageProcessing, mirror),
         ),
-        width: size.$1,
-        height: size.$2,
+        _timed(timer, 'file-move', () => storage.saveVideo(photoId, clip.path)),
+      ).wait;
+      _logTiming('360', timer.summary()); // TIMING
+      return (
+        originalPath: videoPath,
+        thumbnailPath: await storage.saveThumbnail(photoId, poster.thumbnail),
+        width: poster.width,
+        height: poster.height,
+        // The poster was flipped to match the preview, but the clip file is
+        // not, so the viewer flips the clip.
+        mirrored: mirror,
       );
     });
+  }
+
+  /// A still for the clip's cards and keepsake, flipped (cheaply, after
+  /// shrinking) to look like the preview. Tries twice, as a camera that just
+  /// stopped filming can need a moment.
+  Future<({Uint8List thumbnail, int width, int height})> _takePoster(
+    CameraService camera,
+    ImageProcessingService imageProcessing,
+    bool mirror,
+  ) async {
+    XFile file;
+    try {
+      file = await camera.capturePhoto(mirrorFront: false);
+    } catch (_) {
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+      file = await camera.capturePhoto(mirrorFront: false);
+    }
+    final bytes = await file.readAsBytes();
+    final (width, height) = ImageProcessingService.sizeOf(bytes);
+    return (
+      thumbnail: await imageProcessing.createThumbnail(bytes, mirror: mirror),
+      width: width,
+      height: height,
+    );
+  }
+
+  // TIMING: remove with StageTimer once profiling is done.
+  Future<T> _timed<T>(
+    StageTimer timer,
+    String stage,
+    Future<T> Function() run,
+  ) {
+    final watch = Stopwatch()..start();
+    return run().whenComplete(() => timer.add(stage, watch.elapsed));
+  }
+
+  // TIMING: remove with StageTimer once profiling is done.
+  void _logTiming(String feature, String message) {
+    developer.log('$feature $message', name: 'photoquest.timing');
   }
 
   Future<_SavedFiles> _saveAnimation(
@@ -408,6 +485,7 @@ class CaptureViewModel extends _$CaptureViewModel {
       thumbnailPath: await storage.saveThumbnail(photoId, animation.poster),
       width: animation.width,
       height: animation.height,
+      mirrored: false,
     );
   }
 
@@ -434,6 +512,7 @@ class CaptureViewModel extends _$CaptureViewModel {
             width: files.width,
             height: files.height,
             kind: current.mode.kind,
+            mirrored: files.mirrored,
           );
       if (!ref.mounted) return;
       state = AsyncData(
@@ -476,15 +555,6 @@ class CaptureViewModel extends _$CaptureViewModel {
           processingProgress: 0,
         ),
       );
-    }
-  }
-
-  static (int, int) _sizeOf(Uint8List bytes) {
-    try {
-      final decoded = img.decodeImage(bytes);
-      return (decoded?.width ?? 0, decoded?.height ?? 0);
-    } catch (_) {
-      return (0, 0);
     }
   }
 
@@ -552,6 +622,7 @@ typedef _SavedFiles = ({
   String thumbnailPath,
   int width,
   int height,
+  bool mirrored,
 });
 
 /// The person left (or cancelled) mid-capture; clean up quietly.

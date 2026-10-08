@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart'
-    show TargetPlatform, compute, defaultTargetPlatform;
+    show TargetPlatform, compute, defaultTargetPlatform, visibleForTesting;
 import 'package:image/image.dart' as img;
 
 import '../../../../config/constant/app_camera_constants.dart';
@@ -49,17 +49,30 @@ class CameraService {
     await controller.setFlashMode(mode);
   }
 
-  /// Takes a still that looks like the preview. Android shows the front
-  /// camera mirrored like a selfie but saves it unmirrored, so those stills
-  /// are flipped to match what the user framed.
-  Future<XFile> capturePhoto() async {
+  /// Whether output from the active camera must be flipped left-right to
+  /// look like the preview. Android shows the front camera mirrored like a
+  /// selfie but saves stills, stream frames and clips unmirrored.
+  bool get needsFrontMirror {
+    final lens = _controller?.description.lensDirection;
+    return lens != null &&
+        needsMirror(lens: lens, platform: defaultTargetPlatform);
+  }
+
+  /// The mirroring rule: only the Android front camera.
+  @visibleForTesting
+  static bool needsMirror({
+    required CameraLensDirection lens,
+    required TargetPlatform platform,
+  }) => lens == CameraLensDirection.front && platform == TargetPlatform.android;
+
+  /// Takes a still that looks like the preview. With [mirrorFront] false the
+  /// file is left as the camera saved it, for callers that flip it
+  /// themselves after shrinking it (see [needsFrontMirror]) — much cheaper
+  /// than re-encoding a full-size photo here.
+  Future<XFile> capturePhoto({bool mirrorFront = true}) async {
     return _guard((controller) async {
       final file = await controller.takePicture();
-      final isFront =
-          controller.description.lensDirection == CameraLensDirection.front;
-      if (isFront && defaultTargetPlatform == TargetPlatform.android) {
-        await _mirrorInPlace(file.path);
-      }
+      if (mirrorFront && needsFrontMirror) await _mirrorInPlace(file.path);
       return file;
     });
   }
