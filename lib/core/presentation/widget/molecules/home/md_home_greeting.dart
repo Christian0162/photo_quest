@@ -5,9 +5,10 @@ import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_round_icon_button.dart';
+import '../../atoms/common/md_sticker.dart';
 
-/// Today's date as a small kicker, the greeting, and the invitation —
-/// with "memory" inked in coral so the one thing the app is for stands out.
+/// Today's date as a tilted sticker, the greeting, and the invitation set
+/// big enough to read from across a table.
 class MdHomeGreeting extends StatelessWidget {
   const MdHomeGreeting({
     super.key,
@@ -29,30 +30,31 @@ class MdHomeGreeting extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                DateFormat('EEEE · MMMM d').format(today).toUpperCase(),
-                style: AppTypography.overline,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: MdSticker(
+                  label: DateFormat('EEEE, MMM d').format(today),
+                  icon: Icons.wb_sunny_rounded,
+                  delay: const Duration(milliseconds: 250),
+                ),
               ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(greeting, style: AppTypography.bodyMuted),
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                greeting,
+                style: AppTypography.heading3.copyWith(
+                  color: AppColors.textMuted,
+                ),
+              ),
               const SizedBox(height: AppSpacing.xs),
               Semantics(
                 header: true,
-                label: "Let's make a memory.",
-                excludeSemantics: true,
-                child: Text.rich(
-                  TextSpan(
-                    text: "Let's make a ",
-                    children: [
-                      TextSpan(
-                        text: 'memory.',
-                        style: AppTypography.display.copyWith(
-                          color: AppColors.coralInk,
-                        ),
-                      ),
-                    ],
+                child: Text(
+                  "Let's make a memory.",
+                  style: AppTypography.display.copyWith(
+                    fontSize: 44,
+                    height: 1.02,
+                    letterSpacing: -1.2,
                   ),
-                  style: AppTypography.display,
                 ),
               ),
             ],

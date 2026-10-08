@@ -5,6 +5,7 @@ import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/common/md_sticker.dart';
 import '../../molecules/common/md_animated_photoquest_logo.dart';
 
 /// The first thing a signed-out person sees. It carries on from the launch
@@ -52,13 +53,15 @@ class WelcomeTemplate extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const MdAnimatedPhotoQuestLogo(size: 280),
+                        const MdAnimatedPhotoQuestLogo(size: 240),
                         Semantics(
                           header: true,
                           child: Text(
                             'Photo Quest',
                             style: AppTypography.display.copyWith(
                               color: AppColors.onCoral,
+                              fontSize: 48,
+                              letterSpacing: -1.5,
                             ),
                           ),
                         ),
@@ -66,9 +69,34 @@ class WelcomeTemplate extends StatelessWidget {
                         Text(
                           'Do something together.\nKeep the memory.',
                           textAlign: TextAlign.center,
-                          style: AppTypography.bodyLarge.copyWith(
+                          style: AppTypography.heading3.copyWith(
                             color: AppColors.onCoral,
                           ),
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        const Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: AppSpacing.sm,
+                          runSpacing: AppSpacing.sm,
+                          children: [
+                            MdSticker(
+                              label: 'No feed',
+                              tilt: -0.07,
+                              color: AppColors.paper,
+                              delay: Duration(milliseconds: 900),
+                            ),
+                            MdSticker(
+                              label: 'No likes',
+                              tilt: 0.05,
+                              delay: Duration(milliseconds: 1050),
+                            ),
+                            MdSticker(
+                              label: 'Just your people',
+                              tilt: -0.03,
+                              color: AppColors.softPeach,
+                              delay: Duration(milliseconds: 1200),
+                            ),
+                          ],
                         ),
                       ],
                     ),

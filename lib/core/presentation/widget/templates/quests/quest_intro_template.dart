@@ -10,6 +10,7 @@ import '../../../types/quests/quest_participant_with_person.dart';
 import '../../../types/quests/quest_start_readiness.dart';
 import '../../atoms/common/md_fade_slide_in.dart';
 import '../../atoms/common/md_icon_fact.dart';
+import '../../atoms/common/md_sticker.dart';
 import '../../atoms/people/md_person_avatar.dart';
 import '../../atoms/common/md_skeleton_box.dart';
 import '../../molecules/common/md_empty_state.dart';
@@ -97,19 +98,36 @@ class QuestIntroTemplate extends StatelessWidget {
               AppSpacing.xl,
             ),
             children: MdFadeSlideIn.staggered([
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppRadius.photo),
-                child: AspectRatio(
-                  aspectRatio: 16 / 10,
-                  child: MdQuestHeroCover(quest: quest),
-                ),
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(AppRadius.photo),
+                    child: AspectRatio(
+                      aspectRatio: 16 / 10,
+                      child: MdQuestHeroCover(quest: quest),
+                    ),
+                  ),
+                  Positioned(
+                    top: AppSpacing.md,
+                    left: AppSpacing.md,
+                    child: MdSticker(
+                      label: quest.category,
+                      icon: questCategoryIcon(quest.category),
+                      delay: const Duration(milliseconds: 300),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: AppSpacing.lg),
-              Text(quest.category.toUpperCase(), style: AppTypography.overline),
-              const SizedBox(height: AppSpacing.xs),
               Semantics(
                 header: true,
-                child: Text(quest.title, style: AppTypography.heading1),
+                child: Text(
+                  quest.title,
+                  style: AppTypography.display.copyWith(
+                    fontSize: 38,
+                    letterSpacing: -1,
+                  ),
+                ),
               ),
               const SizedBox(height: AppSpacing.sm),
               Wrap(

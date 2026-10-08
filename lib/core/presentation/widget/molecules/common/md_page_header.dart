@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
+import '../../atoms/common/md_sticker.dart';
 
 /// The top of a tab page: a small kicker, the page title and one muted
 /// line, with an optional action on the right.
 ///
 /// ```text
-/// YOUR MEMORY BOX
+/// (Your memory box)
 /// Memories                    (+)
 /// Just for you and the people who were there.
 /// ```
@@ -30,11 +31,23 @@ class MdPageHeader extends StatelessWidget {
     final text = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(overline, style: AppTypography.overline),
-        const SizedBox(height: AppSpacing.sm),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: MdSticker(
+            label: overline,
+            delay: const Duration(milliseconds: 200),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
         Semantics(
           header: true,
-          child: Text(title, style: AppTypography.display),
+          child: Text(
+            title,
+            style: AppTypography.display.copyWith(
+              fontSize: 44,
+              letterSpacing: -1.2,
+            ),
+          ),
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(subtitle, style: AppTypography.bodyMuted),

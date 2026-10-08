@@ -14,7 +14,7 @@ import '../../molecules/quests/md_idea_tile.dart';
 import '../../molecules/common/md_section_header.dart';
 import '../../organisms/common/md_app_scaffold.dart';
 import '../../organisms/memories/md_on_this_day_card.dart';
-import '../../organisms/quests/md_pending_quest_card.dart';
+import '../../organisms/quests/md_pending_quest_tray.dart';
 import '../../organisms/memories/md_recent_memories_section.dart';
 import '../../organisms/quests/md_today_quest_card.dart';
 import '../../molecules/home/md_home_greeting.dart';
@@ -85,7 +85,7 @@ class HomeTemplate extends StatelessWidget {
             child: todayQuest.when(
               loading: () => const MdSkeletonBox(
                 key: ValueKey('today-loading'),
-                height: 460,
+                height: 520,
                 radius: AppRadius.photo,
               ),
               error: (error, stack) => const SizedBox.shrink(),
@@ -114,26 +114,22 @@ class HomeTemplate extends StatelessWidget {
       if (pending.isNotEmpty)
         (
           'pending',
-          MdGutterPadding(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: AppSpacing.sm),
-                const MdSectionHeader(
-                  title: "Needs everyone's OK",
-                  subtitle: 'Get your people to say they’re in.',
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: AppSpacing.sm),
+              const MdGutterPadding(
+                child: MdSectionHeader(
+                  title: 'Waiting on your people',
+                  subtitle: 'One nudge and the quest is on.',
                 ),
-                const SizedBox(height: AppSpacing.ms),
-                for (final entry in pending)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                    child: MdPendingQuestCard(
-                      entry: entry,
-                      onTap: () => onOpenQuest(entry.quest),
-                    ),
-                  ),
-              ],
-            ),
+              ),
+              const SizedBox(height: AppSpacing.ms),
+              MdPendingQuestTray(
+                entries: pending,
+                onOpen: (entry) => onOpenQuest(entry.quest),
+              ),
+            ],
           ),
         ),
       (

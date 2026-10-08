@@ -97,7 +97,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text("TODAY'S QUEST"), findsOneWidget);
+    expect(find.text("Today's quest"), findsOneWidget);
     expect(find.text("Let's do it"), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp('^Start a quest')), findsOneWidget);
   });
@@ -165,7 +165,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 420));
     await tester.pump();
     expect(find.text('Do something together. Keep the memory.'), findsNothing);
-    expect(find.text("TODAY'S QUEST"), findsOneWidget);
+    expect(find.text("Today's quest"), findsOneWidget);
   });
 
   testWidgets('the nav dock fits a small phone at large text on every tab', (
@@ -201,6 +201,10 @@ void main() {
 
   testWidgets('the memory box shows each memory as a journal page, and '
       'every photo can be opened', (tester) async {
+    // A phone, so the poster-style cards aren't taller than the screen.
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     (String, int)? viewed;
     String? opened;
     MemoryFilter? filtered;
@@ -213,6 +217,7 @@ void main() {
           now: PreviewSamples.today,
           onFilterChanged: (filter) => filtered = filter,
           onRetry: () {},
+          onRefresh: () async {},
           onStartQuest: () {},
           onOpenMemory: (summary) => opened = summary.memory.title,
           onViewPhoto: (summary, index) =>
@@ -232,7 +237,10 @@ void main() {
       ),
       findsOneWidget,
     );
-    await tester.tap(find.bySemanticsLabel('View photo 2 of 3').first);
+    final secondPhoto = find.bySemanticsLabel('View photo 2 of 3').first;
+    await tester.ensureVisible(secondPhoto);
+    await tester.pump();
+    await tester.tap(secondPhoto);
     expect(viewed, ('Our Anniversary', 1));
 
     // The rest of the month follows as journal entries.
@@ -247,12 +255,11 @@ void main() {
       200,
       scrollable: page,
     );
-    await tester.drag(page, const Offset(0, -200));
+    // Only one journal entry in the samples, so one button to see its shots.
+    final viewShots = find.text('3 shots · 2 people');
+    await tester.scrollUntilVisible(viewShots, 100, scrollable: page);
     await tester.pumpAndSettle();
-    // Only one journal entry in the samples, so one cover to open.
-    await tester.tap(
-      find.bySemanticsLabel('View the photos. You and Buddy, together.'),
-    );
+    await tester.tap(viewShots);
     expect(viewed, ('Buddy’s Park Day', 0));
 
     await tester.ensureVisible(find.text('Buddy’s Park Day'));
@@ -285,6 +292,7 @@ void main() {
           now: PreviewSamples.today,
           onFilterChanged: (_) {},
           onRetry: () {},
+          onRefresh: () async {},
           onStartQuest: () {},
           onOpenMemory: (_) {},
           onViewPhoto: (_, _) {},

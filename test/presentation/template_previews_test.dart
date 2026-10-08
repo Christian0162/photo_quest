@@ -67,4 +67,22 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  // The tightest case: a small phone with the OS text size turned up.
+  for (final MapEntry(key: name, value: preview) in previews.entries) {
+    testWidgets('$name preview fits a small phone at large text', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(320, 568);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearAllTestValues);
+
+      await tester.pumpWidget(preview());
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(tester.takeException(), isNull);
+    });
+  }
 }

@@ -20,25 +20,36 @@ class MdSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final heading = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Semantics(
+          header: true,
+          child: Text(title, style: AppTypography.heading2),
+        ),
+        if (subtitle != null) ...[
+          const SizedBox(height: AppSpacing.xxs),
+          Text(subtitle!, style: AppTypography.bodyMuted),
+        ],
+      ],
+    );
+    final trailing = this.trailing;
+    if (trailing == null) return heading;
+
+    // With the OS text size turned up there is no room beside the title,
+    // so the action drops underneath it instead of overflowing.
+    final roomy = MediaQuery.textScalerOf(context).scale(16) <= 22;
+    if (!roomy) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [heading, trailing],
+      );
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Semantics(
-                header: true,
-                child: Text(title, style: AppTypography.heading3),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(height: AppSpacing.xxs),
-                Text(subtitle!, style: AppTypography.bodyMuted),
-              ],
-            ],
-          ),
-        ),
-        ?trailing,
+        Expanded(child: heading),
+        trailing,
       ],
     );
   }

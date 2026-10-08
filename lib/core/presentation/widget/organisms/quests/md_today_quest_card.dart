@@ -6,11 +6,14 @@ import '../../../../../config/constant/app_typography.dart';
 import '../../../../domain/quests/entities/quest.dart';
 import '../../../types/display_labels.dart';
 import '../../atoms/common/md_primary_button.dart';
-import '../../molecules/common/md_app_card.dart';
+import '../../atoms/common/md_sticker.dart';
+import '../../molecules/common/md_poster_card.dart';
 import 'md_quest_card.dart';
 
-/// Home's hero: one inviting Quest for today with a prominent example image
-/// and a single "Start" action. See CLAUDE.md §31, design system §14.
+/// Home's hero: today's Quest as a full-bleed poster. The example photo
+/// fills the card, the title sits on a charcoal fade at the bottom, and one
+/// chunky button starts it. Tilted stickers pop on top so it feels like a
+/// thing you could pick up. See CLAUDE.md §31, design system §14.
 class MdTodayQuestCard extends StatelessWidget {
   const MdTodayQuestCard({
     super.key,
@@ -23,69 +26,72 @@ class MdTodayQuestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MdAppCard(
-      padding: const EdgeInsets.all(AppSpacing.ms),
-      radius: AppRadius.photo,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.xl),
-            child: AspectRatio(
-              aspectRatio: 16 / 10,
-              child: MdQuestHeroCover(quest: quest),
-            ),
+    return MdPosterCard(
+      aspectRatio: 4 / 5.2,
+      background: MdQuestHeroCover(quest: quest),
+      overlay: [
+        Positioned(
+          top: AppSpacing.md,
+          left: AppSpacing.md,
+          child: MdSticker(
+            label: "Today's quest",
+            icon: Icons.bolt_rounded,
+            color: AppColors.warmCoral,
+            tilt: -0.06,
+            delay: const Duration(milliseconds: 450),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.xs,
-              AppSpacing.md,
-              AppSpacing.xs,
-              AppSpacing.xs,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("TODAY'S QUEST", style: AppTypography.overline),
-                const SizedBox(height: AppSpacing.xs),
-                Text(quest.title, style: AppTypography.heading1),
-                if (quest.description != null) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    quest.description!,
-                    style: AppTypography.body.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+        ),
+        Positioned(
+          top: AppSpacing.md,
+          right: AppSpacing.md,
+          child: MdSticker(
+            label: questTypeLabel(quest.type),
+            icon: questTypeIcon(quest.type),
+            color: AppColors.paper,
+            tilt: 0.05,
+            delay: const Duration(milliseconds: 600),
+          ),
+        ),
+        Positioned(
+          left: AppSpacing.md,
+          right: AppSpacing.md,
+          bottom: AppSpacing.md,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Semantics(
+                header: true,
+                child: Text(
+                  quest.title,
+                  style: AppTypography.display.copyWith(
+                    color: AppColors.warmCream,
                   ),
-                ],
-                const SizedBox(height: AppSpacing.ms),
-                Row(
-                  children: [
-                    Icon(
-                      questTypeIcon(quest.type),
-                      size: AppIconSizes.sm,
-                      color: AppColors.textMuted,
-                    ),
-                    const SizedBox(width: AppSpacing.xs),
-                    Text(
-                      questTypeLabel(quest.type),
-                      style: AppTypography.caption,
-                    ),
-                  ],
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: AppSpacing.md),
-                MdPrimaryButton(
-                  label: "Let's do it",
-                  icon: Icons.photo_camera_rounded,
-                  onPressed: onStart,
+              ),
+              if (quest.description != null) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  quest.description!,
+                  style: AppTypography.body.copyWith(
+                    color: AppColors.warmCream,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
-            ),
+              const SizedBox(height: AppSpacing.md),
+              MdPrimaryButton(
+                label: "Let's do it",
+                icon: Icons.photo_camera_rounded,
+                onPressed: onStart,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -45,10 +45,14 @@ class MdQuestPromptBar extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: radius,
-            boxShadow: AppShadows.floating,
+            // A charcoal lip under the coral, like the primary button.
+            boxShadow: const [
+              BoxShadow(color: AppColors.warmCharcoal, offset: Offset(0, 4)),
+              ...AppShadows.floating,
+            ],
           ),
           child: Material(
-            color: AppColors.dock,
+            color: AppColors.warmCoral,
             borderRadius: radius,
             clipBehavior: Clip.antiAlias,
             child: InkWell(
@@ -61,13 +65,13 @@ class MdQuestPromptBar extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.onCamera.withValues(alpha: 0.08),
+                        color: AppColors.paper.withValues(alpha: 0.55),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.auto_awesome_rounded,
                         size: AppIconSizes.lg,
-                        color: AppColors.softPeach,
+                        color: AppColors.onCoral,
                       ),
                     ),
                     const SizedBox(width: AppSpacing.ms),
@@ -79,7 +83,7 @@ class MdQuestPromptBar extends StatelessWidget {
                           Text(
                             _title,
                             style: AppTypography.heading3.copyWith(
-                              color: AppColors.warmCream,
+                              color: AppColors.onCoral,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -88,7 +92,7 @@ class MdQuestPromptBar extends StatelessWidget {
                           Text(
                             _subtitle,
                             style: AppTypography.caption.copyWith(
-                              color: AppColors.onDockMuted,
+                              color: AppColors.onCoral,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -109,7 +113,7 @@ class MdQuestPromptBar extends StatelessWidget {
   }
 }
 
-/// The coral "+" with a charcoal plus (readable on coral, CLAUDE.md §65).
+/// The charcoal "+" with a cream plus, sitting on the coral bar.
 /// A ring swells out of it and fades, a few times, then stops.
 class _RipplingPlus extends StatefulWidget {
   const _RipplingPlus();
@@ -180,7 +184,7 @@ class _RipplingPlusState extends State<_RipplingPlus>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColors.warmCoral.withValues(
+                      color: AppColors.warmCharcoal.withValues(
                         alpha: visible ? 0.7 * (1 - t) : 0,
                       ),
                       width: 2,
@@ -192,8 +196,8 @@ class _RipplingPlusState extends State<_RipplingPlus>
           ),
           const CircleAvatar(
             radius: _radius,
-            backgroundColor: AppColors.warmCoral,
-            foregroundColor: AppColors.onCoral,
+            backgroundColor: AppColors.warmCharcoal,
+            foregroundColor: AppColors.warmCream,
             child: Icon(Icons.add_rounded, size: AppIconSizes.lg),
           ),
         ],

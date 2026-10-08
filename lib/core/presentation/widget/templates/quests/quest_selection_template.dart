@@ -10,6 +10,7 @@ import '../../../types/quests/quest_category_shelf.dart';
 import '../../atoms/common/md_primary_button.dart';
 import '../../atoms/common/md_skeleton_box.dart';
 import '../../molecules/common/md_empty_state.dart';
+import '../../molecules/quests/md_surprise_card.dart';
 import '../../organisms/common/md_app_scaffold.dart';
 import '../../organisms/quests/md_quest_category_banner.dart';
 
@@ -84,7 +85,6 @@ class QuestSelectionTemplate extends StatelessWidget {
           icon: const Icon(Icons.edit_rounded, size: AppIconSizes.md),
           label: const Text('Make your own'),
         ),
-        const SizedBox(width: AppSpacing.sm),
       ],
       body: shelves.when(
         loading: () => ListView(
@@ -128,7 +128,13 @@ class QuestSelectionTemplate extends StatelessWidget {
                 ),
                 child: Semantics(
                   header: true,
-                  child: Text('Choose a quest', style: AppTypography.heading1),
+                  child: Text(
+                    'Choose a quest',
+                    style: AppTypography.display.copyWith(
+                      fontSize: 40,
+                      letterSpacing: -1,
+                    ),
+                  ),
                 ),
               ),
               Padding(
@@ -147,15 +153,7 @@ class QuestSelectionTemplate extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.gutter,
                 ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: MdSecondaryButton(
-                    label: "Can't decide? Surprise me",
-                    icon: Icons.casino_rounded,
-                    expand: false,
-                    onPressed: () => _surprise(list),
-                  ),
-                ),
+                child: MdSurpriseCard(onRoll: () => _surprise(list)),
               ),
               for (final (index, shelf) in list.indexed) ...[
                 const SizedBox(height: AppSpacing.xl),

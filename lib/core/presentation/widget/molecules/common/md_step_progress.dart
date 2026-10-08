@@ -39,9 +39,9 @@ class MdStepProgress extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            text.toUpperCase(),
-            style: AppTypography.overline.copyWith(
-              color: onDark ? AppColors.onCamera : AppColors.textMuted,
+            text,
+            style: AppTypography.label.copyWith(
+              color: onDark ? AppColors.onCamera : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -52,7 +52,7 @@ class MdStepProgress extends StatelessWidget {
                   child: AnimatedContainer(
                     duration: AppMotion.of(context, AppMotion.short),
                     curve: AppMotion.standard,
-                    height: 4,
+                    height: 6,
                     margin: EdgeInsets.only(
                       right: i == total - 1 ? 0 : AppSpacing.xs,
                     ),

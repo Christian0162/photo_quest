@@ -7,12 +7,13 @@ import '../../../../domain/people/entities/person.dart';
 import '../../../../domain/quests/entities/quest.dart';
 import '../../../types/display_labels.dart';
 import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/common/md_sticker.dart';
 import '../../atoms/people/md_participant_avatar_stack.dart';
-import '../../molecules/common/md_app_card.dart';
+import '../../molecules/common/md_poster_card.dart';
 import '../../molecules/camera/md_photobooth_print.dart';
 
-/// A Quest as an inspiring, tappable card: cover, title, the real-life idea
-/// in one or two lines, and who it's for. Participants show only for a
+/// A Quest as an inspiring poster: the cover fills the card with its title,
+/// who it's for and who's joining inside it. Participants show only for a
 /// user-created pair/group Quest that has them. See design system §15.
 class MdQuestCard extends StatelessWidget {
   const MdQuestCard({
@@ -30,58 +31,52 @@ class MdQuestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MdAppCard(
+    return MdPosterCard(
       onTap: onTap,
-      padding: EdgeInsets.zero,
+      aspectRatio: 4 / 5,
+      radius: AppRadius.xl,
       semanticLabel: [
         quest.title,
         questTypeLabel(quest.type),
         ?quest.description,
       ].join('. '),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (quest.coverImagePath != null)
-            AspectRatio(
-              aspectRatio: 4 / 3,
-              child: MdLocalPhoto(path: quest.coverImagePath),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.ms),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+      background: quest.coverImagePath != null
+          ? MdLocalPhoto(path: quest.coverImagePath)
+          : MdQuestCoverArt(category: quest.category),
+      overlay: [
+        Positioned(
+          top: AppSpacing.md,
+          right: AppSpacing.md,
+          child: MdSticker(
+            label: questTypeLabel(quest.type),
+            icon: questTypeIcon(quest.type),
+            color: AppColors.paper,
+            tilt: 0.05,
+          ),
+        ),
+        Positioned(
+          left: AppSpacing.md,
+          right: AppSpacing.md,
+          bottom: AppSpacing.md,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Text(
                   quest.title,
-                  style: AppTypography.heading3,
+                  style: AppTypography.heading3.copyWith(
+                    color: AppColors.warmCream,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: AppSpacing.xs),
-                Row(
-                  children: [
-                    Icon(
-                      questTypeIcon(quest.type),
-                      size: AppIconSizes.sm,
-                      color: AppColors.textMuted,
-                    ),
-                    const SizedBox(width: AppSpacing.xs),
-                    Expanded(
-                      child: Text(
-                        questTypeLabel(quest.type),
-                        style: AppTypography.caption,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    if (people.isNotEmpty)
-                      MdParticipantAvatarStack(people: people, radius: 10),
-                  ],
-                ),
-              ],
-            ),
+              ),
+              if (people.isNotEmpty)
+                MdParticipantAvatarStack(people: people, radius: 10),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
