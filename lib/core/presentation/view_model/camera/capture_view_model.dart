@@ -115,6 +115,13 @@ class CaptureViewModel extends _$CaptureViewModel {
     state = AsyncData(current.copyWith(look: look));
   }
 
+  /// Opens or tucks away the look picker.
+  void toggleLooks() {
+    final current = state.value;
+    if (current == null) return;
+    state = AsyncData(current.copyWith(showLooks: !current.showLooks));
+  }
+
   /// Shows a pose idea, or the next one if one is already showing. Solves
   /// "what do we do?" without leaving the booth.
   void nextPoseIdea() {

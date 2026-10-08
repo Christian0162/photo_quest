@@ -51,6 +51,7 @@ Widget _capture(AsyncValue<CaptureState> capture) {
       onRetake: () {},
       onModeChanged: (_) {},
       onLookChanged: (_) {},
+      onToggleLooks: () {},
       onPoseIdea: () {},
       onHidePoseIdea: () {},
       onHoldStart: () {},

@@ -29,6 +29,30 @@ class CaptureScreen extends ConsumerWidget {
     if (leave && context.mounted) context.pop();
   }
 
+  /// The sheet watches the booth, so a tapped choice shows as selected
+  /// straight away.
+  void _openSettings(BuildContext context) {
+    final provider = captureViewModelProvider(sessionId);
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => Consumer(
+        builder: (context, ref, _) {
+          final current = ref.watch(provider).value;
+          if (current == null) return const SizedBox.shrink();
+          final viewModel = ref.read(provider.notifier);
+          return MdBoothSettingsSheet(
+            countdownSeconds: current.countdownSeconds,
+            countdownChoices: SettingsRepository.countdownChoices,
+            onCountdownChanged: viewModel.setCountdownSeconds,
+            clipSeconds: current.clipSeconds,
+            clipChoices: SettingsRepository.clipChoices,
+            onClipChanged: viewModel.setClipSeconds,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = captureViewModelProvider(sessionId);
@@ -66,23 +90,12 @@ class CaptureScreen extends ConsumerWidget {
       onRetake: viewModel.retake,
       onModeChanged: viewModel.setMode,
       onLookChanged: viewModel.setLook,
+      onToggleLooks: viewModel.toggleLooks,
       onPoseIdea: viewModel.nextPoseIdea,
       onHidePoseIdea: viewModel.hidePoseIdea,
       onHoldStart: viewModel.startHold,
       onHoldEnd: viewModel.endHold,
-      onOpenSettings: () {
-        final current = ref.read(provider).value;
-        if (current == null) return;
-        showBoothSettingsSheet(
-          context,
-          countdownSeconds: current.countdownSeconds,
-          countdownChoices: SettingsRepository.countdownChoices,
-          onCountdownChanged: viewModel.setCountdownSeconds,
-          clipSeconds: current.clipSeconds,
-          clipChoices: SettingsRepository.clipChoices,
-          onClipChanged: viewModel.setClipSeconds,
-        );
-      },
+      onOpenSettings: () => _openSettings(context),
     );
   }
 }

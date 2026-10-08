@@ -30,6 +30,7 @@ class CaptureState {
     this.countdownSeconds = 3,
     this.clipSeconds = 6,
     this.holdTooShort = false,
+    this.showLooks = false,
   });
 
   /// Photos in a GIF burst.
@@ -98,6 +99,9 @@ class CaptureState {
   /// [captureFailed].
   final bool holdTooShort;
 
+  /// Whether the look picker is open under the mode switch.
+  final bool showLooks;
+
   QuestShot get currentShot => shots[currentIndex];
   bool get isLastShot => currentIndex == shots.length - 1;
   int get shotNumber => currentIndex + 1;
@@ -126,6 +130,7 @@ class CaptureState {
     int? countdownSeconds,
     int? clipSeconds,
     bool holdTooShort = false,
+    bool? showLooks,
   }) {
     return CaptureState(
       quest: quest,
@@ -150,6 +155,7 @@ class CaptureState {
       countdownSeconds: countdownSeconds ?? this.countdownSeconds,
       clipSeconds: clipSeconds ?? this.clipSeconds,
       holdTooShort: holdTooShort,
+      showLooks: showLooks ?? this.showLooks,
     );
   }
 }
