@@ -9,7 +9,16 @@ import '../preview_samples.dart';
 
 Widget _people(AsyncValue<List<Person>> people) {
   return MdAppWidgetPreview(
-    child: PeopleTemplate(people: people, onRetry: () {}, onAddPerson: () {}),
+    child: PeopleTemplate(
+      people: people,
+      onRetry: () {},
+      onAddPerson: () {},
+      friends: const AsyncData([]),
+      onAddFriend: () {},
+      onRespondToFriend: (_, {required accept}) {},
+      onRemoveFriend: (_) {},
+      onRetryFriends: () {},
+    ),
   );
 }
 
