@@ -127,8 +127,8 @@ class MdQuestPromptBar extends StatelessWidget {
 }
 
 /// The sparkle in the card's badge. It twinkles: swells, brightens and
-/// turns a little, then settles, a few times before resting for good.
-/// Skipped under reduced motion (design system §48-50).
+/// turns a little, then settles, pausing between twinkles for as long as the
+/// card is on screen. Skipped under reduced motion (design system §48-50).
 class _TwinklingSparkle extends StatefulWidget {
   const _TwinklingSparkle();
 
@@ -138,15 +138,14 @@ class _TwinklingSparkle extends StatefulWidget {
 
 class _TwinklingSparkleState extends State<_TwinklingSparkle>
     with SingleTickerProviderStateMixin {
-  static const _twinkles = 6;
   static const _twinkle = Duration(milliseconds: 900);
   static const _pause = Duration(milliseconds: 900);
 
-  // One run covers every twinkle and the pauses between, so there are no
-  // timers to outlive the widget.
+  // One run is a single twinkle plus its pause, repeated until the widget is
+  // disposed (the card closing), so there are no timers to outlive it.
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: (_twinkle + _pause) * _twinkles,
+    duration: _twinkle + _pause,
   );
   bool _started = false;
 
@@ -155,15 +154,13 @@ class _TwinklingSparkleState extends State<_TwinklingSparkle>
     super.didChangeDependencies();
     if (_started || AppMotion.reduced(context)) return;
     _started = true;
-    _controller.forward();
+    _controller.repeat();
   }
 
   /// 0 while resting, rising to 1 and back to 0 through each twinkle.
   double get _glow {
-    final cycle = (_twinkle + _pause).inMicroseconds;
-    final elapsed = (_controller.duration! * _controller.value).inMicroseconds;
-    final into = elapsed % cycle;
-    if (_controller.isCompleted || into >= _twinkle.inMicroseconds) return 0;
+    final into = (_controller.duration! * _controller.value).inMicroseconds;
+    if (into >= _twinkle.inMicroseconds) return 0;
     return math.sin(math.pi * into / _twinkle.inMicroseconds);
   }
 

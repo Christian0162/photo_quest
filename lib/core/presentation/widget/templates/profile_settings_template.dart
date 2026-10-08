@@ -52,7 +52,6 @@ class _ProfileSettingsTemplateState extends State<ProfileSettingsTemplate> {
   Widget build(BuildContext context) {
     return MdAppScaffold(
       showAppBar: true,
-      title: 'Profile settings',
       bottomAction: MdPrimaryButton(
         label: 'Save',
         icon: Icons.check_rounded,
@@ -62,11 +61,16 @@ class _ProfileSettingsTemplateState extends State<ProfileSettingsTemplate> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.gutter,
-          AppSpacing.sm,
+          0,
           AppSpacing.gutter,
           AppSpacing.xxl,
         ),
         children: [
+          Semantics(
+            header: true,
+            child: Text('Profile settings', style: AppTypography.heading1),
+          ),
+          const SizedBox(height: AppSpacing.lg),
           Center(child: MdAvatarImage(avatarId: _avatarId, radius: 48)),
           const SizedBox(height: AppSpacing.lg),
           const Text('Your name', style: AppTypography.label),

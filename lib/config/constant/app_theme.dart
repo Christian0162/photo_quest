@@ -130,7 +130,9 @@ abstract final class AppTheme {
         ),
         labelStyle: AppTypography.label,
         side: const BorderSide(color: AppColors.line),
-        shape: const StadiumBorder(),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+        ),
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.xs,
           vertical: AppSpacing.xs,
@@ -166,7 +168,7 @@ abstract final class AppTheme {
         ),
         actionTextColor: AppColors.filmYellow,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.floating),
         ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(

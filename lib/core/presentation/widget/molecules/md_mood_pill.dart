@@ -29,9 +29,13 @@ class MdMoodPill extends StatelessWidget {
       excludeSemantics: true,
       child: Material(
         color: AppColors.softPeach,
-        shape: const StadiumBorder(),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+        ),
         child: InkWell(
-          customBorder: const StadiumBorder(),
+          customBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+          ),
           onTap: () {
             AppHaptics.selection();
             onTap();
@@ -59,7 +63,7 @@ class MdMoodPill extends StatelessWidget {
                       label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTypography.label.copyWith(fontSize: 13),
+                      style: AppTypography.label,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.xs),

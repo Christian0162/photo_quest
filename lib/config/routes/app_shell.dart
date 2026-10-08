@@ -107,6 +107,38 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  /// How far (or how fast) a sideways swipe must go to change tabs, so a
+  /// slip of the thumb while scrolling doesn't.
+  static const _swipeDistance = 72.0;
+  static const _swipeVelocity = 700.0;
+
+  double _swipeDx = 0;
+
+  /// Swiping left moves to the next tab, right to the previous one. A
+  /// sideways shelf under the finger keeps its own swipe.
+  void _onSwipeEnd(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    final dx = _swipeDx;
+    _swipeDx = 0;
+
+    final far = dx.abs() >= _swipeDistance;
+    final fast = velocity.abs() >= _swipeVelocity;
+    if (!far && !fast) return;
+
+    // The direction the finger travelled, from distance or, failing that,
+    // speed.
+    final toNext = (dx != 0 ? dx : velocity) < 0;
+    final current = widget.navigationShell.currentIndex;
+    final target = current + (toNext ? 1 : -1);
+    if (target < 0 || target >= widget.navigationShell.route.branches.length) {
+      return;
+    }
+
+    AppHaptics.selection();
+    setState(() => _dockShown = true);
+    widget.navigationShell.goBranch(target);
+  }
+
   /// Hides the dock while reading down a page; shows it again on the way
   /// back up. Sideways shelves and chip rows don't count.
   bool _onScroll(UserScrollNotification notification) {
@@ -132,9 +164,16 @@ class _AppShellState extends State<AppShell> {
     return Scaffold(
       body: Stack(
         children: [
-          NotificationListener<UserScrollNotification>(
-            onNotification: _onScroll,
-            child: widget.navigationShell,
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onHorizontalDragStart: (_) => _swipeDx = 0,
+            onHorizontalDragUpdate: (details) => _swipeDx += details.delta.dx,
+            onHorizontalDragEnd: _onSwipeEnd,
+            onHorizontalDragCancel: () => _swipeDx = 0,
+            child: NotificationListener<UserScrollNotification>(
+              onNotification: _onScroll,
+              child: widget.navigationShell,
+            ),
           ),
           Positioned(
             left: 0,
@@ -190,7 +229,7 @@ class _AppShellState extends State<AppShell> {
                                   decoration: BoxDecoration(
                                     color: AppColors.dock,
                                     borderRadius: BorderRadius.circular(
-                                      AppRadius.pill,
+                                      AppRadius.floating,
                                     ),
                                     boxShadow: AppShadows.floating,
                                   ),
@@ -329,7 +368,9 @@ class _DockTabsState extends State<_DockTabs>
                       height: _bubbleHeight * (1 - 0.12 * pull),
                       decoration: BoxDecoration(
                         color: AppColors.warmCream,
-                        borderRadius: BorderRadius.circular(AppRadius.pill),
+                        borderRadius: BorderRadius.circular(
+                          AppRadius.floating - 6,
+                        ),
                       ),
                     ),
                   ),

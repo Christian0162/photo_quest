@@ -26,16 +26,11 @@ class ProfileSettingsScreen extends ConsumerWidget {
 
     // Wait for the saved values, so the fields start filled in.
     if (person.isLoading || avatar.isLoading) {
-      return const MdAppScaffold(
-        showAppBar: true,
-        title: 'Profile settings',
-        body: SizedBox.shrink(),
-      );
+      return const MdAppScaffold(showAppBar: true, body: SizedBox.shrink());
     }
     if (person.hasError || avatar.hasError) {
       return MdAppScaffold(
         showAppBar: true,
-        title: 'Profile settings',
         body: MdEmptyState.error(
           title: "We couldn't open your profile",
           onRetry: () {

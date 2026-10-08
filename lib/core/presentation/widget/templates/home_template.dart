@@ -12,6 +12,7 @@ import '../../types/memories/memory_summary.dart';
 import '../../types/quests/quest_needing_confirmation.dart';
 import '../atoms/md_fade_slide_in.dart';
 import '../atoms/md_profile_button.dart';
+import '../atoms/md_section_action.dart';
 import '../atoms/md_skeleton_box.dart';
 import '../atoms/md_smooth_switch.dart';
 import '../molecules/md_idea_tile.dart';
@@ -166,7 +167,6 @@ class HomeTemplate extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: AppSpacing.sm),
                 const MdSectionHeader(
                   title: "Needs everyone's OK",
                   subtitle: 'Get your people to say they’re in.',
@@ -189,14 +189,13 @@ class HomeTemplate extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: AppSpacing.sm),
             _Padded(
               child: MdSectionHeader(
                 title: 'Recent memories',
                 trailing: memories.value?.isNotEmpty ?? false
-                    ? TextButton(
+                    ? MdSectionAction(
+                        label: 'See all',
                         onPressed: onSeeAllMemories,
-                        child: const Text('See all'),
                       )
                     : null,
               ),
@@ -231,7 +230,6 @@ class HomeTemplate extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: AppSpacing.sm),
               const MdSectionHeader(
                 title: 'Something else in mind?',
                 subtitle: 'Pick another quest, or make your own.',

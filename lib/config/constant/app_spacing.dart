@@ -23,18 +23,28 @@ abstract final class AppSpacing {
   static const dockHeight = 56.0;
 }
 
-/// Centralized corner-radius scale. See CLAUDE.md §27, design system §9.
+/// Centralized corner-radius scale. Rounded corners in the app are 10px, and
+/// 24px on the floating toast and navigation bar, so pop-ups read as softer:
+/// the names stay so each surface keeps saying what it is (a card, a photo,
+/// a chip), but they all share one soft, slightly squared look. Only things
+/// that are genuinely round (avatars, the shutter) are circles. See
+/// CLAUDE.md §27, design system §9.
 abstract final class AppRadius {
-  static const sm = 10.0;
-  static const md = 14.0;
-  static const lg = 18.0;
-  static const xl = 24.0;
+  static const corner = 10.0;
+
+  static const sm = corner;
+  static const md = corner;
+  static const lg = corner;
+  static const xl = corner;
 
   /// Large photography and hero surfaces.
-  static const photo = 28.0;
+  static const photo = corner;
 
-  /// Genuinely pill-shaped controls only: tags, status, compact chips.
-  static const pill = 999.0;
+  /// Floating surfaces: the toast and the navigation bar.
+  static const floating = 24.0;
+
+  /// Tags, status, compact chips.
+  static const pill = corner;
 }
 
 /// Icon sizes. See design system §56.

@@ -2,6 +2,9 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'settle.dart';
+
 import 'package:photoquest/app.dart';
 import 'package:photoquest/config/constant/app_theme.dart';
 import 'package:photoquest/core/data/database/app_database.dart'
@@ -51,7 +54,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
       child: const PhotoQuestApp(),
     ),
   );
-  await tester.pumpAndSettle();
+  await tester.settle();
 }
 
 void main() {
@@ -69,7 +72,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('Feeling happy'), findsOneWidget);
     expect(find.bySemanticsLabel('Your profile'), findsOneWidget);
@@ -85,7 +88,7 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(MaterialApp(theme: AppTheme.light, home: _home()));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('How are you feeling?'), findsOneWidget);
   });
@@ -104,7 +107,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     // Pinned to the preview's "now": 19h and 23h left.
     expect(find.text('Your Day'), findsWidgets);
@@ -125,13 +128,13 @@ void main() {
     expect(find.text('How are you feeling?'), findsOneWidget);
 
     await tester.tap(find.text('How are you feeling?'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     // Seeing how loved ones feel needs accounts, which are not here yet.
     expect(find.text('Coming soon'), findsOneWidget);
 
     await tester.tap(find.text('Sad'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('Feeling sad'), findsOneWidget);
     expect(find.text('Coming soon'), findsNothing);
@@ -142,7 +145,7 @@ void main() {
     await _pumpApp(tester);
 
     await tester.tap(find.bySemanticsLabel('Your profile'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('Private by design'), findsOneWidget);
     expect(find.text('Profile settings'), findsOneWidget);
@@ -160,25 +163,25 @@ void main() {
     expect(onHome, findsNothing);
 
     await tester.tap(find.bySemanticsLabel('Your profile'));
-    await tester.pumpAndSettle();
+    await tester.settle();
     await tester.tap(find.text('Profile settings'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     await tester.enterText(find.byType(TextField), 'Maya');
     // Browse a category, then pick from it.
     await tester.tap(find.text('Travel'));
-    await tester.pumpAndSettle();
+    await tester.settle();
     await tester.tap(find.bySemanticsLabel('Globe avatar'));
-    await tester.pumpAndSettle();
+    await tester.settle();
     await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     // Back on Settings, the name shows under Profile settings.
     expect(find.text('Maya'), findsOneWidget);
 
     // And on Home, the picked avatar replaces the plain icon.
     await tester.pageBack();
-    await tester.pumpAndSettle();
+    await tester.settle();
     expect(onHome, findsOneWidget);
   });
 }

@@ -15,7 +15,7 @@ abstract final class AppTypography {
   /// Hero moments: greeting, "Quest complete".
   static const TextStyle display = TextStyle(
     fontFamily: headingFamily,
-    fontSize: 36,
+    fontSize: 30,
     height: 1.1,
     fontWeight: FontWeight.w700,
     letterSpacing: -0.5,
@@ -25,7 +25,7 @@ abstract final class AppTypography {
   /// Screen titles.
   static const TextStyle heading1 = TextStyle(
     fontFamily: headingFamily,
-    fontSize: 28,
+    fontSize: 24,
     height: 1.15,
     fontWeight: FontWeight.w700,
     letterSpacing: -0.3,
@@ -35,7 +35,7 @@ abstract final class AppTypography {
   /// Card heroes, step questions.
   static const TextStyle heading2 = TextStyle(
     fontFamily: headingFamily,
-    fontSize: 22,
+    fontSize: 19,
     height: 1.2,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
@@ -44,7 +44,7 @@ abstract final class AppTypography {
   /// Section headers, card titles.
   static const TextStyle heading3 = TextStyle(
     fontFamily: headingFamily,
-    fontSize: 18,
+    fontSize: 16,
     height: 1.25,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
@@ -52,7 +52,7 @@ abstract final class AppTypography {
 
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: bodyFamily,
-    fontSize: 17,
+    fontSize: 15,
     height: 1.5,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -60,7 +60,7 @@ abstract final class AppTypography {
 
   static const TextStyle body = TextStyle(
     fontFamily: bodyFamily,
-    fontSize: 16,
+    fontSize: 14,
     height: 1.5,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -69,7 +69,7 @@ abstract final class AppTypography {
   /// Supporting copy under a heading or on a card.
   static const TextStyle bodyMuted = TextStyle(
     fontFamily: bodyFamily,
-    fontSize: 14,
+    fontSize: 13,
     height: 1.45,
     fontWeight: FontWeight.w400,
     color: AppColors.textMuted,
@@ -78,7 +78,7 @@ abstract final class AppTypography {
   /// Compact emphasized labels: chips, nav, status pills.
   static const TextStyle label = TextStyle(
     fontFamily: bodyFamily,
-    fontSize: 14,
+    fontSize: 13,
     height: 1.3,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
@@ -86,7 +86,7 @@ abstract final class AppTypography {
 
   static const TextStyle caption = TextStyle(
     fontFamily: bodyFamily,
-    fontSize: 12,
+    fontSize: 11,
     height: 1.35,
     fontWeight: FontWeight.w500,
     color: AppColors.textMuted,
@@ -95,7 +95,7 @@ abstract final class AppTypography {
   /// Small uppercase kicker above a hero title ("TODAY'S QUEST").
   static const TextStyle overline = TextStyle(
     fontFamily: bodyFamily,
-    fontSize: 12,
+    fontSize: 11,
     height: 1.3,
     fontWeight: FontWeight.w600,
     letterSpacing: 1.2,
@@ -104,7 +104,7 @@ abstract final class AppTypography {
 
   static const TextStyle button = TextStyle(
     fontFamily: bodyFamily,
-    fontSize: 16,
+    fontSize: 15,
     height: 1.25,
     fontWeight: FontWeight.w600,
     color: AppColors.onCoral,
@@ -113,7 +113,7 @@ abstract final class AppTypography {
   /// A handwritten note on a photobooth print ("Better together").
   static const TextStyle script = TextStyle(
     fontFamily: scriptFamily,
-    fontSize: 22,
+    fontSize: 20,
     height: 1.05,
     fontWeight: FontWeight.w600,
     color: AppColors.inkBrown,
@@ -123,7 +123,7 @@ abstract final class AppTypography {
   /// in October").
   static const TextStyle journal = TextStyle(
     fontFamily: scriptFamily,
-    fontSize: 26,
+    fontSize: 24,
     height: 1.1,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,

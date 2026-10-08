@@ -3,14 +3,16 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../types/quests/quest_category_shelf.dart';
 import '../atoms/md_fade_slide_in.dart';
 import '../atoms/md_primary_button.dart';
+import '../atoms/md_round_icon_button.dart';
 import '../atoms/md_skeleton_box.dart';
 import '../molecules/md_empty_state.dart';
+import '../molecules/md_page_header.dart';
 import '../organisms/md_app_scaffold.dart';
 import '../organisms/md_quest_card.dart';
 import '../organisms/md_quest_category_banner.dart';
@@ -53,18 +55,14 @@ class QuestSelectionTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MdAppScaffold(
-      showAppBar: true,
-      actions: [
-        TextButton.icon(
-          onPressed: onCreateQuest,
-          icon: const Icon(Icons.edit_rounded, size: AppIconSizes.md),
-          label: const Text('Make your own'),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-      ],
       body: shelves.when(
         loading: () => ListView(
-          padding: const EdgeInsets.all(AppSpacing.gutter),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.gutter,
+            AppSpacing.md,
+            AppSpacing.gutter,
+            AppSpacing.gutter,
+          ),
           physics: const NeverScrollableScrollPhysics(),
           children: const [
             MdSkeletonBox(width: 220, height: 36),
@@ -92,33 +90,33 @@ class QuestSelectionTemplate extends StatelessWidget {
             );
           }
 
+          // Same page rhythm as the other tabs: header, then content, with
+          // room at the end so the last shelf clears the dock.
           return ListView(
-            padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
+            padding: const EdgeInsets.only(
+              top: AppSpacing.md,
+              bottom: AppSpacing.tabScrollEnd,
+            ),
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.gutter,
-                  0,
-                  AppSpacing.gutter,
-                  AppSpacing.xs,
-                ),
-                child: Semantics(
-                  header: true,
-                  child: Text('Choose a quest', style: AppTypography.heading1),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.gutter,
                 ),
-                child: Text(
-                  'Pick something to do together — the photos come after.',
-                  style: AppTypography.body.copyWith(
-                    color: AppTypography.bodyMuted.color,
+                child: MdPageHeader(
+                  overline: 'FIND SOMETHING TO DO',
+                  title: 'Choose a quest',
+                  subtitle:
+                      'Pick something to do together — the photos come after.',
+                  trailing: MdRoundIconButton(
+                    icon: Icons.edit_rounded,
+                    tooltip: 'Make your own',
+                    backgroundColor: AppColors.warmCoral,
+                    foregroundColor: AppColors.onCoral,
+                    onPressed: onCreateQuest,
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.lg),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.gutter,

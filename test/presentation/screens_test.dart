@@ -2,6 +2,9 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'settle.dart';
+
 import 'package:photoquest/app.dart';
 import 'package:photoquest/config/constant/app_theme.dart';
 import 'package:photoquest/core/data/database/app_database.dart'
@@ -87,7 +90,7 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text("TODAY'S QUEST"), findsOneWidget);
     expect(find.text("Let's do it"), findsOneWidget);
@@ -106,11 +109,11 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     for (final tab in ['People', 'Memories', 'Quests', 'Home']) {
       await tester.tap(find.bySemanticsLabel(tab));
-      await tester.pumpAndSettle();
+      await tester.settle();
       expect(
         find.bySemanticsLabel('Make a quest').hitTestable(),
         findsOneWidget,
@@ -119,7 +122,7 @@ void main() {
     }
 
     await tester.tap(find.bySemanticsLabel('Make a quest'));
-    await tester.pumpAndSettle();
+    await tester.settle();
     expect(find.bySemanticsLabel('Make a quest'), findsNothing);
   });
 
@@ -134,13 +137,13 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     final card = find.bySemanticsLabel(RegExp('^Start a quest'));
     expect(card, findsOneWidget);
 
     await tester.tap(find.byTooltip('Close'));
-    await tester.pumpAndSettle();
+    await tester.settle();
     expect(card, findsNothing);
   });
 
@@ -154,14 +157,14 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     // It stays put on its own; only the X closes it.
     await tester.pump(const Duration(minutes: 1));
     expect(find.bySemanticsLabel(RegExp('^Start a quest')), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel(RegExp('^Start a quest')));
-    await tester.pumpAndSettle();
+    await tester.settle();
     expect(find.byType(QuestSelectionScreen), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp('^Start a quest')), findsOneWidget);
   });
@@ -178,12 +181,12 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     await tester.tap(find.bySemanticsLabel('People'));
-    await tester.pumpAndSettle();
+    await tester.settle();
     await tester.tap(find.byTooltip('Add someone'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('Their name'), findsOneWidget);
     expect(find.bySemanticsLabel('Make a quest').hitTestable(), findsNothing);
@@ -200,7 +203,7 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     final dock = find.bySemanticsLabel('Make a quest');
     final card = find.bySemanticsLabel(RegExp('^Start a quest'));
@@ -209,14 +212,14 @@ void main() {
 
     final page = find.byType(Scrollable).first;
     await tester.drag(page, const Offset(0, -200));
-    await tester.pumpAndSettle();
+    await tester.settle();
     expect(dock.hitTestable(), findsNothing);
     // The welcome card stays, and drops into the dock's place.
     expect(card.hitTestable(), findsOneWidget);
     expect(tester.getTopLeft(card).dy, greaterThan(cardTop));
 
     await tester.drag(page, const Offset(0, 100));
-    await tester.pumpAndSettle();
+    await tester.settle();
     expect(dock.hitTestable(), findsOneWidget);
     expect(tester.getTopLeft(card).dy, cardTop);
   });
@@ -247,6 +250,68 @@ void main() {
     expect(find.text("TODAY'S QUEST"), findsOneWidget);
   });
 
+  testWidgets('swiping sideways moves to the next or previous tab, and stops '
+      'at the first and last', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        child: const PhotoQuestApp(),
+      ),
+    );
+    await tester.settle();
+
+    Future<void> swipe(double dx) async {
+      await tester.flingFrom(const Offset(195, 420), Offset(dx, 0), 1500);
+      await tester.settle();
+    }
+
+    expect(find.text("TODAY'S QUEST"), findsOneWidget);
+
+    // Already on the first tab: swiping right goes nowhere.
+    await swipe(300);
+    expect(find.text("TODAY'S QUEST"), findsOneWidget);
+
+    // Left goes forward: Quests, Memories, People.
+    await swipe(-300);
+    expect(find.text('Choose a quest'), findsOneWidget);
+    await swipe(-300);
+    expect(find.text('YOUR MEMORY BOX'), findsOneWidget);
+    await swipe(-300);
+    expect(find.text('YOUR CIRCLE'), findsOneWidget);
+
+    // Last tab: swiping left goes nowhere.
+    await swipe(-300);
+    expect(find.text('YOUR CIRCLE'), findsOneWidget);
+
+    // Right goes back.
+    await swipe(300);
+    expect(find.text('YOUR MEMORY BOX'), findsOneWidget);
+  });
+
+  testWidgets('a small sideways nudge does not change tabs', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        child: const PhotoQuestApp(),
+      ),
+    );
+    await tester.settle();
+
+    await tester.drag(find.text("TODAY'S QUEST"), const Offset(-30, 0));
+    await tester.settle();
+
+    expect(find.text("TODAY'S QUEST"), findsOneWidget);
+  });
+
   testWidgets('the nav dock fits a small phone at large text on every tab', (
     tester,
   ) async {
@@ -264,11 +329,11 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     for (final tab in ['Memories', 'People', 'Home']) {
       await tester.tap(find.bySemanticsLabel(tab));
-      await tester.pumpAndSettle();
+      await tester.settle();
       expect(tester.takeException(), isNull, reason: 'on $tab');
     }
   });
@@ -293,7 +358,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     // The month's first memory is featured: when, how long ago, the words.
     expect(find.text('MONDAY, SEP 14 · 8:42 PM'), findsOneWidget);
@@ -321,7 +386,7 @@ void main() {
       scrollable: page,
     );
     await tester.drag(page, const Offset(0, -200));
-    await tester.pumpAndSettle();
+    await tester.settle();
     // Only one journal entry in the samples, so one cover to open.
     await tester.tap(
       find.bySemanticsLabel('View the photos. You and Buddy, together.'),
@@ -329,7 +394,7 @@ void main() {
     expect(viewed, ('Buddy’s Park Day', 0));
 
     await tester.ensureVisible(find.text('Buddy’s Park Day'));
-    await tester.pumpAndSettle();
+    await tester.settle();
     await tester.tap(find.text('Buddy’s Park Day'));
     expect(opened, 'Buddy’s Park Day');
 
@@ -338,7 +403,7 @@ void main() {
       -300,
       scrollable: page,
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
     await tester.tap(find.bySemanticsLabel('This day, 1 memory'));
     expect(filtered, MemoryFilter.thisDay);
   });
@@ -364,12 +429,12 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     final page = find.byType(Scrollable).first;
     for (var i = 0; i < 20; i++) {
       await tester.drag(page, const Offset(0, -300));
-      await tester.pumpAndSettle();
+      await tester.settle();
       expect(tester.takeException(), isNull);
     }
   });
@@ -386,7 +451,7 @@ void main() {
         overrides: [memoryListProvider.overrideWith((ref) => const [])],
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('Your memories will live here'), findsOneWidget);
     expect(find.text('Start a quest'), findsOneWidget);
@@ -404,10 +469,10 @@ void main() {
         overrides: [appDatabaseProvider.overrideWithValue(db)],
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     await tester.tap(find.byTooltip('Add someone'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     final addButton = find.widgetWithText(FilledButton, 'Add');
     expect(tester.widget<FilledButton>(addButton).onPressed, isNull);
@@ -416,7 +481,7 @@ void main() {
     await tester.enterText(find.byType(TextField), 'Sam');
     await tester.pump();
     await tester.tap(find.widgetWithText(FilledButton, 'Add Sam'));
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('Sam'), findsOneWidget);
   });
@@ -430,7 +495,7 @@ void main() {
         ],
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.settle();
 
     expect(find.text('Keep it'), findsOneWidget);
     expect(find.text('Retake'), findsOneWidget);

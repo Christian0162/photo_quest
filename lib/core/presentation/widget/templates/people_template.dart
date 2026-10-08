@@ -17,7 +17,7 @@ import '../molecules/md_page_header.dart';
 import '../molecules/md_tile_grid.dart';
 import '../organisms/md_app_scaffold.dart';
 
-/// The people (and pets) your quests and memories are about, grouped the
+/// The people your quests and memories are about, grouped the
 /// way life groups them — your person, family, friends, pets. Private to
 /// this device — not a social directory. See CLAUDE.md §40, design system
 /// §20.
@@ -53,7 +53,7 @@ class PeopleTemplate extends StatelessWidget {
                 child: MdPageHeader(
                   overline: 'YOUR CIRCLE',
                   title: 'People',
-                  subtitle: 'The people (and pets) your memories are about.',
+                  subtitle: 'The memories are all about.',
                   trailing: MdRoundIconButton(
                     icon: Icons.person_add_alt_1_rounded,
                     tooltip: 'Add someone',

@@ -21,7 +21,11 @@ class MdSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      // A lone title lines up with its action; with a subtitle the action
+      // sits at the bottom, beside the supporting line.
+      crossAxisAlignment: subtitle == null
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.end,
       children: [
         Expanded(
           child: Column(
