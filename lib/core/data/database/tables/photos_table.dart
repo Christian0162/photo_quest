@@ -19,6 +19,10 @@ class Photos extends Table {
   /// photo, gif, boomerang or video (`PhotoKind`). Added in schema v3.
   TextColumn get kind => text().withDefault(const Constant('photo'))();
 
+  /// True for a 360° clip whose file is not mirrored but whose preview and
+  /// poster were, so the viewer flips it to match. Added in schema v5.
+  BoolColumn get mirrored => boolean().withDefault(const Constant(false))();
+
   @override
   Set<Column> get primaryKey => {id};
 }

@@ -11,7 +11,9 @@ import 'md_local_photo.dart';
 /// Plays a saved 360° clip muted, on loop, filling its box — like a living
 /// photo. Tap to pause or play. With reduced motion it waits for a tap
 /// instead of starting on its own. Shows [posterPath] until the clip is
-/// ready, and keeps showing it if the clip can't be read. See CLAUDE.md §42,
+/// ready, and keeps showing it if the clip can't be read. With [mirrored]
+/// the clip is flipped left-right as it is shown, so a front-camera clip
+/// looks like the preview and poster without re-encoding the file. See CLAUDE.md §42,
 /// design system §50.
 class MdLoopingVideo extends StatefulWidget {
   const MdLoopingVideo({
@@ -19,12 +21,14 @@ class MdLoopingVideo extends StatefulWidget {
     required this.path,
     this.posterPath,
     this.fit = BoxFit.cover,
+    this.mirrored = false,
     this.semanticLabel,
   });
 
   final String path;
   final String? posterPath;
   final BoxFit fit;
+  final bool mirrored;
   final String? semanticLabel;
 
   @override
@@ -106,7 +110,10 @@ class _MdLoopingVideoState extends State<MdLoopingVideo> {
                 child: SizedBox(
                   width: controller.value.size.width,
                   height: controller.value.size.height,
-                  child: VideoPlayer(controller),
+                  child: Transform.flip(
+                    flipX: widget.mirrored,
+                    child: VideoPlayer(controller),
+                  ),
                 ),
               ),
             if (_ready && !playing)

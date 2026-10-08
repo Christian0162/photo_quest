@@ -38,6 +38,7 @@ class MdShotMedia extends StatelessWidget {
             path: photo.originalPath,
             posterPath: photo.thumbnailPath,
             fit: fit,
+            mirrored: photo.mirrored,
             semanticLabel: semanticLabel,
           )
         : MdLocalPhoto(

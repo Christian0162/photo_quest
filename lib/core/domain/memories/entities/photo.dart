@@ -34,6 +34,7 @@ class Photo {
     required this.width,
     required this.height,
     this.kind = PhotoKind.photo,
+    this.mirrored = false,
   });
 
   final String id;
@@ -48,6 +49,10 @@ class Photo {
 
   /// One of [PhotoKind].
   final String kind;
+
+  /// A clip recorded unmirrored from a front camera whose preview was
+  /// mirrored; the viewer flips it so it matches the preview and poster.
+  final bool mirrored;
 
   bool get isVideo => kind == PhotoKind.video;
 

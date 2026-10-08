@@ -39,6 +39,7 @@ class MemoryRepository {
             width: r.width,
             height: r.height,
             kind: r.kind,
+            mirrored: r.mirrored,
           ),
         )
         .toList();
@@ -139,6 +140,7 @@ class MemoryRepository {
     required int width,
     required int height,
     String kind = PhotoKind.photo,
+    bool mirrored = false,
   }) async {
     final capturedAt = DateTime.now();
 
@@ -154,6 +156,7 @@ class MemoryRepository {
         width: width,
         height: height,
         kind: Value(kind),
+        mirrored: Value(mirrored),
       ),
     );
 
@@ -168,6 +171,7 @@ class MemoryRepository {
       width: width,
       height: height,
       kind: kind,
+      mirrored: mirrored,
     );
   }
 
