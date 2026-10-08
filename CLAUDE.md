@@ -1238,6 +1238,18 @@ Template   (widget/templates/)  the full page design. Plain data + callbacks
                                 repositories/services.
 ```
 
+**Fetching and loading live in the Screen, never in a Template.** The Screen
+watches the providers and decides what to show: while the data the page is
+made of has not arrived (`AsyncValue.isFirstFetch`, from
+`presentation/types/async_value_loading.dart`), it returns
+`MdAppScaffold(body: MdScreenLoading(...))` and nothing else, so the tab bar
+stays but no content is drawn. Once it has arrived it passes the data into the
+Template. A re-fetch that already has data keeps the page up. A Template never
+checks `isLoading`/`isFirstFetch` to swap in a whole-page loader and never
+fetches; it only draws the `AsyncValue` sections it is handed (a small
+section-level skeleton or error is fine). The loader is the shared molecule
+`MdScreenLoading` (`widget/molecules/common/`).
+
 Templates build on the shared, reusable `MdAppScaffold`
 (`widget/organisms/common/md_app_scaffold.dart`) — app bar, safe area, pinned bottom
 action, back-button interception — and use `showAppMessage` for snackbars.
