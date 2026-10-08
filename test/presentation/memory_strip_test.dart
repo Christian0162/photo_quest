@@ -36,6 +36,7 @@ void main() {
           onDoAgain: (_) {},
           onDecorate: () {},
           onDownloadStrip: () {},
+          onInviteFriend: () {},
         ),
       ),
     );

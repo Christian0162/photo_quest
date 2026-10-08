@@ -7,6 +7,7 @@ import 'package:photoquest/config/constant/app_theme.dart';
 import 'package:photoquest/core/data/database/app_database.dart'
     show AppDatabase;
 import 'package:photoquest/core/data/database/database_providers.dart';
+import 'package:photoquest/core/data/repositories/auth_repository_provider.dart';
 import 'package:photoquest/core/domain/camera/enum/capture_phase.dart';
 import 'package:photoquest/core/domain/memories/entities/photo.dart';
 import 'package:photoquest/core/domain/memories/enum/memory_filter.dart';
@@ -21,6 +22,8 @@ import 'package:photoquest/core/presentation/view_model/memories/memory_list_vie
 import 'package:photoquest/core/presentation/widget/molecules/quests/md_quest_prompt_bar.dart';
 import 'package:photoquest/core/presentation/widget/templates/memories/memories_template.dart';
 import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
+
+import '../support/fake_auth_repository.dart';
 
 Widget _themed(Widget child, {List overrides = const []}) {
   return ProviderScope(
@@ -83,7 +86,12 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        overrides: [
+          appDatabaseProvider.overrideWithValue(db),
+          authRepositoryProvider.overrideWithValue(
+            FakeAuthRepository(signedIn: true),
+          ),
+        ],
         child: const PhotoQuestApp(),
       ),
     );
@@ -101,7 +109,12 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        overrides: [
+          appDatabaseProvider.overrideWithValue(db),
+          authRepositoryProvider.overrideWithValue(
+            FakeAuthRepository(signedIn: true),
+          ),
+        ],
         child: const PhotoQuestApp(),
       ),
     );
@@ -131,7 +144,12 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        overrides: [
+          appDatabaseProvider.overrideWithValue(db),
+          authRepositoryProvider.overrideWithValue(
+            FakeAuthRepository(signedIn: true),
+          ),
+        ],
         child: const PhotoQuestApp(),
       ),
     );
@@ -163,7 +181,12 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        overrides: [
+          appDatabaseProvider.overrideWithValue(db),
+          authRepositoryProvider.overrideWithValue(
+            FakeAuthRepository(signedIn: true),
+          ),
+        ],
         child: const PhotoQuestApp(),
       ),
     );
@@ -185,6 +208,7 @@ void main() {
       MaterialApp(
         theme: AppTheme.light,
         home: MemoriesTemplate(
+          onOpenShared: () {},
           box: AsyncData(PreviewSamples.memoryBox()),
           now: PreviewSamples.today,
           onFilterChanged: (filter) => filtered = filter,
@@ -264,6 +288,7 @@ void main() {
           onStartQuest: () {},
           onOpenMemory: (_) {},
           onViewPhoto: (_, _) {},
+          onOpenShared: () {},
         ),
       ),
     );
@@ -304,7 +329,12 @@ void main() {
     await tester.pumpWidget(
       _themed(
         const PeopleScreen(),
-        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        overrides: [
+          appDatabaseProvider.overrideWithValue(db),
+          authRepositoryProvider.overrideWithValue(
+            FakeAuthRepository(signedIn: true),
+          ),
+        ],
       ),
     );
     await tester.pumpAndSettle();

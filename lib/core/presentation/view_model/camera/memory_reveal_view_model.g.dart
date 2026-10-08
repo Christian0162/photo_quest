@@ -79,7 +79,7 @@ final class MemoryRevealProvider
   }
 }
 
-String _$memoryRevealHash() => r'47562c52b25d6c06faafff135bfec5584d67cd3d';
+String _$memoryRevealHash() => r'570033948474e91299e3496c7a7872aad4eaa135';
 
 /// Makes sure a just-completed session has a printed strip — composing a
 /// default one only if the memory has none yet, so a decorated keepsake is

@@ -7,6 +7,7 @@ import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_motion.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
+import '../../atoms/common/md_photoquest_logo.dart';
 
 /// The moment the app opens. Picks up exactly where the native splash
 /// leaves off — coral, with the icon's fanned prints — then the prints
@@ -172,7 +173,12 @@ class _Stage extends StatelessWidget {
             offset: Offset(0, -rise),
             child: SizedBox.square(
               dimension: MdLaunchReveal.artSize,
-              child: _Prints(open: open, twinkle: twinkle),
+              child: MdPhotoQuestLogo(
+                size: MdLaunchReveal.artSize,
+                open: open,
+                twinkle: twinkle,
+                semanticLabel: null,
+              ),
             ),
           ),
           Transform.translate(
@@ -216,152 +222,4 @@ class _Stage extends StatelessWidget {
       ),
     );
   }
-}
-
-/// The icon's three prints, drawn to the same geometry as the launch
-/// image and app icon (`assets/icon/app_icon.png`). [open] fans the side
-/// prints further out; [twinkle] makes the sparkles glint.
-class _Prints extends StatelessWidget {
-  const _Prints({required this.open, required this.twinkle});
-
-  final double open;
-  final double twinkle;
-
-  // Geometry as fractions of the art size, matching the icon.
-  static const _printWidth = 0.34;
-  static const _spread = 0.19;
-  static const _sideDrop = 0.035;
-  static const _tilt = 14 * math.pi / 180;
-
-  @override
-  Widget build(BuildContext context) {
-    const size = MdLaunchReveal.artSize;
-    const w = size * _printWidth;
-    final spread = size * _spread * (1 + 0.18 * open);
-    final tilt = _tilt * (1 + 0.35 * open);
-    const center = Offset(size / 2, size / 2 + size * 0.02);
-
-    Widget at(Offset c, Widget child) =>
-        Positioned(left: c.dx - w / 2, top: c.dy - w * 1.25 / 2, child: child);
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        at(
-          center + Offset(-spread, size * _sideDrop),
-          Transform.rotate(angle: -tilt, child: const _Print(front: false)),
-        ),
-        at(
-          center + Offset(spread, size * _sideDrop),
-          Transform.rotate(angle: tilt, child: const _Print(front: false)),
-        ),
-        at(center - Offset(0, 6 * open), const _Print(front: true)),
-        _Sparkle(
-          center: center + const Offset(size * 0.28, -size * 0.31),
-          radius: size * 0.065 * (1 + 0.3 * twinkle),
-          color: AppColors.filmYellow,
-        ),
-        _Sparkle(
-          center: center + const Offset(-size * 0.30, -size * 0.27),
-          radius: size * 0.035 * (1 + 0.5 * twinkle),
-          color: AppColors.warmCream,
-        ),
-      ],
-    );
-  }
-}
-
-class _Print extends StatelessWidget {
-  const _Print({required this.front});
-
-  final bool front;
-
-  @override
-  Widget build(BuildContext context) {
-    const w = MdLaunchReveal.artSize * _Prints._printWidth;
-    return Container(
-      width: w,
-      height: w * 1.25,
-      padding: const EdgeInsets.all(w * 0.07),
-      decoration: BoxDecoration(
-        color: AppColors.paper,
-        borderRadius: BorderRadius.circular(w * 0.09),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x40252323),
-            blurRadius: 14,
-            offset: Offset(0, 6),
-          ),
-        ],
-      ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: front ? AppColors.warmCharcoal : AppColors.softPeach,
-          borderRadius: BorderRadius.circular(w * 0.06),
-        ),
-        child: front
-            ? const Center(
-                child: Icon(
-                  Icons.favorite_rounded,
-                  size: w * 0.5,
-                  color: AppColors.warmCoral,
-                ),
-              )
-            : null,
-      ),
-    );
-  }
-}
-
-/// A four-point star, like the icon's.
-class _Sparkle extends StatelessWidget {
-  const _Sparkle({
-    required this.center,
-    required this.radius,
-    required this.color,
-  });
-
-  final Offset center;
-  final double radius;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: center.dx - radius,
-      top: center.dy - radius,
-      child: CustomPaint(
-        size: Size.square(radius * 2),
-        painter: _SparklePainter(color),
-      ),
-    );
-  }
-}
-
-class _SparklePainter extends CustomPainter {
-  const _SparklePainter(this.color);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final r = size.width / 2;
-    final inner = r * 0.28;
-    final path = Path();
-    for (var i = 0; i < 8; i++) {
-      final angle = math.pi / 4 * i - math.pi / 2;
-      final radius = i.isEven ? r : inner;
-      final point = Offset(
-        r + radius * math.cos(angle),
-        r + radius * math.sin(angle),
-      );
-      i == 0
-          ? path.moveTo(point.dx, point.dy)
-          : path.lineTo(point.dx, point.dy);
-    }
-    canvas.drawPath(path..close(), Paint()..color = color);
-  }
-
-  @override
-  bool shouldRepaint(_SparklePainter oldDelegate) => oldDelegate.color != color;
 }

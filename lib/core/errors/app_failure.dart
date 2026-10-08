@@ -49,3 +49,52 @@ class GallerySaveFailure extends AppFailure {
     super.message = "We couldn't save that to your photos. Please try again.",
   ]);
 }
+
+/// What went wrong with an account action, so view models can react (e.g.
+/// send an unverified person to the code screen) without parsing messages.
+enum AuthFailureKind {
+  invalidCredentials,
+  emailNotConfirmed,
+  emailTaken,
+  weakPassword,
+  invalidCode,
+  rateLimited,
+  offline,
+  notConfigured,
+  unknown,
+}
+
+class AuthFailure extends AppFailure {
+  const AuthFailure(this.kind, super.message);
+
+  final AuthFailureKind kind;
+}
+
+/// What went wrong sharing or backing up a memory, so screens can react
+/// (for instance "wait a bit" after too many wrong codes).
+enum SharingFailureKind {
+  offline,
+  notFound,
+  tooManyTries,
+  tooManyInvites,
+  questFull,
+  storageFull,
+  notConfigured,
+  unknown,
+}
+
+class SharingFailure extends AppFailure {
+  const SharingFailure(this.kind, super.message);
+
+  const SharingFailure.unknown([
+    super.message = "We couldn't do that just now. Please try again.",
+  ]) : kind = SharingFailureKind.unknown;
+
+  final SharingFailureKind kind;
+}
+
+class ProfileFailure extends AppFailure {
+  const ProfileFailure([
+    super.message = "We couldn't update your profile. Please try again.",
+  ]);
+}
