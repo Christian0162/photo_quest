@@ -270,7 +270,9 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
     Uint8List main;
 
     if (photo.kind == PhotoKind.photo) {
-      main = await _images.createShareCopy(await _storage.readBytes(photo.originalPath));
+      main = await _images.createShareCopy(
+        await _storage.readBytes(photo.originalPath),
+      );
       extension = 'jpg';
       final (w, h) = ImageProcessingService.sizeOf(main);
       if (w > 0 && h > 0) (width, height) = (w, h);
