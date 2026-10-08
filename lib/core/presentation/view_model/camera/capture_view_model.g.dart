@@ -59,7 +59,7 @@ final class CaptureViewModelProvider
   }
 }
 
-String _$captureViewModelHash() => r'85b0a9f75638f6024fcdd2fbd831f4cb7e86222e';
+String _$captureViewModelHash() => r'475e72ef055b1113b3c4e689df7923899ebe535e';
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next

@@ -55,7 +55,7 @@ final class CloudMemoryRepositoryProvider
 }
 
 String _$cloudMemoryRepositoryHash() =>
-    r'445a5afe094f4ec1f9ce3fccaae4711de12230b1';
+    r'e7410abd8ed11e483a1ac0050c84a7a5bb17c4c9';
 
 @ProviderFor(cloudFriendsRepository)
 final cloudFriendsRepositoryProvider = CloudFriendsRepositoryProvider._();
