@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widget/templates/settings_template.dart';
+import '../../widget/templates/settings/settings_template.dart';
 
 /// Settings. Design lives in [SettingsTemplate]. See CLAUDE.md §56.
 class SettingsScreen extends StatelessWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../molecules/md_app_card.dart';
-import '../organisms/md_app_scaffold.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../molecules/common/md_app_card.dart';
+import '../../organisms/common/md_app_scaffold.dart';
 
 /// Quiet, short settings: mostly reassurance that memories are private and
 /// stay on this device. See CLAUDE.md §56.
