@@ -12,6 +12,7 @@ Widget _people(AsyncValue<List<Person>> people) {
     child: PeopleTemplate(
       people: people,
       onRetry: () {},
+      onRefresh: () async {},
       onAddPerson: () {},
       friends: const AsyncData([]),
       onAddFriend: () {},

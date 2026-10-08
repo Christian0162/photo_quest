@@ -25,6 +25,7 @@ class PeopleTemplate extends StatelessWidget {
     super.key,
     required this.people,
     required this.onRetry,
+    required this.onRefresh,
     required this.onAddPerson,
     required this.friends,
     required this.onAddFriend,
@@ -35,6 +36,9 @@ class PeopleTemplate extends StatelessWidget {
 
   final AsyncValue<List<Person>> people;
   final VoidCallback onRetry;
+
+  /// Pull down to fetch people and friends again.
+  final Future<void> Function() onRefresh;
   final VoidCallback onAddPerson;
 
   /// Real people on Photo Quest, shown above the local people.
@@ -47,105 +51,111 @@ class PeopleTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MdAppScaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.gutter,
-              AppSpacing.md,
-              AppSpacing.gutter,
-              AppSpacing.lg,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: MdFadeSlideIn(
-                child: MdPageHeader(
-                  overline: 'YOUR CIRCLE',
-                  title: 'People',
-                  subtitle: 'The people (and pets) your memories are about.',
-                  trailing: MdRoundIconButton(
-                    icon: Icons.person_add_alt_1_rounded,
-                    tooltip: 'Add someone',
-                    backgroundColor: AppColors.warmCoral,
-                    foregroundColor: AppColors.onCoral,
-                    onPressed: onAddPerson,
+      body: RefreshIndicator(
+        onRefresh: onRefresh,
+        color: AppColors.coralInk,
+        child: CustomScrollView(
+          // Always scrollable, so the pull works on a short or empty page.
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.gutter,
+                AppSpacing.md,
+                AppSpacing.gutter,
+                AppSpacing.lg,
+              ),
+              sliver: SliverToBoxAdapter(
+                child: MdFadeSlideIn(
+                  child: MdPageHeader(
+                    overline: 'Your circle',
+                    title: 'People',
+                    subtitle: 'The people (and pets) your memories are about.',
+                    trailing: MdRoundIconButton(
+                      icon: Icons.person_add_alt_1_rounded,
+                      tooltip: 'Add someone',
+                      backgroundColor: AppColors.warmCoral,
+                      foregroundColor: AppColors.onCoral,
+                      onPressed: onAddPerson,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.gutter,
-              0,
-              AppSpacing.gutter,
-              AppSpacing.xl,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: MdFadeSlideIn(
-                order: 1,
-                child: MdFriendsSection(
-                  friends: friends,
-                  onAddFriend: onAddFriend,
-                  onRespond: onRespondToFriend,
-                  onRemove: onRemoveFriend,
-                  onRetry: onRetryFriends,
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.gutter,
+                0,
+                AppSpacing.gutter,
+                AppSpacing.xl,
+              ),
+              sliver: SliverToBoxAdapter(
+                child: MdFadeSlideIn(
+                  order: 1,
+                  child: MdFriendsSection(
+                    friends: friends,
+                    onAddFriend: onAddFriend,
+                    onRespond: onRespondToFriend,
+                    onRemove: onRemoveFriend,
+                    onRetry: onRetryFriends,
+                  ),
                 ),
               ),
             ),
-          ),
-          ...people.when(
-            loading: () => [
-              const SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-                sliver: SliverToBoxAdapter(child: MdPeopleSkeleton()),
-              ),
-            ],
-            error: (error, stack) => [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: MdEmptyState.error(
-                  title: "We couldn't load your people",
-                  onRetry: onRetry,
+            ...people.when(
+              loading: () => [
+                const SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
+                  sliver: SliverToBoxAdapter(child: MdPeopleSkeleton()),
                 ),
-              ),
-            ],
-            data: (list) => list.isEmpty
-                ? [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: MdEmptyState(
-                        icon: Icons.people_alt_rounded,
-                        title: 'Who do you make memories with?',
-                        message:
-                            'Add your partner, family, friends — or your '
-                            'dog. You can invite them to quests.',
-                        action: MdPrimaryButton(
-                          label: 'Add someone',
-                          icon: Icons.person_add_alt_1_rounded,
-                          expand: false,
-                          onPressed: onAddPerson,
+              ],
+              error: (error, stack) => [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: MdEmptyState.error(
+                    title: "We couldn't load your people",
+                    onRetry: onRetry,
+                  ),
+                ),
+              ],
+              data: (list) => list.isEmpty
+                  ? [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: MdEmptyState(
+                          icon: Icons.people_alt_rounded,
+                          title: 'Who do you make memories with?',
+                          message:
+                              'Add your partner, family, friends — or your '
+                              'dog. You can invite them to quests.',
+                          action: MdPrimaryButton(
+                            label: 'Add someone',
+                            icon: Icons.person_add_alt_1_rounded,
+                            expand: false,
+                            onPressed: onAddPerson,
+                          ),
                         ),
                       ),
-                    ),
-                  ]
-                : [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.gutter,
-                      ),
-                      sliver: SliverToBoxAdapter(
-                        child: MdPeopleGroups(
-                          people: list,
-                          onAddPerson: onAddPerson,
+                    ]
+                  : [
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.gutter,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: MdPeopleGroups(
+                            people: list,
+                            onAddPerson: onAddPerson,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: AppSpacing.tabScrollEnd),
-          ),
-        ],
+                    ],
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: AppSpacing.tabScrollEnd),
+            ),
+          ],
+        ),
       ),
     );
   }

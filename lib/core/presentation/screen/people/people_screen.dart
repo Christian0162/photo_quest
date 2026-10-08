@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/friends/entities/friend.dart';
+import '../../types/async_value_loading.dart';
 import '../../view_model/friends/friends_view_models.dart';
 import '../../view_model/people/add_person_view_model.dart';
 import '../../view_model/people/people_list_view_model.dart';
 import '../../widget/molecules/common/md_confirmation_dialog.dart';
+import '../../widget/molecules/common/md_screen_loading.dart';
 import '../../widget/organisms/friends/md_add_friend_sheet.dart';
 import '../../widget/organisms/people/md_add_person_sheet.dart';
 import '../../widget/organisms/common/md_app_scaffold.dart';
@@ -146,11 +148,33 @@ class PeopleScreen extends ConsumerWidget {
     // Keeps the actions notifier alive while People is open.
     ref.watch(friendActionsViewModelProvider);
 
+    final people = ref.watch(peopleListProvider);
+    final friends = ref.watch(friendsProvider);
+    // The page is both lists: the people on this phone and the friends
+    // fetched online. Until each has answered, show just the loader.
+    if (people.isFirstFetch || friends.isFirstFetch) {
+      return const MdAppScaffold(
+        body: MdScreenLoading(message: 'Gathering your people…'),
+      );
+    }
+
     return PeopleTemplate(
-      people: ref.watch(peopleListProvider),
+      people: people,
       onRetry: () => ref.invalidate(peopleListProvider),
+      onRefresh: () async {
+        ref
+          ..invalidate(peopleListProvider)
+          ..invalidate(friendsProvider);
+        // A failed fetch shows its own friendly message; the pull just ends.
+        await Future.wait(
+          [
+            ref.read(peopleListProvider.future),
+            ref.read(friendsProvider.future),
+          ].map((fetch) => fetch.then<void>((_) {}, onError: (_) {})),
+        );
+      },
       onAddPerson: () => _addPerson(context, ref),
-      friends: ref.watch(friendsProvider),
+      friends: friends,
       onAddFriend: () => _addFriend(context),
       onRespondToFriend: (friend, {required accept}) =>
           _respond(context, ref, friend, accept: accept),
