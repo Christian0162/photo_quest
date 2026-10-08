@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../types/async_value_loading.dart';
 import '../../view_model/auth/account_view_model.dart';
 import '../../view_model/auth/auth_session_view_model.dart';
-import '../../widget/atoms/common/md_loading_indicator.dart';
 import '../../widget/molecules/common/md_confirmation_dialog.dart';
 import '../../widget/molecules/common/md_empty_state.dart';
+import '../../widget/molecules/common/md_screen_loading.dart';
 import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/templates/auth/account_template.dart';
 
@@ -66,6 +67,13 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     final account = ref.watch(accountViewModelProvider);
     final draft = ref.watch(accountNameDraftViewModelProvider);
 
+    if (account.isFirstFetch) {
+      return const MdAppScaffold(
+        showAppBar: true,
+        body: MdScreenLoading(message: 'Loading your account…'),
+      );
+    }
+
     return account.when(
       data: (data) => AccountTemplate(
         account: data,
@@ -85,7 +93,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       ),
       loading: () => const MdAppScaffold(
         showAppBar: true,
-        body: MdLoadingIndicator(message: 'Loading your account…'),
+        body: MdScreenLoading(message: 'Loading your account…'),
       ),
       error: (_, _) => MdAppScaffold(
         showAppBar: true,

@@ -8,7 +8,6 @@ import '../../../../config/constant/app_constants.dart';
 import '../../../../config/constant/app_image_sizes.dart';
 import '../../../domain/camera/enum/camera_frame_format.dart';
 import '../../../domain/memories/enum/photo_look.dart';
-import '../../../utils/stage_timer.dart';
 import '../camera/camera_frame.dart';
 
 /// Reports how far along a long job is, from 0 to 1.
@@ -22,17 +21,12 @@ class AnimationResult {
     required this.poster,
     required this.width,
     required this.height,
-    this.timings = '',
   });
 
   final Uint8List gif;
   final Uint8List poster;
   final int width;
   final int height;
-
-  /// Per-stage timings, for comparing speed. TIMING: remove with
-  /// `StageTimer` once profiling is done.
-  final String timings;
 }
 
 /// Owns local image manipulation: looks (filters), resizing, thumbnails,
@@ -245,7 +239,6 @@ class ImageProcessingService {
     bool mirror,
     ProgressCallback report,
   ) {
-    final timer = StageTimer(); // TIMING
     // One frame at a time: decode, shrink, flip, colour, hand to the
     // encoder, let go. Nothing full-size is kept once its frame is added.
     final encoder = img.GifEncoder(samplingFactor: 20);
@@ -254,48 +247,38 @@ class ImageProcessingService {
     int? height;
 
     for (var i = 0; i < photos.length; i++) {
-      final decoded = timer.time('decode', () => _tryDecode(photos[i]));
+      final decoded = _tryDecode(photos[i]);
       if (decoded != null) {
         final img.Image small;
         if (poster == null) {
           // The first frame doubles as the poster, which is kept larger.
-          var still = timer.time(
-            'resize',
-            () => _fitWidth(decoded, AppImageSizes.posterWidth),
-          );
-          if (mirror) still = timer.time('mirror', () => _flip(still));
-          timer.time('look', () => applyColorMatrix(still, matrix));
-          poster = timer.time('poster', () => _encodePoster(still));
-          small = timer.time(
-            'resize',
-            () => _fitWidth(still, AppImageSizes.animationWidth),
-          );
+          var still = _fitWidth(decoded, AppImageSizes.posterWidth);
+          if (mirror) still = _flip(still);
+          applyColorMatrix(still, matrix);
+          poster = _encodePoster(still);
+          small = _fitWidth(still, AppImageSizes.animationWidth);
           width = small.width;
           height = small.height;
         } else {
-          var frame = timer.time(
-            'resize',
-            () => _fitWidth(decoded, AppImageSizes.animationWidth),
-          );
-          if (mirror) frame = timer.time('mirror', () => _flip(frame));
-          timer.time('look', () => applyColorMatrix(frame, matrix));
+          var frame = _fitWidth(decoded, AppImageSizes.animationWidth);
+          if (mirror) frame = _flip(frame);
+          applyColorMatrix(frame, matrix);
           small = frame;
         }
         // Half a second per pose — the rhythm of a classic GIF booth.
-        timer.time('gif-encode', () => encoder.addFrame(small, duration: 50));
+        encoder.addFrame(small, duration: 50);
       }
       report(0.95 * (i + 1) / photos.length);
     }
     if (poster == null) return null;
 
-    final gif = timer.time('gif-encode', () => encoder.finish()!);
+    final gif = encoder.finish()!;
     report(1);
     return AnimationResult(
       gif: gif,
       poster: poster,
       width: width!,
       height: height!,
-      timings: timer.summary(), // TIMING
     );
   }
 
@@ -305,7 +288,6 @@ class ImageProcessingService {
     bool mirror,
     ProgressCallback report,
   ) {
-    final timer = StageTimer(); // TIMING
     // Each camera frame is sampled straight to its final size (rotation and
     // mirroring are just a different pixel lookup), so no full-size picture
     // is ever built — except the first, which is also the poster.
@@ -313,35 +295,24 @@ class ImageProcessingService {
     Uint8List? poster;
     for (var i = 0; i < cameraFrames.length; i++) {
       if (poster == null) {
-        final still = timer.time(
-          'convert+rotate+mirror',
-          () => _frameToImage(
-            cameraFrames[i],
-            maxWidth: AppImageSizes.posterWidth,
-            mirror: mirror,
-          ),
+        final still = _frameToImage(
+          cameraFrames[i],
+          maxWidth: AppImageSizes.posterWidth,
+          mirror: mirror,
         );
         if (still != null) {
-          timer.time('look', () => applyColorMatrix(still, matrix));
-          poster = timer.time('poster', () => _encodePoster(still));
-          small.add(
-            timer.time(
-              'resize',
-              () => _fitWidth(still, AppImageSizes.animationWidth),
-            ),
-          );
+          applyColorMatrix(still, matrix);
+          poster = _encodePoster(still);
+          small.add(_fitWidth(still, AppImageSizes.animationWidth));
         }
       } else {
-        final frame = timer.time(
-          'convert+rotate+mirror',
-          () => _frameToImage(
-            cameraFrames[i],
-            maxWidth: AppImageSizes.animationWidth,
-            mirror: mirror,
-          ),
+        final frame = _frameToImage(
+          cameraFrames[i],
+          maxWidth: AppImageSizes.animationWidth,
+          mirror: mirror,
         );
         if (frame != null) {
-          timer.time('look', () => applyColorMatrix(frame, matrix));
+          applyColorMatrix(frame, matrix);
           small.add(frame);
         }
       }
@@ -352,20 +323,16 @@ class ImageProcessingService {
     final pingPong = pingPongOrder(small);
     final encoder = img.GifEncoder(samplingFactor: 20);
     for (var i = 0; i < pingPong.length; i++) {
-      timer.time(
-        'gif-encode',
-        () => encoder.addFrame(pingPong[i], duration: 7),
-      );
+      encoder.addFrame(pingPong[i], duration: 7);
       report(0.5 + 0.5 * (i + 1) / (pingPong.length + 1));
     }
-    final gif = timer.time('gif-encode', () => encoder.finish()!);
+    final gif = encoder.finish()!;
     report(1);
     return AnimationResult(
       gif: gif,
       poster: poster,
       width: small.first.width,
       height: small.first.height,
-      timings: timer.summary(), // TIMING
     );
   }
 

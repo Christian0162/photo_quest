@@ -169,7 +169,6 @@ void main() {
       expect(gif.width, 480);
       expect(result.width, 480);
       expect(result.height, 320);
-      expect(result.timings, contains('gif-encode'));
     });
 
     test('a front-camera GIF is flipped to match the preview', () async {
@@ -248,7 +247,6 @@ void main() {
       // 720×1280 upright, shrunk to 480 wide.
       expect((gif.width, gif.height), (480, 853));
       expect(gif.numFrames, 6);
-      expect(result.timings, contains('convert+rotate+mirror'));
     });
 
     test('reports progress all the way to done', () async {

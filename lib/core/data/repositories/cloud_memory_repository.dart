@@ -562,15 +562,25 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
           'captured_at': CloudSupport.iso(DateTime.now()),
         });
       } on Object {
-        // No row points at these files, so nothing else would ever remove
-        // them and they would keep using the person's allowance.
+        // If no row points at these files, nothing else would ever remove
+        // them and they would keep using the person's allowance. But the
+        // insert may have been saved even though its answer never arrived,
+        // so the files go only when the row is confirmed missing.
         try {
-          await db.storage.from(CloudSupport.photosBucket).remove([
-            mainPath,
-            thumbPath,
-          ]);
+          final saved = await db
+              .from('photos')
+              .select('id')
+              .eq('id', id)
+              .maybeSingle();
+          if (saved == null) {
+            await db.storage.from(CloudSupport.photosBucket).remove([
+              mainPath,
+              thumbPath,
+            ]);
+          }
         } on Object {
-          // Best effort; the original failure is the one to report.
+          // Outcome unknown: keep the files. The original failure is the one
+          // to report.
         }
         rethrow;
       }
