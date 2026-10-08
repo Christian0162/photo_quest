@@ -543,15 +543,52 @@ select pg_temp.check(
     and (select count(*) from public.my_storage_usage()) = 1,
   'the usage numbers are about the caller only'
 );
+select pg_temp.check(
+  pg_temp.rows_changed(
+    $q$update storage.objects set metadata = '{"size": 1000}' where name = 'a0000000-0000-0000-0000-00000000000a/60000000-0000-0000-0000-000000000001/ok.jpg'$q$
+  ) = 1,
+  'A, under the allowance, can replace a file with a bigger one'
+);
+reset role;
+
+select pg_temp.act_as('b0000000-0000-0000-0000-00000000000b');
+select pg_temp.check(
+  pg_temp.is_refused(
+    $q$update storage.objects set metadata = '{"size": 1000}' where name = 'b0000000-0000-0000-0000-00000000000b/60000000-0000-0000-0000-000000000001/b3.jpg'$q$,
+    '42501'
+  ),
+  'a person at their allowance cannot grow a file by replacing it'
+);
+select pg_temp.check(
+  pg_temp.rows_changed(
+    $q$update storage.objects set metadata = '{"size": 0}' where name = 'b0000000-0000-0000-0000-00000000000b/60000000-0000-0000-0000-000000000001/b3.jpg'$q$
+  ) = 1,
+  'but replacing a file with one no bigger is still fine'
+);
 reset role;
 
 -- ================================================================ leaving, removing, coming back
+insert into storage.objects (bucket_id, name, owner) values
+  ('photos', 'd0000000-0000-0000-0000-00000000000d/60000000-0000-0000-0000-000000000001/d1.jpg', 'd0000000-0000-0000-0000-00000000000d');
+
 select pg_temp.act_as('d0000000-0000-0000-0000-00000000000d');
+select pg_temp.check(
+  pg_temp.rows_changed(
+    $q$update storage.objects set name = 'd0000000-0000-0000-0000-00000000000d/60000000-0000-0000-0000-000000000001/d1b.jpg' where name like 'd0000000-%/d1.jpg'$q$
+  ) = 1,
+  'while in the quest, D can replace a file they added'
+);
 select pg_temp.check(
   pg_temp.rows_changed(
     $q$delete from public.quest_participants where quest_id = '40000000-0000-0000-0000-000000000001'$q$
   ) = 1,
   'D can leave the quest'
+);
+select pg_temp.check(
+  pg_temp.rows_changed(
+    $q$update storage.objects set name = 'd0000000-0000-0000-0000-00000000000d/60000000-0000-0000-0000-000000000001/d1.jpg' where name like 'd0000000-%/d1b.jpg'$q$
+  ) = 0,
+  'after leaving, D can no longer replace the files they added'
 );
 select pg_temp.check(
   (select count(*) from public.memories) = 0 and (select count(*) from public.quests) = 0,
