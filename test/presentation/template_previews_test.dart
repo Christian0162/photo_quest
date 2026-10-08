@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:photoquest/core/presentation/widget/templates/capture_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/create_quest_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/home_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/keepsake_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/memories_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/memory_detail_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/memory_reveal_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/people_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/quest_intro_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/quest_selection_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/settings_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/camera/capture_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/quests/create_quest_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/home/home_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories/keepsake_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories/memories_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories/memory_detail_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/camera/memory_reveal_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/people/people_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/quests/quest_intro_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/quests/quest_selection_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/settings/settings_template_preview.dart';
 
 /// Every template renders from its preview sample data without providers —
 /// catches a template or sample that no longer fits together.
