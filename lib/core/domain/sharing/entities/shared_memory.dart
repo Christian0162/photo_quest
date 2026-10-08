@@ -16,7 +16,6 @@ class SharedPhoto {
   final String id;
   final int position;
 
-  /// photo, gif, boomerang or video.
   final String kind;
   final String url;
   final String? thumbnailUrl;
@@ -24,12 +23,10 @@ class SharedPhoto {
   final int? height;
   final bool mirrored;
 
-  /// Who added it, when it wasn't the memory's owner (a friend on the quest).
   final String? addedByName;
 
   bool get isVideo => kind == 'video';
 
-  /// What to show in a grid: the small picture when there is one.
   String get previewUrl => thumbnailUrl ?? url;
 }
 
@@ -47,7 +44,6 @@ class SharedMemorySummary {
   final String title;
   final DateTime capturedAt;
 
-  /// Who shared it.
   final String ownerName;
   final String? coverUrl;
 }
@@ -93,6 +89,5 @@ class ShareViewer {
   final String? avatarUrl;
   final DateTime sharedAt;
 
-  /// For quest participants: a short word such as "Invited" or "Joined".
   final String? status;
 }

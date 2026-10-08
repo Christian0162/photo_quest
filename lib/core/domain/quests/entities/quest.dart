@@ -1,5 +1,5 @@
 /// A reusable guided real-life activity + photobooth experience, with an
-/// owner and a participation model. See CLAUDE.md §20.
+/// owner and a participation model.
 class Quest {
   const Quest({
     required this.id,
@@ -17,7 +17,6 @@ class Quest {
 
   final String id;
 
-  /// Null for built-in quest templates. See CLAUDE.md §18 note.
   final String? creatorId;
   final String title;
   final String? description;

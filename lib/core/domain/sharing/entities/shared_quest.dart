@@ -62,10 +62,8 @@ class SharedQuestDetail {
   final String? ownerAvatarUrl;
   final ParticipationStatus status;
 
-  /// The instruction of each shot, in order.
   final List<String> shots;
 
-  /// Everyone I'm allowed to see besides the owner.
   final List<ShareViewer> participants;
   final List<SharedMemorySummary> memories;
 }
@@ -79,11 +77,9 @@ class StorageUsage {
 
   bool get isFull => usedBytes >= quotaBytes;
 
-  /// 0 to 1, for a progress bar.
   double get fraction =>
       quotaBytes <= 0 ? 0 : (usedBytes / quotaBytes).clamp(0.0, 1.0);
 
-  /// "12 MB of 100 MB used".
   String get label => '${_mb(usedBytes)} of ${_mb(quotaBytes)} used';
 
   static String _mb(int bytes) {

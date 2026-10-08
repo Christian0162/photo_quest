@@ -1,5 +1,5 @@
 /// Base type for domain/data-layer failures. Presentation code maps these
-/// to friendly copy instead of showing raw exceptions. See CLAUDE.md §41.
+/// to friendly copy instead of showing raw exceptions.
 sealed class AppFailure {
   const AppFailure(this.message);
 

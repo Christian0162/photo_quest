@@ -3,11 +3,9 @@
 abstract final class InviteCode {
   static const length = 10;
 
-  /// Uppercase, with spaces and dashes removed.
   static String normalize(String input) =>
       input.toUpperCase().replaceAll(RegExp(r'[\s-]'), '');
 
-  /// A friendly hint, or null when the code is complete.
   static String? validate(String input) {
     final code = normalize(input);
     if (code.isEmpty) return 'Enter the code your friend sent you.';
@@ -15,7 +13,6 @@ abstract final class InviteCode {
     return null;
   }
 
-  /// `ABCDE-FGHJK`, easier to read and to say aloud.
   static String format(String code) {
     final plain = normalize(code);
     if (plain.length != length) return code;

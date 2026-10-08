@@ -5,6 +5,5 @@ class UserProfile {
   final String id;
   final String? displayName;
 
-  /// Path inside the private `avatars` bucket, e.g. `<user id>/avatar_1.jpg`.
   final String? avatarPath;
 }

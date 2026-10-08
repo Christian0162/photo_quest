@@ -7,7 +7,6 @@ class StageTimer {
   final _totals = <String, int>{};
   final _total = Stopwatch()..start();
 
-  /// Runs [work], adding its time to [stage].
   T time<T>(String stage, T Function() work) {
     final watch = Stopwatch()..start();
     try {
@@ -17,12 +16,10 @@ class StageTimer {
     }
   }
 
-  /// Adds [elapsed] to [stage] (for stages timed by an `await`).
   void add(String stage, Duration elapsed) {
     _totals[stage] = (_totals[stage] ?? 0) + elapsed.inMilliseconds;
   }
 
-  /// One line, e.g. `decode=120ms resize=40ms total=310ms`.
   String summary() {
     final parts = [for (final e in _totals.entries) '${e.key}=${e.value}ms'];
     return '${parts.join(' ')} total=${_total.elapsedMilliseconds}ms';
