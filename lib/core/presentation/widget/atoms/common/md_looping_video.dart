@@ -13,8 +13,7 @@ import 'md_local_photo.dart';
 /// instead of starting on its own. Shows [posterPath] until the clip is
 /// ready, and keeps showing it if the clip can't be read. With [mirrored]
 /// the clip is flipped left-right as it is shown, so a front-camera clip
-/// looks like the preview and poster without re-encoding the file. See CLAUDE.md §42,
-/// design system §50.
+/// looks like the preview and poster without re-encoding the file.
 class MdLoopingVideo extends StatefulWidget {
   const MdLoopingVideo({
     super.key,

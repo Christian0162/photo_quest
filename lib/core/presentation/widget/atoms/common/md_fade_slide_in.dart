@@ -5,13 +5,12 @@ import '../../../../../config/constant/app_spacing.dart';
 
 /// Eases its child up and in once, when first shown. Give sibling sections
 /// increasing [order]s for a short stagger that guides the eye down the
-/// screen. Shown instantly under reduced motion. See design system §48-50.
+/// screen. Shown instantly under reduced motion.
 class MdFadeSlideIn extends StatefulWidget {
   const MdFadeSlideIn({super.key, required this.child, this.order = 0});
 
   final Widget child;
 
-  /// Position in the stagger; each step waits a little longer.
   final int order;
 
   /// Cascades a page's content in, top first. The first child is the
@@ -22,7 +21,6 @@ class MdFadeSlideIn extends StatefulWidget {
       index == 0 ? child : MdFadeSlideIn(order: (index + 1) ~/ 2, child: child),
   ];
 
-  /// Delay between staggered items, capped so long lists never feel slow.
   static const _step = Duration(milliseconds: 60);
   static const _maxOrder = 6;
 

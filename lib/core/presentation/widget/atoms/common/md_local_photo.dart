@@ -8,8 +8,7 @@ import '../../../../../config/constant/app_spacing.dart';
 
 /// Displays a photo stored on the device. Decodes at display size (never the
 /// full original), fades in once decoded, and shows a gentle placeholder if
-/// the file is missing or corrupted instead of a broken-image error. See
-/// CLAUDE.md §42, §46.
+/// the file is missing or corrupted instead of a broken-image error.
 class MdLocalPhoto extends StatelessWidget {
   const MdLocalPhoto({
     super.key,
@@ -24,10 +23,8 @@ class MdLocalPhoto extends StatelessWidget {
   final String? path;
   final BoxFit fit;
 
-  /// Which part of the photo stays in view when [fit] crops it.
   final Alignment alignment;
 
-  /// Logical width to decode at. Defaults to the laid-out width.
   final double? decodeWidth;
   final String? semanticLabel;
   final IconData placeholderIcon;

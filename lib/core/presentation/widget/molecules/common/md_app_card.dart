@@ -7,7 +7,6 @@ import '../../atoms/common/md_pressable_scale.dart';
 
 /// Shared rounded surface for memory/quest/person cards — a photo print on
 /// the cream table. Tappable cards get press feedback and a button role.
-/// See CLAUDE.md §27, §30, design system §10.
 class MdAppCard extends StatelessWidget {
   const MdAppCard({
     super.key,

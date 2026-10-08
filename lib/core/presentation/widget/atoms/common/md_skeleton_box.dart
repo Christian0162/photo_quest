@@ -4,7 +4,7 @@ import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_spacing.dart';
 
 /// A quiet placeholder block that reserves layout space while content
-/// loads, instead of a full-screen spinner. See CLAUDE.md §43.
+/// loads, instead of a full-screen spinner.
 class MdSkeletonBox extends StatelessWidget {
   const MdSkeletonBox({
     super.key,

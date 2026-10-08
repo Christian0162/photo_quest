@@ -5,7 +5,7 @@ import '../../atoms/common/md_primary_button.dart';
 
 /// Asks for explicit confirmation before an action that loses something
 /// ("Leave quest?"). The safe choice is the primary button. Resolves to
-/// `true` only when the person confirms. See design system §45.
+/// `true` only when the person confirms.
 Future<bool> showConfirmationDialog(
   BuildContext context, {
   required String title,

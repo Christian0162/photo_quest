@@ -19,7 +19,6 @@ class MdInviteFriendCard extends StatelessWidget {
     this.buttonLabel = 'Invite a friend',
   });
 
-  /// The memory version.
   const MdInviteFriendCard.memory({super.key, required this.onInvite})
     : title = 'Share this memory with a friend',
       message =
@@ -27,7 +26,6 @@ class MdInviteFriendCard extends StatelessWidget {
           'else of yours.',
       buttonLabel = 'Invite a friend';
 
-  /// The quest version.
   const MdInviteFriendCard.quest({super.key, required this.onInvite})
     : title = 'Do this together',
       message =

@@ -8,8 +8,7 @@ import '../../../../../config/constant/app_motion.dart';
 /// A gradient ring around an avatar, like an unseen story: it says "there's
 /// something here waiting for you". While [active] the ring turns slowly
 /// (still under reduced motion); otherwise it is a quiet hairline. The ring
-/// is a second cue next to the label under it, never the only one (CLAUDE.md
-/// §65).
+/// is a second cue next to the label under it, never the only one.
 class MdStoryRing extends StatefulWidget {
   const MdStoryRing({
     super.key,
@@ -18,7 +17,6 @@ class MdStoryRing extends StatefulWidget {
     this.active = true,
   });
 
-  /// Outer diameter, ring included.
   final double size;
   final Widget child;
   final bool active;
@@ -26,7 +24,6 @@ class MdStoryRing extends StatefulWidget {
   static const _ring = 3.0;
   static const _gap = 3.0;
 
-  /// Diameter left for the [child] inside a ring of outer [size].
   static double innerSize(double size) => size - 2 * (_ring + _gap);
 
   @override

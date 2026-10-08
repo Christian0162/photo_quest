@@ -9,7 +9,6 @@ import '../../../../../config/constant/app_typography.dart';
 /// slight tilt, and a wobbly pop when it lands. It replaces small caps
 /// kickers so the screen feels handmade. Give neighbouring stickers
 /// different [tilt]s and [delay]s. The pop is skipped under reduced motion.
-/// See design system §48-50.
 class MdSticker extends StatelessWidget {
   const MdSticker({
     super.key,
@@ -24,10 +23,8 @@ class MdSticker extends StatelessWidget {
   final IconData? icon;
   final Color color;
 
-  /// Rotation in radians; negative leans left.
   final double tilt;
 
-  /// How long to wait before popping in.
   final Duration delay;
 
   @override

@@ -7,7 +7,7 @@ import '../../atoms/common/md_primary_button.dart';
 
 /// Warm, encouraging empty state — never a bare "No data found." The
 /// [MdEmptyState.error] variant says what happened and offers a retry, never
-/// a raw exception. See CLAUDE.md §42, §44, design system §40-42.
+/// a raw exception.
 class MdEmptyState extends StatelessWidget {
   const MdEmptyState({
     super.key,
@@ -18,7 +18,6 @@ class MdEmptyState extends StatelessWidget {
     this.onDark = false,
   });
 
-  /// A friendly failure with an optional "Try again" action.
   MdEmptyState.error({
     Key? key,
     required String title,

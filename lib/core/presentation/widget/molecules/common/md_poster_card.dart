@@ -9,7 +9,6 @@ import '../../atoms/common/md_pressable_scale.dart';
 /// else (stickers, title, buttons) sits inside it, on a charcoal fade so the
 /// words stay readable on any photo. Tapping anywhere opens it; controls
 /// placed in [overlay] (a button, a link) win over the card's own tap.
-/// See CLAUDE.md §30, design system §14.
 class MdPosterCard extends StatelessWidget {
   const MdPosterCard({
     super.key,
@@ -22,22 +21,17 @@ class MdPosterCard extends StatelessWidget {
     this.scrimStart = 0.35,
   });
 
-  /// The picture. Fills the card.
   final Widget background;
 
-  /// [Positioned] children drawn over the picture and its fade.
   final List<Widget> overlay;
   final VoidCallback? onTap;
 
-  /// One clear label for the card as a whole when it is tapped.
   final String? semanticLabel;
   final double aspectRatio;
   final double radius;
 
-  /// Where the charcoal fade begins, as a fraction of the height.
   final double scrimStart;
 
-  /// Standard inset for [Positioned] overlay content.
   static const inset = AppSpacing.md;
 
   @override

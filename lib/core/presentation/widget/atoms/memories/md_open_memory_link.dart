@@ -9,7 +9,6 @@ import '../../../../../config/constant/app_typography.dart';
 class MdOpenMemoryLink extends StatelessWidget {
   const MdOpenMemoryLink({super.key, this.onDark = false});
 
-  /// On a dark poster, drawn in film yellow instead of coral ink.
   final bool onDark;
 
   @override

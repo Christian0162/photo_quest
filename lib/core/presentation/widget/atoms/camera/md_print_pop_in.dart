@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../config/constant/app_motion.dart';
 
 /// The just-taken photo pops out like a fresh print and settles at a small
-/// tilt — a physical, photobooth moment. Static under reduced motion. See
-/// design system §29-30, §49.
+/// tilt — a physical, photobooth moment. Static under reduced motion.
 class MdPrintPopIn extends StatelessWidget {
   const MdPrintPopIn({super.key, required this.child});
 

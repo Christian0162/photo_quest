@@ -6,8 +6,7 @@ import '../../../../utils/app_haptics.dart';
 import '../common/md_pressable_scale.dart';
 
 /// The photobooth shutter: a big white ring around a coral button that
-/// sinks when pressed, so taking the photo feels physical. See design
-/// system §29, §52.
+/// sinks when pressed, so taking the photo feels physical.
 class MdCaptureButton extends StatelessWidget {
   const MdCaptureButton({
     super.key,

@@ -8,7 +8,7 @@ import '../../../../../config/constant/app_typography.dart';
 /// A memory's note, clipped to its photo like a sticky note left on a
 /// photobooth print — a little square of paper, handwritten and tilted,
 /// held on with a paperclip. Used wherever a memory's [text] should feel
-/// written, not printed. See CLAUDE.md §2.5, §36, design system §33-35.
+/// written, not printed.
 class MdStickyNote extends StatelessWidget {
   const MdStickyNote({super.key, required this.text, this.width = 156});
 

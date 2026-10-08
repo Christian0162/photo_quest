@@ -7,7 +7,7 @@ import '../../../../../config/constant/app_typography.dart';
 /// A calm inline message above an account form's button: what went wrong
 /// (and what to do), or a quiet confirmation. The icon carries the meaning
 /// so it never relies on color alone, and screen readers announce it when
-/// it appears. See CLAUDE.md §65.
+/// it appears.
 class MdAuthMessage extends StatelessWidget {
   const MdAuthMessage.error(this.message, {super.key}) : isError = true;
 

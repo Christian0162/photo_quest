@@ -7,7 +7,6 @@ import '../../../../../config/constant/app_colors.dart';
 class MdProgressRingPainter extends CustomPainter {
   const MdProgressRingPainter({required this.progress});
 
-  /// 1 = full ring, 0 = empty.
   final double progress;
 
   @override

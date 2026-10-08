@@ -9,7 +9,7 @@ import '../../../../domain/people/entities/person.dart';
 /// A Person's photo, or their initial on a warm tint. The tint is stable
 /// per person so faces are easier to tell apart at a glance; the initial
 /// still carries identity on its own. Decorative for screen readers —
-/// callers show the name next to it. See CLAUDE.md §40.
+/// callers show the name next to it.
 class MdPersonAvatar extends StatelessWidget {
   const MdPersonAvatar({super.key, required this.person, this.radius = 28});
 

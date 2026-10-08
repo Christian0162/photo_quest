@@ -7,7 +7,7 @@ import '../../../../../config/constant/app_typography.dart';
 
 /// "Shot 2 of 3" / "Step 2 of 4" plus a segmented bar, so progress is
 /// always both visible and spoken. Used by the photobooth and the Create
-/// Quest flow. See design system §31.
+/// Quest flow.
 class MdStepProgress extends StatelessWidget {
   const MdStepProgress({
     super.key,
@@ -17,10 +17,8 @@ class MdStepProgress extends StatelessWidget {
     this.onDark = false,
   });
 
-  /// e.g. "Shot" or "Step".
   final String label;
 
-  /// Zero-based index of the current step.
   final int current;
   final int total;
   final bool onDark;

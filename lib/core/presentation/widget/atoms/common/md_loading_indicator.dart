@@ -5,7 +5,6 @@ import '../../../../../config/constant/app_typography.dart';
 
 /// Localized loading indicator, optionally with a short human message.
 /// Prefer a [MdSkeletonBox] layout when the shape of the content is known.
-/// See CLAUDE.md §43.
 class MdLoadingIndicator extends StatelessWidget {
   const MdLoadingIndicator({
     super.key,

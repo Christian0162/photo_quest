@@ -9,7 +9,7 @@ import '../../../../utils/app_haptics.dart';
 /// "Photo · GIF · Boomerang · 360°" — picks how the next shot is captured.
 /// Tap-only (no swipe, so it never fights the system back gesture), 48px
 /// tall targets, and the chosen mode is bold with a dot, never color alone.
-/// Sits over the camera. See design system §24, §52.
+/// Sits over the camera.
 class MdCaptureModeSwitch<T> extends StatelessWidget {
   const MdCaptureModeSwitch({
     super.key,

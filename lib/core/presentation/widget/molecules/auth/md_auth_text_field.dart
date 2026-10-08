@@ -36,7 +36,6 @@ class MdAuthTextField extends StatefulWidget {
   final String? errorText;
   final String? helperText;
 
-  /// Hides the text (passwords).
   final bool obscured;
   final VoidCallback? onToggleObscured;
   final TextInputType? keyboardType;

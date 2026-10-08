@@ -8,8 +8,7 @@ import '../../../../../config/constant/app_typography.dart';
 /// What a whole screen shows while its data is still being fetched: a
 /// little photo tile that softly breathes, and one warm line. Nothing else
 /// from the page is drawn yet, but the tab bar stays, since it belongs to
-/// the shell. Under reduced motion the tile just sits still. See CLAUDE.md
-/// §43, design system §48-50.
+/// the shell. Under reduced motion the tile just sits still.
 class MdScreenLoading extends StatefulWidget {
   const MdScreenLoading({super.key, this.message = 'Just a moment…'});
 

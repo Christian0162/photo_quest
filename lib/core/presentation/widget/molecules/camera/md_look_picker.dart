@@ -10,7 +10,7 @@ import '../../../../utils/app_haptics.dart';
 /// A small row of looks (filters) over the camera. Each swatch shows a warm
 /// sample scene through that look, so the choice is visual, with its name
 /// underneath. The chosen look gets a coral ring and a bold name — never
-/// color alone. See CLAUDE.md §2.4, design system §44, §53.
+/// color alone.
 class MdLookPicker extends StatelessWidget {
   const MdLookPicker({
     super.key,

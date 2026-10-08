@@ -6,8 +6,7 @@ import '../../../../domain/people/entities/person.dart';
 import 'md_person_avatar.dart';
 
 /// Overlapping "👤 👤 👤 +2" avatar row used to show quest participants at
-/// a glance. Reads as "With Sam, Mom and 2 others" to screen readers. See
-/// design system §15, §21.
+/// a glance. Reads as "With Sam, Mom and 2 others" to screen readers.
 class MdParticipantAvatarStack extends StatelessWidget {
   const MdParticipantAvatarStack({
     super.key,
@@ -21,7 +20,6 @@ class MdParticipantAvatarStack extends StatelessWidget {
   final double radius;
   final int max;
 
-  /// Should match the surface the stack sits on.
   final Color ringColor;
 
   static String describe(List<Person> people) {

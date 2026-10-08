@@ -9,8 +9,7 @@ import 'md_progress_ring_painter.dart';
 /// The press-and-hold shutter for boomerangs and 360° clips: capturing
 /// starts the moment it's pressed and finishes when it's let go (or the
 /// ring fills). The ring shows how far along it is. Screen readers get a
-/// plain tap that records hands-free to the full length. See design system
-/// §29, §52-53.
+/// plain tap that records hands-free to the full length.
 class MdHoldShutterButton extends StatelessWidget {
   const MdHoldShutterButton({
     super.key,

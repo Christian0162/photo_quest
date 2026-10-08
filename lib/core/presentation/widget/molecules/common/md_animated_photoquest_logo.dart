@@ -5,21 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../../../config/constant/app_motion.dart';
 import '../../atoms/common/md_photoquest_logo.dart';
 
-/// The Photo Quest mark with its short signature animation: the side prints
-/// fan open, the heart develops on the front print, the sparkles glint, and
-/// the prints settle back into the finished logo.
-///
-/// ```text
-///  0.0         0.4          0.65          1.0
-///  prints      fan open     heart         sparkles glint,
-///  stacked  →  (bounce)  →  develops   →  prints settle
-/// ```
-///
-/// The animation is vector (no GIF, video or sprite sheet), so it is tiny,
-/// sharp at any [size], and cannot fail to load. It only plays when [playing]
-/// is true; under reduced motion — or when [playing] is false — it shows the
-/// still logo instead, so nothing ever depends on the motion. It never
-/// blocks input and its controller is disposed with the widget.
 class MdAnimatedPhotoQuestLogo extends StatefulWidget {
   const MdAnimatedPhotoQuestLogo({
     super.key,
@@ -31,10 +16,8 @@ class MdAnimatedPhotoQuestLogo extends StatefulWidget {
 
   final double size;
 
-  /// Plays (or keeps playing) while true; shows the resting logo otherwise.
   final bool playing;
 
-  /// Repeats while [playing], e.g. as a loading indicator.
   final bool loop;
 
   final Duration duration;
@@ -71,7 +54,6 @@ class _MdAnimatedPhotoQuestLogoState extends State<MdAnimatedPhotoQuestLogo>
     }
   }
 
-  /// Starts or stops the controller to match the current settings.
   void _sync() {
     if (_reduced == true || !widget.playing) {
       _controller.stop();
@@ -94,7 +76,6 @@ class _MdAnimatedPhotoQuestLogoState extends State<MdAnimatedPhotoQuestLogo>
     super.dispose();
   }
 
-  /// [t] through the [begin]..[end] slice of the timeline, eased.
   static double _phase(
     double t,
     double begin,

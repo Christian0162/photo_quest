@@ -54,7 +54,6 @@ class _MdSurpriseCardState extends State<MdSurpriseCard>
     widget.onRoll();
   }
 
-  /// Six ticks as the dice slows down.
   void _tick() {
     final step = (_turns.value * 6).floor();
     if (step != _lastTick) {

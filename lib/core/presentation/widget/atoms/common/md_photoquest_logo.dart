@@ -22,19 +22,14 @@ class MdPhotoQuestLogo extends StatelessWidget {
     this.semanticLabel = 'Photo Quest',
   });
 
-  /// Width and height of the square the mark is drawn in.
   final double size;
 
-  /// How far the side prints fan out beyond their resting position (0–1).
   final double open;
 
-  /// How developed the front print is: the heart fades and grows in (0–1).
   final double develop;
 
-  /// How bright the sparkles glint (0–1).
   final double twinkle;
 
-  /// Read by screen readers; pass null when the mark is purely decorative.
   final String? semanticLabel;
 
   // Geometry as fractions of the art size, matching the icon.

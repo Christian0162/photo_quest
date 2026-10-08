@@ -6,17 +6,6 @@ import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_primary_button.dart';
 
-/// The invite code, big enough to read aloud, with the two things to do with
-/// it: copy it, or send it to a friend.
-///
-/// ```text
-/// ╭────────────────────────╮
-/// │      ABCDE-FGHJK       │
-/// │  Works for 7 days, up  │
-/// │  to 5 friends.         │
-/// │  [ Copy ]  [ Send ]    │
-/// ╰────────────────────────╯
-/// ```
 class MdInviteCodeCard extends StatelessWidget {
   const MdInviteCodeCard({
     super.key,
@@ -26,7 +15,6 @@ class MdInviteCodeCard extends StatelessWidget {
     this.caption,
   });
 
-  /// The line under the code. Defaults to how long an invite code works.
   final String? caption;
 
   final String code;

@@ -7,7 +7,7 @@ import '../../../../../config/constant/app_typography.dart';
 import '../../../../utils/app_haptics.dart';
 
 /// A big, tappable choice. Selected = dark border, tint and a check — never
-/// color alone. See design system §17, CLAUDE.md §65.
+/// color alone.
 class MdOptionTile extends StatelessWidget {
   const MdOptionTile({
     super.key,

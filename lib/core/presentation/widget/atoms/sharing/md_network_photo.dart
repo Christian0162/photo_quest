@@ -5,8 +5,7 @@ import '../../../../../config/constant/app_spacing.dart';
 
 /// A picture from a short-lived web link (a memory a friend shared). Shows a
 /// soft placeholder while it loads and a quiet "can't show this" tile if it
-/// fails, never an exception. GIFs and boomerangs move on their own. See
-/// CLAUDE.md §42, §43.
+/// fails, never an exception. GIFs and boomerangs move on their own.
 class MdNetworkPhoto extends StatelessWidget {
   const MdNetworkPhoto({
     super.key,

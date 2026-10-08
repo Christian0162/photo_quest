@@ -9,8 +9,7 @@ import 'md_pressable_scale.dart';
 /// The app's primary call-to-action. Large, warm, one per screen. It sits
 /// on a charcoal "lip" like a physical booth button: pressing sinks it into
 /// the lip with a haptic tap, and it springs back on release. Shows an
-/// inline spinner (and ignores taps) while [loading]. See CLAUDE.md §64,
-/// design system §29, §46, §58.
+/// inline spinner (and ignores taps) while [loading].
 class MdPrimaryButton extends StatefulWidget {
   const MdPrimaryButton({
     super.key,
@@ -27,7 +26,6 @@ class MdPrimaryButton extends StatefulWidget {
   final bool loading;
   final bool expand;
 
-  /// How far the button stands proud of its lip.
   static const _lip = 4.0;
 
   @override
@@ -100,7 +98,6 @@ class _MdPrimaryButtonState extends State<MdPrimaryButton> {
 }
 
 /// The quieter companion to [MdPrimaryButton]: Retake, Decline, Back, Cancel.
-/// See design system §46.
 class MdSecondaryButton extends StatelessWidget {
   const MdSecondaryButton({
     super.key,
@@ -116,7 +113,6 @@ class MdSecondaryButton extends StatelessWidget {
   final IconData? icon;
   final bool expand;
 
-  /// For use over the camera preview.
   final bool onDark;
 
   @override

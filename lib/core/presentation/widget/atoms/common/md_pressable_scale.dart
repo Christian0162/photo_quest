@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../../config/constant/app_motion.dart';
 
 /// Squishes its child while pressed and springs it back on release, so
-/// key actions feel physical, like a photobooth button. Skipped under reduced motion. See
-/// design system §29, §48-50.
+/// key actions feel physical, like a photobooth button. Skipped under
+/// reduced motion.
 class MdPressableScale extends StatefulWidget {
   const MdPressableScale({
     super.key,

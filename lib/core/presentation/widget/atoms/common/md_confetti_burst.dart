@@ -8,7 +8,7 @@ import '../../../../../config/constant/app_motion.dart';
 /// A one-shot burst of film-coloured confetti from [origin], played once
 /// when it first appears and then gone. Put it in a [Stack] above the
 /// moment being celebrated. It never takes taps and draws nothing under
-/// reduced motion. Reserved for reward moments (CLAUDE.md §45).
+/// reduced motion. Reserved for reward moments.
 class MdConfettiBurst extends StatefulWidget {
   const MdConfettiBurst({
     super.key,
@@ -17,7 +17,6 @@ class MdConfettiBurst extends StatefulWidget {
     this.delay = Duration.zero,
   });
 
-  /// Where the burst starts, within the box it fills.
   final Alignment origin;
   final int pieces;
   final Duration delay;

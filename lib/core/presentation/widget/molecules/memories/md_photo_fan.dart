@@ -8,19 +8,6 @@ import '../../../../../config/constant/app_shadows.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../atoms/common/md_local_photo.dart';
 
-/// Up to three photos fanned out like a hand of prints: the first stands
-/// upright on top, the next two tilt out behind it. They deal out once when
-/// first shown (instantly under reduced motion). Tapping a print calls
-/// [onOpen] with its index, so each one can be viewed full screen.
-///
-/// ```text
-///      ┌───┐┌─────┐┌───┐
-///     ╱ 2 ╱ │  1  │ ╲ 3 ╲
-///    └───┘  │     │  └───┘
-///           └─────┘
-/// ```
-///
-/// See CLAUDE.md §2.5 (nostalgic, physical), design system §33-35.
 class MdPhotoFan extends StatelessWidget {
   const MdPhotoFan({
     super.key,
@@ -29,17 +16,14 @@ class MdPhotoFan extends StatelessWidget {
     this.front,
   });
 
-  /// Photo file paths, front print first. Only the first three are shown.
   final List<String?> paths;
   final ValueChanged<int> onOpen;
 
-  /// Wraps the front print — e.g. in a hero so it can fly into the detail.
   final Widget Function(Widget print)? front;
 
   static const _tilt = 0.2; // radians, ~11°
   static const _printRatio = 5 / 4;
 
-  /// The fan's height for a given [width], so lists can reserve space.
   static double heightFor(double width) {
     final printWidth = _printWidth(width);
     return printWidth * _printRatio + printWidth * 0.3;

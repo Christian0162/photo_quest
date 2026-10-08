@@ -9,7 +9,7 @@ import '../../../../../config/constant/app_typography.dart';
 /// frames on soft beige paper, muted film color, little hand-drawn doodles,
 /// a vertical "PHOTOBOOTH" stamp, a handwritten note and the date. Each
 /// frame is a different crop of [image], so a single example photo reads
-/// like a burst from the booth. See CLAUDE.md §2.4, §36.
+/// like a burst from the booth.
 class MdPhotoboothPrint extends StatelessWidget {
   const MdPhotoboothPrint({
     super.key,
@@ -22,15 +22,12 @@ class MdPhotoboothPrint extends StatelessWidget {
 
   final ImageProvider image;
 
-  /// Handwritten on the print, e.g. "Just the two of you".
   final String note;
   final DateTime date;
 
-  /// Where the people are in the photo; every crop stays around them.
   final Alignment focus;
   final String? semanticLabel;
 
-  /// Each frame's crop: nudge from [focus], zoom, and its doodle.
   static const _frames = [
     (-0.30, -0.15, 1.45, _Doodle.heart, Alignment.topLeft),
     (0.30, -0.25, 1.70, _Doodle.hearts, Alignment.topRight),

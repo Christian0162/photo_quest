@@ -16,7 +16,6 @@ class MdIconFact extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  /// Defaults to a muted [AppTypography.label].
   final TextStyle? style;
 
   @override

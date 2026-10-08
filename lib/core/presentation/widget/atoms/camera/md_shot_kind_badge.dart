@@ -7,11 +7,10 @@ import '../../../../domain/memories/entities/photo.dart';
 
 /// "GIF", "Boomerang", "360°" — a small label over a moving shot so it's
 /// clear what it is. Icon + word, never color alone. Shows nothing for a
-/// plain photo. See CLAUDE.md §65.
+/// plain photo.
 class MdShotKindBadge extends StatelessWidget {
   const MdShotKindBadge({super.key, required this.kind});
 
-  /// A [PhotoKind].
   final String kind;
 
   static (IconData, String)? describe(String kind) => switch (kind) {

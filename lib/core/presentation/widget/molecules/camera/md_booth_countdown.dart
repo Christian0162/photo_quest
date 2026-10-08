@@ -8,7 +8,7 @@ import '../../atoms/camera/md_progress_ring_painter.dart';
 
 /// The 3-2-1: a big number inside a ring that drains each second, with the
 /// shot's instruction kept underneath so nobody forgets what to do. Tapping
-/// anywhere cancels. See CLAUDE.md §34-35, design system §28.
+/// anywhere cancels.
 class MdBoothCountdown extends StatelessWidget {
   const MdBoothCountdown({
     super.key,

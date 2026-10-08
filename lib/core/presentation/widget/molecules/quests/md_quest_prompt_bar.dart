@@ -7,22 +7,6 @@ import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_pressable_scale.dart';
 
-/// The app's one primary action, floating above the navigation dock on
-/// every tab. Every memory comes from a quest's photobooth, so tapping
-/// starts one. Copy follows the product line "Do something together. Take
-/// the picture. Keep the memory." (CLAUDE.md §1, §32, §57, design system
-/// §58, §63).
-///
-/// ```text
-/// ╭────────────────────────────────────────╮
-/// │ (✦)  Start a quest                ((+))│
-/// │      Do it together. Keep the memory.  │
-/// ╰────────────────────────────────────────╯
-/// ```
-///
-/// To catch the eye without nagging, the "+" sends out a soft ripple a few
-/// times when the bar first appears, then rests. Skipped under reduced
-/// motion (design system §48-50).
 class MdQuestPromptBar extends StatelessWidget {
   const MdQuestPromptBar({super.key, required this.onTap});
 
@@ -127,7 +111,6 @@ class _RipplingPlusState extends State<_RipplingPlus>
   static const _radius = 20.0;
   static const _ripples = 3;
 
-  /// Lets the bar settle in before the first ripple.
   static const _delay = Duration(milliseconds: 600);
   static const _ripple = Duration(milliseconds: 1400);
 
@@ -147,7 +130,6 @@ class _RipplingPlusState extends State<_RipplingPlus>
     _controller.forward();
   }
 
-  /// Progress through the current ripple, or null while resting.
   double? get _phase {
     if (!_controller.isAnimating) return null;
     final elapsed = _controller.duration! * _controller.value - _delay;

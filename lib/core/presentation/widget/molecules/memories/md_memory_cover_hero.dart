@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Lets a memory's cover photo fly from its card into the Memory detail, so
-/// opening a memory feels like picking up the print. See design system §33,
-/// §49.
+/// opening a memory feels like picking up the print.
 ///
 /// Home and Memories live in separate, always-mounted tabs; the inactive
 /// tab has tickers off, and its heroes are switched off too so two cards

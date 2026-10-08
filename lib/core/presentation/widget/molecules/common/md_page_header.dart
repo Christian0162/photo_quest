@@ -4,14 +4,6 @@ import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_sticker.dart';
 
-/// The top of a tab page: a small kicker, the page title and one muted
-/// line, with an optional action on the right.
-///
-/// ```text
-/// (Your memory box)
-/// Memories                    (+)
-/// Just for you and the people who were there.
-/// ```
 class MdPageHeader extends StatelessWidget {
   const MdPageHeader({
     super.key,
