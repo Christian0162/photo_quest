@@ -8,6 +8,7 @@ class SettingsRepository {
 
   static const _countdownKey = 'booth.countdown_seconds';
   static const _clipKey = 'booth.clip_seconds';
+  static const _backupKey = 'backup.enabled';
 
   /// Countdown lengths people can pick, in seconds.
   static const countdownChoices = [3, 5, 10];
@@ -25,6 +26,14 @@ class SettingsRepository {
 
   Future<void> setClipSeconds(int seconds) =>
       _dao.setValue(_clipKey, '$seconds');
+
+  /// Whether new memories are backed up online by themselves. Off until the
+  /// person turns it on.
+  Future<bool> getBackupEnabled() async =>
+      await _dao.getValue(_backupKey) == '1';
+
+  Future<void> setBackupEnabled(bool enabled) =>
+      _dao.setValue(_backupKey, enabled ? '1' : '0');
 
   /// The saved value if it's still a valid choice, else the first one.
   Future<int> _readChoice(String key, List<int> choices) async {

@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
 import '../../molecules/common/md_app_widget_preview.dart';
+import '../../../types/settings/backup_state.dart';
 import 'settings_template.dart';
 
 @Preview(name: 'Settings', group: 'templates', size: previewPhoneSize)
-Widget settingsTemplatePreview() =>
-    MdAppWidgetPreview(child: SettingsTemplate(onOpenLicenses: () {}));
+Widget settingsTemplatePreview() => MdAppWidgetPreview(
+  child: SettingsTemplate(
+    backup: const BackupState(),
+    onBackupToggled: (_) {},
+    onBackUpNow: () {},
+    onOpenAccount: () {},
+    onOpenLicenses: () {},
+  ),
+);
