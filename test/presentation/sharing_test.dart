@@ -956,14 +956,14 @@ void main() {
 
       expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
       expect(
-        await container.read(settingsRepositoryProvider).getBackupEnabled(),
+        await container.read(settingsRepositoryProvider).getBackupEnabled('me'),
         isTrue,
       );
 
       await tester.tap(find.byType(Switch));
       await tester.pumpAndSettle();
       expect(
-        await container.read(settingsRepositoryProvider).getBackupEnabled(),
+        await container.read(settingsRepositoryProvider).getBackupEnabled('me'),
         isFalse,
       );
     });

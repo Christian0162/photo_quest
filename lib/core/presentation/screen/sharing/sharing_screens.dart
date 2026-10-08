@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../config/routes/app_router.dart';
 import '../../../domain/sharing/entities/shared_quest.dart';
+import '../../types/async_value_loading.dart';
 import '../../view_model/sharing/sharing_view_models.dart';
 import '../../widget/molecules/common/md_confirmation_dialog.dart';
+import '../../widget/molecules/common/md_screen_loading.dart';
 import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/organisms/sharing/md_shared_photo_viewer.dart';
 import '../../widget/templates/sharing/join_memory_template.dart';
@@ -43,8 +45,16 @@ class SharedMemoriesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final hub = ref.watch(sharedHubProvider);
+    if (hub.isFirstFetch) {
+      return const MdAppScaffold(
+        showAppBar: true,
+        body: MdScreenLoading(message: 'Opening what friends shared…'),
+      );
+    }
+
     return SharedMemoriesTemplate(
-      hub: ref.watch(sharedHubProvider),
+      hub: hub,
       onOpenMemory: (memory) =>
           context.push(AppRoutes.sharedMemoryPath(memory.id)),
       onOpenQuest: (quest) => context.push(AppRoutes.sharedQuestPath(quest.id)),
@@ -93,8 +103,16 @@ class SharedMemoryScreen extends ConsumerWidget {
     // the person's photos are being added.
     final addingPhotos = ref.watch(sharedMemoryViewModelProvider(memoryId));
 
+    final detail = ref.watch(sharedMemoryProvider(memoryId));
+    if (detail.isFirstFetch) {
+      return const MdAppScaffold(
+        showAppBar: true,
+        body: MdScreenLoading(message: 'Opening this memory…'),
+      );
+    }
+
     return SharedMemoryTemplate(
-      detail: ref.watch(sharedMemoryProvider(memoryId)),
+      detail: detail,
       onOpenPhoto: (detail, index) => showSharedPhotoViewer(
         context,
         photos: detail.photos,
@@ -168,8 +186,16 @@ class SharedQuestScreen extends ConsumerWidget {
     // true while an answer or a leave is being sent.
     final busy = ref.watch(sharedQuestViewModelProvider(questId));
 
+    final quest = ref.watch(sharedQuestProvider(questId));
+    if (quest.isFirstFetch) {
+      return const MdAppScaffold(
+        showAppBar: true,
+        body: MdScreenLoading(message: 'Opening this quest…'),
+      );
+    }
+
     return SharedQuestTemplate(
-      quest: ref.watch(sharedQuestProvider(questId)),
+      quest: quest,
       busy: busy,
       onAccept: () => _answer(context, ref, accept: true),
       onDecline: () => _answer(context, ref, accept: false),

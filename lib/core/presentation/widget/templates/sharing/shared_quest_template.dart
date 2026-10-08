@@ -7,7 +7,6 @@ import '../../../../../config/constant/app_typography.dart';
 import '../../../../domain/sharing/entities/shared_memory.dart';
 import '../../../../domain/sharing/entities/shared_quest.dart';
 import '../../atoms/common/md_primary_button.dart';
-import '../../atoms/common/md_skeleton_box.dart';
 import '../../molecules/common/md_empty_state.dart';
 import '../../molecules/common/md_section_header.dart';
 import '../../molecules/sharing/md_shared_memory_tile.dart';
@@ -65,14 +64,7 @@ class SharedQuestTemplate extends StatelessWidget {
             )
           : null,
       body: quest.when(
-        loading: () => ListView(
-          padding: const EdgeInsets.all(AppSpacing.gutter),
-          children: const [
-            MdSkeletonBox(height: 32),
-            SizedBox(height: AppSpacing.md),
-            MdSkeletonBox(height: 160, radius: AppRadius.lg),
-          ],
-        ),
+        loading: () => const SizedBox.shrink(),
         error: (error, stack) => MdEmptyState.error(
           title: "We couldn't open this quest",
           message:

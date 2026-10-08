@@ -7,7 +7,6 @@ import '../../../../domain/sharing/entities/shared_memory.dart';
 import '../../../../domain/sharing/entities/shared_quest.dart';
 import '../../../types/sharing/shared_hub.dart';
 import '../../atoms/common/md_primary_button.dart';
-import '../../atoms/common/md_skeleton_box.dart';
 import '../../molecules/common/md_empty_state.dart';
 import '../../molecules/common/md_section_header.dart';
 import '../../molecules/sharing/md_shared_memory_tile.dart';
@@ -43,14 +42,7 @@ class SharedMemoriesTemplate extends StatelessWidget {
         onPressed: onEnterCode,
       ),
       body: hub.when(
-        loading: () => ListView(
-          padding: const EdgeInsets.all(AppSpacing.gutter),
-          children: const [
-            MdSkeletonBox(height: 96, radius: AppRadius.lg),
-            SizedBox(height: AppSpacing.md),
-            MdSkeletonBox(height: 96, radius: AppRadius.lg),
-          ],
-        ),
+        loading: () => const SizedBox.shrink(),
         error: (error, stack) => MdEmptyState.error(
           title: "We couldn't open what's shared with you",
           message: 'Check your connection and try again.',

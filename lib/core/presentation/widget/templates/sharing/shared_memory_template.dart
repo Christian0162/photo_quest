@@ -7,7 +7,6 @@ import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../../../domain/sharing/entities/shared_memory.dart';
 import '../../atoms/common/md_primary_button.dart';
-import '../../atoms/common/md_skeleton_box.dart';
 import '../../atoms/sharing/md_network_photo.dart';
 import '../../molecules/common/md_empty_state.dart';
 import '../../organisms/common/md_app_scaffold.dart';
@@ -39,14 +38,7 @@ class SharedMemoryTemplate extends StatelessWidget {
     return MdAppScaffold(
       showAppBar: true,
       body: detail.when(
-        loading: () => ListView(
-          padding: const EdgeInsets.all(AppSpacing.gutter),
-          children: const [
-            MdSkeletonBox(height: 32),
-            SizedBox(height: AppSpacing.md),
-            MdSkeletonBox(height: 280, radius: AppRadius.photo),
-          ],
-        ),
+        loading: () => const SizedBox.shrink(),
         error: (error, stack) => MdEmptyState.error(
           title: "We couldn't open this memory",
           message:

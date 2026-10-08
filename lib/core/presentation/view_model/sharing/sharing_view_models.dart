@@ -349,6 +349,8 @@ class SharedMemoryViewModel extends _$SharedMemoryViewModel {
       ref.invalidate(sharedMemoryProvider(memoryId));
       return null;
     } on Object catch (error) {
+      // Earlier photos in the batch may have been saved before the failure.
+      if (ref.mounted) ref.invalidate(sharedMemoryProvider(memoryId));
       return _messageFor(error);
     } finally {
       if (ref.mounted) state = false;
