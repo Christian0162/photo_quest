@@ -14,8 +14,14 @@ abstract final class AppMotion {
   /// Emotional reveals (quest complete, memory reveal).
   static const reveal = Duration(milliseconds: 560);
 
+  /// Stickers and badges landing with a wobble.
+  static const pop = Duration(milliseconds: 640);
+
   static const standard = Curves.easeOutCubic;
   static const emphasized = Curves.easeOutBack;
+
+  /// Springy settle after a release or a pop-in; overshoots and wobbles.
+  static const spring = Curves.elasticOut;
 
   /// Whether the person asked the OS to reduce motion. Essential state
   /// feedback stays; movement and scale are dropped. See design system §50.

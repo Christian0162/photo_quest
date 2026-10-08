@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../../../config/constant/app_motion.dart';
 
-/// Scales its child down slightly while pressed so key actions feel
-/// physical, like a photobooth button. Skipped under reduced motion. See
+/// Squishes its child while pressed and springs it back on release, so
+/// key actions feel physical, like a photobooth button. Skipped under reduced motion. See
 /// design system §29, §48-50.
 class MdPressableScale extends StatefulWidget {
   const MdPressableScale({
     super.key,
     required this.child,
     required this.enabled,
-    this.scale = 0.96,
+    this.scale = 0.94,
   });
 
   final Widget child;
@@ -38,8 +38,9 @@ class _MdPressableScaleState extends State<MdPressableScale> {
       onPointerCancel: (_) => _set(false),
       child: AnimatedScale(
         scale: _pressed ? widget.scale : 1,
-        duration: AppMotion.micro,
-        curve: AppMotion.standard,
+        // Squishes in fast, then springs back past rest on release.
+        duration: _pressed ? AppMotion.micro : AppMotion.short * 1.6,
+        curve: _pressed ? AppMotion.standard : AppMotion.spring,
         child: widget.child,
       ),
     );

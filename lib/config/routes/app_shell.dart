@@ -310,9 +310,9 @@ class _DockTab extends StatelessWidget {
               // The icon fills in as the bubble arrives underneath it.
               child: AnimatedSwitcher(
                 duration: AppMotion.of(context, AppMotion.medium),
-                switchInCurve: AppMotion.standard,
+                switchInCurve: AppMotion.spring,
                 transitionBuilder: (child, animation) => ScaleTransition(
-                  scale: Tween(begin: 0.7, end: 1.0).animate(animation),
+                  scale: Tween(begin: 0.4, end: 1.0).animate(animation),
                   child: FadeTransition(opacity: animation, child: child),
                 ),
                 child: Icon(
