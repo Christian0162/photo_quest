@@ -14,6 +14,8 @@ Future<Person?> showPeoplePickerSheet(
 }) {
   return showModalBottomSheet<Person>(
     context: context,
+    // Above the navigation dock, which lives inside the tab shell.
+    useRootNavigator: true,
     isScrollControlled: true,
     builder: (context) => SafeArea(
       child: ConstrainedBox(

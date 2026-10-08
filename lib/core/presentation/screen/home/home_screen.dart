@@ -34,7 +34,7 @@ class HomeScreen extends ConsumerWidget {
         extra: summary.coverPhoto?.thumbnailPath,
       ),
       onSeeAllMemories: () => context.go(AppRoutes.memories),
-      onBrowseQuests: () => context.push(AppRoutes.quests),
+      onBrowseQuests: () => context.go(AppRoutes.quests),
       onCreateQuest: () => context.push(AppRoutes.createQuest),
     );
   }

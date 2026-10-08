@@ -15,10 +15,10 @@ import 'package:photoquest/core/domain/quests/entities/quest_shot.dart';
 import 'package:photoquest/core/presentation/screen/camera/capture_screen.dart';
 import 'package:photoquest/core/presentation/screen/memories/memories_screen.dart';
 import 'package:photoquest/core/presentation/screen/people/people_screen.dart';
+import 'package:photoquest/core/presentation/screen/quests/quest_selection_screen.dart';
 import 'package:photoquest/core/presentation/types/camera/capture_state.dart';
 import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
 import 'package:photoquest/core/presentation/view_model/memories/memory_list_view_model.dart';
-import 'package:photoquest/core/presentation/widget/molecules/md_quest_prompt_bar.dart';
 import 'package:photoquest/core/presentation/widget/templates/memories_template.dart';
 import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
@@ -91,11 +91,12 @@ void main() {
 
     expect(find.text("TODAY'S QUEST"), findsOneWidget);
     expect(find.text("Let's do it"), findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('^Start a quest')), findsOneWidget);
+    expect(find.bySemanticsLabel('Make a quest'), findsOneWidget);
   });
 
-  testWidgets('the quest prompt floats on every tab, tucks away while '
-      'scrolling down, and returns on the way up', (tester) async {
+  testWidgets('the dock stays on every tab and the + opens quest creation', (
+    tester,
+  ) async {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     addTearDown(db.close);
 
@@ -107,21 +108,117 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final prompt = find.byType(MdQuestPromptBar);
-    for (final tab in ['People', 'Memories', 'Home']) {
+    for (final tab in ['People', 'Memories', 'Quests', 'Home']) {
       await tester.tap(find.bySemanticsLabel(tab));
       await tester.pumpAndSettle();
-      expect(prompt.hitTestable(), findsOneWidget, reason: 'on $tab');
+      expect(
+        find.bySemanticsLabel('Make a quest').hitTestable(),
+        findsOneWidget,
+        reason: 'on $tab',
+      );
     }
+
+    await tester.tap(find.bySemanticsLabel('Make a quest'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Make a quest'), findsNothing);
+  });
+
+  testWidgets('the welcome card shows on open, closes with its X, and opens '
+      'Quests when tapped', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        child: const PhotoQuestApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final card = find.bySemanticsLabel(RegExp('^Start a quest'));
+    expect(card, findsOneWidget);
+
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
+    expect(card, findsNothing);
+  });
+
+  testWidgets('tapping the welcome card goes to Quests', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        child: const PhotoQuestApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // It stays put on its own; only the X closes it.
+    await tester.pump(const Duration(minutes: 1));
+    expect(find.bySemanticsLabel(RegExp('^Start a quest')), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel(RegExp('^Start a quest')));
+    await tester.pumpAndSettle();
+    expect(find.byType(QuestSelectionScreen), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('^Start a quest')), findsOneWidget);
+  });
+
+  testWidgets('sheets open above the dock, so nothing is hidden behind it', (
+    tester,
+  ) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        child: const PhotoQuestApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.bySemanticsLabel('People'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Add someone'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Their name'), findsOneWidget);
+    expect(find.bySemanticsLabel('Make a quest').hitTestable(), findsNothing);
+  });
+
+  testWidgets('the dock tucks away while scrolling down and returns on the '
+      'way up', (tester) async {
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [appDatabaseProvider.overrideWithValue(db)],
+        child: const PhotoQuestApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final dock = find.bySemanticsLabel('Make a quest');
+    final card = find.bySemanticsLabel(RegExp('^Start a quest'));
+    expect(dock.hitTestable(), findsOneWidget);
+    final cardTop = tester.getTopLeft(card).dy;
 
     final page = find.byType(Scrollable).first;
     await tester.drag(page, const Offset(0, -200));
     await tester.pumpAndSettle();
-    expect(prompt.hitTestable(), findsNothing);
+    expect(dock.hitTestable(), findsNothing);
+    // The welcome card stays, and drops into the dock's place.
+    expect(card.hitTestable(), findsOneWidget);
+    expect(tester.getTopLeft(card).dy, greaterThan(cardTop));
 
     await tester.drag(page, const Offset(0, 100));
     await tester.pumpAndSettle();
-    expect(prompt.hitTestable(), findsOneWidget);
+    expect(dock.hitTestable(), findsOneWidget);
+    expect(tester.getTopLeft(card).dy, cardTop);
   });
 
   testWidgets('opening the app plays a short reveal, then gets out of the '

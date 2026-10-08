@@ -65,6 +65,14 @@ GoRouter appRouter(Ref ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                path: AppRoutes.quests,
+                builder: (context, state) => const QuestSelectionScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
                 path: AppRoutes.memories,
                 builder: (context, state) => const MemoriesScreen(),
               ),
@@ -79,10 +87,6 @@ GoRouter appRouter(Ref ref) {
             ],
           ),
         ],
-      ),
-      GoRoute(
-        path: AppRoutes.quests,
-        builder: (context, state) => const QuestSelectionScreen(),
       ),
       GoRoute(
         path: AppRoutes.createQuest,

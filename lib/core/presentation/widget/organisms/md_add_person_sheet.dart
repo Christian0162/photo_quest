@@ -11,6 +11,8 @@ import '../atoms/md_primary_button.dart';
 Future<(String, String)?> showAddPersonSheet(BuildContext context) {
   return showModalBottomSheet<(String, String)>(
     context: context,
+    // Above the navigation dock, which lives inside the tab shell.
+    useRootNavigator: true,
     isScrollControlled: true,
     builder: (context) => const _AddPersonSheet(),
   );

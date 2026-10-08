@@ -18,6 +18,7 @@ Future<void> showBoothSettingsSheet(
 }) {
   return showModalBottomSheet<void>(
     context: context,
+    useRootNavigator: true,
     builder: (context) => _BoothSettingsSheet(
       countdownSeconds: countdownSeconds,
       countdownChoices: countdownChoices,
