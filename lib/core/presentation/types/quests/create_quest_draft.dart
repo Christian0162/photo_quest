@@ -11,6 +11,7 @@ class CreateQuestDraft {
     this.type = 'solo',
     this.participantIds = const [],
     this.shots = const [],
+    this.shotType = 'group',
     this.step = CreateQuestStep.what,
     this.isSubmitting = false,
   });
@@ -21,6 +22,9 @@ class CreateQuestDraft {
   final String type; // solo, pair, group
   final List<String> participantIds;
   final List<DraftShot> shots;
+
+  /// The kind of shot the next typed instruction will be added as.
+  final String shotType;
   final CreateQuestStep step;
   final bool isSubmitting;
 
@@ -46,6 +50,7 @@ class CreateQuestDraft {
     String? type,
     List<String>? participantIds,
     List<DraftShot>? shots,
+    String? shotType,
     CreateQuestStep? step,
     bool? isSubmitting,
   }) {
@@ -56,6 +61,7 @@ class CreateQuestDraft {
       type: type ?? this.type,
       participantIds: participantIds ?? this.participantIds,
       shots: shots ?? this.shots,
+      shotType: shotType ?? this.shotType,
       step: step ?? this.step,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );

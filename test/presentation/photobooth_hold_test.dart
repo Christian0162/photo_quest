@@ -54,6 +54,7 @@ Widget _template(
       onRetake: () {},
       onModeChanged: (_) {},
       onLookChanged: (_) {},
+      onToggleLooks: () {},
       onPoseIdea: () {},
       onHidePoseIdea: () {},
       onHoldStart: onHoldStart ?? () {},

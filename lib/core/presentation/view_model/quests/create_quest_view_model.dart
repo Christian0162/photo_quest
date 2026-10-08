@@ -58,6 +58,9 @@ class CreateQuestViewModel extends _$CreateQuestViewModel {
     return true;
   }
 
+  void setShotType(String shotType) =>
+      state = state.copyWith(shotType: shotType);
+
   void addShot(DraftShot shot) {
     state = state.copyWith(shots: [...state.shots, shot]);
   }

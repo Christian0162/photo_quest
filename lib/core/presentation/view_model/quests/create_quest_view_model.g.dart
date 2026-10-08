@@ -48,7 +48,7 @@ final class CreateQuestViewModelProvider
 }
 
 String _$createQuestViewModelHash() =>
-    r'431cdae88e80ba4131c94de5da633ceaf7f0d91f';
+    r'1483ff27d2d2e946111281ede48ad5071701fc7f';
 
 /// Drives the guided Create Quest flow: what/description/participants/shots
 /// -> review -> create. See CLAUDE.md §33, design system §17-19.

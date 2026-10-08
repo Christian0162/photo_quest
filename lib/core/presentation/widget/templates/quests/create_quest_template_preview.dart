@@ -39,6 +39,7 @@ Widget _create(CreateQuestDraft draft) {
       onTypeChanged: (_) {},
       onToggleParticipant: (_) {},
       onAddShot: (_) {},
+      onShotTypeChanged: (_) {},
       onRemoveShot: (_) {},
       onMoveShot: (_, _) {},
     ),

@@ -62,6 +62,7 @@ class CreateQuestScreen extends ConsumerWidget {
       onTypeChanged: notifier.setType,
       onToggleParticipant: notifier.toggleParticipant,
       onAddShot: notifier.addShot,
+      onShotTypeChanged: notifier.setShotType,
       onRemoveShot: (index) {
         final shot = ref.read(createQuestViewModelProvider).shots[index];
         AppHaptics.remove();
