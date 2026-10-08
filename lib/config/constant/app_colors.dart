@@ -71,4 +71,9 @@ abstract final class AppColors {
   static const lookSampleShadow = Color(0xFF8D5B4C);
 
   static const shadow = Color(0x1F252323);
+
+  /// Charcoal fade under poster-card text, and the deeper shadow of the logo print.
+  static const posterScrimClear = Color(0x00252323);
+  static const posterScrimDeep = Color(0xF2252323);
+  static const logoShadow = Color(0x40252323);
 }

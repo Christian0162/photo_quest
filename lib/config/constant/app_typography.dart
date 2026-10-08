@@ -19,6 +19,16 @@ abstract final class AppTypography {
     color: AppColors.textPrimary,
   );
 
+  /// Hero wordmark on the welcome screen.
+  static const TextStyle hero = TextStyle(
+    fontFamily: headingFamily,
+    fontSize: 48,
+    height: 1.1,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -1.5,
+    color: AppColors.textPrimary,
+  );
+
   static const TextStyle heading1 = TextStyle(
     fontFamily: headingFamily,
     fontSize: 28,

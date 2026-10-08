@@ -95,7 +95,7 @@ class _PopIn extends StatefulWidget {
   State<_PopIn> createState() => _PopInState();
 }
 
-class _PopInState extends State<_PopIn> with SingleTickerProviderStateMixin {
+class _PopInState extends State<_PopIn> with TickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _pop;
   AnimationController? _sway;

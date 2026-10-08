@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../molecules/common/md_bottom_action_bar.dart';
 
@@ -16,6 +17,8 @@ class MdAppScaffold extends StatelessWidget {
     this.actions,
     this.bottomAction,
     this.backgroundColor,
+    this.bottomActionSheet = false,
+    this.overlayStyle,
     this.safeArea = true,
     this.onBackBlocked,
   });
@@ -32,6 +35,13 @@ class MdAppScaffold extends StatelessWidget {
   final Widget? bottomAction;
   final Color? backgroundColor;
 
+  /// Draws [bottomAction] as a rounded sheet over a coloured
+  /// [backgroundColor], as on the welcome screen.
+  final bool bottomActionSheet;
+
+  /// Status-bar icon style, for pages whose [backgroundColor] needs one.
+  final SystemUiOverlayStyle? overlayStyle;
+
   /// Keeps the body clear of notches and system bars when there's no app
   /// bar. Off for edge-to-edge screens like the photobooth.
   final bool safeArea;
@@ -47,13 +57,20 @@ class MdAppScaffold extends StatelessWidget {
       content = Column(
         children: [
           Expanded(child: content),
-          MdBottomActionBar(child: bottomAction!),
+          MdBottomActionBar(sheet: bottomActionSheet, child: bottomAction!),
         ],
       );
     }
     if (safeArea && !showAppBar) {
       // The bottom action bar handles its own bottom inset.
       content = SafeArea(bottom: bottomAction == null, child: content);
+    }
+    final overlayStyle = this.overlayStyle;
+    if (overlayStyle != null) {
+      content = AnnotatedRegion<SystemUiOverlayStyle>(
+        value: overlayStyle,
+        child: content,
+      );
     }
 
     final scaffold = Scaffold(

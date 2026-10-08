@@ -113,7 +113,7 @@ class _Print extends StatelessWidget {
         borderRadius: BorderRadius.circular(w * 0.09),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x40252323),
+            color: AppColors.logoShadow,
             blurRadius: w * 0.17,
             offset: Offset(0, w * 0.07),
           ),

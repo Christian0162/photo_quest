@@ -62,7 +62,10 @@ class MdPosterCard extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment(0, scrimStart * 2 - 1),
                         end: Alignment.bottomCenter,
-                        colors: const [Color(0x00252323), Color(0xF2252323)],
+                        colors: const [
+                          AppColors.posterScrimClear,
+                          AppColors.posterScrimDeep,
+                        ],
                       ),
                     ),
                   ),
