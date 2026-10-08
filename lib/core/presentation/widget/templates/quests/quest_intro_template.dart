@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../config/constant/app_constants.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/quests/enum/status_tone.dart';
-import '../../types/display_labels.dart';
-import '../../types/quests/quest_detail.dart';
-import '../../types/quests/quest_participant_with_person.dart';
-import '../../types/quests/quest_start_readiness.dart';
-import '../atoms/md_fade_slide_in.dart';
-import '../atoms/md_icon_fact.dart';
-import '../atoms/md_person_avatar.dart';
-import '../atoms/md_primary_button.dart';
-import '../atoms/md_skeleton_box.dart';
-import '../atoms/md_status_pill.dart';
-import '../molecules/md_empty_state.dart';
-import '../molecules/md_section_header.dart';
-import '../organisms/md_app_scaffold.dart';
-import '../organisms/md_quest_card.dart';
-import '../organisms/md_quest_participants_section.dart';
-import '../organisms/md_quest_shot_list.dart';
+import '../../../../../config/constant/app_constants.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/quests/enum/status_tone.dart';
+import '../../../types/display_labels.dart';
+import '../../../types/quests/quest_detail.dart';
+import '../../../types/quests/quest_participant_with_person.dart';
+import '../../../types/quests/quest_start_readiness.dart';
+import '../../atoms/common/md_fade_slide_in.dart';
+import '../../atoms/common/md_icon_fact.dart';
+import '../../atoms/people/md_person_avatar.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/common/md_skeleton_box.dart';
+import '../../atoms/common/md_status_pill.dart';
+import '../../molecules/common/md_empty_state.dart';
+import '../../molecules/common/md_section_header.dart';
+import '../../organisms/common/md_app_scaffold.dart';
+import '../../organisms/quests/md_quest_card.dart';
+import '../../organisms/quests/md_quest_participants_section.dart';
+import '../../organisms/quests/md_quest_shot_list.dart';
 
 /// Introduces a Quest before capture: what we're doing, who's joining, which
 /// photos we'll take — then one primary action to begin. See CLAUDE.md §59,

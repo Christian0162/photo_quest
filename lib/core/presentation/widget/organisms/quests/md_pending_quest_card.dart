@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/quests/enum/status_tone.dart';
-import '../../types/quests/quest_needing_confirmation.dart';
-import '../atoms/md_participant_avatar_stack.dart';
-import '../atoms/md_status_pill.dart';
-import '../molecules/md_app_card.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/quests/enum/status_tone.dart';
+import '../../../types/quests/quest_needing_confirmation.dart';
+import '../../atoms/people/md_participant_avatar_stack.dart';
+import '../../atoms/common/md_status_pill.dart';
+import '../../molecules/common/md_app_card.dart';
 
 /// One Quest you created that's still waiting on people to say they're in,
 /// shown on Home so a group quest doesn't quietly stall. See design system

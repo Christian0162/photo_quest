@@ -8,9 +8,9 @@ import '../../types/quests/quest_participant_with_person.dart';
 import '../../view_model/quests/quest_detail_view_model.dart';
 import '../../view_model/quests/quest_intro_view_model.dart';
 import '../../view_model/quests/quest_participants_view_model.dart';
-import '../../widget/organisms/md_app_scaffold.dart';
-import '../../widget/organisms/md_people_picker_sheet.dart';
-import '../../widget/templates/quest_intro_template.dart';
+import '../../widget/organisms/common/md_app_scaffold.dart';
+import '../../widget/organisms/people/md_people_picker_sheet.dart';
+import '../../widget/templates/quests/quest_intro_template.dart';
 
 /// Quest Introduction. Wires view models, the invite sheet and navigation
 /// into [QuestIntroTemplate]. See CLAUDE.md §59.

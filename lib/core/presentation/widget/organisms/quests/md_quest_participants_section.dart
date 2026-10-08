@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/quests/enum/status_tone.dart';
-import '../../types/quests/quest_participant_with_person.dart';
-import '../atoms/md_person_avatar.dart';
-import '../atoms/md_primary_button.dart';
-import '../atoms/md_skeleton_box.dart';
-import '../atoms/md_status_pill.dart';
-import '../molecules/md_app_card.dart';
-import '../molecules/md_section_header.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/quests/enum/status_tone.dart';
+import '../../../types/quests/quest_participant_with_person.dart';
+import '../../atoms/people/md_person_avatar.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/common/md_skeleton_box.dart';
+import '../../atoms/common/md_status_pill.dart';
+import '../../molecules/common/md_app_card.dart';
+import '../../molecules/common/md_section_header.dart';
 
 /// Shows who's doing this Quest and lets the creator invite more People.
 /// Since V1 is a single shared device (CLAUDE.md §54A), each participant

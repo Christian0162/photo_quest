@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/quests/entities/quest.dart';
-import '../../types/display_labels.dart';
-import '../atoms/md_primary_button.dart';
-import '../molecules/md_app_card.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/quests/entities/quest.dart';
+import '../../../types/display_labels.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../molecules/common/md_app_card.dart';
 import 'md_quest_card.dart';
 
 /// Home's hero: one inviting Quest for today with a prominent example image

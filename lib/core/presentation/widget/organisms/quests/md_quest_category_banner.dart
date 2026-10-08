@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_shadows.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../types/display_labels.dart';
-import '../molecules/md_photobooth_print.dart';
+import '../../../../../config/constant/app_shadows.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../types/display_labels.dart';
+import '../../molecules/camera/md_photobooth_print.dart';
 
 /// A category's header on Choose a Quest: its name, and an example of that
 /// kind of memory as a photobooth print laid on the table at a slight

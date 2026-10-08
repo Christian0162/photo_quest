@@ -3,15 +3,15 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/quests/entities/quest.dart';
-import '../../types/quests/quest_category_shelf.dart';
-import '../atoms/md_primary_button.dart';
-import '../atoms/md_skeleton_box.dart';
-import '../molecules/md_empty_state.dart';
-import '../organisms/md_app_scaffold.dart';
-import '../organisms/md_quest_category_banner.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/quests/entities/quest.dart';
+import '../../../types/quests/quest_category_shelf.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/common/md_skeleton_box.dart';
+import '../../molecules/common/md_empty_state.dart';
+import '../../organisms/common/md_app_scaffold.dart';
+import '../../organisms/quests/md_quest_category_banner.dart';
 
 /// Inspirational Quest picker: large visual cards on one shelf per
 /// category ("For Us", "For Family" …), not a dense list. See CLAUDE.md §33.

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
 
 /// "Need an idea?" answered: one short, playful pose over the camera, with
 /// another idea one tap away. Read out when it changes. See CLAUDE.md §2.4,

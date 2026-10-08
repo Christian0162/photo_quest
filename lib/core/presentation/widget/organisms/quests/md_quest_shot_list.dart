@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/quests/entities/quest_shot.dart';
-import '../../types/display_labels.dart';
-import '../atoms/md_local_photo.dart';
-import '../molecules/md_app_card.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/quests/entities/quest_shot.dart';
+import '../../../types/display_labels.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../molecules/common/md_app_card.dart';
 
 /// The numbered photos a Quest asks for, so everyone knows what pictures
 /// they're about to take. See CLAUDE.md §33, design system §16.

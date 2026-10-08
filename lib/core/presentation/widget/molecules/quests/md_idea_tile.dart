@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import 'md_app_card.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../common/md_app_card.dart';
 
 /// A half-width "other ways in" card: an icon badge, a title and one line.
 class MdIdeaTile extends StatelessWidget {

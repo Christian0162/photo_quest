@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
 
 /// A small tag on a memory: "Anniversary", "Birthday", "For Us", "3 of
 /// us". Icon plus word, so it never relies on the icon alone.

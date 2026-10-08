@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../types/quests/quest_detail.dart';
-import '../../types/quests/quest_participant_with_person.dart';
-import '../../types/quests/quest_start_readiness.dart';
-import '../molecules/md_app_widget_preview.dart';
-import 'preview_samples.dart';
+import '../../../types/quests/quest_detail.dart';
+import '../../../types/quests/quest_participant_with_person.dart';
+import '../../../types/quests/quest_start_readiness.dart';
+import '../../molecules/common/md_app_widget_preview.dart';
+import '../preview_samples.dart';
 import 'quest_intro_template.dart';
 
 Widget _intro({

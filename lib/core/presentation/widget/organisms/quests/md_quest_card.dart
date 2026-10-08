@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/people/entities/person.dart';
-import '../../../domain/quests/entities/quest.dart';
-import '../../types/display_labels.dart';
-import '../atoms/md_local_photo.dart';
-import '../atoms/md_participant_avatar_stack.dart';
-import '../molecules/md_app_card.dart';
-import '../molecules/md_photobooth_print.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/people/entities/person.dart';
+import '../../../../domain/quests/entities/quest.dart';
+import '../../../types/display_labels.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/people/md_participant_avatar_stack.dart';
+import '../../molecules/common/md_app_card.dart';
+import '../../molecules/camera/md_photobooth_print.dart';
 
 /// A Quest as an inspiring, tappable card: cover, title, the real-life idea
 /// in one or two lines, and who it's for. Participants show only for a

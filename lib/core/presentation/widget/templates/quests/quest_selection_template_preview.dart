@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../types/quests/quest_category_shelf.dart';
-import '../molecules/md_app_widget_preview.dart';
-import 'preview_samples.dart';
+import '../../../types/quests/quest_category_shelf.dart';
+import '../../molecules/common/md_app_widget_preview.dart';
+import '../preview_samples.dart';
 import 'quest_selection_template.dart';
 
 Widget _selection(AsyncValue<List<QuestCategoryShelf>> shelves) {
