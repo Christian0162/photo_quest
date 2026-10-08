@@ -18,6 +18,7 @@ Widget _detail(AsyncValue<MemoryDetail> detail) {
       onDoAgain: (_) {},
       onDecorate: () {},
       onDownloadStrip: () {},
+      onInviteFriend: () {},
     ),
   );
 }

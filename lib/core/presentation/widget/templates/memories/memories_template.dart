@@ -18,6 +18,7 @@ import '../../organisms/common/md_app_scaffold.dart';
 import '../../organisms/memories/md_memory_feature_card.dart';
 import '../../organisms/memories/md_memory_journal_card.dart';
 import '../../molecules/memories/md_empty_memory_filter.dart';
+import '../../molecules/sharing/md_shared_with_you_row.dart';
 
 /// The private memory box, kept like a journal:
 ///
@@ -45,6 +46,7 @@ class MemoriesTemplate extends StatelessWidget {
     required this.onStartQuest,
     required this.onOpenMemory,
     required this.onViewPhoto,
+    required this.onOpenShared,
   });
 
   final AsyncValue<MemoryBox> box;
@@ -58,6 +60,9 @@ class MemoriesTemplate extends StatelessWidget {
 
   /// Opens one of a memory's photos full screen, at [index].
   final void Function(MemorySummary summary, int index) onViewPhoto;
+
+  /// Opens the memories friends have shared with you.
+  final VoidCallback onOpenShared;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +85,20 @@ class MemoriesTemplate extends StatelessWidget {
                   title: 'Memories',
                   subtitle: 'Just for you and the people who were there.',
                 ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.gutter,
+              0,
+              AppSpacing.gutter,
+              AppSpacing.md,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: MdFadeSlideIn(
+                order: 1,
+                child: MdSharedWithYouRow(onTap: onOpenShared),
               ),
             ),
           ),

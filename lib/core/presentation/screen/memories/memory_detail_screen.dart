@@ -10,6 +10,7 @@ import '../../view_model/memories/memory_detail_view_model.dart';
 import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/organisms/memories/md_photo_viewer.dart';
 import '../../widget/templates/memories/memory_detail_template.dart';
+import '../sharing/invite_friend_sheet.dart';
 
 /// One Memory. Wires [MemoryDetailViewModel] and navigation into
 /// [MemoryDetailTemplate]. See CLAUDE.md §39.
@@ -93,6 +94,7 @@ class MemoryDetailScreen extends ConsumerWidget {
       onShare: (origin) => _share(context, ref, origin),
       onDoAgain: (questId) => context.push(AppRoutes.questDetailPath(questId)),
       onDecorate: () => context.push(AppRoutes.keepsakePath(memoryId)),
+      onInviteFriend: () => showInviteFriendSheet(context, memoryId),
       onDownloadStrip: () => _download(
         context,
         ref

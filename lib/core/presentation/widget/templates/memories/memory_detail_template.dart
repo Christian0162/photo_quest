@@ -17,6 +17,7 @@ import '../../molecules/common/md_empty_state.dart';
 import '../../molecules/memories/md_memory_cover_hero.dart';
 import '../../molecules/common/md_section_header.dart';
 import '../../organisms/common/md_app_scaffold.dart';
+import '../../molecules/sharing/md_invite_friend_card.dart';
 import '../../organisms/memories/md_keepsake_canvas.dart';
 import '../../organisms/memories/md_photo_album.dart';
 
@@ -35,6 +36,7 @@ class MemoryDetailTemplate extends StatelessWidget {
     required this.onDoAgain,
     required this.onDecorate,
     required this.onDownloadStrip,
+    required this.onInviteFriend,
     this.keepsake,
   });
 
@@ -60,6 +62,9 @@ class MemoryDetailTemplate extends StatelessWidget {
   /// Saves the printed keepsake to the phone's photos.
   final VoidCallback onDownloadStrip;
 
+  /// Opens the invite sheet so a friend can view this memory.
+  final VoidCallback onInviteFriend;
+
   /// The keepsake design, played live: GIFs, boomerangs and 360° clips move
   /// inside the print. The kept print image shows instead until it loads,
   /// and whenever there's no saved design to redraw it from.
@@ -73,6 +78,12 @@ class MemoryDetailTemplate extends StatelessWidget {
     return MdAppScaffold(
       showAppBar: true,
       actions: [
+        if (data != null)
+          IconButton(
+            tooltip: 'Invite a friend',
+            icon: const Icon(Icons.person_add_alt_1_rounded),
+            onPressed: onInviteFriend,
+          ),
         if (data?.stripPath != null)
           Builder(
             builder: (context) => IconButton(
@@ -208,6 +219,8 @@ class MemoryDetailTemplate extends StatelessWidget {
                   ],
                 ),
               ],
+              const SizedBox(height: AppSpacing.xl),
+              MdInviteFriendCard(onInvite: onInviteFriend),
               if (data.stripPath != null) ...[
                 const SizedBox(height: AppSpacing.xl),
                 MdSectionHeader(

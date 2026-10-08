@@ -20,6 +20,7 @@ class MemoriesScreen extends ConsumerWidget {
           ref.read(memoryFilterSelectionProvider.notifier).select(filter),
       onRetry: () => ref.invalidate(memoryListProvider),
       onStartQuest: () => context.push(AppRoutes.quests),
+      onOpenShared: () => context.push(AppRoutes.shared),
       onOpenMemory: (summary) => context.push(
         AppRoutes.memoryDetailPath(summary.memory.id),
         extra: summary.coverPhoto?.thumbnailPath,

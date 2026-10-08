@@ -18,6 +18,7 @@ Widget _memories(AsyncValue<MemoryBox> box) {
       onStartQuest: () {},
       onOpenMemory: (_) {},
       onViewPhoto: (_, _) {},
+      onOpenShared: () {},
     ),
   );
 }

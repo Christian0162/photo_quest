@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show compute, visibleForTesting;
 import 'package:image/image.dart' as img;
 
+import '../../../../config/constant/app_constants.dart';
 import '../../../../config/constant/app_image_sizes.dart';
 import '../../../domain/camera/enum/camera_frame_format.dart';
 import '../../../domain/memories/enum/photo_look.dart';
@@ -45,6 +46,15 @@ class ImageProcessingService {
     bool mirror = false,
   }) {
     return compute(_createThumbnail, (originalBytes, mirror));
+  }
+
+  /// A smaller JPEG of a photo for sharing: no bigger than
+  /// [AppConstants.sharedPhotoMaxSide] on its longest side, upright, and
+  /// compressed, so a memory is quick to upload and light on storage. The
+  /// original on the phone is never touched. An unreadable image comes back
+  /// unchanged.
+  Future<Uint8List> createShareCopy(Uint8List originalBytes) {
+    return compute(_createShareCopy, originalBytes);
   }
 
   /// Applies [look] to a captured photo and returns a JPEG. Orientation is
@@ -166,6 +176,23 @@ class ImageProcessingService {
         mirror ? img.flipHorizontal(resized) : resized,
         quality: AppImageSizes.thumbnailJpegQuality,
       ),
+    );
+  }
+
+  static Uint8List _createShareCopy(Uint8List bytes) {
+    final decoded = _tryDecode(bytes);
+    if (decoded == null) return bytes;
+    const maxSide = AppConstants.sharedPhotoMaxSide;
+    final longest = decoded.width > decoded.height
+        ? decoded.width
+        : decoded.height;
+    final resized = longest <= maxSide
+        ? decoded
+        : decoded.width >= decoded.height
+        ? img.copyResize(decoded, width: maxSide)
+        : img.copyResize(decoded, height: maxSide);
+    return Uint8List.fromList(
+      img.encodeJpg(resized, quality: AppConstants.sharedPhotoJpegQuality),
     );
   }
 

@@ -9,6 +9,12 @@ class SharingService {
   Future<void> sharePhoto(String path, {required String text, Rect? origin}) =>
       shareFile(path, mimeType: 'image/jpeg', text: text, origin: origin);
 
+  /// Shares a short piece of text, such as an invite code, with whichever app
+  /// the person picks.
+  Future<void> shareText(String text, {Rect? origin}) async {
+    await Share.share(text, sharePositionOrigin: origin);
+  }
+
   /// Shares any saved keepsake file — a photo strip, a GIF or boomerang,
   /// or a 360° clip.
   Future<void> shareFile(
