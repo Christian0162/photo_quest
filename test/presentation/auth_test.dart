@@ -20,6 +20,14 @@ import 'package:photoquest/core/presentation/widget/templates/auth/verify_email_
 
 import '../support/fake_auth_repository.dart';
 
+/// The logo and stickers never stop moving; reduced motion lets
+/// `pumpAndSettle` finish.
+void _reduceMotion(WidgetTester tester) {
+  tester.platformDispatcher.accessibilityFeaturesTestValue =
+      const FakeAccessibilityFeatures(disableAnimations: true);
+  addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+}
+
 /// Boots the whole app against [auth], on a phone-sized screen.
 Future<ProviderContainer> _pumpApp(
   WidgetTester tester,
@@ -29,6 +37,7 @@ Future<ProviderContainer> _pumpApp(
   tester.view.physicalSize = const Size(420, 900);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
+  _reduceMotion(tester);
 
   final db = AppDatabase.forTesting(NativeDatabase.memory());
   addTearDown(db.close);
@@ -536,6 +545,7 @@ void main() {
       Widget child, {
       double keyboard = 0,
     }) async {
+      _reduceMotion(tester);
       tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1;
       tester.view.viewInsets = FakeViewPadding(bottom: keyboard);
@@ -589,6 +599,7 @@ void main() {
     }
 
     testWidgets('text scales up without overflowing', (tester) async {
+      _reduceMotion(tester);
       tester.view.physicalSize = const Size(360, 740);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);

@@ -37,7 +37,11 @@ class WelcomeTemplate extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const MdAnimatedPhotoQuestLogo(size: 240),
+                        const MdAnimatedPhotoQuestLogo(
+                          size: 240,
+                          loop: true,
+                          duration: Duration(milliseconds: 3200),
+                        ),
                         Semantics(
                           header: true,
                           child: Text(
@@ -66,17 +70,20 @@ class WelcomeTemplate extends StatelessWidget {
                             MdSticker(
                               label: 'No feed',
                               tilt: -0.07,
+                              sway: true,
                               color: AppColors.paper,
                               delay: Duration(milliseconds: 900),
                             ),
                             MdSticker(
                               label: 'No likes',
                               tilt: 0.05,
+                              sway: true,
                               delay: Duration(milliseconds: 1050),
                             ),
                             MdSticker(
                               label: 'Just your people',
                               tilt: -0.03,
+                              sway: true,
                               color: AppColors.softPeach,
                               delay: Duration(milliseconds: 1200),
                             ),

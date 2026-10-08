@@ -5,6 +5,7 @@ import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_motion.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
+import '../../atoms/common/md_fade_slide_in.dart';
 import '../../atoms/common/md_round_icon_button.dart';
 import '../../molecules/common/md_animated_photoquest_logo.dart';
 
@@ -32,6 +33,7 @@ class MdAuthLayout extends StatelessWidget {
   static const _bandHeightCompact = 88.0;
   static const _logoSize = 132.0;
   static const _logoSizeCompact = 64.0;
+  static const _loopDuration = Duration(milliseconds: 3200);
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +60,10 @@ class MdAuthLayout extends StatelessWidget {
                       maxHeight: _logoSize,
                       child: MdAnimatedPhotoQuestLogo(
                         size: compact ? _logoSizeCompact : _logoSize,
-                        playing: busy,
+                        // Never stops: it keeps the screen alive while the
+                        // person types, and the same motion covers the wait.
                         loop: true,
+                        duration: _loopDuration,
                       ),
                     ),
                     if (onBack != null)
@@ -100,19 +104,32 @@ class MdAuthLayout extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Semantics(
-                              header: true,
-                              child: Text(title, style: AppTypography.heading1),
+                            MdFadeSlideIn(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Semantics(
+                                    header: true,
+                                    child: Text(
+                                      title,
+                                      style: AppTypography.heading1,
+                                    ),
+                                  ),
+                                  if (subtitle != null) ...[
+                                    const SizedBox(height: AppSpacing.sm),
+                                    Text(
+                                      subtitle!,
+                                      style: AppTypography.bodyMuted,
+                                    ),
+                                  ],
+                                ],
+                              ),
                             ),
-                            if (subtitle != null) ...[
-                              const SizedBox(height: AppSpacing.sm),
-                              Text(subtitle!, style: AppTypography.bodyMuted),
-                            ],
                             const SizedBox(height: AppSpacing.lg),
                             for (final (index, child) in children.indexed) ...[
                               if (index > 0)
                                 const SizedBox(height: AppSpacing.md),
-                              child,
+                              MdFadeSlideIn(order: index + 1, child: child),
                             ],
                             if (footer != null) ...[
                               const SizedBox(height: AppSpacing.lg),

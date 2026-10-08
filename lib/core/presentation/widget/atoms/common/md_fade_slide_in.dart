@@ -69,12 +69,14 @@ class _MdFadeSlideInState extends State<MdFadeSlideIn>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _progress,
-      child: widget.child,
-      builder: (context, child) => Opacity(
-        opacity: _progress.value,
-        child: Transform.translate(
+    // FadeTransition and the transform reuse the child's layer each frame
+    // instead of rebuilding it or saving a layer like `Opacity` does.
+    return FadeTransition(
+      opacity: _progress,
+      child: AnimatedBuilder(
+        animation: _progress,
+        child: widget.child,
+        builder: (context, child) => Transform.translate(
           offset: Offset(0, (1 - _progress.value) * AppSpacing.md),
           child: child,
         ),
