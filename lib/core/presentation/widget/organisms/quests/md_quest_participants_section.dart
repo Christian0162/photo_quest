@@ -15,10 +15,9 @@ import '../../molecules/common/md_app_card.dart';
 import '../../molecules/common/md_section_header.dart';
 
 /// Shows who's doing this Quest and lets the creator invite more People.
-/// Since V1 is a single shared device (CLAUDE.md §54A), each participant
+/// Since V1 is a single shared device, each participant
 /// confirms in person with "I'm in" before the quest starts. Every status
-/// is an icon + word, never color alone. See CLAUDE.md §40-41, §65,
-/// design system §21, §60.
+/// is an icon + word, never color alone.
 class MdQuestParticipantsSection extends StatelessWidget {
   const MdQuestParticipantsSection({
     super.key,
@@ -31,7 +30,6 @@ class MdQuestParticipantsSection extends StatelessWidget {
 
   final AsyncValue<List<QuestParticipantWithPerson>> participants;
 
-  /// The most People this Quest can have (CLAUDE.md §15A).
   final int limit;
   final VoidCallback onInvite;
   final ValueChanged<QuestParticipantWithPerson> onConfirm;

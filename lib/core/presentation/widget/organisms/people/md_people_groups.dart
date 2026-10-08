@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../domain/people/entities/person.dart';
-import '../../../types/display_labels.dart';
 import '../../atoms/common/md_fade_slide_in.dart';
 import '../../molecules/common/md_tile_grid.dart';
 import '../../molecules/people/md_self_card.dart';
@@ -23,10 +22,8 @@ class MdPeopleGroups extends StatelessWidget {
   final List<Person> people;
   final VoidCallback onAddPerson;
 
-  /// Group order on screen: closest first.
   static const _groupOrder = ['partner', 'family', 'friend', 'pet', 'other'];
 
-  /// Unknown types fall into "Everyone else", matching [personTypeLabel].
   static String _groupOf(Person person) =>
       _groupOrder.contains(person.type) ? person.type : 'other';
 

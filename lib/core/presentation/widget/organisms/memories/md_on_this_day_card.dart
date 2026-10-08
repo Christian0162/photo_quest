@@ -10,8 +10,7 @@ import '../../molecules/common/md_poster_card.dart';
 
 /// "1 year ago today" — resurfaces a memory from this date so the app
 /// feels like a time capsule, and nudges "do it again". The photo fills the
-/// card with the sticker, title and "Relive it" inside it. See CLAUDE.md
-/// §21, §68.
+/// card with the sticker, title and "Relive it" inside it.
 class MdOnThisDayCard extends StatelessWidget {
   const MdOnThisDayCard({
     super.key,

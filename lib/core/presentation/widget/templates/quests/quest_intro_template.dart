@@ -23,8 +23,7 @@ import '../../molecules/quests/md_quest_start_action.dart';
 import '../../molecules/sharing/md_invite_friend_card.dart';
 
 /// Introduces a Quest before capture: what we're doing, who's joining, which
-/// photos we'll take — then one primary action to begin. See CLAUDE.md §59,
-/// design system §16, §23.
+/// photos we'll take — then one primary action to begin.
 class QuestIntroTemplate extends StatelessWidget {
   const QuestIntroTemplate({
     super.key,

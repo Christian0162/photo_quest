@@ -9,7 +9,7 @@ import '../../atoms/common/md_local_photo.dart';
 import '../../molecules/common/md_app_card.dart';
 
 /// The numbered photos a Quest asks for, so everyone knows what pictures
-/// they're about to take. See CLAUDE.md §33, design system §16.
+/// they're about to take.
 class MdQuestShotList extends StatelessWidget {
   const MdQuestShotList({super.key, required this.shots});
 

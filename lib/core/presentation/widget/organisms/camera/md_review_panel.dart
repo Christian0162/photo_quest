@@ -12,7 +12,7 @@ import '../../atoms/camera/md_print_pop_in.dart';
 import '../../molecules/camera/md_shot_media.dart';
 
 /// Keep / Retake for the photo just taken. Keep is primary; Retake stays
-/// one tap away. See CLAUDE.md §35, design system §30.
+/// one tap away.
 class MdReviewPanel extends StatelessWidget {
   const MdReviewPanel({
     super.key,

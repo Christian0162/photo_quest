@@ -28,10 +28,8 @@ class InviteSheetCopy {
   final String savingLabel;
   final String peopleTitle;
 
-  /// Over the friends who can be invited straight away.
   final String friendsTitle;
 
-  /// "Stop sharing with Bo".
   final String Function(String name) removeTooltip;
 
   static InviteSheetCopy memory = InviteSheetCopy(
@@ -85,7 +83,6 @@ class MdInviteFriendSheet extends StatelessWidget {
   /// aren't offered.
   final ValueChanged<Friend>? onInviteFriend;
 
-  /// When set, offers to take the memory's online copy away.
   final VoidCallback? onRemoveOnlineCopy;
 
   @override

@@ -11,7 +11,7 @@ import '../../molecules/camera/md_shot_media.dart';
 /// Opens [photos] full screen on black: swipe between shots, pinch or
 /// double-tap to zoom, swipe down or tap close to go back. GIFs play and
 /// 360° clips loop. With [onShare], the shot on screen can be shared as it
-/// was captured. See design system §33 ("the photo should dominate").
+/// was captured.
 Future<void> showPhotoViewer(
   BuildContext context, {
   required List<Photo> photos,

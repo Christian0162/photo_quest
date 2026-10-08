@@ -6,14 +6,12 @@ import 'package:flutter/widgets.dart';
 
 /// Turns whatever is inside a [MdKeepsakeSnapshot] into a PNG — how a
 /// designed keepsake becomes a real, shareable image that looks exactly
-/// like the screen. See CLAUDE.md §36.
+/// like the screen.
 class MdKeepsakeSnapshotController {
   final _key = GlobalKey();
 
-  /// Width of the saved image, in pixels. Enough to print or share.
   static const outputWidth = 1080.0;
 
-  /// Renders the current frame, or null if nothing is on screen yet.
   Future<Uint8List?> toPng() async {
     await WidgetsBinding.instance.endOfFrame;
     final boundary =

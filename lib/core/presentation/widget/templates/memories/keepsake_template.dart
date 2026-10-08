@@ -24,8 +24,7 @@ import '../../molecules/memories/md_keepsake_sticker_tray.dart';
 /// Makes the printed keepsake yours: pick a layout (strip, grid, polaroid),
 /// a paper, and add stickers you drag, pinch and turn. The print stays in
 /// view the whole time; one tidy tray changes it. Not a photo editor — just
-/// the fun of decorating a photobooth print. See CLAUDE.md §36, design
-/// system §34, §44, §65.
+/// the fun of decorating a photobooth print.
 class KeepsakeTemplate extends StatefulWidget {
   const KeepsakeTemplate({
     super.key,
@@ -44,12 +43,10 @@ class KeepsakeTemplate extends StatefulWidget {
 
   final AsyncValue<KeepsakeDesign> design;
 
-  /// The primary action's words, e.g. "Save keepsake" or "Done".
   final String doneLabel;
   final VoidCallback onClose;
   final VoidCallback onRetry;
 
-  /// Receives a function that renders the keepsake to PNG bytes.
   final ValueChanged<Future<Uint8List?> Function()> onDone;
   final ValueChanged<KeepsakeLayout> onLayoutChanged;
   final ValueChanged<KeepsakeFrame> onFrameChanged;
@@ -73,7 +70,6 @@ class _KeepsakeTemplateState extends State<KeepsakeTemplate> {
   final _snapshot = MdKeepsakeSnapshotController();
   var _tray = KeepsakeTray.layout;
 
-  /// True while rendering, so selection outlines aren't printed.
   bool _capturing = false;
 
   Future<Uint8List?> _render() async {

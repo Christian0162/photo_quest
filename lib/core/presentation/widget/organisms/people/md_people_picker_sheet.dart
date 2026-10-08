@@ -7,7 +7,7 @@ import '../../../types/display_labels.dart';
 import '../../atoms/people/md_person_avatar.dart';
 
 /// Bottom sheet for inviting one Person to a Quest. Resolves to the chosen
-/// Person, or null if dismissed. See CLAUDE.md §40, design system §20, §44.
+/// Person, or null if dismissed.
 Future<Person?> showPeoplePickerSheet(
   BuildContext context, {
   required List<Person> people,

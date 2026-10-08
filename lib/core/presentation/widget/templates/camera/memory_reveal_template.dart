@@ -14,8 +14,7 @@ import '../../organisms/camera/md_memory_reveal.dart';
 /// develops like an instant print — pale and grey, then full color — before
 /// who was there and when fade in. Warm, not a game victory screen. The
 /// print is the live keepsake design: keeping it saves exactly what's on
-/// screen, and it can be decorated first. See CLAUDE.md §36-37, design
-/// system §32, §49.
+/// screen, and it can be decorated first.
 class MemoryRevealTemplate extends StatelessWidget {
   const MemoryRevealTemplate({
     super.key,
@@ -28,11 +27,9 @@ class MemoryRevealTemplate extends StatelessWidget {
 
   final AsyncValue<MemoryRevealResult> reveal;
 
-  /// The keepsake design, once loaded. Until then the printed strip shows.
   final KeepsakeDesign? keepsake;
   final VoidCallback onRetry;
 
-  /// Keeps the memory; receives a function that renders the print.
   final void Function(
     MemoryRevealResult result,
     Future<Uint8List?> Function() render,

@@ -14,7 +14,7 @@ import '../../molecules/camera/md_photobooth_print.dart';
 
 /// A Quest as an inspiring poster: the cover fills the card with its title,
 /// who it's for and who's joining inside it. Participants show only for a
-/// user-created pair/group Quest that has them. See design system §15.
+/// user-created pair/group Quest that has them.
 class MdQuestCard extends StatelessWidget {
   const MdQuestCard({
     super.key,
@@ -26,7 +26,6 @@ class MdQuestCard extends StatelessWidget {
   final Quest quest;
   final VoidCallback onTap;
 
-  /// Who's joining, shown as a small avatar stack when not empty.
   final List<Person> people;
 
   @override
@@ -82,7 +81,7 @@ class MdQuestCard extends StatelessWidget {
 }
 
 /// Illustrated stand-in cover for a Quest without a photo: a warm tint and
-/// the category's icon, so cards still feel distinct. See CLAUDE.md §30.
+/// the category's icon, so cards still feel distinct.
 class MdQuestCoverArt extends StatelessWidget {
   const MdQuestCoverArt({super.key, required this.category});
 
@@ -128,10 +127,9 @@ class MdQuestCoverArt extends StatelessWidget {
 }
 
 /// A Quest's hero image: its own cover photo if it has one, else an example
-/// photobooth print of its category ("what this kind of memory looks like"), else the
+/// photobooth print of its category, else the
 /// illustrated art. For single, large heroes (Today's Quest, the intro) —
-/// shelf cards keep the art so they don't repeat the category banner. See
-/// design system §14.
+/// shelf cards keep the art so they don't repeat the category banner.
 class MdQuestHeroCover extends StatelessWidget {
   const MdQuestHeroCover({super.key, required this.quest});
 

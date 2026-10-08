@@ -23,7 +23,7 @@ import '../../atoms/common/md_gutter_padding.dart';
 /// Answers "What can we do today?" — a greeting, one hero Quest, anything
 /// waiting on people, and a shelf of recent memories. Never a dashboard.
 /// Sections ease in top-first, and loading placeholders cross-fade into
-/// content instead of popping. See CLAUDE.md §31, design system §13-14.
+/// content instead of popping.
 class HomeTemplate extends StatelessWidget {
   const HomeTemplate({
     super.key,
@@ -48,7 +48,6 @@ class HomeTemplate extends StatelessWidget {
   final AsyncValue<List<QuestNeedingConfirmation>> pendingQuests;
   final AsyncValue<List<MemorySummary>> memories;
 
-  /// A memory from this date in an earlier year, resurfaced near the top.
   final AsyncValue<MemorySummary?> onThisDay;
   final Future<void> Function() onRefresh;
   final VoidCallback onOpenSettings;

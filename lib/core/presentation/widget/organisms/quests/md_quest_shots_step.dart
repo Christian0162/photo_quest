@@ -10,8 +10,7 @@ import '../../../types/quests/draft_shot.dart';
 import '../../molecules/quests/md_quest_step_page.dart';
 import '../../molecules/quests/md_quest_shot_row.dart';
 
-/// Ready-made, playful shot instructions: tap one instead of typing. See
-/// design system §27 ("short, playful, actionable").
+/// Ready-made, playful shot instructions: tap one instead of typing.
 const _shotIdeas = [
   ('Everyone squeeze together!', 'group'),
   ('Give your funniest face', 'candid'),

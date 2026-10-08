@@ -20,8 +20,7 @@ import '../../molecules/quests/md_pose_idea_card.dart';
 /// capture it (mode and look), and the shutter. Looks stay tucked away
 /// until asked for, so the booth stays simple. Boomerang and 360° use a
 /// press-and-hold shutter; while it's held these same controls stay on
-/// screen (so the finger is never lost) and show how far along it is. See
-/// CLAUDE.md §34-35, design system §24-27, §65.
+/// screen (so the finger is never lost) and show how far along it is.
 class MdInstructionControls extends StatelessWidget {
   const MdInstructionControls({
     super.key,
@@ -116,7 +115,7 @@ class MdInstructionControls extends StatelessWidget {
             children: [
               if (shot.exampleImagePath != null) ...[
                 // A subtle example, never stronger than the real people in
-                // the preview. See design system §26.
+                // the preview.
                 Container(
                   width: 64,
                   height: 84,

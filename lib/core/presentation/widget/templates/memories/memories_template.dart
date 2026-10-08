@@ -21,22 +21,6 @@ import '../../organisms/memories/md_memory_journal_card.dart';
 import '../../molecules/memories/md_empty_memory_filter.dart';
 import '../../molecules/sharing/md_shared_with_you_row.dart';
 
-/// The private memory box, kept like a journal:
-///
-/// ```text
-/// Memories
-/// (This day 1) (This month 3) (All journey 24)
-///
-/// • October                                2026
-///   [ featured: taped page, fanned prints ]
-/// • Earlier in October
-///   [ journal entry ]
-///   [ journal entry ]
-/// • September …
-/// ```
-///
-/// Not a social feed — no likes, no comments. See CLAUDE.md §38, design
-/// system §35.
 class MemoriesTemplate extends StatelessWidget {
   const MemoriesTemplate({
     super.key,
@@ -53,20 +37,16 @@ class MemoriesTemplate extends StatelessWidget {
 
   final AsyncValue<MemoryBox> box;
 
-  /// Today, for "This day" and "2 weeks ago".
   final DateTime now;
   final ValueChanged<MemoryFilter> onFilterChanged;
   final VoidCallback onRetry;
 
-  /// Pull down to fetch the memories again.
   final Future<void> Function() onRefresh;
   final VoidCallback onStartQuest;
   final ValueChanged<MemorySummary> onOpenMemory;
 
-  /// Opens one of a memory's photos full screen, at [index].
   final void Function(MemorySummary summary, int index) onViewPhoto;
 
-  /// Opens the memories friends have shared with you.
   final VoidCallback onOpenShared;
 
   @override

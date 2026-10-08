@@ -51,15 +51,12 @@ class MdCaptureBody extends StatefulWidget {
   final ValueChanged<PhotoLook> onLookChanged;
   final VoidCallback onToggleLooks;
 
-  /// Shows a pose idea, or the next one.
   final VoidCallback onPoseIdea;
   final VoidCallback onHidePoseIdea;
 
-  /// Boomerang / 360°: the shutter was pressed, and let go.
   final VoidCallback onHoldStart;
   final VoidCallback onHoldEnd;
 
-  /// Opens the booth settings (countdown, clip length).
   final VoidCallback onOpenSettings;
 
   @override
@@ -95,7 +92,7 @@ class _MdCaptureBodyState extends State<MdCaptureBody>
   void didUpdateWidget(covariant MdCaptureBody oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Shutter flash the instant a shot lands. Kept under reduced motion —
-    // it's essential feedback, not decoration. See design system §29, §50.
+    // it's essential feedback, not decoration.
     final old = oldWidget.state;
     final now = widget.state;
     final justCaptured =

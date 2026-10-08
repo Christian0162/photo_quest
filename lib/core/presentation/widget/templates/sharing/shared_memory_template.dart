@@ -13,7 +13,7 @@ import '../../molecules/common/md_empty_state.dart';
 import '../../organisms/common/md_app_scaffold.dart';
 
 /// A memory a friend shared, opened: their photos first, then who shared it
-/// and when. View only. See CLAUDE.md §39, §54C.
+/// and when. View only.
 class SharedMemoryTemplate extends StatelessWidget {
   const SharedMemoryTemplate({
     super.key,
@@ -30,10 +30,8 @@ class SharedMemoryTemplate extends StatelessWidget {
   final VoidCallback onLeave;
   final VoidCallback onRetry;
 
-  /// Lets a friend on the quest add their own photos.
   final VoidCallback onAddPhotos;
 
-  /// True while those photos are being added.
   final bool addingPhotos;
 
   @override

@@ -5,7 +5,7 @@ import '../../molecules/common/md_bottom_action_bar.dart';
 /// The one page shell every template is built on: an optional app bar, safe
 /// area insets, an optional pinned bottom action, and back-button
 /// interception. Templates fill the slots instead of re-assembling a
-/// [Scaffold] each time. See CLAUDE.md §25, §66.
+/// [Scaffold] each time.
 class MdAppScaffold extends StatelessWidget {
   const MdAppScaffold({
     super.key,
@@ -22,7 +22,6 @@ class MdAppScaffold extends StatelessWidget {
 
   final Widget body;
 
-  /// Shows the themed app bar (with a back button when the route can pop).
   final bool showAppBar;
   final String? title;
   final Widget? leading;
@@ -82,7 +81,7 @@ class MdAppScaffold extends StatelessWidget {
 }
 
 /// Shows a short, friendly message at the bottom of the current screen.
-/// Copy should be human, never a raw error. See CLAUDE.md §42, §57.
+/// Copy should be human, never a raw error.
 ///
 /// Pass [actionLabel] + [onAction] to offer a way back, e.g. "Undo" after
 /// removing something. A new message replaces the current one instead of

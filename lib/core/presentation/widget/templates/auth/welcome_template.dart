@@ -8,22 +8,6 @@ import '../../atoms/common/md_primary_button.dart';
 import '../../atoms/common/md_sticker.dart';
 import '../../molecules/common/md_animated_photoquest_logo.dart';
 
-/// The first thing a signed-out person sees. It carries on from the launch
-/// reveal (same coral, same prints) so the app feels like one continuous
-/// moment, then asks one thing: make an account. Returning people have a
-/// quieter way in underneath.
-///
-/// ```text
-/// ╭───────────────────────────╮
-/// │        ╱▭╲ ┌─┐ ╱▭╲        │
-/// │        Photo Quest        │
-/// │ Do something together.    │
-/// │ Keep the memory.          │
-/// │ ╭───────────────────────╮ │
-/// │ │  [ Create account ]   │ │
-/// │ │  Log in               │ │
-/// ╰─┴───────────────────────┴─╯
-/// ```
 class WelcomeTemplate extends StatelessWidget {
   const WelcomeTemplate({
     super.key,

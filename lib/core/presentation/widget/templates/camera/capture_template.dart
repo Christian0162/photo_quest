@@ -15,7 +15,7 @@ import '../../organisms/camera/md_capture_body.dart';
 
 /// The photobooth: the live camera dominates, with just enough guidance —
 /// shot progress, the instruction and example, a countdown, then Keep or
-/// Retake. See CLAUDE.md §34-35, design system §24-31.
+/// Retake.
 class CaptureTemplate extends StatelessWidget {
   const CaptureTemplate({
     super.key,
@@ -40,15 +40,12 @@ class CaptureTemplate extends StatelessWidget {
 
   final AsyncValue<CaptureState> capture;
 
-  /// Asks before leaving mid-quest — the close button and system back.
   final VoidCallback onLeave;
 
-  /// Leaves straight away, when the booth never started.
   final VoidCallback onClose;
   final VoidCallback onRetry;
   final VoidCallback onCapture;
 
-  /// "Not ready yet" — tapping during the 3-2-1 stops it.
   final VoidCallback onCancelCountdown;
   final VoidCallback onSwitchCamera;
   final VoidCallback onKeep;
@@ -57,15 +54,12 @@ class CaptureTemplate extends StatelessWidget {
   final ValueChanged<PhotoLook> onLookChanged;
   final VoidCallback onToggleLooks;
 
-  /// Shows a pose idea, or the next one.
   final VoidCallback onPoseIdea;
   final VoidCallback onHidePoseIdea;
 
-  /// Boomerang / 360°: the shutter was pressed, and let go.
   final VoidCallback onHoldStart;
   final VoidCallback onHoldEnd;
 
-  /// Opens the booth settings (countdown, clip length).
   final VoidCallback onOpenSettings;
 
   @override

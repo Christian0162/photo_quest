@@ -8,24 +8,6 @@ import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_round_icon_button.dart';
 import '../../molecules/common/md_animated_photoquest_logo.dart';
 
-/// The frame every account screen shares: a coral band with the Photo Quest
-/// mark, and a cream sheet rising over it that holds the form.
-///
-/// ```text
-/// ╭──────────────────────────────╮
-/// │ (←)          ✦               │  coral band, the mark
-/// │          ╱▭╲ ┌─┐ ╱▭╲        │
-/// │ ╭──────────────────────────╮ │
-/// │ │ Welcome back             │ │  cream sheet
-/// │ │ Log in to pick up…       │ │
-/// │ │ [ form fields ]          │ │
-/// ╰─┴──────────────────────────┴─╯
-/// ```
-///
-/// The band folds down while the keyboard is open so the form keeps the room.
-/// While [busy] the mark plays its looping "developing" animation, so the
-/// brand — not a spinner — says something is happening. The primary action is
-/// pinned by the scaffold, not here.
 class MdAuthLayout extends StatelessWidget {
   const MdAuthLayout({
     super.key,
@@ -42,10 +24,8 @@ class MdAuthLayout extends StatelessWidget {
   final List<Widget> children;
   final bool busy;
 
-  /// Shows a back button on the band.
   final VoidCallback? onBack;
 
-  /// A quiet row of links under the form (e.g. "New here? Create account").
   final Widget? footer;
 
   static const _bandHeight = 184.0;

@@ -16,7 +16,7 @@ import '../../molecules/memories/md_memory_cover_hero.dart';
 /// A memory as a poster: the cover photo fills the card, with the kind of
 /// day as a sticker, the title and its note, and a button to see the shots
 /// full screen, all inside the picture. Tap anywhere else to open the
-/// memory. See CLAUDE.md §2.4, §36, §38.
+/// memory.
 class MdMemoryJournalCard extends StatefulWidget {
   const MdMemoryJournalCard({
     super.key,
@@ -34,7 +34,6 @@ class MdMemoryJournalCard extends StatefulWidget {
 }
 
 class _MdMemoryJournalCardState extends State<MdMemoryJournalCard> {
-  /// The photo showing, so the pill opens the viewer on the one in view.
   int _page = 0;
 
   @override

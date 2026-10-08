@@ -7,7 +7,7 @@ import '../../atoms/common/md_primary_button.dart';
 
 /// The body of the "Add someone" sheet: a name and who they are to you,
 /// as a friendly sheet instead of a cramped dialog. Holds no state — the
-/// screen owns the form. See CLAUDE.md §40, design system §20.
+/// screen owns the form.
 class MdAddPersonSheet extends StatelessWidget {
   const MdAddPersonSheet({
     super.key,

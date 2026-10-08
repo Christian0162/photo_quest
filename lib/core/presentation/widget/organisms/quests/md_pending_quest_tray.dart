@@ -11,7 +11,7 @@ import '../../atoms/people/md_story_ring.dart';
 /// Quests you made that are still waiting on people, laid out like a row of
 /// stories: a turning ring round the first friend, a count badge, the quest
 /// name underneath. An open loop you can close with one tap, so a group
-/// quest doesn't quietly stall. See design system §13, §22, §60.
+/// quest doesn't quietly stall.
 class MdPendingQuestTray extends StatelessWidget {
   const MdPendingQuestTray({
     super.key,

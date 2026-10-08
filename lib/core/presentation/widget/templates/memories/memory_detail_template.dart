@@ -23,7 +23,7 @@ import '../../organisms/memories/md_photo_album.dart';
 
 /// Opening a memory should feel like opening a photo album: the photos
 /// dominate, then the quest, the date, who was there, the printed strip,
-/// and "Do this again". See CLAUDE.md §39, design system §33-34.
+/// and "Do this again".
 class MemoryDetailTemplate extends StatelessWidget {
   const MemoryDetailTemplate({
     super.key,
@@ -47,7 +47,6 @@ class MemoryDetailTemplate extends StatelessWidget {
   /// away while the rest of the memory loads.
   final String? coverPath;
 
-  /// Opens the photo at an index full screen.
   final void Function(MemoryDetail detail, int index) onOpenPhoto;
   final VoidCallback onRetry;
 
@@ -56,13 +55,10 @@ class MemoryDetailTemplate extends StatelessWidget {
   final ValueChanged<Rect?> onShare;
   final ValueChanged<String> onDoAgain;
 
-  /// Opens the keepsake designer for this memory's print.
   final VoidCallback onDecorate;
 
-  /// Saves the printed keepsake to the phone's photos.
   final VoidCallback onDownloadStrip;
 
-  /// Opens the invite sheet so a friend can view this memory.
   final VoidCallback onInviteFriend;
 
   /// The keepsake design, played live: GIFs, boomerangs and 360° clips move

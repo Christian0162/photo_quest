@@ -15,7 +15,7 @@ import '../../organisms/common/md_app_scaffold.dart';
 import '../../organisms/quests/md_quest_category_banner.dart';
 
 /// Inspirational Quest picker: large visual cards on one shelf per
-/// category ("For Us", "For Family" …), not a dense list. See CLAUDE.md §33.
+/// category ("For Us", "For Family" …), not a dense list.
 class QuestSelectionTemplate extends StatelessWidget {
   const QuestSelectionTemplate({
     super.key,
@@ -30,7 +30,6 @@ class QuestSelectionTemplate extends StatelessWidget {
   final VoidCallback onCreateQuest;
   final ValueChanged<Quest> onOpenQuest;
 
-  /// Opens a random quest — for when "anything!" is the answer.
   void _surprise(List<QuestCategoryShelf> shelves) {
     final all = [
       for (final shelf in shelves)
@@ -40,7 +39,6 @@ class QuestSelectionTemplate extends StatelessWidget {
     onOpenQuest(all[math.Random().nextInt(all.length)]);
   }
 
-  /// One quest opens straight away; several let the person pick.
   Future<void> _openShelf(
     BuildContext context,
     QuestCategoryShelf shelf,

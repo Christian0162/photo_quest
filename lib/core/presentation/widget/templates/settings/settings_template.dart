@@ -9,7 +9,7 @@ import '../../organisms/settings/md_backup_card.dart';
 import '../../organisms/common/md_app_scaffold.dart';
 
 /// Quiet, short settings: mostly reassurance that memories are private and
-/// stay on this device, plus a way into the account. See CLAUDE.md §56.
+/// stay on this device, plus a way into the account.
 class SettingsTemplate extends StatelessWidget {
   const SettingsTemplate({
     super.key,

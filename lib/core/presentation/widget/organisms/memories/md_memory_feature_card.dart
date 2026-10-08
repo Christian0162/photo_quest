@@ -14,25 +14,6 @@ import '../../atoms/people/md_participant_avatar_stack.dart';
 import '../../molecules/memories/md_memory_cover_hero.dart';
 import '../../molecules/memories/md_photo_fan.dart';
 
-/// The first memory of a month, shown like a page taped into a journal: a
-/// dark booth tray with the prints fanned out and the note clipped on like
-/// a sticky note, and the kind of day, who was there, the title and the
-/// link to open it all inside the card. Tap a print to see it full screen;
-/// tap anywhere else to open the memory. See CLAUDE.md §2.5, §36-38, design
-/// system §33-35.
-///
-/// ```text
-///            ▭ tape
-/// ┌──────────────────────────────┐
-/// │ (♥ Anniversary)   ⟲ 2 weeks ago │
-/// │       ╱▭╲ ┌──┐ ╱▭╲   [note]  │
-/// │ ▣ 3 shots                    │
-/// │ With Jamie                   │
-/// │ Our Anniversary              │
-/// │ SATURDAY, OCT 14 · Date Night│
-/// │                Open memory › │
-/// └──────────────────────────────┘
-/// ```
 class MdMemoryFeatureCard extends StatelessWidget {
   const MdMemoryFeatureCard({
     super.key,
@@ -44,7 +25,6 @@ class MdMemoryFeatureCard extends StatelessWidget {
 
   final MemorySummary summary;
 
-  /// Today, for "2 weeks ago".
   final DateTime now;
   final VoidCallback onOpen;
   final ValueChanged<int> onViewPhoto;
@@ -125,7 +105,6 @@ class MdMemoryFeatureCard extends StatelessWidget {
                   const SizedBox(height: AppSpacing.lg),
                   // The prints lie in the tray, like fresh from the booth,
                   // with the memory's note clipped on like a sticky note.
-                  // See CLAUDE.md §2.5, §36.
                   Stack(
                     clipBehavior: Clip.none,
                     children: [

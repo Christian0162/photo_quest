@@ -9,7 +9,7 @@ import '../../molecules/camera/md_photobooth_print.dart';
 /// A category's header on Choose a Quest: its name, and an example of that
 /// kind of memory as a photobooth print laid on the table at a slight
 /// angle (alternating per shelf, like prints tossed down). Falls back to
-/// just the name when there's no example photo. See CLAUDE.md §33, §36.
+/// just the name when there's no example photo.
 class MdQuestCategoryBanner extends StatelessWidget {
   const MdQuestCategoryBanner({
     super.key,
@@ -22,14 +22,11 @@ class MdQuestCategoryBanner extends StatelessWidget {
 
   final String category;
 
-  /// Opens this category's quest(s); the print is tappable when set.
   final VoidCallback? onTap;
   final int questCount;
 
-  /// Position of the shelf, so neighbouring prints tilt opposite ways.
   final int index;
 
-  /// Date written on the print; defaults to today.
   final DateTime? today;
 
   @override

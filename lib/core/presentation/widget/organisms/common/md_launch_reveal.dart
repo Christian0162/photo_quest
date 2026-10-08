@@ -9,27 +9,9 @@ import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_photoquest_logo.dart';
 
-/// The moment the app opens. Picks up exactly where the native splash
-/// leaves off — coral, with the icon's fanned prints — then the prints
-/// fan open, the name and promise rise in, and the whole page melts away
-/// into the app, which has been loading underneath the whole time.
-///
-/// ```text
-///        ✦                 ✦
-///     ╱▭╲ ┌──┐ ╱▭╲      ╱▭╲  ┌──┐  ╱▭╲
-///         │♥ │     →        │♥ │         →   (app)
-///         └──┘              └──┘
-///                        Photo Quest
-///               Do something together. Keep the memory.
-/// ```
-///
-/// Best practice for launch screens: under two seconds, never blocks
-/// loading, any tap skips it, and reduced motion skips it entirely. See
-/// CLAUDE.md §2.5, §45, design system §48-50.
 class MdLaunchReveal extends StatefulWidget {
   const MdLaunchReveal({super.key, required this.child});
 
-  /// The app, built and loading beneath the reveal.
   final Widget child;
 
   /// Size of the prints artwork — the same 240 logical px as the native
@@ -44,7 +26,6 @@ class _MdLaunchRevealState extends State<MdLaunchReveal>
     with SingleTickerProviderStateMixin {
   static const _duration = Duration(milliseconds: 1800);
 
-  /// When the outro starts; a tap jumps straight here.
   static const _outroAt = 0.78;
 
   late final AnimationController _controller = AnimationController(
@@ -81,7 +62,6 @@ class _MdLaunchRevealState extends State<MdLaunchReveal>
     super.dispose();
   }
 
-  /// [t] mapped through [begin]..[end] of the timeline, eased.
   double _phase(double begin, double end, [Curve curve = Curves.easeOut]) {
     final t = ((_controller.value - begin) / (end - begin)).clamp(0.0, 1.0);
     return curve.transform(t);
@@ -150,13 +130,10 @@ class _Stage extends StatelessWidget {
   final double words;
   final double twinkle;
 
-  /// How far the prints rise to make room for the name underneath.
   static const _rise = 56.0;
 
-  /// The lowest visible edge of the fanned prints, below the art's centre.
   static const _artBottom = 74.0;
 
-  /// Half the height of the name + promise block.
   static const _wordsHalfHeight = 36.0;
 
   @override

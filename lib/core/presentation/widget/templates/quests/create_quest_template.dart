@@ -20,7 +20,6 @@ import '../../organisms/quests/md_quest_review_step.dart';
 /// A guided, one-question-per-step flow for creating a Quest instead of a
 /// long form: what → the idea → who → which photos → review. The step and
 /// its validation come from [CreateQuestDraft]; this only draws them.
-/// See CLAUDE.md §33, design system §17-20.
 class CreateQuestTemplate extends StatefulWidget {
   const CreateQuestTemplate({
     super.key,
@@ -43,11 +42,9 @@ class CreateQuestTemplate extends StatefulWidget {
 
   final CreateQuestDraft draft;
 
-  /// The People who can be invited (everyone except the device owner).
   final AsyncValue<List<Person>> people;
   final VoidCallback onClose;
 
-  /// Back one step — also what system back does, via [MdAppScaffold].
   final VoidCallback onBack;
   final VoidCallback onContinue;
   final VoidCallback onCreate;
@@ -60,7 +57,6 @@ class CreateQuestTemplate extends StatefulWidget {
   final ValueChanged<String> onShotTypeChanged;
   final ValueChanged<int> onRemoveShot;
 
-  /// Moves a shot from one position to its final new position.
   final void Function(int from, int to) onMoveShot;
 
   @override

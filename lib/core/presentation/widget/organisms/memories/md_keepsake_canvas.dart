@@ -21,7 +21,6 @@ import '../../molecules/camera/md_shot_media.dart';
 /// the saved image. When [editable], stickers can be tapped to select,
 /// dragged, pinched and rotated. When [live], GIFs and boomerangs play in
 /// their frames and 360° clips loop — the saved image always uses shots.
-/// See CLAUDE.md §36, design system §34.
 class MdKeepsakeCanvas extends StatelessWidget {
   const MdKeepsakeCanvas({
     super.key,
@@ -47,7 +46,6 @@ class MdKeepsakeCanvas extends StatelessWidget {
   onTransformSticker;
   final ValueChanged<String>? onRemoveSticker;
 
-  /// Paper and ink for each frame. Ink always reads at 4.5:1 on its paper.
   static (Color, Color) colorsOf(KeepsakeFrame frame) => switch (frame) {
     KeepsakeFrame.cream => (AppColors.printPaper, AppColors.inkBrown),
     KeepsakeFrame.film => (AppColors.warmCharcoal, AppColors.warmCream),
@@ -56,7 +54,6 @@ class MdKeepsakeCanvas extends StatelessWidget {
     KeepsakeFrame.mint => (AppColors.softGreen, AppColors.warmCharcoal),
   };
 
-  /// Width ÷ height of the keepsake for [design].
   static double aspectRatioOf(KeepsakeDesign design) {
     final m = _Metrics(design, 1);
     return 1 / m.height;
@@ -186,7 +183,6 @@ class _Metrics {
 class _Slot {
   const _Slot(this.shot, this.rect);
 
-  /// Null shows the photo placeholder.
   final Photo? shot;
   final Rect rect;
 }

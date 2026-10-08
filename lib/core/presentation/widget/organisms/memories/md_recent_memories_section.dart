@@ -9,7 +9,7 @@ import '../../molecules/common/md_app_card.dart';
 import 'md_memory_card.dart';
 
 /// Horizontal shelf of recent memories on Home, or a gentle nudge when
-/// there are none yet. See CLAUDE.md §31, §44.
+/// there are none yet.
 class MdRecentMemoriesSection extends StatelessWidget {
   const MdRecentMemoriesSection({
     super.key,
@@ -25,7 +25,6 @@ class MdRecentMemoriesSection extends StatelessWidget {
   static double _shelfHeight(BuildContext context) =>
       MdMemoryCard.heightFor(_cardWidth);
 
-  /// Placeholder shelf with the same footprint, so nothing jumps on load.
   static Widget skeleton(BuildContext context) {
     return SizedBox(
       height: _shelfHeight(context),

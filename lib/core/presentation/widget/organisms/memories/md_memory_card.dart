@@ -13,8 +13,7 @@ import '../../molecules/common/md_poster_card.dart';
 import '../../molecules/memories/md_memory_cover_hero.dart';
 
 /// A Memory as a poster: the picture fills the card and the quest title,
-/// date and who was there sit inside it on a charcoal fade. See CLAUDE.md
-/// §38, design system §35.
+/// date and who was there sit inside it on a charcoal fade.
 class MdMemoryCard extends StatelessWidget {
   const MdMemoryCard({super.key, required this.summary, required this.onTap});
 

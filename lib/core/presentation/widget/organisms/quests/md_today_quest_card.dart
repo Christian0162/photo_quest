@@ -13,7 +13,7 @@ import 'md_quest_card.dart';
 /// Home's hero: today's Quest as a full-bleed poster. The example photo
 /// fills the card, the title sits on a charcoal fade at the bottom, and one
 /// chunky button starts it. Tilted stickers pop on top so it feels like a
-/// thing you could pick up. See CLAUDE.md §31, design system §14.
+/// thing you could pick up.
 class MdTodayQuestCard extends StatelessWidget {
   const MdTodayQuestCard({
     super.key,

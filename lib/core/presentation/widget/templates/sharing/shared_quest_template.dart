@@ -17,8 +17,7 @@ import '../../organisms/common/md_app_scaffold.dart';
 ///
 /// An invitation reads like a note from a friend, with one dominant action:
 /// accept. Once you're in, it shows who is taking part, the memories made so
-/// far (add your own photos from there), and a quiet way out. See CLAUDE.md
-/// §22, §41, design system §22.
+/// far (add your own photos from there), and a quiet way out.
 class SharedQuestTemplate extends StatelessWidget {
   const SharedQuestTemplate({
     super.key,
@@ -33,7 +32,6 @@ class SharedQuestTemplate extends StatelessWidget {
 
   final AsyncValue<SharedQuestDetail> quest;
 
-  /// True while an answer or a leave is being sent.
   final bool busy;
   final VoidCallback onAccept;
   final VoidCallback onDecline;

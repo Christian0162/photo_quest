@@ -6,7 +6,7 @@ import '../../molecules/camera/md_seconds_choice.dart';
 
 /// Photobooth settings as a short sheet body: how long the countdown is, and
 /// how long a 360° clip can run. Choices apply straight away — no Save
-/// button. See design system §44.
+/// button.
 class MdBoothSettingsSheet extends StatelessWidget {
   const MdBoothSettingsSheet({
     super.key,

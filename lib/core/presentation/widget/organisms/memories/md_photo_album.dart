@@ -28,7 +28,6 @@ class MdPhotoAlbum extends StatefulWidget {
   final List<Photo> photos;
   final String? coverPhotoId;
 
-  /// The thumbnail from the tapped card, if any.
   final String? coverPath;
   final String title;
   final ValueChanged<int> onOpen;

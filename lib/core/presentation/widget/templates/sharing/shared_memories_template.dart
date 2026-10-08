@@ -16,7 +16,7 @@ import '../../organisms/common/md_app_scaffold.dart';
 
 /// Everything friends shared with you: invitations to answer, quests you are
 /// taking part in, and memories they gave you a code for. Private to you and
-/// the friends who invited you: not a feed. See CLAUDE.md §22, §38, §54C.
+/// the friends who invited you: not a feed.
 class SharedMemoriesTemplate extends StatelessWidget {
   const SharedMemoriesTemplate({
     super.key,
