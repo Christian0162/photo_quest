@@ -65,11 +65,103 @@ text and **Caveat** for handwritten touches.
 
 ## Getting started
 
+### 1. Install the tools
+
+1. Install the [Flutter SDK](https://docs.flutter.dev/get-started/install)
+   and add its `bin` folder to your `PATH`.
+2. For Android, install [Android Studio](https://developer.android.com/studio),
+   open it once and let the setup wizard install the **Android SDK**,
+   **platform-tools** (this is where `adb` lives) and **command-line tools**.
+   Without Android Studio, download the
+   [command-line tools](https://developer.android.com/studio#command-line-tools-only)
+   and run `sdkmanager "platform-tools"`. Then install the Android platform
+   your Flutter SDK requires with `sdkmanager "platforms;android-<N>"`
+   (it's the `compileSdk` value the build asks for; if you skip this, Gradle
+   downloads the missing platform on the first `flutter run` once the licenses
+   are accepted).
+3. Accept the licenses and check everything:
+
+   ```bash
+   flutter doctor --android-licenses
+   flutter doctor -v
+   ```
+
+   `flutter doctor -v` prints the SDK location (`Android SDK at ...`). If your
+   SDK is somewhere unusual, point Flutter at it with
+   `flutter config --android-sdk <path>`.
+4. Make `adb` available in your terminal by adding
+   `<android-sdk>/platform-tools` to your `PATH` (on Windows it is often
+   `%LOCALAPPDATA%\Android\Sdk\platform-tools`). Check with `adb version`.
+
+### 2. Get the code running
+
 ```bash
 flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
+
+The camera needs a real camera, so test on a physical phone. Pick one of the
+two ways below to connect it.
+
+### Run on a physical Android phone
+
+First enable **Developer options**: Settings → About phone → tap
+**Build number** 7 times.
+
+#### Option A: USB
+
+1. Settings → Developer options → turn on **USB debugging**.
+2. Plug the phone into your computer with a data-capable cable.
+3. Accept the **Allow USB debugging?** prompt on the phone.
+4. Check that it shows up, then run:
+
+   ```bash
+   flutter devices
+   flutter run
+   ```
+
+If the phone is missing, try another cable or port, set USB mode to **File
+transfer**, and on Windows install your phone maker's USB driver.
+
+#### Option B: Wireless (Android 11+)
+
+The phone and computer must be on the same Wi-Fi (not a guest or isolated
+network).
+
+1. Settings → Developer options → turn on **Wireless debugging**.
+2. Tap **Wireless debugging** → **Pair device with pairing code**. Keep the
+   dialog open: it shows a 6-digit code and a pairing `IP:port`.
+3. Pair once from your computer, using the pairing `IP:port` from the dialog:
+
+   ```bash
+   adb pair 192.168.1.5:37123
+   ```
+
+   Enter the 6-digit code when asked. Use a colon between IP and port.
+4. Close the dialog. On the main Wireless debugging screen, note the
+   **different** `IP:port` under "IP address & port" and connect:
+
+   ```bash
+   adb connect 192.168.1.5:41567
+   ```
+
+5. Run the app:
+
+   ```bash
+   flutter devices
+   flutter run -d <device-id>
+   ```
+
+   With only one device connected, plain `flutter run` is enough.
+
+The pairing port and the connect port are different. Pairing is one-time;
+afterwards only `adb connect` is needed, and the connect port can change
+when Wireless debugging is toggled or the phone restarts. If it fails, run
+`adb kill-server` and try again.
+
+On iOS, a Mac with Xcode is required; connect the iPhone by cable and trust
+the computer.
 
 Run `build_runner` again after changing a Drift table, a DAO or a
 `@riverpod` provider. Generated `*.g.dart` files are committed.
