@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_colors.dart';
 
 class MdProgressRingPainter extends CustomPainter {
   const MdProgressRingPainter({required this.progress});

@@ -6,10 +6,10 @@ import '../../../../config/routes/app_router.dart';
 import '../../../data/repositories/settings_repository.dart';
 import '../../../domain/camera/enum/capture_phase.dart';
 import '../../view_model/camera/capture_view_model.dart';
-import '../../widget/molecules/md_confirmation_dialog.dart';
-import '../../widget/organisms/md_app_scaffold.dart';
-import '../../widget/organisms/md_booth_settings_sheet.dart';
-import '../../widget/templates/capture_template.dart';
+import '../../widget/molecules/common/md_confirmation_dialog.dart';
+import '../../widget/organisms/common/md_app_scaffold.dart';
+import '../../widget/organisms/camera/md_booth_settings_sheet.dart';
+import '../../widget/templates/camera/capture_template.dart';
 
 /// The photobooth. Wires [CaptureViewModel], the leave dialog and
 /// navigation into [CaptureTemplate]. See CLAUDE.md §34-35.

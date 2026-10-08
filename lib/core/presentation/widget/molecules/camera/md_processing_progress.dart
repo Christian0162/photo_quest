@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../atoms/md_progress_ring_painter.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../atoms/camera/md_progress_ring_painter.dart';
 
 /// Making the GIF or boomerang: a ring filling up with the percentage in
 /// the middle, so it's clear how long to wait.

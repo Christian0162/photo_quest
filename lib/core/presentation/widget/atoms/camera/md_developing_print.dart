@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_colors.dart';
 
 /// An instant print developing: starts washed-out and grey, ends in full
 /// color. [progress] runs 0 → 1.

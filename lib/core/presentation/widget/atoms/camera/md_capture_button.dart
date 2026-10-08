@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../utils/app_haptics.dart';
-import 'md_pressable_scale.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../utils/app_haptics.dart';
+import '../common/md_pressable_scale.dart';
 
 /// The photobooth shutter: a big white ring around a coral button that
 /// sinks when pressed, so taking the photo feels physical. See design

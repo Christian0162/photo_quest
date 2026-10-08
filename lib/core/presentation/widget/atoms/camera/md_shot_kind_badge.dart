@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/memories/entities/photo.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/memories/entities/photo.dart';
 
 /// "GIF", "Boomerang", "360°" — a small label over a moving shot so it's
 /// clear what it is. Icon + word, never color alone. Shows nothing for a

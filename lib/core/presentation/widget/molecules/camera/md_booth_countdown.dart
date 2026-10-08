@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../atoms/md_progress_ring_painter.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../atoms/camera/md_progress_ring_painter.dart';
 
 /// The 3-2-1: a big number inside a ring that drains each second, with the
 /// shot's instruction kept underneath so nobody forgets what to do. Tapping

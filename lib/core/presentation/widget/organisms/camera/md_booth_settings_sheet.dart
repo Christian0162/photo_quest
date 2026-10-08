@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../utils/app_haptics.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../utils/app_haptics.dart';
 
 /// Photobooth settings as a short sheet: how long the countdown is, and
 /// how long a 360° clip can run. Choices apply straight away — no Save

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../utils/app_haptics.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../utils/app_haptics.dart';
 
 /// "Photo · GIF · Boomerang · 360°" — picks how the next shot is captured.
 /// Tap-only (no swipe, so it never fights the system back gesture), 48px

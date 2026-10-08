@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_motion.dart';
 
 /// The just-taken photo pops out like a fresh print and settles at a small
 /// tilt — a physical, photobooth moment. Static under reduced motion. See

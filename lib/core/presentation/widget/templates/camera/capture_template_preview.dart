@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../domain/camera/enum/capture_mode.dart';
-import '../../../domain/camera/enum/capture_phase.dart';
-import '../../../domain/memories/enum/photo_look.dart';
-import '../../../errors/app_failure.dart';
-import '../../types/camera/capture_state.dart';
-import '../molecules/md_app_widget_preview.dart';
+import '../../../../domain/camera/enum/capture_mode.dart';
+import '../../../../domain/camera/enum/capture_phase.dart';
+import '../../../../domain/memories/enum/photo_look.dart';
+import '../../../../errors/app_failure.dart';
+import '../../../types/camera/capture_state.dart';
+import '../../molecules/common/md_app_widget_preview.dart';
 import 'capture_template.dart';
-import 'preview_samples.dart';
+import '../preview_samples.dart';
 
 /// No live camera in the previewer, so the booth shows its dark backdrop.
 CaptureState _state(

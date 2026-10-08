@@ -4,23 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_shadows.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../utils/app_haptics.dart';
-import '../../types/camera/memory_reveal_result.dart';
-import '../../types/memories/keepsake_design.dart';
-import '../atoms/md_appear_transition.dart';
-import '../atoms/md_developing_print.dart';
-import '../atoms/md_loading_indicator.dart';
-import '../atoms/md_local_photo.dart';
-import '../atoms/md_primary_button.dart';
-import '../molecules/md_empty_state.dart';
-import '../organisms/md_app_scaffold.dart';
-import '../organisms/md_keepsake_canvas.dart';
-import '../organisms/md_keepsake_snapshot.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_shadows.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../utils/app_haptics.dart';
+import '../../../types/camera/memory_reveal_result.dart';
+import '../../../types/memories/keepsake_design.dart';
+import '../../atoms/common/md_appear_transition.dart';
+import '../../atoms/camera/md_developing_print.dart';
+import '../../atoms/common/md_loading_indicator.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../molecules/common/md_empty_state.dart';
+import '../../organisms/common/md_app_scaffold.dart';
+import '../../organisms/memories/md_keepsake_canvas.dart';
+import '../../organisms/memories/md_keepsake_snapshot.dart';
 
 /// The payoff after finishing a Quest: the photo strip rises in and
 /// develops like an instant print — pale and grey, then full color — before

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../utils/app_haptics.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../utils/app_haptics.dart';
 import 'md_progress_ring_painter.dart';
 
 /// The press-and-hold shutter for boomerangs and 360° clips: capturing

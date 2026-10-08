@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
 
 /// A round, translucent control that stays legible over any camera frame
 /// (close, flip camera). Always 48px and always labeled. See design system

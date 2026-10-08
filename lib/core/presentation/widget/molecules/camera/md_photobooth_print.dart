@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
 
 /// A photo laid out as an aesthetic photobooth print: a 3 × 2 grid of
 /// frames on soft beige paper, muted film color, little hand-drawn doodles,
