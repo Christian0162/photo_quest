@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../domain/people/entities/person.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../domain/people/entities/person.dart';
 import 'md_person_avatar.dart';
 
 /// [MdPersonAvatar] inside a soft ring, like a photo in a round frame.

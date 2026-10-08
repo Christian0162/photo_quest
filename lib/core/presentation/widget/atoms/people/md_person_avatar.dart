@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/people/entities/person.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/people/entities/person.dart';
 
 /// A Person's photo, or their initial on a warm tint. The tint is stable
 /// per person so faces are easier to tell apart at a glance; the initial

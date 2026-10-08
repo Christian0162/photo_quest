@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../types/display_labels.dart';
-import '../atoms/md_primary_button.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../types/display_labels.dart';
+import '../../atoms/common/md_primary_button.dart';
 
 /// Asks for a name + relationship as a friendly sheet instead of a cramped
 /// dialog. Resolves to `(name, type)`, or null if dismissed. See CLAUDE.md

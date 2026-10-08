@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/people/entities/person.dart';
-import '../../types/display_labels.dart';
-import '../atoms/md_fade_slide_in.dart';
-import '../atoms/md_primary_button.dart';
-import '../atoms/md_ringed_avatar.dart';
-import '../atoms/md_round_icon_button.dart';
-import '../atoms/md_skeleton_box.dart';
-import '../molecules/md_app_card.dart';
-import '../molecules/md_empty_state.dart';
-import '../molecules/md_page_header.dart';
-import '../molecules/md_tile_grid.dart';
-import '../organisms/md_app_scaffold.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/people/entities/person.dart';
+import '../../../types/display_labels.dart';
+import '../../atoms/common/md_fade_slide_in.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/people/md_ringed_avatar.dart';
+import '../../atoms/common/md_round_icon_button.dart';
+import '../../atoms/common/md_skeleton_box.dart';
+import '../../molecules/common/md_app_card.dart';
+import '../../molecules/common/md_empty_state.dart';
+import '../../molecules/common/md_page_header.dart';
+import '../../molecules/common/md_tile_grid.dart';
+import '../../organisms/common/md_app_scaffold.dart';
 
 /// The people (and pets) your quests and memories are about, grouped the
 /// way life groups them — your person, family, friends, pets. Private to

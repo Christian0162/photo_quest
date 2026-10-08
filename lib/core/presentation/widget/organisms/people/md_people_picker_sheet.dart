@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/people/entities/person.dart';
-import '../../types/display_labels.dart';
-import '../atoms/md_person_avatar.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/people/entities/person.dart';
+import '../../../types/display_labels.dart';
+import '../../atoms/people/md_person_avatar.dart';
 
 /// Bottom sheet for inviting one Person to a Quest. Resolves to the chosen
 /// Person, or null if dismissed. See CLAUDE.md §40, design system §20, §44.

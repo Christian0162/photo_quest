@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/people/entities/person.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/people/entities/person.dart';
 import 'md_person_avatar.dart';
 
 /// Overlapping "👤 👤 👤 +2" avatar row used to show quest participants at
