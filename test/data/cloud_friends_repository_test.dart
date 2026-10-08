@@ -8,6 +8,7 @@ import 'package:photoquest/core/data/repositories/cloud_quest_repository.dart';
 import 'package:photoquest/core/data/repositories/memory_repository.dart';
 import 'package:photoquest/core/data/repositories/quest_repository.dart';
 import 'package:photoquest/core/data/services/image/image_processing_service.dart';
+import 'package:photoquest/core/data/services/storage/photo_storage_service.dart';
 import 'package:photoquest/core/errors/app_failure.dart';
 
 import '../support/fake_supabase_server.dart';
@@ -301,6 +302,7 @@ void main() {
         memories: memories,
         quests: quests,
         images: ImageProcessingService(),
+        storage: PhotoStorageService(),
         currentUserId: () => _me,
       );
 

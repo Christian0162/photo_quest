@@ -8,6 +8,7 @@ import 'package:photoquest/core/data/repositories/cloud_memory_repository.dart';
 import 'package:photoquest/core/data/repositories/memory_repository.dart';
 import 'package:photoquest/core/data/repositories/quest_repository.dart';
 import 'package:photoquest/core/data/services/image/image_processing_service.dart';
+import 'package:photoquest/core/data/services/storage/photo_storage_service.dart';
 import 'package:photoquest/core/domain/memories/entities/photo.dart';
 import 'package:photoquest/core/domain/sharing/entities/shared_quest.dart';
 import 'package:photoquest/core/errors/app_failure.dart';
@@ -17,6 +18,16 @@ import '../support/fake_supabase_server.dart';
 const _me = 'a0000000-0000-0000-0000-00000000000a';
 const _photoOne = '10000000-0000-0000-0000-000000000001';
 const _photoTwo = '10000000-0000-0000-0000-000000000002';
+
+class _FakeStorage extends PhotoStorageService {
+  _FakeStorage(this._files);
+
+  final Map<String, Uint8List> _files;
+
+  @override
+  Future<Uint8List> readBytes(String path) async =>
+      _files[path] ?? (throw StateError('no $path'));
+}
 
 void main() {
   late AppDatabase db;
@@ -42,7 +53,7 @@ void main() {
       memories: memories,
       quests: quests,
       images: ImageProcessingService(),
-      readFile: (path) async => files[path] ?? (throw StateError('no $path')),
+      storage: _FakeStorage(files),
       currentUserId: () => userId,
     );
   }

@@ -17,6 +17,7 @@ CloudMemoryRepository cloudMemoryRepository(Ref ref) {
     memories: ref.watch(memoryRepositoryProvider),
     quests: ref.watch(questRepositoryProvider),
     images: ref.watch(imageProcessingServiceProvider),
+    storage: ref.watch(photoStorageServiceProvider),
   );
 }
 

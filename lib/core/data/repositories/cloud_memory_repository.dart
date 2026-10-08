@@ -12,6 +12,7 @@ import '../../domain/sharing/entities/shared_memory.dart';
 import '../../domain/sharing/entities/shared_quest.dart';
 import '../../errors/app_failure.dart';
 import '../services/image/image_processing_service.dart';
+import '../services/storage/photo_storage_service.dart';
 import '../services/storage/storage_tree_cleaner.dart';
 import 'cloud_support.dart';
 import 'memory_repository.dart';
