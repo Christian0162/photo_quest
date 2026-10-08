@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../types/memories/memory_summary.dart';
-import '../atoms/md_local_photo.dart';
-import '../atoms/md_participant_avatar_stack.dart';
-import '../molecules/md_app_card.dart';
-import '../molecules/md_memory_cover_hero.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../types/memories/memory_summary.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/people/md_participant_avatar_stack.dart';
+import '../../molecules/common/md_app_card.dart';
+import '../../molecules/memories/md_memory_cover_hero.dart';
 
 /// A Memory as a printed photo: the picture dominates, with a white print
 /// border, the quest title, date, and who was there underneath. See

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../types/memories/memory_summary.dart';
-import '../atoms/md_local_photo.dart';
-import '../molecules/md_app_card.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../types/memories/memory_summary.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../molecules/common/md_app_card.dart';
 
 /// "1 year ago today" — resurfaces a memory from this date so the app
 /// feels like a time capsule, and nudges "do it again". See CLAUDE.md §21,

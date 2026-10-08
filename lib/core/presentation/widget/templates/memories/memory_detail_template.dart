@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_shadows.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../types/memories/keepsake_design.dart';
-import '../../types/memories/memory_detail.dart';
-import '../atoms/md_fade_slide_in.dart';
-import '../atoms/md_local_photo.dart';
-import '../atoms/md_person_avatar.dart';
-import '../atoms/md_primary_button.dart';
-import '../atoms/md_skeleton_box.dart';
-import '../molecules/md_empty_state.dart';
-import '../molecules/md_memory_cover_hero.dart';
-import '../molecules/md_section_header.dart';
-import '../organisms/md_app_scaffold.dart';
-import '../organisms/md_keepsake_canvas.dart';
-import '../organisms/md_photo_album.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_shadows.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../types/memories/keepsake_design.dart';
+import '../../../types/memories/memory_detail.dart';
+import '../../atoms/common/md_fade_slide_in.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/people/md_person_avatar.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/common/md_skeleton_box.dart';
+import '../../molecules/common/md_empty_state.dart';
+import '../../molecules/memories/md_memory_cover_hero.dart';
+import '../../molecules/common/md_section_header.dart';
+import '../../organisms/common/md_app_scaffold.dart';
+import '../../organisms/memories/md_keepsake_canvas.dart';
+import '../../organisms/memories/md_photo_album.dart';
 
 /// Opening a memory should feel like opening a photo album: the photos
 /// dominate, then the quest, the date, who was there, the printed strip,

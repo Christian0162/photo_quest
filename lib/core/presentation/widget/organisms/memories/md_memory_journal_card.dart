@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_shadows.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../utils/date_labels.dart';
-import '../../types/display_labels.dart';
-import '../../types/memories/memory_summary.dart';
-import '../atoms/md_icon_fact.dart';
-import '../atoms/md_local_photo.dart';
-import '../atoms/md_occasion_chip.dart';
-import '../atoms/md_open_memory_link.dart';
-import '../atoms/md_sticky_note.dart';
-import '../molecules/md_app_card.dart';
-import '../molecules/md_memory_cover_hero.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_shadows.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../utils/date_labels.dart';
+import '../../../types/display_labels.dart';
+import '../../../types/memories/memory_summary.dart';
+import '../../atoms/common/md_icon_fact.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/quests/md_occasion_chip.dart';
+import '../../atoms/memories/md_open_memory_link.dart';
+import '../../atoms/memories/md_sticky_note.dart';
+import '../../molecules/common/md_app_card.dart';
+import '../../molecules/memories/md_memory_cover_hero.dart';
 
 /// A memory as a journal entry: when it was and what kind of day, the
 /// title, one wide photo with its note pinned to the corner like a sticky

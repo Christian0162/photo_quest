@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_motion.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/memories/entities/photo.dart';
-import '../atoms/md_camera_icon_button.dart';
-import '../molecules/md_shot_media.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/memories/entities/photo.dart';
+import '../../atoms/camera/md_camera_icon_button.dart';
+import '../../molecules/camera/md_shot_media.dart';
 
 /// Opens [photos] full screen on black: swipe between shots, pinch or
 /// double-tap to zoom, swipe down or tap close to go back. GIFs play and

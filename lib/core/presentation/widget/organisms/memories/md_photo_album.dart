@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_shadows.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../domain/memories/entities/photo.dart';
-import '../../../utils/app_haptics.dart';
-import '../atoms/md_local_photo.dart';
-import '../atoms/md_page_dots.dart';
-import '../molecules/md_memory_cover_hero.dart';
-import '../molecules/md_shot_media.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_shadows.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../domain/memories/entities/photo.dart';
+import '../../../../utils/app_haptics.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/common/md_page_dots.dart';
+import '../../molecules/memories/md_memory_cover_hero.dart';
+import '../../molecules/camera/md_shot_media.dart';
 
 /// Swipeable photos that open on the memory's cover. The thumbnail that was
 /// just flown in stays underneath while the full-size original fades in on

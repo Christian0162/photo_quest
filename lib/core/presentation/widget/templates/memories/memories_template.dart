@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/memories/enum/memory_filter.dart';
-import '../../types/memories/memory_box.dart';
-import '../../types/memories/memory_month.dart';
-import '../../types/memories/memory_summary.dart';
-import '../atoms/md_fade_slide_in.dart';
-import '../atoms/md_primary_button.dart';
-import '../atoms/md_skeleton_box.dart';
-import '../molecules/md_empty_state.dart';
-import '../molecules/md_journal_heading.dart';
-import '../molecules/md_memory_filter_chips.dart';
-import '../molecules/md_page_header.dart';
-import '../organisms/md_app_scaffold.dart';
-import '../organisms/md_memory_feature_card.dart';
-import '../organisms/md_memory_journal_card.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/memories/enum/memory_filter.dart';
+import '../../../types/memories/memory_box.dart';
+import '../../../types/memories/memory_month.dart';
+import '../../../types/memories/memory_summary.dart';
+import '../../atoms/common/md_fade_slide_in.dart';
+import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/common/md_skeleton_box.dart';
+import '../../molecules/common/md_empty_state.dart';
+import '../../molecules/memories/md_journal_heading.dart';
+import '../../molecules/memories/md_memory_filter_chips.dart';
+import '../../molecules/common/md_page_header.dart';
+import '../../organisms/common/md_app_scaffold.dart';
+import '../../organisms/memories/md_memory_feature_card.dart';
+import '../../organisms/memories/md_memory_journal_card.dart';
 
 /// The private memory box, kept like a journal:
 ///

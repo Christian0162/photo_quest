@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/memories/entities/photo.dart';
-import '../../../domain/memories/enum/keepsake_frame.dart';
-import '../../../domain/memories/enum/keepsake_layout.dart';
-import '../../../utils/app_haptics.dart';
-import '../../types/memories/keepsake_design.dart';
-import '../../types/memories/placed_sticker.dart';
-import '../atoms/md_local_photo.dart';
-import '../atoms/md_sticker_art.dart';
-import '../molecules/md_shot_media.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/memories/entities/photo.dart';
+import '../../../../domain/memories/enum/keepsake_frame.dart';
+import '../../../../domain/memories/enum/keepsake_layout.dart';
+import '../../../../utils/app_haptics.dart';
+import '../../../types/memories/keepsake_design.dart';
+import '../../../types/memories/placed_sticker.dart';
+import '../../atoms/common/md_local_photo.dart';
+import '../../atoms/memories/md_sticker_art.dart';
+import '../../molecules/camera/md_shot_media.dart';
 
 /// The printed keepsake — strip, grid or polaroid — on its paper, with the
 /// title handwritten and any stickers on top. Everything is proportional to
