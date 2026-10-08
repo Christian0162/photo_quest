@@ -5,16 +5,20 @@ import 'package:intl/intl.dart';
 import '../../../../config/constant/app_colors.dart';
 import '../../../../config/constant/app_spacing.dart';
 import '../../../../config/constant/app_typography.dart';
+import '../../../domain/moments/entities/day_moment.dart';
+import '../../../domain/people/enum/mood.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../types/memories/memory_summary.dart';
 import '../../types/quests/quest_needing_confirmation.dart';
 import '../atoms/md_fade_slide_in.dart';
-import '../atoms/md_round_icon_button.dart';
+import '../atoms/md_profile_button.dart';
 import '../atoms/md_skeleton_box.dart';
 import '../atoms/md_smooth_switch.dart';
 import '../molecules/md_idea_tile.dart';
+import '../molecules/md_mood_pill.dart';
 import '../molecules/md_section_header.dart';
 import '../organisms/md_app_scaffold.dart';
+import '../organisms/md_day_moments_row.dart';
 import '../organisms/md_on_this_day_card.dart';
 import '../organisms/md_pending_quest_card.dart';
 import '../organisms/md_recent_memories_section.dart';
@@ -32,8 +36,15 @@ class HomeTemplate extends StatelessWidget {
     required this.pendingQuests,
     required this.memories,
     this.onThisDay = const AsyncData(null),
+    this.now,
     required this.onRefresh,
-    required this.onOpenSettings,
+    this.mood,
+    this.avatarId,
+    this.moments = const AsyncData([]),
+    required this.onOpenMood,
+    required this.onOpenProfile,
+    required this.onAddMoment,
+    required this.onOpenMoment,
     required this.onOpenQuest,
     required this.onOpenMemory,
     required this.onSeeAllMemories,
@@ -51,7 +62,20 @@ class HomeTemplate extends StatelessWidget {
   /// A memory from this date in an earlier year, resurfaced near the top.
   final AsyncValue<MemorySummary?> onThisDay;
   final Future<void> Function() onRefresh;
-  final VoidCallback onOpenSettings;
+
+  /// The moment to treat as "now". Previews pin it; the app leaves it null.
+  final DateTime? now;
+  final Mood? mood;
+
+  /// The avatar picked for the profile button, if any.
+  final String? avatarId;
+
+  /// "Your Day" moments that are still showing.
+  final AsyncValue<List<DayMoment>> moments;
+  final VoidCallback onOpenMood;
+  final VoidCallback onOpenProfile;
+  final VoidCallback onAddMoment;
+  final ValueChanged<DayMoment> onOpenMoment;
   final ValueChanged<Quest> onOpenQuest;
   final ValueChanged<MemorySummary> onOpenMemory;
   final VoidCallback onSeeAllMemories;
@@ -60,7 +84,7 @@ class HomeTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
+    final today = now ?? DateTime.now();
     final onThisDaySummary = onThisDay.value;
     final pending = pendingQuests.value ?? const [];
 
@@ -74,8 +98,32 @@ class HomeTemplate extends StatelessWidget {
           child: _Greeting(
             greeting: greeting,
             today: today,
-            onOpenSettings: onOpenSettings,
+            mood: mood,
+            avatarId: avatarId,
+            onOpenMood: onOpenMood,
+            onOpenProfile: onOpenProfile,
           ),
+        ),
+      ),
+      (
+        'your-day',
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const _Padded(
+              child: MdSectionHeader(
+                title: 'Moments & Stories',
+                subtitle: 'Little moments that matters',
+              ),
+            ),
+            const SizedBox(height: AppSpacing.ms),
+            MdDayMomentsRow(
+              moments: moments,
+              now: today,
+              onAdd: onAddMoment,
+              onOpen: onOpenMoment,
+            ),
+          ],
         ),
       ),
       (
@@ -250,56 +298,62 @@ class _Greeting extends StatelessWidget {
   const _Greeting({
     required this.greeting,
     required this.today,
-    required this.onOpenSettings,
+    required this.mood,
+    required this.avatarId,
+    required this.onOpenMood,
+    required this.onOpenProfile,
   });
 
   final String greeting;
   final DateTime today;
-  final VoidCallback onOpenSettings;
+  final Mood? mood;
+  final String? avatarId;
+  final VoidCallback onOpenMood;
+  final VoidCallback onOpenProfile;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                DateFormat('EEEE · MMMM d').format(today).toUpperCase(),
-                style: AppTypography.overline,
+        // How you feel on the left, you on the right.
+        Row(
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: MdMoodPill(mood: mood, onTap: onOpenMood),
               ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(greeting, style: AppTypography.bodyMuted),
-              const SizedBox(height: AppSpacing.xs),
-              Semantics(
-                header: true,
-                label: "Let's make a memory.",
-                excludeSemantics: true,
-                child: Text.rich(
-                  TextSpan(
-                    text: "Let's make a ",
-                    children: [
-                      TextSpan(
-                        text: 'memory.',
-                        style: AppTypography.display.copyWith(
-                          color: AppColors.coralInk,
-                        ),
-                      ),
-                    ],
-                  ),
-                  style: AppTypography.display,
-                ),
-              ),
-            ],
-          ),
+            ),
+            MdProfileButton(avatarId: avatarId, onTap: onOpenProfile),
+          ],
         ),
-        const SizedBox(width: AppSpacing.sm),
-        MdRoundIconButton(
-          icon: Icons.settings_outlined,
-          tooltip: 'Settings',
-          onPressed: onOpenSettings,
+        const SizedBox(height: AppSpacing.lg),
+        Text(
+          DateFormat('EEEE · MMMM d').format(today).toUpperCase(),
+          style: AppTypography.overline,
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(greeting, style: AppTypography.bodyMuted),
+        const SizedBox(height: AppSpacing.xs),
+        Semantics(
+          header: true,
+          label: "Let's make a memory.",
+          excludeSemantics: true,
+          child: Text.rich(
+            TextSpan(
+              text: "Let's make a ",
+              children: [
+                TextSpan(
+                  text: 'memory.',
+                  style: AppTypography.display.copyWith(
+                    color: AppColors.coralInk,
+                  ),
+                ),
+              ],
+            ),
+            style: AppTypography.display,
+          ),
         ),
       ],
     );

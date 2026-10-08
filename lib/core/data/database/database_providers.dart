@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'app_database.dart';
+import 'daos/day_moment_dao.dart';
 import 'daos/memory_dao.dart';
 import 'daos/people_dao.dart';
 import 'daos/quest_dao.dart';
@@ -26,3 +27,7 @@ PeopleDao peopleDao(Ref ref) => ref.watch(appDatabaseProvider).peopleDao;
 
 @riverpod
 SettingsDao settingsDao(Ref ref) => ref.watch(appDatabaseProvider).settingsDao;
+
+@riverpod
+DayMomentDao dayMomentDao(Ref ref) =>
+    ref.watch(appDatabaseProvider).dayMomentDao;

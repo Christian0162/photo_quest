@@ -213,3 +213,44 @@ final class SettingsDaoProvider
 }
 
 String _$settingsDaoHash() => r'44f3d580e6459e0377116afcd80208cfc18b4c91';
+
+@ProviderFor(dayMomentDao)
+final dayMomentDaoProvider = DayMomentDaoProvider._();
+
+final class DayMomentDaoProvider
+    extends $FunctionalProvider<DayMomentDao, DayMomentDao, DayMomentDao>
+    with $Provider<DayMomentDao> {
+  DayMomentDaoProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dayMomentDaoProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dayMomentDaoHash();
+
+  @$internal
+  @override
+  $ProviderElement<DayMomentDao> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DayMomentDao create(Ref ref) {
+    return dayMomentDao(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DayMomentDao value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DayMomentDao>(value),
+    );
+  }
+}
+
+String _$dayMomentDaoHash() => r'0eb1ab81196a0bd996e705e25cfc63ce170e3d01';

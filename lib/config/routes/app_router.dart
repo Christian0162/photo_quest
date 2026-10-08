@@ -4,7 +4,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../core/presentation/screen/camera/capture_screen.dart';
 import '../../core/presentation/screen/camera/memory_reveal_screen.dart';
+import '../../core/presentation/screen/camera/moment_capture_screen.dart';
 import '../../core/presentation/screen/home/home_screen.dart';
+import '../../core/presentation/screen/home/moment_viewer_screen.dart';
 import '../../core/presentation/screen/memories/keepsake_screen.dart';
 import '../../core/presentation/screen/memories/memories_screen.dart';
 import '../../core/presentation/screen/memories/memory_detail_screen.dart';
@@ -12,6 +14,7 @@ import '../../core/presentation/screen/people/people_screen.dart';
 import '../../core/presentation/screen/quests/create_quest_screen.dart';
 import '../../core/presentation/screen/quests/quest_intro_screen.dart';
 import '../../core/presentation/screen/quests/quest_selection_screen.dart';
+import '../../core/presentation/screen/settings/profile_settings_screen.dart';
 import '../../core/presentation/screen/settings/settings_screen.dart';
 import '../constant/app_colors.dart';
 import '../constant/app_motion.dart';
@@ -33,7 +36,11 @@ abstract final class AppRoutes {
   static const keepsake = '/memory/:memoryId/keepsake';
   static const people = '/people';
   static const settings = '/settings';
+  static const profileSettings = '/settings/profile';
+  static const momentCapture = '/moments/new';
+  static const momentView = '/moments/:momentId';
 
+  static String momentViewPath(String momentId) => '/moments/$momentId';
   static String questDetailPath(String questId) => '/quests/$questId';
   static String capturePath(String sessionId) => '/capture/$sessionId';
   static String memoryRevealPath(String sessionId) =>
@@ -133,6 +140,20 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: AppRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.profileSettings,
+        builder: (context, state) => const ProfileSettingsScreen(),
+      ),
+      // `/moments/new` first, so it is not read as a moment id.
+      GoRoute(
+        path: AppRoutes.momentCapture,
+        builder: (context, state) => const MomentCaptureScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.momentView,
+        builder: (context, state) =>
+            MomentViewerScreen(momentId: state.pathParameters['momentId']!),
       ),
     ],
   );

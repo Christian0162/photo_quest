@@ -1,12 +1,14 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
+import 'daos/day_moment_dao.dart';
 import 'daos/memory_dao.dart';
 import 'daos/people_dao.dart';
 import 'daos/quest_dao.dart';
 import 'daos/settings_dao.dart';
 import 'seed/default_quests_seed.dart';
 import 'tables/app_settings_table.dart';
+import 'tables/day_moments_table.dart';
 import 'tables/memories_table.dart';
 import 'tables/memory_people_table.dart';
 import 'tables/people_table.dart';
@@ -29,8 +31,9 @@ part 'app_database.g.dart';
     Photos,
     MemoryPeople,
     AppSettings,
+    DayMoments,
   ],
-  daos: [QuestDao, MemoryDao, PeopleDao, SettingsDao],
+  daos: [QuestDao, MemoryDao, PeopleDao, SettingsDao, DayMomentDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -38,7 +41,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -65,6 +68,10 @@ class AppDatabase extends _$AppDatabase {
       if (from < 4) {
         await m.addColumn(memories, memories.keepsakeDesign);
         await m.createTable(appSettings);
+      }
+      // v4 -> v5: private "Your Day" moments that last 24 hours.
+      if (from < 5) {
+        await m.createTable(dayMoments);
       }
     },
     // Future schema changes add a step here rather than recreating

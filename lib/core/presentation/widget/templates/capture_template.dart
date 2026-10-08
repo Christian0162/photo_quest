@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +13,7 @@ import '../../../domain/memories/enum/photo_look.dart';
 import '../../../errors/app_failure.dart';
 import '../../../utils/app_haptics.dart';
 import '../../types/camera/capture_state.dart';
+import '../atoms/md_camera_cover_preview.dart';
 import '../atoms/md_camera_edge_scrims.dart';
 import '../atoms/md_camera_icon_button.dart';
 import '../atoms/md_capture_button.dart';
@@ -264,10 +264,10 @@ class _CaptureBodyState extends State<_CaptureBody>
         if (controller != null && controller.value.isInitialized)
           // The live look — the same numbers the saved photo gets.
           state.effectiveLook.isNatural
-              ? _CoverPreview(controller: controller)
+              ? MdCameraCoverPreview(controller: controller)
               : ColorFiltered(
                   colorFilter: ColorFilter.matrix(state.effectiveLook.matrix),
-                  child: _CoverPreview(controller: controller),
+                  child: MdCameraCoverPreview(controller: controller),
                 )
         else
           const ColoredBox(color: AppColors.camera),
@@ -397,32 +397,6 @@ class _CaptureBodyState extends State<_CaptureBody>
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Fills the screen with the preview (cropping the edges) instead of
-/// letterboxing it, so the booth feels immersive.
-class _CoverPreview extends StatelessWidget {
-  const _CoverPreview({required this.controller});
-
-  final CameraController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final previewSize = controller.value.previewSize;
-    if (previewSize == null) return CameraPreview(controller);
-
-    // The plugin reports a landscape size; the booth is portrait.
-    return ClipRect(
-      child: FittedBox(
-        fit: BoxFit.cover,
-        child: SizedBox(
-          width: previewSize.height,
-          height: previewSize.width,
-          child: CameraPreview(controller),
-        ),
-      ),
     );
   }
 }

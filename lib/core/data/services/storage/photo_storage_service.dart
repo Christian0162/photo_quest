@@ -52,6 +52,27 @@ class PhotoStorageService {
     return target;
   }
 
+  /// Saves a "Your Day" moment's photo and thumbnail, returning
+  /// `(photoPath, thumbnailPath)`.
+  Future<(String, String)> saveMoment(
+    String momentId, {
+    required List<int> photo,
+    required List<int> thumbnail,
+  }) async {
+    final dir = await _ensureDir(AppStoragePaths.moments);
+    final photoFile = File(p.join(dir.path, '$momentId.jpg'));
+    final thumbFile = File(p.join(dir.path, '$momentId-thumb.jpg'));
+    await photoFile.writeAsBytes(photo);
+    await thumbFile.writeAsBytes(thumbnail);
+    return (photoFile.path, thumbFile.path);
+  }
+
+  Future<void> deleteMoment(String momentId) async {
+    final dir = await _ensureDir(AppStoragePaths.moments);
+    await _deleteIfExists(File(p.join(dir.path, '$momentId.jpg')));
+    await _deleteIfExists(File(p.join(dir.path, '$momentId-thumb.jpg')));
+  }
+
   /// Deletes a temporary camera file that won't be kept (e.g. a clip
   /// that was too short).
   Future<void> discardTemporary(String path) => _deleteIfExists(File(path));

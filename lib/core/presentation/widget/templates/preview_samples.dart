@@ -4,6 +4,7 @@ import '../../../domain/memories/enum/keepsake_frame.dart';
 import '../../../domain/memories/enum/keepsake_layout.dart';
 import '../../../domain/memories/enum/memory_filter.dart';
 import '../../../domain/memories/enum/sticker_type.dart';
+import '../../../domain/moments/entities/day_moment.dart';
 import '../../../domain/people/entities/person.dart';
 import '../../../domain/quests/entities/quest.dart';
 import '../../../domain/quests/entities/quest_participant.dart';
@@ -40,6 +41,28 @@ abstract final class PreviewSamples {
 
   /// Everyone except the device owner — who can be invited to a Quest.
   static final invitable = [jamie, mom, dad, maya, buddy];
+
+  // Your Day -----------------------------------------------------------
+
+  /// Two moments that have been up for a few hours. Their photos are left
+  /// empty like every other sample, so they render as the warm placeholder.
+  static final dayMoments = [
+    DayMoment(
+      id: 'm-coffee',
+      photoPath: '',
+      thumbnailPath: '',
+      caption: 'Coffee with Jamie',
+      createdAt: today.subtract(const Duration(hours: 5)),
+      expiresAt: today.add(const Duration(hours: 19)),
+    ),
+    DayMoment(
+      id: 'm-walk',
+      photoPath: '',
+      thumbnailPath: '',
+      createdAt: today.subtract(const Duration(hours: 1)),
+      expiresAt: today.add(const Duration(hours: 23)),
+    ),
+  ];
 
   // Quests -------------------------------------------------------------
 

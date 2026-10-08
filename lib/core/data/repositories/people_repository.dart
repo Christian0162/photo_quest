@@ -40,6 +40,25 @@ class PeopleRepository {
     );
   }
 
+  /// Sets the device owner's name, creating the owner the first time.
+  Future<void> saveSelfName(String name) async {
+    final trimmed = name.trim();
+    final self = await _dao.getSelfPerson();
+    final now = DateTime.now();
+    if (self == null) {
+      return createPerson(
+        Person(
+          id: '',
+          name: trimmed,
+          type: 'self',
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+    }
+    await _dao.updateName(self.id, trimmed, now);
+  }
+
   Future<void> deletePerson(String id) => _dao.deletePerson(id);
 
   Person _toEntity(db.PeopleData row) {

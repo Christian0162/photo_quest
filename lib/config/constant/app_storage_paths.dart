@@ -15,4 +15,7 @@ abstract final class AppStoragePaths {
 
   /// Printed keepsakes (strip / grid / polaroid).
   static const strips = 'photos/strips';
+
+  /// "Your Day" moments, which are removed after 24 hours.
+  static const moments = 'photos/moments';
 }

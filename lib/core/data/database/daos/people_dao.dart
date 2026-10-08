@@ -23,6 +23,11 @@ class PeopleDao extends DatabaseAccessor<AppDatabase> with _$PeopleDaoMixin {
   Future<void> insertPerson(PeopleCompanion person) =>
       into(people).insert(person);
 
+  Future<void> updateName(String id, String name, DateTime now) =>
+      (update(people)..where((p) => p.id.equals(id))).write(
+        PeopleCompanion(name: Value(name), updatedAt: Value(now)),
+      );
+
   Future<void> deletePerson(String id) =>
       (delete(people)..where((p) => p.id.equals(id))).go();
 }

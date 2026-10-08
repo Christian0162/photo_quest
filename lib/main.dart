@@ -10,8 +10,9 @@ void main() {
   runApp(const ProviderScope(child: PhotoQuestApp()));
 }
 
-/// The bundled fonts are SIL OFL; their licenses must ship with the app and
-/// appear on the licenses page (Settings → Open-source licenses).
+/// The bundled fonts (SIL OFL) and avatars (MIT) must ship their licenses
+/// with the app and appear on the licenses page (Settings → Open-source
+/// licenses).
 void _registerFontLicenses() {
   LicenseRegistry.addLicense(() async* {
     for (final (family, asset) in [
@@ -23,5 +24,12 @@ void _registerFontLicenses() {
         family,
       ], await rootBundle.loadString(asset));
     }
+    // The profile avatars are Microsoft's Fluent UI Emoji (MIT).
+    yield LicenseEntryWithLineBreaks(
+      ['Fluent UI Emoji'],
+      await rootBundle.loadString(
+        'assets/images/avatars/LICENSE-FluentUI-Emoji.txt',
+      ),
+    );
   });
 }

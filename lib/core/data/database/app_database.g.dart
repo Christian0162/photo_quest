@@ -4047,6 +4047,422 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 }
 
+class $DayMomentsTable extends DayMoments
+    with TableInfo<$DayMomentsTable, DayMoment> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DayMomentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _photoPathMeta = const VerificationMeta(
+    'photoPath',
+  );
+  @override
+  late final GeneratedColumn<String> photoPath = GeneratedColumn<String>(
+    'photo_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _thumbnailPathMeta = const VerificationMeta(
+    'thumbnailPath',
+  );
+  @override
+  late final GeneratedColumn<String> thumbnailPath = GeneratedColumn<String>(
+    'thumbnail_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _captionMeta = const VerificationMeta(
+    'caption',
+  );
+  @override
+  late final GeneratedColumn<String> caption = GeneratedColumn<String>(
+    'caption',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _expiresAtMeta = const VerificationMeta(
+    'expiresAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> expiresAt = GeneratedColumn<DateTime>(
+    'expires_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    photoPath,
+    thumbnailPath,
+    caption,
+    createdAt,
+    expiresAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'day_moments';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DayMoment> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('photo_path')) {
+      context.handle(
+        _photoPathMeta,
+        photoPath.isAcceptableOrUnknown(data['photo_path']!, _photoPathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_photoPathMeta);
+    }
+    if (data.containsKey('thumbnail_path')) {
+      context.handle(
+        _thumbnailPathMeta,
+        thumbnailPath.isAcceptableOrUnknown(
+          data['thumbnail_path']!,
+          _thumbnailPathMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_thumbnailPathMeta);
+    }
+    if (data.containsKey('caption')) {
+      context.handle(
+        _captionMeta,
+        caption.isAcceptableOrUnknown(data['caption']!, _captionMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('expires_at')) {
+      context.handle(
+        _expiresAtMeta,
+        expiresAt.isAcceptableOrUnknown(data['expires_at']!, _expiresAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_expiresAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DayMoment map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DayMoment(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      photoPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}photo_path'],
+      )!,
+      thumbnailPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}thumbnail_path'],
+      )!,
+      caption: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}caption'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      expiresAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}expires_at'],
+      )!,
+    );
+  }
+
+  @override
+  $DayMomentsTable createAlias(String alias) {
+    return $DayMomentsTable(attachedDatabase, alias);
+  }
+}
+
+class DayMoment extends DataClass implements Insertable<DayMoment> {
+  final String id;
+  final String photoPath;
+  final String thumbnailPath;
+  final String? caption;
+  final DateTime createdAt;
+  final DateTime expiresAt;
+  const DayMoment({
+    required this.id,
+    required this.photoPath,
+    required this.thumbnailPath,
+    this.caption,
+    required this.createdAt,
+    required this.expiresAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['photo_path'] = Variable<String>(photoPath);
+    map['thumbnail_path'] = Variable<String>(thumbnailPath);
+    if (!nullToAbsent || caption != null) {
+      map['caption'] = Variable<String>(caption);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['expires_at'] = Variable<DateTime>(expiresAt);
+    return map;
+  }
+
+  DayMomentsCompanion toCompanion(bool nullToAbsent) {
+    return DayMomentsCompanion(
+      id: Value(id),
+      photoPath: Value(photoPath),
+      thumbnailPath: Value(thumbnailPath),
+      caption: caption == null && nullToAbsent
+          ? const Value.absent()
+          : Value(caption),
+      createdAt: Value(createdAt),
+      expiresAt: Value(expiresAt),
+    );
+  }
+
+  factory DayMoment.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DayMoment(
+      id: serializer.fromJson<String>(json['id']),
+      photoPath: serializer.fromJson<String>(json['photoPath']),
+      thumbnailPath: serializer.fromJson<String>(json['thumbnailPath']),
+      caption: serializer.fromJson<String?>(json['caption']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      expiresAt: serializer.fromJson<DateTime>(json['expiresAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'photoPath': serializer.toJson<String>(photoPath),
+      'thumbnailPath': serializer.toJson<String>(thumbnailPath),
+      'caption': serializer.toJson<String?>(caption),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'expiresAt': serializer.toJson<DateTime>(expiresAt),
+    };
+  }
+
+  DayMoment copyWith({
+    String? id,
+    String? photoPath,
+    String? thumbnailPath,
+    Value<String?> caption = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? expiresAt,
+  }) => DayMoment(
+    id: id ?? this.id,
+    photoPath: photoPath ?? this.photoPath,
+    thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+    caption: caption.present ? caption.value : this.caption,
+    createdAt: createdAt ?? this.createdAt,
+    expiresAt: expiresAt ?? this.expiresAt,
+  );
+  DayMoment copyWithCompanion(DayMomentsCompanion data) {
+    return DayMoment(
+      id: data.id.present ? data.id.value : this.id,
+      photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
+      thumbnailPath: data.thumbnailPath.present
+          ? data.thumbnailPath.value
+          : this.thumbnailPath,
+      caption: data.caption.present ? data.caption.value : this.caption,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      expiresAt: data.expiresAt.present ? data.expiresAt.value : this.expiresAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DayMoment(')
+          ..write('id: $id, ')
+          ..write('photoPath: $photoPath, ')
+          ..write('thumbnailPath: $thumbnailPath, ')
+          ..write('caption: $caption, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('expiresAt: $expiresAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, photoPath, thumbnailPath, caption, createdAt, expiresAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DayMoment &&
+          other.id == this.id &&
+          other.photoPath == this.photoPath &&
+          other.thumbnailPath == this.thumbnailPath &&
+          other.caption == this.caption &&
+          other.createdAt == this.createdAt &&
+          other.expiresAt == this.expiresAt);
+}
+
+class DayMomentsCompanion extends UpdateCompanion<DayMoment> {
+  final Value<String> id;
+  final Value<String> photoPath;
+  final Value<String> thumbnailPath;
+  final Value<String?> caption;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> expiresAt;
+  final Value<int> rowid;
+  const DayMomentsCompanion({
+    this.id = const Value.absent(),
+    this.photoPath = const Value.absent(),
+    this.thumbnailPath = const Value.absent(),
+    this.caption = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.expiresAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DayMomentsCompanion.insert({
+    required String id,
+    required String photoPath,
+    required String thumbnailPath,
+    this.caption = const Value.absent(),
+    required DateTime createdAt,
+    required DateTime expiresAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       photoPath = Value(photoPath),
+       thumbnailPath = Value(thumbnailPath),
+       createdAt = Value(createdAt),
+       expiresAt = Value(expiresAt);
+  static Insertable<DayMoment> custom({
+    Expression<String>? id,
+    Expression<String>? photoPath,
+    Expression<String>? thumbnailPath,
+    Expression<String>? caption,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? expiresAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (photoPath != null) 'photo_path': photoPath,
+      if (thumbnailPath != null) 'thumbnail_path': thumbnailPath,
+      if (caption != null) 'caption': caption,
+      if (createdAt != null) 'created_at': createdAt,
+      if (expiresAt != null) 'expires_at': expiresAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DayMomentsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? photoPath,
+    Value<String>? thumbnailPath,
+    Value<String?>? caption,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? expiresAt,
+    Value<int>? rowid,
+  }) {
+    return DayMomentsCompanion(
+      id: id ?? this.id,
+      photoPath: photoPath ?? this.photoPath,
+      thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+      caption: caption ?? this.caption,
+      createdAt: createdAt ?? this.createdAt,
+      expiresAt: expiresAt ?? this.expiresAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (photoPath.present) {
+      map['photo_path'] = Variable<String>(photoPath.value);
+    }
+    if (thumbnailPath.present) {
+      map['thumbnail_path'] = Variable<String>(thumbnailPath.value);
+    }
+    if (caption.present) {
+      map['caption'] = Variable<String>(caption.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (expiresAt.present) {
+      map['expires_at'] = Variable<DateTime>(expiresAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DayMomentsCompanion(')
+          ..write('id: $id, ')
+          ..write('photoPath: $photoPath, ')
+          ..write('thumbnailPath: $thumbnailPath, ')
+          ..write('caption: $caption, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('expiresAt: $expiresAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4060,10 +4476,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $PhotosTable photos = $PhotosTable(this);
   late final $MemoryPeopleTable memoryPeople = $MemoryPeopleTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
+  late final $DayMomentsTable dayMoments = $DayMomentsTable(this);
   late final QuestDao questDao = QuestDao(this as AppDatabase);
   late final MemoryDao memoryDao = MemoryDao(this as AppDatabase);
   late final PeopleDao peopleDao = PeopleDao(this as AppDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as AppDatabase);
+  late final DayMomentDao dayMomentDao = DayMomentDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4078,6 +4496,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     photos,
     memoryPeople,
     appSettings,
+    dayMoments,
   ];
 }
 
@@ -8211,6 +8630,231 @@ typedef $$AppSettingsTableProcessedTableManager =
       AppSetting,
       PrefetchHooks Function()
     >;
+typedef $$DayMomentsTableCreateCompanionBuilder = DayMomentsCompanion Function({
+  required String id,
+  required String photoPath,
+  required String thumbnailPath,
+  Value<String?> caption,
+  required DateTime createdAt,
+  required DateTime expiresAt,
+  Value<int> rowid,
+});
+typedef $$DayMomentsTableUpdateCompanionBuilder = DayMomentsCompanion Function({
+  Value<String> id,
+  Value<String> photoPath,
+  Value<String> thumbnailPath,
+  Value<String?> caption,
+  Value<DateTime> createdAt,
+  Value<DateTime> expiresAt,
+  Value<int> rowid,
+});
+
+class $$DayMomentsTableFilterComposer
+    extends Composer<_$AppDatabase, $DayMomentsTable> {
+  $$DayMomentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get thumbnailPath => $composableBuilder(
+    column: $table.thumbnailPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get caption => $composableBuilder(
+    column: $table.caption,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get expiresAt => $composableBuilder(
+    column: $table.expiresAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DayMomentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $DayMomentsTable> {
+  $$DayMomentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photoPath => $composableBuilder(
+    column: $table.photoPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get thumbnailPath => $composableBuilder(
+    column: $table.thumbnailPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get caption => $composableBuilder(
+    column: $table.caption,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get expiresAt => $composableBuilder(
+    column: $table.expiresAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DayMomentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DayMomentsTable> {
+  $$DayMomentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get photoPath =>
+      $composableBuilder(column: $table.photoPath, builder: (column) => column);
+
+  GeneratedColumn<String> get thumbnailPath => $composableBuilder(
+    column: $table.thumbnailPath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get caption =>
+      $composableBuilder(column: $table.caption, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get expiresAt =>
+      $composableBuilder(column: $table.expiresAt, builder: (column) => column);
+}
+
+class $$DayMomentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DayMomentsTable,
+          DayMoment,
+          $$DayMomentsTableFilterComposer,
+          $$DayMomentsTableOrderingComposer,
+          $$DayMomentsTableAnnotationComposer,
+          $$DayMomentsTableCreateCompanionBuilder,
+          $$DayMomentsTableUpdateCompanionBuilder,
+          (
+            DayMoment,
+            BaseReferences<_$AppDatabase, $DayMomentsTable, DayMoment>,
+          ),
+          DayMoment,
+          PrefetchHooks Function()
+        > {
+  $$DayMomentsTableTableManager(_$AppDatabase db, $DayMomentsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DayMomentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DayMomentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DayMomentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> photoPath = const Value.absent(),
+                Value<String> thumbnailPath = const Value.absent(),
+                Value<String?> caption = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> expiresAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DayMomentsCompanion(
+                id: id,
+                photoPath: photoPath,
+                thumbnailPath: thumbnailPath,
+                caption: caption,
+                createdAt: createdAt,
+                expiresAt: expiresAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String photoPath,
+                required String thumbnailPath,
+                Value<String?> caption = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime expiresAt,
+                Value<int> rowid = const Value.absent(),
+              }) => DayMomentsCompanion.insert(
+                id: id,
+                photoPath: photoPath,
+                thumbnailPath: thumbnailPath,
+                caption: caption,
+                createdAt: createdAt,
+                expiresAt: expiresAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DayMomentsTable, DayMoment>(table),
+                  BaseReferences<_$AppDatabase, $DayMomentsTable, DayMoment>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DayMomentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DayMomentsTable,
+      DayMoment,
+      $$DayMomentsTableFilterComposer,
+      $$DayMomentsTableOrderingComposer,
+      $$DayMomentsTableAnnotationComposer,
+      $$DayMomentsTableCreateCompanionBuilder,
+      $$DayMomentsTableUpdateCompanionBuilder,
+      (DayMoment, BaseReferences<_$AppDatabase, $DayMomentsTable, DayMoment>),
+      DayMoment,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -8233,4 +8877,6 @@ class $AppDatabaseManager {
       $$MemoryPeopleTableTableManager(_db, _db.memoryPeople);
   $$AppSettingsTableTableManager get appSettings =>
       $$AppSettingsTableTableManager(_db, _db.appSettings);
+  $$DayMomentsTableTableManager get dayMoments =>
+      $$DayMomentsTableTableManager(_db, _db.dayMoments);
 }
