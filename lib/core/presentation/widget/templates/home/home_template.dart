@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_spacing.dart';
@@ -9,7 +8,6 @@ import '../../../../domain/quests/entities/quest.dart';
 import '../../../types/memories/memory_summary.dart';
 import '../../../types/quests/quest_needing_confirmation.dart';
 import '../../atoms/common/md_fade_slide_in.dart';
-import '../../atoms/common/md_round_icon_button.dart';
 import '../../atoms/common/md_skeleton_box.dart';
 import '../../atoms/common/md_smooth_switch.dart';
 import '../../molecules/quests/md_idea_tile.dart';
@@ -19,6 +17,8 @@ import '../../organisms/memories/md_on_this_day_card.dart';
 import '../../organisms/quests/md_pending_quest_card.dart';
 import '../../organisms/memories/md_recent_memories_section.dart';
 import '../../organisms/quests/md_today_quest_card.dart';
+import '../../molecules/home/md_home_greeting.dart';
+import '../../atoms/common/md_gutter_padding.dart';
 
 /// Answers "What can we do today?" — a greeting, one hero Quest, anything
 /// waiting on people, and a shelf of recent memories. Never a dashboard.
@@ -70,8 +70,8 @@ class HomeTemplate extends StatelessWidget {
     final sections = <(String, Widget)>[
       (
         'greeting',
-        _Padded(
-          child: _Greeting(
+        MdGutterPadding(
+          child: MdHomeGreeting(
             greeting: greeting,
             today: today,
             onOpenSettings: onOpenSettings,
@@ -80,7 +80,7 @@ class HomeTemplate extends StatelessWidget {
       ),
       (
         'today',
-        _Padded(
+        MdGutterPadding(
           child: MdSmoothSwitch(
             child: todayQuest.when(
               loading: () => const MdSkeletonBox(
@@ -103,7 +103,7 @@ class HomeTemplate extends StatelessWidget {
       if (onThisDaySummary != null)
         (
           'on-this-day',
-          _Padded(
+          MdGutterPadding(
             child: MdOnThisDayCard(
               summary: onThisDaySummary,
               today: today,
@@ -114,7 +114,7 @@ class HomeTemplate extends StatelessWidget {
       if (pending.isNotEmpty)
         (
           'pending',
-          _Padded(
+          MdGutterPadding(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -142,7 +142,7 @@ class HomeTemplate extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: AppSpacing.sm),
-            _Padded(
+            MdGutterPadding(
               child: MdSectionHeader(
                 title: 'Recent memories',
                 trailing: memories.value?.isNotEmpty ?? false
@@ -160,7 +160,7 @@ class HomeTemplate extends StatelessWidget {
                   key: const ValueKey('memories-loading'),
                   child: MdRecentMemoriesSection.skeleton(context),
                 ),
-                error: (error, stack) => const _Padded(
+                error: (error, stack) => const MdGutterPadding(
                   key: ValueKey('memories-error'),
                   child: Text(
                     "We couldn't load your memories right now.",
@@ -179,7 +179,7 @@ class HomeTemplate extends StatelessWidget {
       ),
       (
         'more',
-        _Padded(
+        MdGutterPadding(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -240,82 +240,6 @@ class HomeTemplate extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Today's date as a small kicker, the greeting, and the invitation —
-/// with "memory" inked in coral so the one thing the app is for stands out.
-class _Greeting extends StatelessWidget {
-  const _Greeting({
-    required this.greeting,
-    required this.today,
-    required this.onOpenSettings,
-  });
-
-  final String greeting;
-  final DateTime today;
-  final VoidCallback onOpenSettings;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                DateFormat('EEEE · MMMM d').format(today).toUpperCase(),
-                style: AppTypography.overline,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(greeting, style: AppTypography.bodyMuted),
-              const SizedBox(height: AppSpacing.xs),
-              Semantics(
-                header: true,
-                label: "Let's make a memory.",
-                excludeSemantics: true,
-                child: Text.rich(
-                  TextSpan(
-                    text: "Let's make a ",
-                    children: [
-                      TextSpan(
-                        text: 'memory.',
-                        style: AppTypography.display.copyWith(
-                          color: AppColors.coralInk,
-                        ),
-                      ),
-                    ],
-                  ),
-                  style: AppTypography.display,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        MdRoundIconButton(
-          icon: Icons.settings_outlined,
-          tooltip: 'Settings',
-          onPressed: onOpenSettings,
-        ),
-      ],
-    );
-  }
-}
-
-class _Padded extends StatelessWidget {
-  const _Padded({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-      child: child,
     );
   }
 }
