@@ -61,13 +61,13 @@ void main() {
 
   group('the setting', () {
     test('is off until the person turns it on, and remembers', () async {
-      expect(await settings.getBackupEnabled(), isFalse);
+      expect(await settings.getBackupEnabled('me'), isFalse);
 
-      await settings.setBackupEnabled(true);
-      expect(await settings.getBackupEnabled(), isTrue);
+      await settings.setBackupEnabled('me', enabled: true);
+      expect(await settings.getBackupEnabled('me'), isTrue);
 
-      await settings.setBackupEnabled(false);
-      expect(await settings.getBackupEnabled(), isFalse);
+      await settings.setBackupEnabled('me', enabled: false);
+      expect(await settings.getBackupEnabled('me'), isFalse);
     });
   });
 
@@ -151,15 +151,33 @@ void main() {
     });
 
     test('saves that memory when it is on, on Wi-Fi, signed in', () async {
-      await settings.setBackupEnabled(true);
+      await settings.setBackupEnabled('me', enabled: true);
 
       await service.memorySaved(ids.first);
 
       expect(backedUp(), [ids.first]);
     });
 
+    test('saves a shared quest\'s memory even with backup off', () async {
+      cloud.fromSharedQuest.add(ids.first);
+
+      await service.memorySaved(ids.first);
+      await service.memorySaved(ids.last);
+
+      expect(backedUp(), [ids.first]);
+    });
+
+    test('shared quest memories still wait for Wi-Fi', () async {
+      cloud.fromSharedQuest.add(ids.first);
+      connectivity.wifi = false;
+
+      await service.memorySaved(ids.first);
+
+      expect(cloud.calls, isEmpty);
+    });
+
     test('waits for Wi-Fi rather than using mobile data', () async {
-      await settings.setBackupEnabled(true);
+      await settings.setBackupEnabled('me', enabled: true);
       connectivity.wifi = false;
 
       await service.memorySaved(ids.first);
@@ -168,7 +186,7 @@ void main() {
     });
 
     test('does nothing when nobody is signed in', () async {
-      await settings.setBackupEnabled(true);
+      await settings.setBackupEnabled('me', enabled: true);
       final signedOut = MemoryBackupService(
         memories: memories,
         cloud: cloud,
@@ -183,7 +201,7 @@ void main() {
     });
 
     test('a failure is ignored: the memory is safe on the phone', () async {
-      await settings.setBackupEnabled(true);
+      await settings.setBackupEnabled('me', enabled: true);
       cloud.failNext = const SharingFailure.unknown();
 
       await expectLater(service.memorySaved(ids.first), completes);
@@ -194,7 +212,7 @@ void main() {
     test(
       'catches up everything missing, if backup is on and on Wi-Fi',
       () async {
-        await settings.setBackupEnabled(true);
+        await settings.setBackupEnabled('me', enabled: true);
 
         await service.catchUp();
 
@@ -202,14 +220,30 @@ void main() {
       },
     );
 
+    test('with backup off, only catches up shared quests', () async {
+      cloud.fromSharedQuest.add(ids[1]);
+
+      await service.catchUp();
+
+      expect(backedUp(), [ids[1]]);
+    });
+
     test('does nothing when off, or on mobile data', () async {
       await service.catchUp();
       expect(cloud.calls, isEmpty);
 
-      await settings.setBackupEnabled(true);
+      await settings.setBackupEnabled('me', enabled: true);
       connectivity.wifi = false;
       await service.catchUp();
       expect(cloud.calls, isEmpty);
+    });
+  });
+
+  group('consent belongs to one account', () {
+    test('another account starts with backup off', () async {
+      await settings.setBackupEnabled('me', enabled: true);
+
+      expect(await settings.getBackupEnabled('someone-else'), isFalse);
     });
   });
 }

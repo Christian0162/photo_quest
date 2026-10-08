@@ -68,6 +68,13 @@ class FakeCloudMemoryRepository implements CloudMemoryRepository {
     return online;
   }
 
+  /// Memories whose quest has friends invited to it.
+  final fromSharedQuest = <String>{};
+
+  @override
+  Future<bool> isFromSharedQuest(String memoryId) async =>
+      fromSharedQuest.contains(memoryId);
+
   @override
   Future<String> createInvite(
     String memoryId, {

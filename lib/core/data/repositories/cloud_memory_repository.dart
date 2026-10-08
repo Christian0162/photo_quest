@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -33,6 +32,10 @@ abstract class CloudMemoryRepository {
   Future<void> backUpMemory(String memoryId, {ProgressCallback? onProgress});
 
   Future<bool> isOnline(String memoryId);
+
+  /// Whether this memory was made from a quest the person has invited friends
+  /// to (invited or joined). Those friends can only see it once it is online.
+  Future<bool> isFromSharedQuest(String memoryId);
 
   /// Backs the memory up if needed, then makes a code a friend can use to view
   /// it. The code is only ever shown once, here.
@@ -74,26 +77,22 @@ abstract class CloudMemoryRepository {
   Future<void> removeOnlineCopy(String memoryId);
 }
 
-/// Reads a file's bytes. Replaced in tests.
-typedef FileReader = Future<Uint8List> Function(String path);
-
 class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
   SupabaseCloudMemoryRepository({
     required SupabaseClient? client,
     required this._memories,
     required QuestRepository quests,
     required this._images,
-    FileReader? readFile,
+    required this._storage,
     String? Function()? currentUserId,
-  }) : _support = CloudSupport(client: client, currentUserId: currentUserId),
-       _readFile = readFile ?? ((path) => File(path).readAsBytes()) {
+  }) : _support = CloudSupport(client: client, currentUserId: currentUserId) {
     _questUploader = QuestUploader(_support, quests);
   }
 
   final CloudSupport _support;
   final MemoryRepository _memories;
   final ImageProcessingService _images;
-  final FileReader _readFile;
+  final PhotoStorageService _storage;
   late final QuestUploader _questUploader;
 
   static const _mimeTypes = {
@@ -173,6 +172,22 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
         .eq('owner_id', _support.userId)
         .maybeSingle();
     return row != null;
+  });
+
+  @override
+  Future<bool> isFromSharedQuest(String memoryId) => _support.guard(() async {
+    final memory = await _memories.getMemory(memoryId);
+    if (memory == null) return false;
+    final session = await _memories.getSession(memory.questSessionId);
+    if (session == null) return false;
+    final rows = await _support.db
+        .from('quest_participants')
+        .select('user_id')
+        .eq('quest_id', session.questId)
+        .neq('user_id', _support.userId)
+        .inFilter('status', ['invited', 'accepted'])
+        .limit(1);
+    return rows.isNotEmpty;
   });
 
   Future<void> _ensureSession(
@@ -255,17 +270,17 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
     Uint8List main;
 
     if (photo.kind == PhotoKind.photo) {
-      main = await _images.createShareCopy(await _readFile(photo.originalPath));
+      main = await _images.createShareCopy(await _storage.readBytes(photo.originalPath));
       extension = 'jpg';
       final (w, h) = ImageProcessingService.sizeOf(main);
       if (w > 0 && h > 0) (width, height) = (w, h);
     } else {
-      final raw = await _readFile(photo.originalPath);
+      final raw = await _storage.readBytes(photo.originalPath);
       if (raw.length > AppConstants.sharedFileMaxBytes ||
           !_mimeTypes.containsKey(extension)) {
         // Too big (or a type the bucket won't take): share its still poster.
         main = await _images.createShareCopy(
-          await _readFile(photo.thumbnailPath),
+          await _storage.readBytes(photo.thumbnailPath),
         );
         kind = PhotoKind.photo;
         extension = 'jpg';
@@ -275,7 +290,7 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
       }
     }
 
-    final thumbnail = await _readFile(photo.thumbnailPath);
+    final thumbnail = await _storage.readBytes(photo.thumbnailPath);
     final mainPath = '$folder/${photo.id}.$extension';
     final thumbPath = '$folder/${photo.id}_thumb.jpg';
 
@@ -521,29 +536,41 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
       final thumbnail = await _images.createThumbnail(main);
       final (width, height) = ImageProcessingService.sizeOf(main);
 
-      await _support.uploadPhoto(
-        '$folder/$id.jpg',
-        main,
-        contentType: 'image/jpeg',
-      );
-      await _support.uploadPhoto(
-        '$folder/${id}_thumb.jpg',
-        thumbnail,
-        contentType: 'image/jpeg',
-      );
-      await db.from('photos').insert({
-        'id': id,
-        'memory_id': memoryId,
-        'owner_id': ownerId,
-        'uploaded_by': uid,
-        'storage_path': '$folder/$id.jpg',
-        'thumbnail_path': '$folder/${id}_thumb.jpg',
-        'position': next++,
-        'kind': PhotoKind.photo,
-        'width': width > 0 ? width : null,
-        'height': height > 0 ? height : null,
-        'captured_at': CloudSupport.iso(DateTime.now()),
-      });
+      final mainPath = '$folder/$id.jpg';
+      final thumbPath = '$folder/${id}_thumb.jpg';
+      try {
+        await _support.uploadPhoto(mainPath, main, contentType: 'image/jpeg');
+        await _support.uploadPhoto(
+          thumbPath,
+          thumbnail,
+          contentType: 'image/jpeg',
+        );
+        await db.from('photos').insert({
+          'id': id,
+          'memory_id': memoryId,
+          'owner_id': ownerId,
+          'uploaded_by': uid,
+          'storage_path': mainPath,
+          'thumbnail_path': thumbPath,
+          'position': next++,
+          'kind': PhotoKind.photo,
+          'width': width > 0 ? width : null,
+          'height': height > 0 ? height : null,
+          'captured_at': CloudSupport.iso(DateTime.now()),
+        });
+      } on Object {
+        // No row points at these files, so nothing else would ever remove
+        // them and they would keep using the person's allowance.
+        try {
+          await db.storage.from(CloudSupport.photosBucket).remove([
+            mainPath,
+            thumbPath,
+          ]);
+        } on Object {
+          // Best effort; the original failure is the one to report.
+        }
+        rethrow;
+      }
       onProgress?.call((i + 1) / photos.length);
     }
   });

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path/path.dart' as p;
@@ -114,6 +115,9 @@ class PhotoStorageService {
       await _deleteIfExists(strip);
     }
   }
+
+  /// Reads a stored file, e.g. to make a compressed copy for the cloud.
+  Future<Uint8List> readBytes(String path) => File(path).readAsBytes();
 
   Future<String> getPhotoPath(String photoId, {required bool thumbnail}) async {
     final dir = await _ensureDir(

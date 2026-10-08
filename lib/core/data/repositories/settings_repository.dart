@@ -25,13 +25,14 @@ class SettingsRepository {
   Future<void> setClipSeconds(int seconds) =>
       _dao.setValue(_clipKey, '$seconds');
 
-  /// Whether new memories are backed up online by themselves. Off until the
-  /// person turns it on.
-  Future<bool> getBackupEnabled() async =>
-      await _dao.getValue(_backupKey) == '1';
+  /// Whether [accountId] has turned on backing up their memories online.
+  /// Consent belongs to one account: the saved value is the account that
+  /// chose it, so another account signing in on this phone starts with it off.
+  Future<bool> getBackupEnabled(String accountId) async =>
+      await _dao.getValue(_backupKey) == accountId;
 
-  Future<void> setBackupEnabled(bool enabled) =>
-      _dao.setValue(_backupKey, enabled ? '1' : '0');
+  Future<void> setBackupEnabled(String accountId, {required bool enabled}) =>
+      _dao.setValue(_backupKey, enabled ? accountId : '0');
 
   Future<int> _readChoice(String key, List<int> choices) async {
     final saved = int.tryParse(await _dao.getValue(key) ?? '');

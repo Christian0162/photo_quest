@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../data/repositories/auth_repository_provider.dart';
 import '../../../data/repositories/backup_providers.dart';
 import '../../../data/repositories/cloud_memory_repository_provider.dart';
 import '../../../data/repositories/settings_repository_provider.dart';
@@ -30,9 +31,10 @@ class BackupViewModel extends _$BackupViewModel {
   }
 
   Future<void> _load() async {
-    final enabled = await ref
-        .read(settingsRepositoryProvider)
-        .getBackupEnabled();
+    final accountId = ref.read(authRepositoryProvider).currentUser?.id;
+    final enabled =
+        accountId != null &&
+        await ref.read(settingsRepositoryProvider).getBackupEnabled(accountId);
     if (ref.mounted) state = state.copyWith(enabled: enabled);
     await refreshUsage();
   }
@@ -51,7 +53,11 @@ class BackupViewModel extends _$BackupViewModel {
   /// Turns automatic backup on or off. Turning it on also catches up older
   /// memories when the phone is on Wi-Fi.
   Future<void> setEnabled({required bool enabled}) async {
-    await ref.read(settingsRepositoryProvider).setBackupEnabled(enabled);
+    final accountId = ref.read(authRepositoryProvider).currentUser?.id;
+    if (accountId == null) return;
+    await ref
+        .read(settingsRepositoryProvider)
+        .setBackupEnabled(accountId, enabled: enabled);
     if (!ref.mounted) return;
     state = state.copyWith(enabled: enabled, message: null, isError: false);
     if (enabled) {
