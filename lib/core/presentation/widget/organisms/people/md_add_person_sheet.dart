@@ -5,43 +5,28 @@ import '../../../../../config/constant/app_typography.dart';
 import '../../../types/display_labels.dart';
 import '../../atoms/common/md_primary_button.dart';
 
-/// Asks for a name + relationship as a friendly sheet instead of a cramped
-/// dialog. Resolves to `(name, type)`, or null if dismissed. See CLAUDE.md
-/// §40, design system §20.
-Future<(String, String)?> showAddPersonSheet(BuildContext context) {
-  return showModalBottomSheet<(String, String)>(
-    context: context,
-    isScrollControlled: true,
-    builder: (context) => const _AddPersonSheet(),
-  );
-}
+/// The body of the "Add someone" sheet: a name and who they are to you,
+/// as a friendly sheet instead of a cramped dialog. Holds no state — the
+/// screen owns the form. See CLAUDE.md §40, design system §20.
+class MdAddPersonSheet extends StatelessWidget {
+  const MdAddPersonSheet({
+    super.key,
+    required this.name,
+    required this.type,
+    required this.onNameChanged,
+    required this.onTypeChanged,
+    required this.onSubmit,
+  });
 
-class _AddPersonSheet extends StatefulWidget {
-  const _AddPersonSheet();
-
-  @override
-  State<_AddPersonSheet> createState() => _AddPersonSheetState();
-}
-
-class _AddPersonSheetState extends State<_AddPersonSheet> {
-  final _nameController = TextEditingController();
-  String _type = 'family';
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final name = _nameController.text.trim();
-    if (name.isEmpty) return;
-    Navigator.of(context).pop((name, _type));
-  }
+  final String name;
+  final String type;
+  final ValueChanged<String> onNameChanged;
+  final ValueChanged<String> onTypeChanged;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {
-    final name = _nameController.text.trim();
+    final trimmed = name.trim();
 
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
@@ -60,13 +45,12 @@ class _AddPersonSheetState extends State<_AddPersonSheet> {
               Text('Add someone', style: AppTypography.heading2),
               const SizedBox(height: AppSpacing.md),
               TextField(
-                controller: _nameController,
                 autofocus: true,
                 textCapitalization: TextCapitalization.words,
                 textInputAction: TextInputAction.done,
                 decoration: const InputDecoration(labelText: 'Their name'),
-                onChanged: (_) => setState(() {}),
-                onSubmitted: (_) => _submit(),
+                onChanged: onNameChanged,
+                onSubmitted: (_) => onSubmit(),
               ),
               const SizedBox(height: AppSpacing.lg),
               Text('Who are they to you?', style: AppTypography.label),
@@ -79,16 +63,16 @@ class _AddPersonSheetState extends State<_AddPersonSheet> {
                     ChoiceChip(
                       avatar: Icon(icon, size: AppIconSizes.sm),
                       label: Text(label),
-                      selected: _type == value,
+                      selected: type == value,
                       showCheckmark: false,
-                      onSelected: (_) => setState(() => _type = value),
+                      onSelected: (_) => onTypeChanged(value),
                     ),
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
               MdPrimaryButton(
-                label: name.isEmpty ? 'Add' : 'Add $name',
-                onPressed: name.isEmpty ? null : _submit,
+                label: trimmed.isEmpty ? 'Add' : 'Add $trimmed',
+                onPressed: trimmed.isEmpty ? null : onSubmit,
               ),
             ],
           ),

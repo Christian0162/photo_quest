@@ -3,19 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../config/constant/app_colors.dart';
 import '../../../../../config/constant/app_spacing.dart';
-import '../../../../../config/constant/app_typography.dart';
 import '../../../../domain/people/entities/person.dart';
-import '../../../types/display_labels.dart';
 import '../../atoms/common/md_fade_slide_in.dart';
 import '../../atoms/common/md_primary_button.dart';
-import '../../atoms/people/md_ringed_avatar.dart';
 import '../../atoms/common/md_round_icon_button.dart';
-import '../../atoms/common/md_skeleton_box.dart';
-import '../../molecules/common/md_app_card.dart';
 import '../../molecules/common/md_empty_state.dart';
 import '../../molecules/common/md_page_header.dart';
-import '../../molecules/common/md_tile_grid.dart';
 import '../../organisms/common/md_app_scaffold.dart';
+import '../../organisms/people/md_people_groups.dart';
+import '../../molecules/people/md_people_skeleton.dart';
 
 /// The people (and pets) your quests and memories are about, grouped the
 /// way life groups them — your person, family, friends, pets. Private to
@@ -32,9 +28,6 @@ class PeopleTemplate extends StatelessWidget {
   final AsyncValue<List<Person>> people;
   final VoidCallback onRetry;
   final VoidCallback onAddPerson;
-
-  /// Group order on screen: closest first.
-  static const _groupOrder = ['partner', 'family', 'friend', 'pet', 'other'];
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +62,7 @@ class PeopleTemplate extends StatelessWidget {
             loading: () => [
               const SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-                sliver: SliverToBoxAdapter(child: _LoadingPeople()),
+                sliver: SliverToBoxAdapter(child: MdPeopleSkeleton()),
               ),
             ],
             error: (error, stack) => [
@@ -106,7 +99,7 @@ class PeopleTemplate extends StatelessWidget {
                         horizontal: AppSpacing.gutter,
                       ),
                       sliver: SliverToBoxAdapter(
-                        child: _PeopleGroups(
+                        child: MdPeopleGroups(
                           people: list,
                           onAddPerson: onAddPerson,
                         ),
@@ -116,279 +109,6 @@ class PeopleTemplate extends StatelessWidget {
           ),
           const SliverToBoxAdapter(
             child: SizedBox(height: AppSpacing.tabScrollEnd),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// "You" up top, then one group per relationship, then a way to add
-/// someone. Built eagerly — a private circle is a handful of people — so
-/// the stagger plays once instead of replaying on scroll.
-class _PeopleGroups extends StatelessWidget {
-  const _PeopleGroups({required this.people, required this.onAddPerson});
-
-  final List<Person> people;
-  final VoidCallback onAddPerson;
-
-  /// Unknown types fall into "Everyone else", matching [personTypeLabel].
-  static String _groupOf(Person person) =>
-      PeopleTemplate._groupOrder.contains(person.type) ? person.type : 'other';
-
-  @override
-  Widget build(BuildContext context) {
-    final self = people.where((p) => p.type == 'self').firstOrNull;
-    final others = people.where((p) => p.type != 'self').toList();
-    final groups = [
-      for (final type in PeopleTemplate._groupOrder)
-        (type, others.where((p) => _groupOf(p) == type).toList()),
-    ].where((g) => g.$2.isNotEmpty);
-
-    var order = 1;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (self != null) ...[
-          MdFadeSlideIn(
-            key: ValueKey(self.id),
-            order: order++,
-            child: _SelfCard(person: self, circleSize: others.length),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-        ],
-        for (final (type, members) in groups) ...[
-          MdFadeSlideIn(
-            key: ValueKey('group-$type'),
-            order: order++,
-            child: _GroupHeader(type: type, count: members.length),
-          ),
-          const SizedBox(height: AppSpacing.ms),
-          MdTileGrid(
-            children: [
-              for (final person in members)
-                MdFadeSlideIn(
-                  key: ValueKey(person.id),
-                  order: order++,
-                  child: _PersonTile(person: person),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.xl),
-        ],
-        MdFadeSlideIn(
-          key: const ValueKey('add-person'),
-          order: order,
-          child: _AddPersonCard(onTap: onAddPerson),
-        ),
-      ],
-    );
-  }
-}
-
-/// The device owner, shown as the centre of the circle rather than one
-/// more tile.
-class _SelfCard extends StatelessWidget {
-  const _SelfCard({required this.person, required this.circleSize});
-
-  final Person person;
-  final int circleSize;
-
-  @override
-  Widget build(BuildContext context) {
-    final circle = switch (circleSize) {
-      0 => 'Just you, for now',
-      1 => '1 person in your circle',
-      _ => '$circleSize people in your circle',
-    };
-
-    return MdAppCard(
-      color: AppColors.softPeach,
-      elevated: false,
-      radius: AppRadius.xl,
-      semanticLabel: '${person.name}, you. $circle',
-      child: Row(
-        children: [
-          MdRingedAvatar(person: person, radius: 30, ring: AppColors.paper),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  person.name,
-                  style: AppTypography.heading2,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: AppSpacing.xxs),
-                Text(circle, style: AppTypography.bodyMuted),
-              ],
-            ),
-          ),
-          const _Chip(label: "That's you", icon: Icons.favorite_rounded),
-        ],
-      ),
-    );
-  }
-}
-
-class _GroupHeader extends StatelessWidget {
-  const _GroupHeader({required this.type, required this.count});
-
-  final String type;
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      header: true,
-      child: Row(
-        children: [
-          Icon(
-            personTypeIcon(type),
-            size: AppIconSizes.md,
-            color: AppColors.coralInk,
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Flexible(
-            child: Text(
-              personGroupLabel(type),
-              style: AppTypography.heading3,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Text('$count', style: AppTypography.caption),
-        ],
-      ),
-    );
-  }
-}
-
-/// A small photo-print: the face first, the name written underneath.
-class _PersonTile extends StatelessWidget {
-  const _PersonTile({required this.person});
-
-  final Person person;
-
-  @override
-  Widget build(BuildContext context) {
-    return MdAppCard(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        AppSpacing.md,
-        AppSpacing.sm,
-        AppSpacing.ms,
-      ),
-      semanticLabel: '${person.name}, ${personTypeLabel(person.type)}',
-      child: Column(
-        children: [
-          MdRingedAvatar(person: person, radius: 32, ring: AppColors.sunken),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            person.name,
-            style: AppTypography.label,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AddPersonCard extends StatelessWidget {
-  const _AddPersonCard({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return MdAppCard(
-      onTap: onTap,
-      color: AppColors.sunken,
-      elevated: false,
-      radius: AppRadius.xl,
-      semanticLabel: 'Add someone. Partner, family, friends or pets.',
-      child: Row(
-        children: [
-          const CircleAvatar(
-            radius: 24,
-            backgroundColor: AppColors.paper,
-            foregroundColor: AppColors.textPrimary,
-            child: Icon(Icons.add_rounded),
-          ),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Add someone', style: AppTypography.heading3),
-                const SizedBox(height: AppSpacing.xxs),
-                Text(
-                  'Partner, family, friends — or pets.',
-                  style: AppTypography.bodyMuted,
-                ),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right_rounded),
-        ],
-      ),
-    );
-  }
-}
-
-class _Chip extends StatelessWidget {
-  const _Chip({required this.label, required this.icon});
-
-  final String label;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.ms,
-        vertical: AppSpacing.xs,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.paper,
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: AppIconSizes.sm, color: AppColors.coralInk),
-          const SizedBox(width: AppSpacing.xs),
-          Text(label, style: AppTypography.caption),
-        ],
-      ),
-    );
-  }
-}
-
-/// Placeholder shapes that match the loaded layout, so nothing jumps.
-class _LoadingPeople extends StatelessWidget {
-  const _LoadingPeople();
-
-  @override
-  Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const MdSkeletonBox(height: 96, radius: AppRadius.xl),
-          const SizedBox(height: AppSpacing.xl),
-          const MdSkeletonBox(width: 120, height: 20),
-          const SizedBox(height: AppSpacing.ms),
-          MdTileGrid(
-            children: [
-              for (var i = 0; i < 6; i++) const MdSkeletonBox(height: 124),
-            ],
           ),
         ],
       ),
