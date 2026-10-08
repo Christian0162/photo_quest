@@ -9,6 +9,7 @@ class SettingsRepository {
   static const _countdownKey = 'booth.countdown_seconds';
   static const _clipKey = 'booth.clip_seconds';
   static const _backupKey = 'backup.enabled';
+  static const _withheldKey = 'backup.withheld';
 
   static const countdownChoices = [3, 5, 10];
 
@@ -33,6 +34,25 @@ class SettingsRepository {
 
   Future<void> setBackupEnabled(String accountId, {required bool enabled}) =>
       _dao.setValue(_backupKey, enabled ? accountId : '0');
+
+  /// Memories whose online copy the owner took away. Automatic backup leaves
+  /// them alone until the owner shares them again.
+  Future<Set<String>> getWithheldMemories() async {
+    final saved = await _dao.getValue(_withheldKey) ?? '';
+    return {
+      for (final id in saved.split(','))
+        if (id.isNotEmpty) id,
+    };
+  }
+
+  Future<void> setMemoryWithheld(
+    String memoryId, {
+    required bool withheld,
+  }) async {
+    final ids = await getWithheldMemories();
+    final changed = withheld ? ids.add(memoryId) : ids.remove(memoryId);
+    if (changed) await _dao.setValue(_withheldKey, ids.join(','));
+  }
 
   Future<int> _readChoice(String key, List<int> choices) async {
     final saved = int.tryParse(await _dao.getValue(key) ?? '');

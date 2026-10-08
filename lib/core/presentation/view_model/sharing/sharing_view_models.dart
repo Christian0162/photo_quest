@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:ui' show Rect;
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../data/repositories/cloud_memory_repository_provider.dart';
 import '../../../data/repositories/service_providers.dart';
+import '../../../data/repositories/settings_repository_provider.dart';
 import '../../../domain/friends/entities/friend.dart';
 import '../../../domain/sharing/entities/shared_memory.dart';
 import '../../../domain/sharing/entities/shared_quest.dart';
@@ -61,12 +63,24 @@ class ShareMemoryViewModel extends _$ShareMemoryViewModel {
     }
   }
 
+  /// Remembers whether the owner took this memory's online copy away, so
+  /// automatic backup leaves it alone until they share it again.
+  void _setWithheld({required bool withheld}) {
+    unawaited(
+      ref
+          .read(settingsRepositoryProvider)
+          .setMemoryWithheld(memoryId, withheld: withheld)
+          .catchError((Object _) {}),
+    );
+  }
+
   Future<void> inviteFriend(Friend friend) async {
     state = state.copyWith(error: null);
     try {
       await ref
           .read(cloudMemoryRepositoryProvider)
           .shareWithFriend(memoryId, friend.id);
+      _setWithheld(withheld: false);
       await refresh();
     } on Object catch (error) {
       if (ref.mounted) state = state.copyWith(error: _messageFor(error));
@@ -85,6 +99,7 @@ class ShareMemoryViewModel extends _$ShareMemoryViewModel {
               if (ref.mounted) state = state.copyWith(progress: progress);
             },
           );
+      _setWithheld(withheld: false);
       if (!ref.mounted) return;
       state = state.copyWith(
         phase: SharePhase.ready,
@@ -135,6 +150,7 @@ class ShareMemoryViewModel extends _$ShareMemoryViewModel {
     state = state.copyWith(removing: true, error: null);
     try {
       await ref.read(cloudMemoryRepositoryProvider).removeOnlineCopy(memoryId);
+      _setWithheld(withheld: true);
       if (!ref.mounted) return;
       state = const ShareMemoryState();
     } on Object catch (error) {

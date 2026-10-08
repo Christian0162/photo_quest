@@ -68,7 +68,7 @@ final class ShareMemoryViewModelProvider
 }
 
 String _$shareMemoryViewModelHash() =>
-    r'4461ed6314fc17a6add5e7f084ce495b05dccffd';
+    r'50b5053af5c648764eb45097d2aa8041da315028';
 
 /// The "Invite a friend" sheet for one of my memories: saves it online, makes
 /// a code, lists (and removes) the friends who can see it, and can take the

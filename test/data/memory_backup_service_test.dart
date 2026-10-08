@@ -228,6 +228,19 @@ void main() {
       expect(backedUp(), [ids[1]]);
     });
 
+    test('leaves alone a memory whose online copy was removed', () async {
+      cloud.fromSharedQuest.addAll([ids[0], ids[1]]);
+      await settings.setMemoryWithheld(ids[1], withheld: true);
+
+      await service.catchUp();
+      expect(backedUp(), [ids[0]]);
+
+      await settings.setMemoryWithheld(ids[1], withheld: false);
+      cloud.calls.clear();
+      await service.catchUp();
+      expect(backedUp(), containsAll([ids[0], ids[1]]));
+    });
+
     test('does nothing when off, or on mobile data', () async {
       await service.catchUp();
       expect(cloud.calls, isEmpty);

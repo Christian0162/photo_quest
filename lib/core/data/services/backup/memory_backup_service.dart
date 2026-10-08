@@ -64,8 +64,11 @@ class MemoryBackupService {
     final accountId = _auth.currentUser?.id;
     _running = true;
     try {
-      var all = [...await _memories.getMemories()]
-        ..sort((a, b) => b.capturedAt.compareTo(a.capturedAt));
+      final withheld = await _settings.getWithheldMemories();
+      var all = [
+        for (final memory in await _memories.getMemories())
+          if (!withheld.contains(memory.id)) memory,
+      ]..sort((a, b) => b.capturedAt.compareTo(a.capturedAt));
       if (sharedQuestsOnly) {
         final shared = [
           for (final memory in all)
@@ -129,6 +132,7 @@ class MemoryBackupService {
     try {
       final accountId = _auth.currentUser?.id;
       if (accountId == null || !await _connectivity.isOnWifi()) return;
+      if ((await _settings.getWithheldMemories()).contains(memoryId)) return;
       if (await _settings.getBackupEnabled(accountId) ||
           await _cloud.isFromSharedQuest(memoryId)) {
         await _cloud.backUpMemory(memoryId);
