@@ -41,15 +41,15 @@ class MdLaunchReveal extends StatefulWidget {
 
 class _MdLaunchRevealState extends State<MdLaunchReveal>
     with SingleTickerProviderStateMixin {
-  static const _duration = Duration(milliseconds: 2800);
+  static const _duration = Duration(milliseconds: 4400);
   static const _reducedDuration = Duration(milliseconds: 1400);
 
   /// When the outro starts; a tap jumps straight here.
   static const _outroAt = 0.84;
 
-  /// The longest slice of time one frame may advance the reveal. The app is
-  /// built underneath while this plays, and a slow first frame must not make
-  /// the animation leap to its end before anyone has seen it.
+  /// The longest slice the first real frame may advance the reveal. The app
+  /// is built underneath while this starts, and a slow first frame must not
+  /// make the animation leap ahead before anyone has seen it.
   static const _maxFrameStep = Duration(milliseconds: 50);
 
   /// 0..1 through the whole reveal.
@@ -58,6 +58,7 @@ class _MdLaunchRevealState extends State<MdLaunchReveal>
   late final Ticker _ticker = createTicker(_onTick);
   Duration _total = _duration;
   Duration _lastElapsed = Duration.zero;
+  bool _startupStepSpent = false;
   bool _done = false;
 
   @override
@@ -71,11 +72,15 @@ class _MdLaunchRevealState extends State<MdLaunchReveal>
   }
 
   void _onTick(Duration elapsed) {
-    final step = elapsed - _lastElapsed;
+    var step = elapsed - _lastElapsed;
     _lastElapsed = elapsed;
-    final clamped = step > _maxFrameStep ? _maxFrameStep : step;
-    final next =
-        _progress.value + clamped.inMicroseconds / _total.inMicroseconds;
+    // Only the startup hitch is forgiven; later slow frames still count, so
+    // the reveal never outlasts its real-time duration on a slow phone.
+    if (!_startupStepSpent && step > Duration.zero) {
+      _startupStepSpent = true;
+      if (step > _maxFrameStep) step = _maxFrameStep;
+    }
+    final next = _progress.value + step.inMicroseconds / _total.inMicroseconds;
     if (next >= 1) {
       _ticker.stop();
       setState(() => _done = true);
@@ -121,25 +126,27 @@ class _MdLaunchRevealState extends State<MdLaunchReveal>
                 builder: (context, _) {
                   final appear = still
                       ? 1.0
-                      : _phase(0, 0.25, Curves.easeOutCubic);
+                      : _phase(0, 0.09, Curves.easeOutCubic);
                   final open = still
                       ? 1.0
-                      : _phase(0.06, 0.36, Curves.easeOutBack);
+                      : _phase(0.015, 0.13, Curves.easeOutBack);
                   final lift = still
                       ? 1.0
-                      : _phase(0.1, 0.4, Curves.easeOutCubic);
+                      : _phase(0.03, 0.14, Curves.easeOutCubic);
                   final write = still
                       ? 1.0
-                      : _phase(0.3, 0.72, Curves.easeInOutSine);
+                      : _phase(0.15, 0.6, Curves.easeInOutSine);
                   final promise = still
                       ? 1.0
-                      : _phase(0.7, 0.82, Curves.easeOut);
+                      : _phase(0.58, 0.7, Curves.easeOut);
                   // Seconds into the reveal; drives the endless sparkle pulse.
-                  final clock = still ? 0.0 : _progress.value * 2.8;
+                  final clock = still
+                      ? 0.0
+                      : _progress.value * _duration.inMilliseconds / 1000;
                   // The light sweep crosses the prints once, left to right.
                   final shine = still
                       ? 2.0
-                      : -1 + 2 * _phase(0.14, 0.5, Curves.easeInOut);
+                      : -1 + 2 * _phase(0.05, 0.21, Curves.easeInOut);
                   final outro = _phase(_outroAt, 1, Curves.easeInCubic);
 
                   return Opacity(
