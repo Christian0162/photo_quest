@@ -10,19 +10,19 @@ part of 'capture_view_model.dart';
 // ignore_for_file: type=lint, type=warning
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-/// shot. See CLAUDE.md §34-35.
+/// shot.
 
 @ProviderFor(CaptureViewModel)
 final captureViewModelProvider = CaptureViewModelFamily._();
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-/// shot. See CLAUDE.md §34-35.
+/// shot.
 final class CaptureViewModelProvider
     extends $AsyncNotifierProvider<CaptureViewModel, CaptureState> {
   /// Drives the photobooth capture flow: instruction -> countdown -> shutter
   /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-  /// shot. See CLAUDE.md §34-35.
+  /// shot.
   CaptureViewModelProvider._({
     required CaptureViewModelFamily super.from,
     required String super.argument,
@@ -63,7 +63,7 @@ String _$captureViewModelHash() => r'85b0a9f75638f6024fcdd2fbd831f4cb7e86222e';
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-/// shot. See CLAUDE.md §34-35.
+/// shot.
 
 final class CaptureViewModelFamily extends $Family
     with
@@ -85,7 +85,7 @@ final class CaptureViewModelFamily extends $Family
 
   /// Drives the photobooth capture flow: instruction -> countdown -> shutter
   /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-  /// shot. See CLAUDE.md §34-35.
+  /// shot.
 
   CaptureViewModelProvider call(String sessionId) =>
       CaptureViewModelProvider._(argument: sessionId, from: this);
@@ -96,7 +96,7 @@ final class CaptureViewModelFamily extends $Family
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-/// shot. See CLAUDE.md §34-35.
+/// shot.
 
 abstract class _$CaptureViewModel extends $AsyncNotifier<CaptureState> {
   late final _$args = ref.$arg as String;

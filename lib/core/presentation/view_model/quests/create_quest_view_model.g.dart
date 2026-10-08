@@ -9,17 +9,17 @@ part of 'create_quest_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Drives the guided Create Quest flow: what/description/participants/shots
-/// -> review -> create. See CLAUDE.md §33, design system §17-19.
+/// -> review -> create.
 
 @ProviderFor(CreateQuestViewModel)
 final createQuestViewModelProvider = CreateQuestViewModelProvider._();
 
 /// Drives the guided Create Quest flow: what/description/participants/shots
-/// -> review -> create. See CLAUDE.md §33, design system §17-19.
+/// -> review -> create.
 final class CreateQuestViewModelProvider
     extends $NotifierProvider<CreateQuestViewModel, CreateQuestDraft> {
   /// Drives the guided Create Quest flow: what/description/participants/shots
-  /// -> review -> create. See CLAUDE.md §33, design system §17-19.
+  /// -> review -> create.
   CreateQuestViewModelProvider._()
     : super(
         from: null,
@@ -51,7 +51,7 @@ String _$createQuestViewModelHash() =>
     r'1483ff27d2d2e946111281ede48ad5071701fc7f';
 
 /// Drives the guided Create Quest flow: what/description/participants/shots
-/// -> review -> create. See CLAUDE.md §33, design system §17-19.
+/// -> review -> create.
 
 abstract class _$CreateQuestViewModel extends $Notifier<CreateQuestDraft> {
   CreateQuestDraft build();

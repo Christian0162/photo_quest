@@ -8,15 +8,15 @@ part of 'auth_form_view_models.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The log in form. See CLAUDE.md §42.
+/// The log in form.
 
 @ProviderFor(LoginViewModel)
 final loginViewModelProvider = LoginViewModelProvider._();
 
-/// The log in form. See CLAUDE.md §42.
+/// The log in form.
 final class LoginViewModelProvider
     extends $NotifierProvider<LoginViewModel, LoginFormState> {
-  /// The log in form. See CLAUDE.md §42.
+  /// The log in form.
   LoginViewModelProvider._()
     : super(
         from: null,
@@ -46,7 +46,7 @@ final class LoginViewModelProvider
 
 String _$loginViewModelHash() => r'7b3107be7c3c08c8cc47372a46ff938bc322341c';
 
-/// The log in form. See CLAUDE.md §42.
+/// The log in form.
 
 abstract class _$LoginViewModel extends $Notifier<LoginFormState> {
   LoginFormState build();

@@ -708,19 +708,13 @@ class Quest extends DataClass implements Insertable<Quest> {
   final String id;
 
   /// The [People] row that created this quest. Null for built-in quest
-  /// templates that ship with the app. See CLAUDE.md §18 note.
+  /// templates that ship with the app.
   final String? creatorId;
   final String title;
   final String? description;
   final String category;
-
-  /// solo, pair, group. See CLAUDE.md §19.
   final String type;
-
-  /// draft, published, invited, active, completed. See CLAUDE.md §16A.
   final String status;
-
-  /// Nullable; a configured default applies when null. See CLAUDE.md §15A.
   final int? maxParticipants;
   final String? coverImagePath;
   final DateTime createdAt;
@@ -1332,12 +1326,7 @@ class QuestShot extends DataClass implements Insertable<QuestShot> {
   final int position;
   final String instruction;
   final String shotType;
-
-  /// A visual example of the pose/framing to demonstrate the shot. See
-  /// CLAUDE.md §10A.
   final String? exampleImagePath;
-
-  /// Whether this shot gates quest completion. See CLAUDE.md §37.
   final bool required;
   final DateTime createdAt;
   const QuestShot({
@@ -1812,8 +1801,6 @@ class QuestParticipant extends DataClass
   final String id;
   final String questId;
   final String personId;
-
-  /// invited, accepted, declined, removed, completed. See CLAUDE.md §16A.
   final String status;
   final DateTime invitedAt;
   final DateTime? respondedAt;
@@ -3306,8 +3293,6 @@ class Photo extends DataClass implements Insertable<Photo> {
   final DateTime capturedAt;
   final int width;
   final int height;
-
-  /// photo, gif, boomerang or video (`PhotoKind`). Added in schema v3.
   final String kind;
 
   /// True for a 360° clip whose file is not mirrored but whose preview and

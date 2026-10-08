@@ -9,17 +9,17 @@ part of 'add_person_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// The in-progress "Add someone" form. Lives only while the sheet is open,
-/// so the next one starts blank. See CLAUDE.md §40.
+/// so the next one starts blank.
 
 @ProviderFor(AddPersonViewModel)
 final addPersonViewModelProvider = AddPersonViewModelProvider._();
 
 /// The in-progress "Add someone" form. Lives only while the sheet is open,
-/// so the next one starts blank. See CLAUDE.md §40.
+/// so the next one starts blank.
 final class AddPersonViewModelProvider
     extends $NotifierProvider<AddPersonViewModel, AddPersonDraft> {
   /// The in-progress "Add someone" form. Lives only while the sheet is open,
-  /// so the next one starts blank. See CLAUDE.md §40.
+  /// so the next one starts blank.
   AddPersonViewModelProvider._()
     : super(
         from: null,
@@ -51,7 +51,7 @@ String _$addPersonViewModelHash() =>
     r'ffcc327becc66d65420b75c5aee0149af7985677';
 
 /// The in-progress "Add someone" form. Lives only while the sheet is open,
-/// so the next one starts blank. See CLAUDE.md §40.
+/// so the next one starts blank.
 
 abstract class _$AddPersonViewModel extends $Notifier<AddPersonDraft> {
   AddPersonDraft build();
