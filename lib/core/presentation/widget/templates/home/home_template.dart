@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/constant/app_colors.dart';
-import '../../../../config/constant/app_spacing.dart';
-import '../../../../config/constant/app_typography.dart';
-import '../../../domain/quests/entities/quest.dart';
-import '../../types/memories/memory_summary.dart';
-import '../../types/quests/quest_needing_confirmation.dart';
-import '../atoms/md_fade_slide_in.dart';
-import '../atoms/md_round_icon_button.dart';
-import '../atoms/md_skeleton_box.dart';
-import '../atoms/md_smooth_switch.dart';
-import '../molecules/md_idea_tile.dart';
-import '../molecules/md_section_header.dart';
-import '../organisms/md_app_scaffold.dart';
-import '../organisms/md_on_this_day_card.dart';
-import '../organisms/md_pending_quest_card.dart';
-import '../organisms/md_recent_memories_section.dart';
-import '../organisms/md_today_quest_card.dart';
+import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_spacing.dart';
+import '../../../../../config/constant/app_typography.dart';
+import '../../../../domain/quests/entities/quest.dart';
+import '../../../types/memories/memory_summary.dart';
+import '../../../types/quests/quest_needing_confirmation.dart';
+import '../../atoms/common/md_fade_slide_in.dart';
+import '../../atoms/common/md_round_icon_button.dart';
+import '../../atoms/common/md_skeleton_box.dart';
+import '../../atoms/common/md_smooth_switch.dart';
+import '../../molecules/quests/md_idea_tile.dart';
+import '../../molecules/common/md_section_header.dart';
+import '../../organisms/common/md_app_scaffold.dart';
+import '../../organisms/memories/md_on_this_day_card.dart';
+import '../../organisms/quests/md_pending_quest_card.dart';
+import '../../organisms/memories/md_recent_memories_section.dart';
+import '../../organisms/quests/md_today_quest_card.dart';
 
 /// Answers "What can we do today?" — a greeting, one hero Quest, anything
 /// waiting on people, and a shelf of recent memories. Never a dashboard.

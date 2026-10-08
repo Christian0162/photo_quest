@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../molecules/md_app_widget_preview.dart';
+import '../../molecules/common/md_app_widget_preview.dart';
 import 'home_template.dart';
-import 'preview_samples.dart';
+import '../preview_samples.dart';
 
 HomeTemplate _home({bool withMemories = true, bool loading = false}) {
   return HomeTemplate(
