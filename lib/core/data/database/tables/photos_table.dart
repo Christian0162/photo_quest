@@ -4,7 +4,7 @@ import 'memories_table.dart';
 import 'quest_shots_table.dart';
 
 /// A single captured image belonging to a Memory. Only metadata lives here —
-/// the image bytes live on the filesystem. See CLAUDE.md §5, §19.
+/// the image bytes live on the filesystem.
 class Photos extends Table {
   TextColumn get id => text()();
   TextColumn get memoryId => text().references(Memories, #id)();
@@ -16,7 +16,6 @@ class Photos extends Table {
   IntColumn get width => integer()();
   IntColumn get height => integer()();
 
-  /// photo, gif, boomerang or video (`PhotoKind`). Added in schema v3.
   TextColumn get kind => text().withDefault(const Constant('photo'))();
 
   /// True for a 360° clip whose file is not mirrored but whose preview and

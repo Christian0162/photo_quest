@@ -7,7 +7,7 @@ import '../../domain/quests/entities/quest_session.dart';
 import '../database/app_database.dart' as db;
 import '../database/daos/memory_dao.dart';
 
-/// Source of truth for Memory/Photo data. See CLAUDE.md §16.
+/// Source of truth for Memory/Photo data.
 class MemoryRepository {
   MemoryRepository(this._dao);
 
@@ -69,7 +69,7 @@ class MemoryRepository {
   }
 
   /// Starts a new attempt at a Quest. Repeating a Quest always starts a new
-  /// session rather than reusing a prior one. See CLAUDE.md §21.
+  /// session rather than reusing a prior one.
   Future<String> startQuestSession(String questId) async {
     final id = _uuid.v4();
     await _dao.insertSession(
@@ -92,7 +92,7 @@ class MemoryRepository {
   }
 
   /// Creates a new Memory tied to a Quest session. Repeating a Quest always
-  /// calls this again rather than mutating a prior Memory. See CLAUDE.md §21.
+  /// calls this again rather than mutating a prior Memory.
   Future<Memory> createMemory({
     required String questSessionId,
     required String title,
@@ -176,7 +176,7 @@ class MemoryRepository {
   }
 
   /// Removes a photo record so its shot can be retaken. The caller deletes
-  /// the files through `PhotoStorageService`. See CLAUDE.md §35.
+  /// the files through `PhotoStorageService`.
   Future<void> deletePhoto(String id) => _dao.deletePhoto(id);
 
   Future<void> deleteMemory(String id) => _dao.deleteMemory(id);

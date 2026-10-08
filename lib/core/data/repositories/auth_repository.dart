@@ -7,23 +7,14 @@ import '../../domain/auth/entities/account_user.dart';
 import '../../errors/app_failure.dart';
 
 /// What signing up led to.
-enum SignUpOutcome {
-  /// A code was emailed; the address must be confirmed before logging in.
-  needsVerification,
-
-  /// The project doesn't require confirmation, so the person is in.
-  signedIn,
-}
+enum SignUpOutcome { needsVerification, signedIn }
 
 /// Source of truth for who is signed in. Wraps Supabase Auth; passwords and
 /// tokens stay inside it. Every method throws an [AuthFailure] with copy that
 /// is safe to show. Abstract so view models can be tested without a network.
-/// See CLAUDE.md §16, §42.
 abstract class AuthRepository {
-  /// The account restored from the saved session, if any.
   AccountUser? get currentUser;
 
-  /// Emits the account whenever it changes, `null` once signed out.
   Stream<AccountUser?> get userChanges;
 
   Future<SignUpOutcome> signUp({

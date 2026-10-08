@@ -25,14 +25,13 @@ import 'quest_uploader.dart';
 /// on in Settings). The full-size originals never leave the phone: only
 /// compressed copies go up. Every method throws a [SharingFailure] with copy
 /// that is safe to show. Abstract so view models can be tested without a
-/// network. See CLAUDE.md §54C.
+/// network.
 abstract class CloudMemoryRepository {
   /// Copies a memory (and the quest it came from) to the account. Safe to run
   /// again: it only uploads what is missing, so an interrupted upload picks up
   /// where it stopped. [onProgress] goes from 0 to 1.
   Future<void> backUpMemory(String memoryId, {ProgressCallback? onProgress});
 
-  /// Whether the memory is already online.
   Future<bool> isOnline(String memoryId);
 
   /// Backs the memory up if needed, then makes a code a friend can use to view
@@ -56,23 +55,18 @@ abstract class CloudMemoryRepository {
 
   Future<SharedMemoryDetail> getSharedMemory(String memoryId);
 
-  /// Stops seeing a memory somebody shared.
   Future<void> leaveSharedMemory(String memoryId);
 
-  /// Adds the person's own photos to a quest memory they are taking part in.
   Future<void> addPhotosToMemory(
     String memoryId,
     List<Uint8List> photos, {
     ProgressCallback? onProgress,
   });
 
-  /// Who can see one of my memories.
   Future<List<ShareViewer>> getViewers(String memoryId);
 
-  /// Stops [viewerId] seeing one of my memories.
   Future<void> removeViewer(String memoryId, String viewerId);
 
-  /// How much of the online storage allowance is used.
   Future<StorageUsage> getStorageUsage();
 
   /// Removes a memory's online copy (files and records), including photos
@@ -102,7 +96,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
   final FileReader _readFile;
   late final QuestUploader _questUploader;
 
-  /// File types the `photos` bucket accepts, by extension.
   static const _mimeTypes = {
     'jpg': 'image/jpeg',
     'png': 'image/png',
@@ -112,8 +105,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
   };
 
   static const _sessionStatuses = {'in_progress', 'completed', 'cancelled'};
-
-  // ---------------------------------------------------------------- backup
 
   @override
   Future<void> backUpMemory(String memoryId, {ProgressCallback? onProgress}) =>
@@ -315,8 +306,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
     });
   }
 
-  // --------------------------------------------------------------- invites
-
   @override
   Future<String> createInvite(
     String memoryId, {
@@ -359,8 +348,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
         : InviteKind.memory;
     return InviteTarget(kind, result['id'] as String);
   });
-
-  // ------------------------------------------------------ shared with me
 
   @override
   Future<List<SharedMemorySummary>> getSharedWithMe() =>
@@ -492,8 +479,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
         .eq('viewer_id', _support.userId);
   });
 
-  // ------------------------------------------------- adding friends' photos
-
   @override
   Future<void> addPhotosToMemory(
     String memoryId,
@@ -563,8 +548,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
     }
   });
 
-  // ------------------------------------------------------ my own memories
-
   @override
   Future<List<ShareViewer>> getViewers(String memoryId) =>
       _support.guard(() async {
@@ -608,8 +591,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
             .eq('memory_id', memoryId)
             .eq('viewer_id', viewerId);
       });
-
-  // ------------------------------------------------- storage and removal
 
   @override
   Future<StorageUsage> getStorageUsage() => _support.storageUsage();
@@ -660,8 +641,6 @@ class SupabaseCloudMemoryRepository implements CloudMemoryRepository {
     // Then the records. Photos, shares and invites go with the memory.
     await db.from('memories').delete().eq('id', memoryId).eq('owner_id', uid);
   });
-
-  // --------------------------------------------------------------- helpers
 
   /// The last `.ext` of [path], lowercased, without the dot; `jpeg` counts as
   /// `jpg`.

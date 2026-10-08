@@ -6,9 +6,7 @@ import '../app_database.dart';
 const _uuid = Uuid();
 
 /// Inserts the starter set of Quest templates the first time the database
-/// is created, so Quest Selection (CLAUDE.md §33) isn't empty on first
-/// launch. Categories match the groupings from §33; titles/shots draw from
-/// the examples in §19.
+/// is created, so Quest Selection isn't empty on first launch.
 Future<void> seedDefaultQuests(AppDatabase db) async {
   final now = DateTime.now();
 

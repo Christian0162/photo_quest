@@ -25,10 +25,8 @@ typedef RemoveStorageFiles = Future<void> Function(List<String> paths);
 class StorageTreeCleaner {
   const StorageTreeCleaner({this.pageSize = 100});
 
-  /// How many entries to list, and how many files to remove, per call.
   final int pageSize;
 
-  /// Returns how many files were removed.
   Future<int> deleteTree(
     String root, {
     required ListStorageFolder list,

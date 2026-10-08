@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../../../config/constant/app_storage_paths.dart';
 
 /// Owns all photo filesystem behavior. Repositories never touch paths
-/// directly. See CLAUDE.md §6.
+/// directly.
 class PhotoStorageService {
   Future<Directory> _ensureDir(String relativePath) async {
     final root = await getApplicationDocumentsDirectory();
@@ -34,7 +34,6 @@ class PhotoStorageService {
     return file.path;
   }
 
-  /// Saves a GIF or boomerang.
   Future<String> saveAnimation(String photoId, List<int> gifBytes) async {
     final dir = await _ensureDir(AppStoragePaths.motion);
     final file = File(p.join(dir.path, '$photoId.gif'));
@@ -87,7 +86,6 @@ class PhotoStorageService {
     return file.path;
   }
 
-  /// The latest keepsake for [memoryId], or null if none exists yet.
   Future<String?> findPhotoStrip(String memoryId) async {
     final strips = await _stripsFor(memoryId);
     if (strips.isEmpty) return null;

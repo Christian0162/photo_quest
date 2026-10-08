@@ -47,7 +47,7 @@ class AppDatabase extends _$AppDatabase {
       await seedDefaultQuests(this);
     },
     onUpgrade: (m, from, to) async {
-      // v1 -> v2: quest participants/invitations (CLAUDE.md §16A, §18).
+      // v1 -> v2: quest participants/invitations.
       if (from < 2) {
         await m.addColumn(quests, quests.creatorId);
         await m.addColumn(quests, quests.type);
@@ -72,7 +72,7 @@ class AppDatabase extends _$AppDatabase {
       }
     },
     // Future schema changes add a step here rather than recreating
-    // tables. See CLAUDE.md §49.
+    // tables.
   );
 
   static QueryExecutor _openConnection() {

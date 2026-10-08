@@ -14,16 +14,12 @@ class BackupOutcome {
     this.stopped,
   });
 
-  /// How many memories were looked at.
   final int total;
 
-  /// How many are online now (including ones that already were).
   final int backedUp;
 
-  /// How many couldn't be saved, for reasons that may pass.
   final int failed;
 
-  /// Why the run stopped early, when it did: storage full, offline, ...
   final SharingFailure? stopped;
 
   bool get storageFull => stopped?.kind == SharingFailureKind.storageFull;
@@ -37,7 +33,6 @@ class BackupOutcome {
 /// itself, it stops at once when storage is full, and a capture is never
 /// delayed or lost by it (the memory is already saved on the phone first).
 /// "Back up now" is the person's own choice, so it works on any connection.
-/// See CLAUDE.md §54C.
 class MemoryBackupService {
   MemoryBackupService({
     required this._memories,
@@ -55,7 +50,6 @@ class MemoryBackupService {
 
   bool _running = false;
 
-  /// Whether a run is in progress.
   bool get isRunning => _running;
 
   /// Backs up every memory on the phone that isn't online yet, newest first.

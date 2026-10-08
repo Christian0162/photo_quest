@@ -49,7 +49,6 @@ class CloudSupport {
     return id;
   }
 
-  /// Turns anything that can go wrong into a [SharingFailure].
   Future<T> guard<T>(Future<T> Function() action) async {
     try {
       return await action();
@@ -127,7 +126,6 @@ class CloudSupport {
     return const SharingFailure.unknown();
   }
 
-  /// How much online storage the person has used.
   Future<StorageUsage> storageUsage() => guard(() async {
     final rows =
         await db.rpc<dynamic>('my_storage_usage', params: {}) as List<dynamic>;
@@ -188,7 +186,6 @@ class CloudSupport {
     };
   }
 
-  /// Short-lived links for private files, keyed by the file path.
   Future<Map<String, String>> signedUrls(
     String bucket,
     Iterable<String> paths,

@@ -12,7 +12,7 @@ import 'quest_uploader.dart';
 /// invitation, and seeing a quest you are in. Joining a quest also lets you
 /// see the memories made from it and add your own photos (see
 /// `CloudMemoryRepository`). Every method throws a [SharingFailure] with copy
-/// that is safe to show. See CLAUDE.md §16A, §41, §54C.
+/// that is safe to show.
 abstract class CloudQuestRepository {
   /// Puts the quest online if needed, then makes a code a friend can use to
   /// be invited to it. Shown once.
@@ -23,18 +23,14 @@ abstract class CloudQuestRepository {
   /// accept.
   Future<void> inviteFriend(String questId, String friendId);
 
-  /// Quests I've been invited to or have joined, newest first.
   Future<List<SharedQuestSummary>> getMyQuests();
 
   Future<SharedQuestDetail> getQuest(String questId);
 
-  /// Accepts or declines an invitation.
   Future<void> respond(String questId, {required bool accept});
 
-  /// Stops taking part in a quest.
   Future<void> leave(String questId);
 
-  /// Friends I've invited to one of my quests, and whether they've said yes.
   Future<List<ShareViewer>> getParticipants(String questId);
 
   Future<void> removeParticipant(String questId, String userId);
@@ -237,7 +233,6 @@ class SupabaseCloudQuestRepository implements CloudQuestRepository {
             .eq('user_id', userId);
       });
 
-  /// Everyone on the quest I'm allowed to see, except me and the owner.
   Future<List<ShareViewer>> _participantsOf(
     String questId, {
     String? ownerId,

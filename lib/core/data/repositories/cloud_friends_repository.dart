@@ -7,23 +7,18 @@ import 'cloud_support.dart';
 /// they chose to share. Nobody can search for people, so nobody can check who
 /// has an account. A request only becomes a friendship when the other person
 /// accepts. Every method throws a `SharingFailure` with copy that is safe to
-/// show. See CLAUDE.md §40, §54C.
+/// show.
 abstract class CloudFriendsRepository {
-  /// My own friend code, to give to people I want as friends.
   Future<String> getMyFriendCode();
 
-  /// Makes a new code; the old one stops working at once.
   Future<String> resetFriendCode();
 
-  /// Sends a request using someone's code. Null when the code doesn't work.
   Future<FriendRequestResult?> addByCode(String code);
 
-  /// Friends, requests waiting for my answer, and requests I'm waiting on.
   Future<List<Friend>> getFriends();
 
   Future<void> respond(String userId, {required bool accept});
 
-  /// Removes a friend, or cancels a request.
   Future<void> remove(String userId);
 }
 

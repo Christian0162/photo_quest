@@ -10,12 +10,10 @@ class PhotoPickerService {
 
   final ImagePicker _picker;
 
-  /// How many photos can be added in one go.
   static const maxPhotos = 10;
 
   static const _maxSide = 2048.0;
 
-  /// The picked photos' bytes; empty when the person backs out.
   Future<List<Uint8List>> pickPhotos() async {
     final files = await _picker.pickMultiImage(
       limit: maxPhotos,

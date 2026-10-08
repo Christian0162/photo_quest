@@ -8,8 +8,7 @@ import '../tables/quests_table.dart';
 part 'quest_dao.g.dart';
 
 /// All Quest/QuestShot/QuestParticipant queries live here. Repositories
-/// depend on this DAO, never on raw `AppDatabase` queries. See CLAUDE.md
-/// §16, §48.
+/// depend on this DAO, never on raw `AppDatabase` queries.
 @DriftAccessor(tables: [Quests, QuestShots, QuestParticipants])
 class QuestDao extends DatabaseAccessor<AppDatabase> with _$QuestDaoMixin {
   QuestDao(super.db);

@@ -8,7 +8,6 @@ class PickedAvatar {
 
   final Uint8List bytes;
 
-  /// `jpg`, `png` or `webp` — the types the `avatars` bucket accepts.
   final String extension;
 }
 
@@ -22,7 +21,6 @@ class AvatarPickerService {
 
   static const _maxSide = 512.0;
 
-  /// `null` when the person backs out.
   Future<PickedAvatar?> pickAvatar() async {
     final file = await _picker.pickImage(
       source: ImageSource.gallery,

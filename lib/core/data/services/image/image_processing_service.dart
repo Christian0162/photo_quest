@@ -37,7 +37,7 @@ class AnimationResult {
 
 /// Owns local image manipulation: looks (filters), resizing, thumbnails,
 /// GIFs and boomerangs, and photo-strip composition. Everything heavy runs
-/// off the UI thread via `compute`. See CLAUDE.md §7, §46.
+/// off the UI thread via `compute`.
 class ImageProcessingService {
   /// A small JPEG of [originalBytes]. With [mirror] the thumbnail is also
   /// flipped left-right (after shrinking, so it is cheap).
@@ -127,13 +127,12 @@ class ImageProcessingService {
     return Isolate.run(() => work(progress.send));
   }
 
-  /// Converts a rendered keepsake (PNG) to a shareable JPEG.
   Future<Uint8List> encodeKeepsake(Uint8List pngBytes) {
     return compute(_pngToJpg, pngBytes);
   }
 
   /// Lays [photos] out as a physical photobooth print with a "PHOTO QUEST"
-  /// footer and [caption] (usually the date). See CLAUDE.md §36.
+  /// footer and [caption] (usually the date).
   Future<Uint8List> composePhotoStrip(
     List<Uint8List> photos, {
     required String caption,
@@ -153,7 +152,7 @@ class ImageProcessingService {
   }
 
   /// Decodes [bytes], or null for a corrupted/unsupported image — some
-  /// decoders throw on garbage instead of returning null. See CLAUDE.md §42.
+  /// decoders throw on garbage instead of returning null.
   static img.Image? _tryDecode(Uint8List bytes) {
     try {
       final decoded = img.decodeImage(bytes);
@@ -237,7 +236,6 @@ class ImageProcessingService {
     return true;
   }
 
-  /// Shrinks [image] to [width] if it is wider; otherwise returns it as is.
   static img.Image _fitWidth(img.Image image, int width) =>
       image.width > width ? img.copyResize(image, width: width) : image;
 

@@ -21,7 +21,6 @@ class QuestUploader {
     'completed',
   };
 
-  /// The local quest, or null if it is gone.
   Future<Quest?> questFor(String questId) => _quests.getQuest(questId);
 
   /// Makes sure the quest and its shots are online. Returns the ids of every

@@ -14,7 +14,7 @@ import '../../../errors/app_failure.dart';
 import 'camera_frame.dart';
 
 /// Owns camera hardware behavior. Knows how to operate the camera; knows
-/// nothing about Quests or Memories. See CLAUDE.md §17, §46.
+/// nothing about Quests or Memories.
 class CameraService {
   CameraController? _controller;
   List<CameraDescription> _cameras = [];
@@ -58,7 +58,6 @@ class CameraService {
         needsMirror(lens: lens, platform: defaultTargetPlatform);
   }
 
-  /// The mirroring rule: only the Android front camera.
   @visibleForTesting
   static bool needsMirror({
     required CameraLensDirection lens,
@@ -101,7 +100,6 @@ class CameraService {
     }
   }
 
-  /// Starts recording a silent clip (no microphone needed).
   Future<void> startVideoRecording() async {
     await _guard((controller) async {
       await controller.prepareForVideoRecording();
