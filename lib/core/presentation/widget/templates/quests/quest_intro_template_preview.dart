@@ -24,6 +24,7 @@ Widget _intro({
       onRetry: () {},
       onStart: () {},
       onInvite: () {},
+      onInviteOnline: () {},
       onConfirmParticipant: (_) {},
       onRemoveParticipant: (_) {},
     ),

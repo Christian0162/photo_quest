@@ -11,6 +11,7 @@ import '../../view_model/quests/quest_participants_view_model.dart';
 import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/organisms/people/md_people_picker_sheet.dart';
 import '../../widget/templates/quests/quest_intro_template.dart';
+import '../sharing/invite_friend_sheet.dart';
 
 /// Quest Introduction. Wires view models, the invite sheet and navigation
 /// into [QuestIntroTemplate]. See CLAUDE.md §59.
@@ -100,6 +101,7 @@ class QuestIntroScreen extends ConsumerWidget {
       onRetry: () => ref.invalidate(questDetailProvider(questId)),
       onStart: () => _start(context, ref),
       onInvite: () => _invite(context, ref),
+      onInviteOnline: () => showInviteToQuestSheet(context, questId),
       onConfirmParticipant: (entry) {
         AppHaptics.selection();
         ref

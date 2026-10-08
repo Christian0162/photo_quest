@@ -19,6 +19,7 @@ import '../../organisms/quests/md_quest_card.dart';
 import '../../organisms/quests/md_quest_participants_section.dart';
 import '../../organisms/quests/md_quest_shot_list.dart';
 import '../../molecules/quests/md_quest_start_action.dart';
+import '../../molecules/sharing/md_invite_friend_card.dart';
 
 /// Introduces a Quest before capture: what we're doing, who's joining, which
 /// photos we'll take — then one primary action to begin. See CLAUDE.md §59,
@@ -33,6 +34,7 @@ class QuestIntroTemplate extends StatelessWidget {
     required this.onRetry,
     required this.onStart,
     required this.onInvite,
+    required this.onInviteOnline,
     required this.onConfirmParticipant,
     required this.onRemoveParticipant,
   });
@@ -44,6 +46,10 @@ class QuestIntroTemplate extends StatelessWidget {
   final VoidCallback onRetry;
   final VoidCallback onStart;
   final VoidCallback onInvite;
+
+  /// Opens the sheet that makes a code a friend with Photo Quest can use to
+  /// join this quest from their own phone.
+  final VoidCallback onInviteOnline;
   final ValueChanged<QuestParticipantWithPerson> onConfirmParticipant;
   final ValueChanged<QuestParticipantWithPerson> onRemoveParticipant;
 
@@ -152,6 +158,8 @@ class QuestIntroTemplate extends StatelessWidget {
                   onConfirm: onConfirmParticipant,
                   onRemove: onRemoveParticipant,
                 ),
+                const SizedBox(height: AppSpacing.lg),
+                MdInviteFriendCard.quest(onInvite: onInviteOnline),
               ],
               if (data.shots.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.xl),
