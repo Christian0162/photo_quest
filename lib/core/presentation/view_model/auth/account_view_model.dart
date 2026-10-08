@@ -29,7 +29,6 @@ class AccountViewModel extends _$AccountViewModel {
     );
   }
 
-  /// Returns a friendly message when it fails, otherwise null.
   Future<String?> saveName(String name) async {
     final current = state.value;
     if (current == null) return null;
@@ -95,7 +94,6 @@ class AccountNameDraftViewModel extends _$AccountNameDraftViewModel {
 
   void setText(String value) => state = state.copyWith(text: value);
 
-  /// Saves the typed name. Returns a friendly message on failure.
   Future<String?> save() async {
     final text = state.text;
     if (text == null || state.saving) return null;

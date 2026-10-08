@@ -10,10 +10,8 @@ class AccountData {
   final String email;
   final String? displayName;
 
-  /// Storage path of the avatar, kept so a new one can replace it.
   final String? avatarPath;
 
-  /// Short-lived signed link to show the avatar.
   final String? avatarUrl;
 
   /// The name to greet them with: their display name, else the part of the
@@ -45,7 +43,6 @@ const _keep = Object();
 class AccountNameDraft {
   const AccountNameDraft({this.text, this.saving = false});
 
-  /// Null until the person edits the field.
   final String? text;
   final bool saving;
 

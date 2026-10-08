@@ -8,6 +8,5 @@ class QuestDetail {
   final Quest quest;
   final List<QuestShot> shots;
 
-  /// Null for built-in quest templates. See design system §16.
   final Person? creator;
 }

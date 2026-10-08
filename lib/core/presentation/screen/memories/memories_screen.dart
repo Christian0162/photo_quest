@@ -10,7 +10,7 @@ import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/organisms/memories/md_photo_viewer.dart';
 import '../../widget/templates/memories/memories_template.dart';
 
-/// The memory box. Design lives in [MemoriesTemplate]. See CLAUDE.md §38.
+/// The memory box. Design lives in [MemoriesTemplate].
 class MemoriesScreen extends ConsumerWidget {
   const MemoriesScreen({super.key});
 

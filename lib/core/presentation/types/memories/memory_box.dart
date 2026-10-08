@@ -36,6 +36,5 @@ class MemoryBox {
   final Map<MemoryFilter, int> counts;
   final List<MemoryMonth> months;
 
-  /// True when there are no memories at all, not just none in [filter].
   bool get isEmpty => counts[MemoryFilter.allJourney] == 0;
 }

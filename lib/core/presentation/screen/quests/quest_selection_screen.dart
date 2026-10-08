@@ -7,7 +7,6 @@ import '../../view_model/quests/quest_list_view_model.dart';
 import '../../widget/templates/quests/quest_selection_template.dart';
 
 /// Choose a Quest. Design lives in [QuestSelectionTemplate].
-/// See CLAUDE.md §33.
 class QuestSelectionScreen extends ConsumerWidget {
   const QuestSelectionScreen({super.key});
 

@@ -15,11 +15,10 @@ import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/templates/people/people_template.dart';
 
 /// People. Wires [PeopleList] and the add-someone sheet into
-/// [PeopleTemplate]. See CLAUDE.md §40.
+/// [PeopleTemplate].
 class PeopleScreen extends ConsumerWidget {
   const PeopleScreen({super.key});
 
-  /// Resolves to `(name, type)`, or null if the sheet was dismissed.
   Future<(String, String)?> _askForPerson(BuildContext context) {
     return showModalBottomSheet<(String, String)>(
       context: context,
@@ -60,7 +59,6 @@ class PeopleScreen extends ConsumerWidget {
     }
   }
 
-  /// Opens the "Add a friend" sheet: my own friend code, and a box for theirs.
   Future<void> _addFriend(BuildContext context) {
     return showModalBottomSheet<void>(
       context: context,

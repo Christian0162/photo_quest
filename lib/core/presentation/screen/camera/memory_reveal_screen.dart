@@ -12,7 +12,7 @@ import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/templates/camera/memory_reveal_template.dart';
 
 /// Memory reveal. Wires the reveal, the keepsake design and navigation into
-/// [MemoryRevealTemplate]. See CLAUDE.md §36-37.
+/// [MemoryRevealTemplate].
 class MemoryRevealScreen extends ConsumerWidget {
   const MemoryRevealScreen({super.key, required this.sessionId});
 

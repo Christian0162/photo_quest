@@ -14,18 +14,14 @@ class BackupState {
     this.isError = false,
   });
 
-  /// Whether new memories are saved online by themselves (on Wi-Fi).
   final bool enabled;
 
-  /// Online storage used, once it has been read.
   final StorageUsage? usage;
 
-  /// True while a "Back up now" is running.
   final bool running;
   final int done;
   final int total;
 
-  /// How the last run went, in friendly words.
   final String? message;
   final bool isError;
 

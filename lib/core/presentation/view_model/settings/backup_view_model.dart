@@ -37,7 +37,6 @@ class BackupViewModel extends _$BackupViewModel {
     await refreshUsage();
   }
 
-  /// A quiet refresh of the storage meter; offline just leaves it as it was.
   Future<void> refreshUsage() async {
     try {
       final usage = await ref
@@ -61,7 +60,6 @@ class BackupViewModel extends _$BackupViewModel {
     }
   }
 
-  /// The person's own choice to back everything up now, on any connection.
   Future<void> backUpNow() async {
     if (state.running) return;
     state = state.copyWith(

@@ -35,20 +35,16 @@ class AuthSessionViewModel extends _$AuthSessionViewModel {
     }
   }
 
-  /// The code screen: a new account, or a log in with an unconfirmed email.
   void awaitVerification(String email) =>
       state = AuthAwaitingVerification(email);
 
-  /// The reset screen: a reset code was just sent.
   void beginRecovery(String email) => state = AuthRecovering(email);
 
-  /// The email is confirmed or the password was changed: into the app.
   void completeSignIn() {
     final user = ref.read(authRepositoryProvider).currentUser;
     state = user == null ? const AuthSignedOut() : AuthSignedIn(user);
   }
 
-  /// Backs out of the code or reset screen.
   Future<void> cancelPending() async {
     final repository = ref.read(authRepositoryProvider);
     if (repository.currentUser != null) {

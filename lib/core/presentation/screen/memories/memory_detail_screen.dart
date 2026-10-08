@@ -13,13 +13,12 @@ import '../../widget/templates/memories/memory_detail_template.dart';
 import '../sharing/invite_friend_sheet.dart';
 
 /// One Memory. Wires [MemoryDetailViewModel] and navigation into
-/// [MemoryDetailTemplate]. See CLAUDE.md §39.
+/// [MemoryDetailTemplate].
 class MemoryDetailScreen extends ConsumerWidget {
   const MemoryDetailScreen({super.key, required this.memoryId, this.coverPath});
 
   final String memoryId;
 
-  /// The cover already on screen when this memory was tapped.
   final String? coverPath;
 
   Future<void> _share(BuildContext context, WidgetRef ref, Rect? origin) async {
@@ -49,7 +48,6 @@ class MemoryDetailScreen extends ConsumerWidget {
     }
   }
 
-  /// Runs a download and says how it went, in friendly words.
   Future<void> _download(
     BuildContext context,
     Future<void> Function() save,

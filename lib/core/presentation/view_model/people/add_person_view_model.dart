@@ -5,7 +5,7 @@ import '../../types/people/add_person_draft.dart';
 part 'add_person_view_model.g.dart';
 
 /// The in-progress "Add someone" form. Lives only while the sheet is open,
-/// so the next one starts blank. See CLAUDE.md §40.
+/// so the next one starts blank.
 @riverpod
 class AddPersonViewModel extends _$AddPersonViewModel {
   @override

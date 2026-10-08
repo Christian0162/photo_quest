@@ -16,8 +16,7 @@ part 'memory_reveal_view_model.g.dart';
 
 /// Makes sure a just-completed session has a printed strip — composing a
 /// default one only if the memory has none yet, so a decorated keepsake is
-/// never overwritten — and returns the memory it belongs to. See CLAUDE.md
-/// §36-37.
+/// never overwritten — and returns the memory it belongs to.
 @riverpod
 Future<MemoryRevealResult> memoryReveal(Ref ref, String sessionId) async {
   final memoryRepo = ref.watch(memoryRepositoryProvider);

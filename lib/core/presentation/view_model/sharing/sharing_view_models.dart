@@ -31,7 +31,6 @@ class ShareMemoryViewModel extends _$ShareMemoryViewModel {
     return const ShareMemoryState();
   }
 
-  /// A quiet refresh: if it fails (offline), things just stay as they were.
   Future<void> refresh() async {
     try {
       final cloud = ref.read(cloudMemoryRepositoryProvider);
@@ -62,7 +61,6 @@ class ShareMemoryViewModel extends _$ShareMemoryViewModel {
     }
   }
 
-  /// Lets a friend view this memory straight away, with no code.
   Future<void> inviteFriend(Friend friend) async {
     state = state.copyWith(error: null);
     try {
@@ -100,7 +98,6 @@ class ShareMemoryViewModel extends _$ShareMemoryViewModel {
     }
   }
 
-  /// What a friend gets in a message.
   String get inviteMessage {
     final code = state.code;
     return "Here's my Photo Quest invite code: $code\n\n"
@@ -108,7 +105,6 @@ class ShareMemoryViewModel extends _$ShareMemoryViewModel {
         'the code to see the memory.';
   }
 
-  /// Opens the share sheet with the code. Returns a message on failure.
   Future<String?> sendCode({Rect? origin}) async {
     if (state.code == null) return null;
     try {
@@ -329,7 +325,6 @@ class SharedMemoryViewModel extends _$SharedMemoryViewModel {
   @override
   bool build(String memoryId) => false;
 
-  /// Stops seeing this memory. Returns a message on failure, otherwise null.
   Future<String?> leave() async {
     try {
       await ref.read(cloudMemoryRepositoryProvider).leaveSharedMemory(memoryId);
@@ -378,7 +373,6 @@ class SharedQuestViewModel extends _$SharedQuestViewModel {
     ref.invalidate(sharedQuestProvider(questId));
   }
 
-  /// Accepts or declines. Returns a message on failure, otherwise null.
   Future<String?> respond({required bool accept}) async {
     if (state) return null;
     state = true;
@@ -395,7 +389,6 @@ class SharedQuestViewModel extends _$SharedQuestViewModel {
     }
   }
 
-  /// Stops taking part. Returns a message on failure, otherwise null.
   Future<String?> leave() async {
     if (state) return null;
     state = true;

@@ -4,16 +4,7 @@ import '../../../domain/sharing/invite_code.dart';
 
 const _keep = Object();
 
-enum SharePhase {
-  /// Nothing started yet.
-  idle,
-
-  /// Saving the memory online, then making the code.
-  saving,
-
-  /// There is a code to hand to a friend.
-  ready,
-}
+enum SharePhase { idle, saving, ready }
 
 /// The "Invite a friend" sheet for one memory.
 class ShareMemoryState {
@@ -30,21 +21,16 @@ class ShareMemoryState {
 
   final SharePhase phase;
 
-  /// 0 to 1 while [phase] is [SharePhase.saving].
   final double progress;
   final String? code;
   final String? error;
 
-  /// Friends who can already see this memory, or are on this quest.
   final List<ShareViewer> viewers;
 
-  /// Whether this memory already has an online copy.
   final bool isOnline;
 
-  /// True while the online copy is being removed.
   final bool removing;
 
-  /// Real friends (added in People) who can be invited straight from here.
   final List<Friend> friends;
 
   ShareMemoryState copyWith({

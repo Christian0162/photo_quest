@@ -13,7 +13,6 @@ import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/templates/home/home_template.dart';
 
 /// Home. Wires view models and navigation into [HomeTemplate].
-/// See CLAUDE.md §31.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 

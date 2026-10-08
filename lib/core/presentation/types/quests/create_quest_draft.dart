@@ -2,7 +2,7 @@ import '../../../domain/quests/enum/create_quest_step.dart';
 import 'draft_shot.dart';
 
 /// The in-progress Quest a creator is building, and where they are in the
-/// flow. See CLAUDE.md §33.
+/// flow.
 class CreateQuestDraft {
   const CreateQuestDraft({
     this.title = '',
@@ -23,7 +23,6 @@ class CreateQuestDraft {
   final List<String> participantIds;
   final List<DraftShot> shots;
 
-  /// The kind of shot the next typed instruction will be added as.
   final String shotType;
   final CreateQuestStep step;
   final bool isSubmitting;
@@ -32,10 +31,8 @@ class CreateQuestDraft {
   bool get isFirstStep => step == CreateQuestStep.values.first;
   bool get isLastStep => step == CreateQuestStep.values.last;
 
-  /// Whether leaving now would lose something the creator wrote.
   bool get hasWork => title.trim().isNotEmpty || shots.isNotEmpty;
 
-  /// Why the current step can't move on yet, or null when it can.
   String? get blocker => switch (step) {
     CreateQuestStep.what when title.trim().isEmpty => 'Give your quest a name.',
     CreateQuestStep.shots when shots.isEmpty =>

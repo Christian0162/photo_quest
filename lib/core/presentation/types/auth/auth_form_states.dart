@@ -20,7 +20,6 @@ class LoginFormState {
   final bool showErrors;
   final bool busy;
 
-  /// Something the server said, shown above the button.
   final String? error;
 
   String? get emailError => showErrors ? AuthValidators.email(email) : null;
@@ -111,7 +110,6 @@ class VerifyFormState {
   final bool busy;
   final bool resending;
 
-  /// A calm confirmation, e.g. "New code sent".
   final String? notice;
   final String? error;
 

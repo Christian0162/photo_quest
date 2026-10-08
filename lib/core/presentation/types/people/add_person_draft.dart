@@ -5,7 +5,6 @@ class AddPersonDraft {
   final String name;
   final String type;
 
-  /// The name without stray spaces, as it will be saved.
   String get trimmedName => name.trim();
   bool get canSubmit => trimmedName.isNotEmpty;
 

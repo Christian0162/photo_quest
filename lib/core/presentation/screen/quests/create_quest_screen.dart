@@ -11,7 +11,7 @@ import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/templates/quests/create_quest_template.dart';
 
 /// Create Quest. Wires [CreateQuestViewModel], the discard dialog and
-/// navigation into [CreateQuestTemplate]. See CLAUDE.md §33.
+/// navigation into [CreateQuestTemplate].
 class CreateQuestScreen extends ConsumerWidget {
   const CreateQuestScreen({super.key});
 

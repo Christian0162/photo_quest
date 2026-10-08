@@ -11,8 +11,7 @@ import '../../widget/organisms/common/md_app_scaffold.dart';
 import '../../widget/templates/memories/keepsake_template.dart';
 
 /// Decorate a Memory's printed keepsake. Wires [KeepsakeViewModel] into
-/// [KeepsakeTemplate]; saving renders the print and goes back. See
-/// CLAUDE.md §36.
+/// [KeepsakeTemplate]; saving renders the print and goes back.
 class KeepsakeScreen extends ConsumerWidget {
   const KeepsakeScreen({super.key, required this.memoryId});
 

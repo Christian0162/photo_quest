@@ -6,7 +6,7 @@ import '../../../../config/routes/app_router.dart';
 import '../../view_model/settings/backup_view_model.dart';
 import '../../widget/templates/settings/settings_template.dart';
 
-/// Settings. Design lives in [SettingsTemplate]. See CLAUDE.md §56.
+/// Settings. Design lives in [SettingsTemplate].
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 

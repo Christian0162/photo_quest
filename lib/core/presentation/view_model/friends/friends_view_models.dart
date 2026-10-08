@@ -52,7 +52,6 @@ class FriendCodeViewModel extends _$FriendCodeViewModel {
     return _load();
   }
 
-  /// A new code; the old one stops working at once.
   Future<void> reset() async {
     if (state.resetting) return;
     state = state.copyWith(resetting: true, error: null);
@@ -70,7 +69,6 @@ class FriendCodeViewModel extends _$FriendCodeViewModel {
     }
   }
 
-  /// Opens the share sheet with the code. Returns a message on failure.
   Future<String?> send({Rect? origin}) async {
     final code = state.code;
     if (code == null) return null;
@@ -140,7 +138,6 @@ class FriendActionsViewModel extends _$FriendActionsViewModel {
   @override
   bool build() => false;
 
-  /// Accepts or declines a request. Returns a message on failure.
   Future<String?> respond(Friend friend, {required bool accept}) async {
     if (state) return null;
     state = true;
@@ -157,7 +154,6 @@ class FriendActionsViewModel extends _$FriendActionsViewModel {
     }
   }
 
-  /// Removes a friend, or cancels a request. Returns a message on failure.
   Future<String?> remove(Friend friend) async {
     if (state) return null;
     state = true;

@@ -11,7 +11,6 @@ class FriendCodeState {
     this.error,
   });
 
-  /// Shown as `ABCDE-FGHJK`; null until it has loaded.
   final String? code;
   final bool loading;
   final bool resetting;
@@ -45,7 +44,6 @@ class AddFriendState {
   final bool busy;
   final String? error;
 
-  /// What happened when it worked: "Request sent to Bo."
   final String? notice;
 
   String? get codeError => showErrors ? InviteCode.validate(code) : null;

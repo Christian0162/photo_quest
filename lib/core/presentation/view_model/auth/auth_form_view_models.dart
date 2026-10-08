@@ -14,7 +14,7 @@ const _genericError = 'Something went wrong. Please try again.';
 String _messageFor(Object error) =>
     error is AppFailure ? error.message : _genericError;
 
-/// The log in form. See CLAUDE.md §42.
+/// The log in form.
 @riverpod
 class LoginViewModel extends _$LoginViewModel {
   @override

@@ -26,7 +26,7 @@ part 'capture_view_model.g.dart';
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-/// shot. See CLAUDE.md §34-35.
+/// shot.
 @riverpod
 class CaptureViewModel extends _$CaptureViewModel {
   static const _uuid = Uuid();
@@ -86,15 +86,10 @@ class CaptureViewModel extends _$CaptureViewModel {
   /// cancelled (or replaced) stops at its next beat instead of carrying on.
   int _run = 0;
 
-  /// Which pose idea is showing, for "Another idea".
   int _poseIndex = 0;
 
-  /// Set when the shutter is let go during a held boomerang or clip.
   bool _holdReleased = false;
 
-  // Choices ---------------------------------------------------------------
-
-  /// Switches between Photo, GIF, Boomerang and 360°. Only between shots.
   void setMode(CaptureMode mode) {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;
@@ -108,14 +103,12 @@ class CaptureViewModel extends _$CaptureViewModel {
     );
   }
 
-  /// Changes the look shown live and saved into the next shots.
   void setLook(PhotoLook look) {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;
     state = AsyncData(current.copyWith(look: look));
   }
 
-  /// Opens or tucks away the look picker.
   void toggleLooks() {
     final current = state.value;
     if (current == null) return;
@@ -138,7 +131,6 @@ class CaptureViewModel extends _$CaptureViewModel {
     state = AsyncData(current.copyWith(clearPoseIdea: true));
   }
 
-  /// Changes the countdown length and remembers it for next time.
   Future<void> setCountdownSeconds(int seconds) async {
     final current = state.value;
     if (current == null) return;
@@ -148,7 +140,6 @@ class CaptureViewModel extends _$CaptureViewModel {
     await ref.read(settingsRepositoryProvider).setCountdownSeconds(seconds);
   }
 
-  /// Changes the longest 360° clip and remembers it for next time.
   Future<void> setClipSeconds(int seconds) async {
     final current = state.value;
     if (current == null) return;
@@ -159,9 +150,6 @@ class CaptureViewModel extends _$CaptureViewModel {
   List<String> _ideas(CaptureState state, CaptureMode mode) =>
       PoseIdeas.forShot(questType: state.quest.type, kind: mode.kind);
 
-  // Capture ---------------------------------------------------------------
-
-  /// Photo and GIF: counts down, then captures.
   Future<void> startCountdown() async {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;
@@ -207,11 +195,10 @@ class CaptureViewModel extends _$CaptureViewModel {
     }
   }
 
-  /// The shutter was let go.
   void endHold() => _holdReleased = true;
 
   /// "Wait, not ready!" — stops the countdown and goes back to the shot's
-  /// instruction without taking anything. See CLAUDE.md §35.
+  /// instruction without taking anything.
   void cancelCountdown() {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.countdown) return;
@@ -292,7 +279,6 @@ class CaptureViewModel extends _$CaptureViewModel {
     });
   }
 
-  /// Updates the processing percentage, if we're still in the booth.
   ProgressCallback _reportProcessing(CaptureState current) {
     return (progress) {
       if (!ref.mounted || state.value?.phase != CapturePhase.processing) {
@@ -566,8 +552,7 @@ class CaptureViewModel extends _$CaptureViewModel {
   }
 
   /// Discards the shot just taken and returns to its instruction. The
-  /// quest can't complete without a kept shot for every instruction. See
-  /// CLAUDE.md §35, §37.
+  /// quest can't complete without a kept shot for every instruction.
   Future<void> retake() async {
     final current = state.value;
     final photo = current?.lastPhoto;
@@ -586,7 +571,6 @@ class CaptureViewModel extends _$CaptureViewModel {
     );
   }
 
-  /// Flips between front and back cameras between shots.
   Future<void> switchCamera() async {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;

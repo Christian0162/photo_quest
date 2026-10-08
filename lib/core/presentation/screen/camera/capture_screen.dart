@@ -12,7 +12,7 @@ import '../../widget/organisms/camera/md_booth_settings_sheet.dart';
 import '../../widget/templates/camera/capture_template.dart';
 
 /// The photobooth. Wires [CaptureViewModel], the leave dialog and
-/// navigation into [CaptureTemplate]. See CLAUDE.md §34-35.
+/// navigation into [CaptureTemplate].
 class CaptureScreen extends ConsumerWidget {
   const CaptureScreen({super.key, required this.sessionId});
 
