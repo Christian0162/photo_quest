@@ -4,7 +4,7 @@ import '../../../domain/camera/enum/camera_frame_format.dart';
 
 /// One raw frame from the live camera stream, copied out of the plugin's
 /// reused buffers so it can be processed later (e.g. into a boomerang).
-/// Plain data — safe to send to a background isolate.
+/// Plain data — safe to send to a background isolate. See CLAUDE.md §7.
 class CameraFrame {
   const CameraFrame({
     required this.width,
@@ -17,9 +17,11 @@ class CameraFrame {
   final int width;
   final int height;
 
+  /// How the pixels are laid out.
   final CameraFrameFormat format;
   final List<CameraFramePlane> planes;
 
+  /// Clockwise rotation that turns the sensor image upright (portrait).
   final int rotationDegrees;
 }
 

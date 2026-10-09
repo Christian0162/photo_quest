@@ -13,6 +13,8 @@ class MemoryRevealResult {
   final String title;
   final DateTime capturedAt;
 
+  /// Who was there — the reveal celebrates people, not just pixels. See
+  /// design system §32.
   final List<Person> people;
   final String stripPath;
 }

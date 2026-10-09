@@ -6,13 +6,13 @@ import '../../../../config/routes/app_router.dart';
 import '../../../data/repositories/settings_repository.dart';
 import '../../../domain/camera/enum/capture_phase.dart';
 import '../../view_model/camera/capture_view_model.dart';
-import '../../widget/molecules/common/md_confirmation_dialog.dart';
-import '../../widget/organisms/common/md_app_scaffold.dart';
-import '../../widget/organisms/camera/md_booth_settings_sheet.dart';
-import '../../widget/templates/camera/capture_template.dart';
+import '../../widget/molecules/md_confirmation_dialog.dart';
+import '../../widget/organisms/md_app_scaffold.dart';
+import '../../widget/organisms/md_booth_settings_sheet.dart';
+import '../../widget/templates/capture_template.dart';
 
 /// The photobooth. Wires [CaptureViewModel], the leave dialog and
-/// navigation into [CaptureTemplate].
+/// navigation into [CaptureTemplate]. See CLAUDE.md §34-35.
 class CaptureScreen extends ConsumerWidget {
   const CaptureScreen({super.key, required this.sessionId});
 
@@ -27,30 +27,6 @@ class CaptureScreen extends ConsumerWidget {
       cancelLabel: 'Stay',
     );
     if (leave && context.mounted) context.pop();
-  }
-
-  /// The sheet watches the booth, so a tapped choice shows as selected
-  /// straight away.
-  void _openSettings(BuildContext context) {
-    final provider = captureViewModelProvider(sessionId);
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (_) => Consumer(
-        builder: (context, ref, _) {
-          final current = ref.watch(provider).value;
-          if (current == null) return const SizedBox.shrink();
-          final viewModel = ref.read(provider.notifier);
-          return MdBoothSettingsSheet(
-            countdownSeconds: current.countdownSeconds,
-            countdownChoices: SettingsRepository.countdownChoices,
-            onCountdownChanged: viewModel.setCountdownSeconds,
-            clipSeconds: current.clipSeconds,
-            clipChoices: SettingsRepository.clipChoices,
-            onClipChanged: viewModel.setClipSeconds,
-          );
-        },
-      ),
-    );
   }
 
   @override
@@ -90,12 +66,23 @@ class CaptureScreen extends ConsumerWidget {
       onRetake: viewModel.retake,
       onModeChanged: viewModel.setMode,
       onLookChanged: viewModel.setLook,
-      onToggleLooks: viewModel.toggleLooks,
       onPoseIdea: viewModel.nextPoseIdea,
       onHidePoseIdea: viewModel.hidePoseIdea,
       onHoldStart: viewModel.startHold,
       onHoldEnd: viewModel.endHold,
-      onOpenSettings: () => _openSettings(context),
+      onOpenSettings: () {
+        final current = ref.read(provider).value;
+        if (current == null) return;
+        showBoothSettingsSheet(
+          context,
+          countdownSeconds: current.countdownSeconds,
+          countdownChoices: SettingsRepository.countdownChoices,
+          onCountdownChanged: viewModel.setCountdownSeconds,
+          clipSeconds: current.clipSeconds,
+          clipChoices: SettingsRepository.clipChoices,
+          onClipChanged: viewModel.setClipSeconds,
+        );
+      },
     );
   }
 }

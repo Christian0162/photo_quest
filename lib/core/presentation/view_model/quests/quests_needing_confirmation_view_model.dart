@@ -9,6 +9,7 @@ part 'quests_needing_confirmation_view_model.g.dart';
 
 /// Quests you created that still have participants who haven't confirmed
 /// they're in. Surfaced on Home so a group quest doesn't quietly stall.
+/// See CLAUDE.md §16A, §31, design system §13.
 @riverpod
 Future<List<QuestNeedingConfirmation>> questsNeedingConfirmation(
   Ref ref,

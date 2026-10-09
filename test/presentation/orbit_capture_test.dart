@@ -20,7 +20,7 @@ class _QuickStopCamera extends CameraService {
   bool recording = false;
 
   @override
-  Future<XFile> capturePhoto({bool mirrorFront = true}) async => XFile.fromData(
+  Future<XFile> capturePhoto() async => XFile.fromData(
     Uint8List.fromList(img.encodeJpg(img.Image(width: 4, height: 4))),
   );
 

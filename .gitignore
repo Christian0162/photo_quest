@@ -46,6 +46,3 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
-
-# Local Supabase client config (copy env.example.json). Never commit.
-/env.json

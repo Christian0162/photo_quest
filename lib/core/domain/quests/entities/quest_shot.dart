@@ -1,4 +1,4 @@
-/// One instruction/photo within a Quest.
+/// One instruction/photo within a Quest. See CLAUDE.md §20.
 class QuestShot {
   const QuestShot({
     required this.id,
@@ -17,5 +17,6 @@ class QuestShot {
   final String shotType;
   final String? exampleImagePath;
 
+  /// Whether this shot gates quest completion. See CLAUDE.md §37.
   final bool required;
 }

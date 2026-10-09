@@ -52,7 +52,7 @@ class MemoryDetailViewModel extends _$MemoryDetailViewModel {
   void build(String memoryId) {}
 
   /// Opens the share sheet for the photo strip — only ever on an explicit
-  /// tap. Throws if sharing couldn't open.
+  /// tap. Throws if sharing couldn't open. See CLAUDE.md §11, §56.
   Future<void> shareStrip({Rect? origin}) async {
     final detail = await ref.read(memoryDetailProvider(memoryId).future);
     final stripPath = detail.stripPath;

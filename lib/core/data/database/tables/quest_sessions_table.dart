@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 
 import 'quests_table.dart';
 
-/// One execution/attempt of a Quest.
+/// One execution/attempt of a Quest. See CLAUDE.md §19-21.
 class QuestSessions extends Table {
   TextColumn get id => text()();
   TextColumn get questId => text().references(Quests, #id)();

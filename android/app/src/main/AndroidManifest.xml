@@ -1,8 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Talks to Supabase (accounts and profile photo). Debug and profile
-         builds get this automatically; release builds need it declared. -->
-    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Saving downloads to the gallery on Android 10 and older (gal).
          The camera plugin declares this too, capped at 28; ours wins so
          saving also works on Android 10 (API 29). -->

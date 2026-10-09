@@ -110,13 +110,13 @@ abstract class _$MemoryFilterSelection extends $Notifier<MemoryFilter> {
 }
 
 /// Filtering is synchronous on top of [memoryListProvider], so switching
-/// filters never flashes a loading state.
+/// filters never flashes a loading state. See CLAUDE.md §38, §43.
 
 @ProviderFor(memoryBox)
 final memoryBoxProvider = MemoryBoxProvider._();
 
 /// Filtering is synchronous on top of [memoryListProvider], so switching
-/// filters never flashes a loading state.
+/// filters never flashes a loading state. See CLAUDE.md §38, §43.
 
 final class MemoryBoxProvider
     extends
@@ -127,7 +127,7 @@ final class MemoryBoxProvider
         >
     with $Provider<AsyncValue<MemoryBox>> {
   /// Filtering is synchronous on top of [memoryListProvider], so switching
-  /// filters never flashes a loading state.
+  /// filters never flashes a loading state. See CLAUDE.md §38, §43.
   MemoryBoxProvider._()
     : super(
         from: null,
@@ -166,12 +166,14 @@ String _$memoryBoxHash() => r'153ce8a14bd8329acd65e7c2969c698aa2095af9';
 
 /// A memory made on this calendar day in an earlier year, if there is one —
 /// the time-capsule moment ("2 years ago today"). The most recent year wins.
+/// See CLAUDE.md §21, §68.
 
 @ProviderFor(onThisDayMemory)
 final onThisDayMemoryProvider = OnThisDayMemoryProvider._();
 
 /// A memory made on this calendar day in an earlier year, if there is one —
 /// the time-capsule moment ("2 years ago today"). The most recent year wins.
+/// See CLAUDE.md §21, §68.
 
 final class OnThisDayMemoryProvider
     extends
@@ -183,6 +185,7 @@ final class OnThisDayMemoryProvider
     with $FutureModifier<MemorySummary?>, $FutureProvider<MemorySummary?> {
   /// A memory made on this calendar day in an earlier year, if there is one —
   /// the time-capsule moment ("2 years ago today"). The most recent year wins.
+  /// See CLAUDE.md §21, §68.
   OnThisDayMemoryProvider._()
     : super(
         from: null,

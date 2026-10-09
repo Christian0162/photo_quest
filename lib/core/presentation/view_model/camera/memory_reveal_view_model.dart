@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../data/repositories/backup_providers.dart';
 import '../../../data/repositories/memory_repository_provider.dart';
 import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/service_providers.dart';
@@ -16,7 +14,8 @@ part 'memory_reveal_view_model.g.dart';
 
 /// Makes sure a just-completed session has a printed strip — composing a
 /// default one only if the memory has none yet, so a decorated keepsake is
-/// never overwritten — and returns the memory it belongs to.
+/// never overwritten — and returns the memory it belongs to. See CLAUDE.md
+/// §36-37.
 @riverpod
 Future<MemoryRevealResult> memoryReveal(Ref ref, String sessionId) async {
   final memoryRepo = ref.watch(memoryRepositoryProvider);
@@ -31,11 +30,6 @@ Future<MemoryRevealResult> memoryReveal(Ref ref, String sessionId) async {
   final stripPath =
       await storage.findPhotoStrip(memory.id) ??
       await _composeDefaultStrip(ref, memory.id, memory.capturedAt);
-
-  // The memory is safe on the phone. If the person turned backup on, save a
-  // copy online too, in the background: never waiting, never failing the
-  // reveal.
-  unawaited(ref.read(memoryBackupServiceProvider).memorySaved(memory.id));
 
   final people = <Person>[];
   for (final id in await memoryRepo.getPersonIds(memory.id)) {

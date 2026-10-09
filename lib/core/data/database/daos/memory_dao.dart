@@ -8,7 +8,8 @@ import '../tables/quest_sessions_table.dart';
 
 part 'memory_dao.g.dart';
 
-/// All Memory/Photo/QuestSession/MemoryPeople queries live here.
+/// All Memory/Photo/QuestSession/MemoryPeople queries live here. See
+/// CLAUDE.md §16, §47.
 @DriftAccessor(tables: [Memories, Photos, QuestSessions, MemoryPeople])
 class MemoryDao extends DatabaseAccessor<AppDatabase> with _$MemoryDaoMixin {
   MemoryDao(super.db);

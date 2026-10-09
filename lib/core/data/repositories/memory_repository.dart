@@ -7,7 +7,7 @@ import '../../domain/quests/entities/quest_session.dart';
 import '../database/app_database.dart' as db;
 import '../database/daos/memory_dao.dart';
 
-/// Source of truth for Memory/Photo data.
+/// Source of truth for Memory/Photo data. See CLAUDE.md §16.
 class MemoryRepository {
   MemoryRepository(this._dao);
 
@@ -39,7 +39,6 @@ class MemoryRepository {
             width: r.width,
             height: r.height,
             kind: r.kind,
-            mirrored: r.mirrored,
           ),
         )
         .toList();
@@ -69,7 +68,7 @@ class MemoryRepository {
   }
 
   /// Starts a new attempt at a Quest. Repeating a Quest always starts a new
-  /// session rather than reusing a prior one.
+  /// session rather than reusing a prior one. See CLAUDE.md §21.
   Future<String> startQuestSession(String questId) async {
     final id = _uuid.v4();
     await _dao.insertSession(
@@ -92,7 +91,7 @@ class MemoryRepository {
   }
 
   /// Creates a new Memory tied to a Quest session. Repeating a Quest always
-  /// calls this again rather than mutating a prior Memory.
+  /// calls this again rather than mutating a prior Memory. See CLAUDE.md §21.
   Future<Memory> createMemory({
     required String questSessionId,
     required String title,
@@ -140,7 +139,6 @@ class MemoryRepository {
     required int width,
     required int height,
     String kind = PhotoKind.photo,
-    bool mirrored = false,
   }) async {
     final capturedAt = DateTime.now();
 
@@ -156,7 +154,6 @@ class MemoryRepository {
         width: width,
         height: height,
         kind: Value(kind),
-        mirrored: Value(mirrored),
       ),
     );
 
@@ -171,12 +168,11 @@ class MemoryRepository {
       width: width,
       height: height,
       kind: kind,
-      mirrored: mirrored,
     );
   }
 
   /// Removes a photo record so its shot can be retaken. The caller deletes
-  /// the files through `PhotoStorageService`.
+  /// the files through `PhotoStorageService`. See CLAUDE.md §35.
   Future<void> deletePhoto(String id) => _dao.deletePhoto(id);
 
   Future<void> deleteMemory(String id) => _dao.deleteMemory(id);

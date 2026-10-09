@@ -8,9 +8,10 @@ import '../../types/quests/quest_participant_with_person.dart';
 part 'quest_participants_view_model.g.dart';
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited, who's confirmed, and inviting more People.
+/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
+/// §40-41, §60.
 ///
-/// V1 is local-only and single-device: everyone doing the
+/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
 /// quest is physically present and shares this phone, so "accepting an
 /// invitation" means tapping your own name on the shared screen before the
 /// quest starts, rather than a remote push notification.
@@ -38,6 +39,7 @@ class QuestParticipantsViewModel extends _$QuestParticipantsViewModel {
     return result;
   }
 
+  /// People who could still be invited: everyone not already on this Quest.
   Future<List<Person>> invitablePeople() async {
     final current = await future;
     final currentIds = current.map((p) => p.person.id).toSet();
@@ -55,7 +57,7 @@ class QuestParticipantsViewModel extends _$QuestParticipantsViewModel {
   }
 
   /// Records whether this participant confirmed (`accepted`) or won't be
-  /// joining (`declined`).
+  /// joining (`declined`). See CLAUDE.md §16A.
   Future<void> respond({
     required String participantId,
     required bool accepted,
@@ -72,7 +74,7 @@ class QuestParticipantsViewModel extends _$QuestParticipantsViewModel {
   }
 
   /// Undoes a removal: invites the Person again and, if they had already
-  /// said they're in, keeps them in.
+  /// said they're in, keeps them in. See CLAUDE.md §16A.
   Future<void> restoreParticipant(QuestParticipantWithPerson removed) async {
     await addParticipant(removed.person.id);
     if (removed.participant.status != 'accepted') return;

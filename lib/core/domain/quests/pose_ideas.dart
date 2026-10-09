@@ -2,7 +2,8 @@ import '../memories/entities/photo.dart';
 
 /// Short, playful pose prompts for "Need an idea?" in the photobooth — the
 /// answer to "what do we do?". Curated content, no AI. Ideas that fit the
-/// capture kind come first, then ideas for who's in the shot.
+/// capture kind come first, then ideas for who's in the shot. See CLAUDE.md
+/// §2.4, §34, design system §27.
 abstract final class PoseIdeas {
   static const _solo = [
     'Look back over your shoulder and laugh',

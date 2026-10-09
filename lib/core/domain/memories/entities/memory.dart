@@ -1,4 +1,4 @@
-/// The completed collection of photos representing a moment.
+/// The completed collection of photos representing a moment. See CLAUDE.md §20.
 class Memory {
   const Memory({
     required this.id,

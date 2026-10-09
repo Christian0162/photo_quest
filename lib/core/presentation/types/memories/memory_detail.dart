@@ -16,8 +16,9 @@ class MemoryDetail {
   final List<Person> people;
 
   /// The Quest this Memory's session belongs to, so "Do This Again" can
-  /// start a fresh session on the same Quest.
+  /// start a fresh session on the same Quest. See CLAUDE.md §21, §39.
   final String? questId;
 
+  /// The generated photobooth strip, if one was made. See CLAUDE.md §36.
   final String? stripPath;
 }

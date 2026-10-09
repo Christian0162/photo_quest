@@ -94,14 +94,17 @@ final class QuestStartReadinessFamily extends $Family
 }
 
 /// Starts a Quest from its introduction. State is true while starting.
+/// See CLAUDE.md §21, §59.
 
 @ProviderFor(QuestIntroViewModel)
 final questIntroViewModelProvider = QuestIntroViewModelFamily._();
 
 /// Starts a Quest from its introduction. State is true while starting.
+/// See CLAUDE.md §21, §59.
 final class QuestIntroViewModelProvider
     extends $NotifierProvider<QuestIntroViewModel, bool> {
   /// Starts a Quest from its introduction. State is true while starting.
+  /// See CLAUDE.md §21, §59.
   QuestIntroViewModelProvider._({
     required QuestIntroViewModelFamily super.from,
     required String super.argument,
@@ -150,6 +153,7 @@ String _$questIntroViewModelHash() =>
     r'44eff54ab6caa1ecc2595507655a120284b5cb4d';
 
 /// Starts a Quest from its introduction. State is true while starting.
+/// See CLAUDE.md §21, §59.
 
 final class QuestIntroViewModelFamily extends $Family
     with $ClassFamilyOverride<QuestIntroViewModel, bool, bool, bool, String> {
@@ -163,6 +167,7 @@ final class QuestIntroViewModelFamily extends $Family
       );
 
   /// Starts a Quest from its introduction. State is true while starting.
+  /// See CLAUDE.md §21, §59.
 
   QuestIntroViewModelProvider call(String questId) =>
       QuestIntroViewModelProvider._(argument: questId, from: this);
@@ -172,6 +177,7 @@ final class QuestIntroViewModelFamily extends $Family
 }
 
 /// Starts a Quest from its introduction. State is true while starting.
+/// See CLAUDE.md §21, §59.
 
 abstract class _$QuestIntroViewModel extends $Notifier<bool> {
   late final _$args = ref.$arg as String;

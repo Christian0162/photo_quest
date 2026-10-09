@@ -6,7 +6,7 @@ import 'app_typography.dart';
 
 /// Material 3 as the foundation, Photo Quest as the identity. Every stock
 /// component used by the app is themed here so screens never restyle them
-/// ad hoc.
+/// ad hoc. See CLAUDE.md §27-30, design system §5.
 abstract final class AppTheme {
   static const _colorScheme = ColorScheme(
     brightness: Brightness.light,

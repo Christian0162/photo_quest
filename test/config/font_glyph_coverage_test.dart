@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// The bundled Outfit/Inter fonts are the Latin subset. A character outside
 /// it (e.g. "→") renders as a missing-glyph box on device, so UI copy must
-/// stay inside it — use an Icon for arrows and symbols instead.
+/// stay inside it — use an Icon for arrows and symbols instead. See
+/// CLAUDE.md §29.
 void main() {
   bool covered(int code) =>
       (code >= 0x20 && code < 0x7f) ||

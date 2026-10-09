@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-/// A person (or pet) memories can be tagged with.
+/// A person (or pet) memories can be tagged with. See CLAUDE.md §19.
 class People extends Table {
   TextColumn get id => text()();
   TextColumn get name => text()();

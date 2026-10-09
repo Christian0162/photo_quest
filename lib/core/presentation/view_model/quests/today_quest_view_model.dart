@@ -6,7 +6,8 @@ import 'quest_list_view_model.dart';
 part 'today_quest_view_model.g.dart';
 
 /// Picks the day's featured Quest for Home's hero card from the built-in
-/// templates. Stable for the whole calendar day, different the next.
+/// templates. Stable for the whole calendar day, different the next. See
+/// CLAUDE.md §31, design system §14.
 @riverpod
 Future<Quest?> todayQuest(Ref ref) async {
   final quests = await ref.watch(questListProvider.future);

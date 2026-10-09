@@ -18,8 +18,10 @@ enum StickerType {
 
   const StickerType(this.label, {this.stamp});
 
+  /// Name read out by screen readers.
   final String label;
 
+  /// The words on a text stamp, or null for an icon sticker.
   final String? stamp;
 
   bool get isStamp => stamp != null;

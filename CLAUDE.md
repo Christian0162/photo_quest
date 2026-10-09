@@ -37,10 +37,6 @@ evidence the quest happened in real life.
 
 The resulting photographs become a **Memory**.
 
-A quest can be done alone, with friends, or with someone special — and the
-memory can be shared, **privately, with the people invited to it** (§54C).
-Sharing is invite-only. Photo Quest is never a public feed.
-
 The long-term purpose is to let people repeat the same Quest over time and
 see how life — and their relationships — change.
 
@@ -234,26 +230,6 @@ web, including preview, image/video capture and image streaming.
 Do NOT use `image_picker` as the primary camera implementation.
 
 Photo Quest requires a custom photobooth camera experience.
-
----
-
-# 4A. Backend & Accounts (Supabase, Free plan)
-
-Use:
-
-```yaml
-supabase_flutter:
-image_picker:        # choosing an avatar from the photo library only
-```
-
-Supabase provides accounts (Auth), the cloud database (Postgres) and file
-storage. The camera stays the custom `camera` plugin; `image_picker` is
-**only** for picking an existing photo (e.g. a profile picture).
-
-Everything must stay within the Supabase **Free** plan. The full rules —
-Row Level Security, private buckets, secrets, migrations, the sharing
-model — are in §54C. Read it before touching anything under `supabase/`,
-auth, profiles, or any code that talks to the cloud.
 
 ---
 
@@ -473,21 +449,8 @@ Example:
 ├── memory/:memoryId
 ├── memories
 ├── people
-├── settings
-├── account
-├── welcome            (signed out)
-├── login              (signed out)
-├── register           (signed out)
-├── forgot-password    (signed out)
-├── verify-email       (awaiting email confirmation)
-└── reset-password     (choosing a new password)
+└── settings
 ```
-
-Who may be on which route is decided in **one** place: the router's
-`redirect`, driven by the auth status (`AuthSignedOut`,
-`AuthAwaitingVerification`, `AuthRecovering`, `AuthSignedIn`). Screens never
-navigate "because auth changed"; they change the status and the router
-follows.
 
 Do not scatter navigation logic throughout the application. Do not
 introduce route changes without a product reason.
@@ -816,15 +779,13 @@ PERSON
 This allows one quest to have multiple participants, and one memory to
 contain multiple people.
 
-> **Accounts and the local database (§54C):** The person signs in with a
-> Supabase account (`auth.users`, with a `profiles` row). The on-device
-> `people` table is unchanged: it still holds everyone a memory can be
-> tagged with — friends, family, pets — and the one `person.type == 'self'`
-> row stands for the device owner. `people` rows are **local contacts**, not
-> accounts. Linking a `self` row to the signed-in account's id, and turning
-> a friend into a real invited account, belong to the sharing work planned
-> in §54C. Until that is built, `quest_participants.status` still carries
-> the invited → accepted/declined lifecycle locally.
+> **Local-first note (§56A):** V1 has no backend/auth. `people` doubles as
+> the local, on-device stand-in for both "a person tagged in a memory" and
+> "a participant on a quest" — one `person.type == 'self'` row represents
+> the device owner. There is no separate network `User`/`Invitation` model
+> yet; `quest_participants.status` carries the invited → accepted/declined
+> lifecycle locally. See §54A before adding real accounts or network
+> invitations.
 
 ---
 
@@ -1051,8 +1012,8 @@ They represent different things.
 ### Person
 
 Someone (or a pet) known to the app on this device — including the device
-owner (`type == 'self'`). A local contact, not an account: the signed-in
-account is the Supabase user and its `profiles` row (§54C).
+owner (`type == 'self'`). The local stand-in for a social "user" until a
+real account system exists (§54A).
 
 ### Quest
 
@@ -1129,55 +1090,70 @@ Quest template remains reusable.
 
 # 22. Project Structure
 
-Use this structure (it matches the repository):
+Use this structure:
 
 ```text
 lib/
 │
-├── main.dart                 # bootstraps: fonts, Supabase session restore
+├── main.dart
 ├── app.dart
 │
 ├── config/
-│   ├── constant/             # app_colors, app_typography, app_spacing,
-│   │                         # app_motion, app_shadows, app_theme, ...
-│   ├── env/
-│   │   └── app_env.dart      # build-time config (Supabase URL + public key)
+│   ├── constant/
+│   │   ├── app_colors.dart
+│   │   ├── app_typography.dart
+│   │   ├── app_spacing.dart
+│   │   ├── app_constants.dart
+│   │   └── app_theme.dart
 │   └── routes/
-│       ├── app_router.dart   # routes + auth redirect
+│       ├── app_router.dart
 │       └── app_shell.dart
 │
-└── core/
-    ├── errors/               # AppFailure and friendly subtypes
-    ├── utils/
-    │
-    ├── domain/               # entities, enums, pure rules (no Flutter UI)
-    │   ├── auth/             # account_user, user_profile, auth_status,
-    │   │                     # auth_validators
+├── core/
+│   ├── errors/
+│   ├── extensions/
+│   ├── utils/
+│   └── presentation/
+│       ├── enum/
+│       ├── types/
+│       ├── screen/
+│       │   ├── home/
+│       │   ├── quests/
+│       │   ├── camera/
+│       │   ├── memories/
+│       │   ├── people/
+│       │   └── settings/
+│       ├── view_model/
+│       │   ├── quests/
+│       │   ├── camera/
+│       │   ├── memories/
+│       │   └── people/
+│       └── widget/
+│           ├── atoms/
+│           ├── molecules/
+│           ├── organisms/
+│           └── template/
+│
+├── domain/
+│   ├── quests/
+│   │   └── entities/
+│   ├── memories/
+│   │   └── entities/
+│   └── people/
+│       └── entities/
+│
+└── data/
+    ├── database/
+    │   ├── app_database.dart
+    │   ├── tables/
+    │   ├── daos/
+    │   └── seed/
+    ├── services/
     │   ├── camera/
-    │   ├── memories/
-    │   ├── people/
-    │   └── quests/
-    │
-    ├── data/
-    │   ├── database/         # Drift: app_database, tables/, daos/, seed/
-    │   ├── services/         # camera, gallery, image, sharing, storage
-    │   └── repositories/     # one per aggregate + its Riverpod provider
-    │
-    └── presentation/
-        ├── screen/           # one subfolder per area (home, quests, camera,
-        │                     # memories, people, settings, auth)
-        ├── view_model/       # same areas as screen/
-        ├── types/            # UI state and display models, per area
-        └── widget/
-            ├── atoms/
-            ├── molecules/
-            ├── organisms/
-            └── templates/    # one *_template.dart per screen
-
-supabase/                     # backend, at the repository root
-├── migrations/               # reproducible SQL: tables, RLS, storage policies
-├── tests/                    # SQL policy tests (+ local stubs for Docker)
-└── README.md                 # setup, dashboard steps, Free-plan notes
+    │   ├── storage/
+    │   ├── image/
+    │   └── sharing/
+    └── repositories/
 ```
 
 `app.dart` holds the root `MaterialApp.router` widget; `main.dart` only
@@ -1187,13 +1163,13 @@ bootstraps it.
 grouped by domain area (`quests`, `camera`, `memories`, `people`, `home`,
 `settings`) so related screens and their ViewModels stay easy to find.
 `core/presentation/widget/` follows atomic design (`atoms` → `molecules` →
-`organisms` → `templates`) instead of being duplicated per domain area,
+`organisms` → `template`) instead of being duplicated per domain area,
 since most UI components are shared or composed from small pieces.
 
-`core/domain/` holds entities (and use cases, when needed — see §53) grouped
+`domain/` holds entities (and use cases, when needed — see §53) grouped
 by domain area, not by technical layer.
 
-`core/data/repositories/` is flat: one repository per aggregate
+`data/repositories/` is flat: one repository per aggregate
 (`quest_repository.dart`, `memory_repository.dart`,
 `people_repository.dart`), each with its Riverpod provider file alongside
 it. Quest participant/invitation operations live on `QuestRepository`
@@ -1216,15 +1192,12 @@ Shared UI components go in `widget/`, classified by atomic-design tier:
 ```text
 widget/
 │
-├── atoms/       # MdPrimaryButton, MdLoadingIndicator, MdPersonAvatar
-├── molecules/   # MdAppCard, MdEmptyState, MdAuthTextField
-├── organisms/   # MdAppScaffold, MdQuestCard, MdMemoryCard, MdAuthLayout
-└── templates/   # one *_template.dart per screen (+ *_template_preview.dart
-                 # where a preview exists), preview_samples.dart
+├── atoms/       # PrimaryButton, LoadingIndicator, PersonAvatar
+├── molecules/   # AppCard, EmptyState, AppWidgetPreview
+├── organisms/   # AppScaffold, QuestCard, MemoryCard, RecentMemoriesSection, ParticipantList
+└── template/    # one *_template.dart per screen + its *_template_preview.dart,
+                 # preview_samples.dart
 ```
-
-Shared widgets carry the `Md` prefix and sit in a subfolder per area
-(`common`, `camera`, `memories`, `people`, `quests`, `auth`, ...).
 
 Every screen is split in three:
 
@@ -1233,30 +1206,18 @@ Screen     (screen/)            ConsumerWidget: watches ViewModels, wires
                                 callbacks, navigation, dialogs, sheets,
                                 snackbars. No layout, no business logic.
 ViewModel  (view_model/)        state, validation, derived data, actions.
-Template   (widget/templates/)  the full page design. Plain data + callbacks
+Template   (widget/template/)   the full page design. Plain data + callbacks
                                 in; never touches `ref`, the router, or
                                 repositories/services.
 ```
 
-**Fetching and loading live in the Screen, never in a Template.** The Screen
-watches the providers and decides what to show: while the data the page is
-made of has not arrived (`AsyncValue.isFirstFetch`, from
-`presentation/types/async_value_loading.dart`), it returns
-`MdAppScaffold(body: MdScreenLoading(...))` and nothing else, so the tab bar
-stays but no content is drawn. Once it has arrived it passes the data into the
-Template. A re-fetch that already has data keeps the page up. A Template never
-checks `isLoading`/`isFirstFetch` to swap in a whole-page loader and never
-fetches; it only draws the `AsyncValue` sections it is handed (a small
-section-level skeleton or error is fine). The loader is the shared molecule
-`MdScreenLoading` (`widget/molecules/common/`).
-
-Templates build on the shared, reusable `MdAppScaffold`
-(`widget/organisms/common/md_app_scaffold.dart`) — app bar, safe area, pinned bottom
+Templates build on the shared, reusable `AppScaffold`
+(`widget/organisms/app_scaffold.dart`) — app bar, safe area, pinned bottom
 action, back-button interception — and use `showAppMessage` for snackbars.
 Do not assemble a raw `Scaffold` in a screen or template.
 
 Previews live next to their template as `<name>_template_preview.dart` in
-`widget/templates/`. They render the template directly (no providers, no
+`widget/template/`. They render the template directly (no providers, no
 database) with the shared sample cast in `preview_samples.dart`, so update
 that one file when example data needs to change.
 
@@ -1851,11 +1812,8 @@ View Participants
 
 # 40. People & Participants
 
-People are private entities used to organize memories and participate in
-quests. On this device they are local contacts (friends, family, pets).
-The People screen also lists **real friends on Photo Quest** (accounts),
-added with a friend code and only once they accept (§54C); real friends can
-be invited straight to a quest or memory with no code.
+People are private, on-device entities used to organize memories and
+participate in quests.
 
 Examples:
 
@@ -1874,8 +1832,7 @@ quests. Quest participants have explicit membership state (§16A,
 `removed`, `completed`.
 
 Do not create social-network behavior (public profiles, followers,
-discovery feeds). Invitation is always explicit and scoped to one quest
-or memory.
+discovery feeds). Invitation is always explicit and scoped to one quest.
 
 ---
 
@@ -2107,11 +2064,6 @@ Write tests for important logic.
 * photo ordering
 * photo-strip generation
 * validation
-* auth flows against a fake `AuthRepository` (register, confirm with code,
-  log in, wrong password, existing email, reset password, log out)
-* Row Level Security and Storage policies (`supabase/tests/`) — any new
-  table or bucket ships with checks that one account cannot read or change
-  another's data
 
 ### Widget tests
 
@@ -2119,8 +2071,6 @@ Write tests for important logic.
 * Quest selection / creation
 * Memory detail
 * Participant picker / invitations list
-* auth screens at small/large phone sizes, with the keyboard open and at
-  large text scale
 * empty states
 * error states
 
@@ -2205,219 +2155,67 @@ Quest → Participants → Session → Memory workflow.
 
 ---
 
-# 54A. Do Not Build Yet (Out of Scope)
+# 54A. Do Not Build Yet (Real Backend / Social Infrastructure)
 
-Accounts and a Supabase backend are **in scope** (§54C). Unless
-specifically requested, still do NOT implement:
+Photo Quest's product vision is social and eventually needs real
+authentication and cross-device invitations (§54B). Unless specifically
+requested, do NOT prematurely implement:
 
-* any backend other than Supabase (Firebase, custom servers, other auth
-  providers)
-* paid Supabase features, paid third-party services, or Edge Functions that
-  aren't clearly needed — everything stays on the Supabase **Free** plan
+* Firebase / Supabase / any remote backend
+* real network authentication (passwords, OAuth, sessions, tokens)
+* cloud synchronization
 * push notifications
-* public profiles, followers, likes, comments, reactions
-* public discovery / recommendation / trending feeds
+* public profiles, followers, likes, comments
+* public discovery / recommendation feeds
 * AI photo generation
 * AI face recognition
 * payments / subscriptions / ads
-* cloud copies of quests, memories or photos, and real cross-user
-  invitations, **until the plan in §54C is confirmed** — they change who can
-  read someone's photos, so they are designed first and built second
 
-The product is social through invitation, not through a feed: people are
-invited to a specific quest or memory and can see only what they were
-invited to.
+V1 ships **local-first**: one `people` row with `type == 'self'` stands
+in for "the current user," and quest participants/invitations are modeled
+and stored locally on-device (§18 note, §16A). This lets the full quest →
+participants → photobooth → memory data model and UI be built now, ready
+to swap onto a real backend later without reshaping the domain layer.
 
 ---
 
-# 54B. Architecture Direction
+# 54B. Future Architecture
 
-The app is local-first with an account on top.
+The architecture should make real accounts and cloud synchronization
+possible later without a rewrite.
+
+Future:
+
+```text
+                Repository
+                    │
+           ┌────────┴────────┐
+           │                 │
+       Local DB          Remote API
+           │                 │
+        SQLite           Cloud DB
+```
+
+But V1 should only implement:
 
 ```text
 Repository
-    │
-    ├── Local DB (Drift / SQLite)     ← every device, works offline
-    └── Remote (Supabase)             ← accounts, profile, (planned) backup
-                                         and sharing
+    ↓
+SQLite
 ```
 
-Today: accounts (`AuthRepository`), the profile row and avatar
-(`ProfileRepository`) use Supabase; quests, memories, photos and people use
-only the local database. When cloud copies are added (§54C), the repository
-interface stays the same, the local database remains the offline source of
-truth for the device, and the remote side is added behind the repository —
-presentation and domain do not change shape.
-
----
-
-# 54C. Supabase Backend, Accounts & Sharing
-
-## Status
-
-Built (in `supabase/`, tested; the Flutter side for sharing is not built yet):
-
-```text
-Auth            email + password, email confirmed with a 6-digit code (no deep
-                links), password reset with a code, session persisted
-profiles        one row per account (display_name, avatar_path)
-quests, quest_shots, quest_sessions, memories, photos
-                cloud copies, owner-only, composite keys keep children under
-                the same owner
-memory_shares   who may VIEW a memory besides its owner
-memory_invites  share codes (hashed), expiring, limited, revocable
-friendships     friend requests; profiles.friend_code is private (no grant)
-quest_participants / quest_invites
-                taking part in a quest: invited -> accepted | declined
-photos.uploaded_by  who added a photo (owner or a friend on the quest)
-my_storage_usage()  100 MB online allowance per person
-avatars         private bucket, 2 MB
-photos          private bucket, 10 MB, <owner id>/<memory id>/<file>
-delete_my_account()   deletes the caller's account and all their data
-```
-
-Built in Flutter:
-
-* Account screen with **Delete my account** (confirms, deletes the person's
-  Storage files first, then calls `delete_my_account()`, then returns to the
-  welcome screen). Photos saved on the phone are kept.
-* **Invite a friend** on a memory (`CloudMemoryRepository`): saves the memory
-  online if needed (compressed copies only, resumable), makes a code, shows it
-  to copy or send, and lists friends who can see it (removable). It can also
-  take the memory's online copy away again.
-* **Real friends** (`CloudFriendsRepository`, People screen): every account
-  has a private **friend code**. You enter a friend's code, they get a request
-  and accept or decline (nobody is added without their OK). Friends appear in
-  People under "Friends on Photo Quest", and the invite sheets list them so
-  you can invite one to a quest or share a memory in one tap, with no code.
-* **Do a quest together** (`CloudQuestRepository`): an invite code on a pair or
-  group quest. A friend enters it in the same box, is invited, and accepts or
-  declines. Once in, they see the quest, who else is taking part and the
-  memories made from it, and can **add their own photos** to them. They can
-  leave; the owner can remove them.
-* **Got a code?** and **Shared with you**: enter a code, see the list of
-  memories friends shared, open one (photos, GIFs and clips, view only), and
-  remove it from the list. Reached from Memories.
-
-* **Back up my memories** (Settings): off by default. When on, new memories
-  are saved online **on Wi-Fi only**, and the app catches up older ones when
-  it opens. "Back up now" does it on any connection. It stops at once when
-  storage is full, and a capture is never delayed or lost by it.
-* **Storage allowance:** 100 MB of online photos per person (Free storage is
-  1 GB for everyone). The upload policy enforces it; Settings shows the meter.
-
-Nothing is uploaded unless the person invites someone or turns backup on.
-
-Not built: restoring memories from the cloud onto a new phone (backup saves
-them online, but they can't be brought back into the app yet), revoking a
-single invite code from the app, deleting an online copy automatically when a
-memory is deleted on the phone, a choice to also clear on-device photos when
-deleting an account, and cleaning up friends' leftover files when a quest
-owner's account is deleted.
-
-## Rules that never bend
-
-1. **Free plan only.** No paid features or services. Photos are large and
-   Free storage is 1 GB: upload compressed copies, keep originals on the
-   device.
-2. **Row Level Security on every table**, written down per table as who may
-   SELECT, INSERT, UPDATE and DELETE. Never a broad "authenticated can do
-   everything" policy. Start from `revoke all`, then grant only what the app
-   needs (column-level for UPDATE and, for secrets, SELECT).
-3. **Private buckets.** Files live at `<owner user id>/...` and every Storage
-   policy checks that first folder. Show private files through short-lived
-   signed URLs, never public URLs.
-4. **The client never supplies a user id.** Read it from the Supabase session
-   (`auth.currentUser`); the database also checks `auth.uid()`.
-5. **No secrets in the app.** Only the project URL and the publishable (anon)
-   key, passed with `--dart-define-from-file=env.json` (gitignored; commit
-   only `env.example.json`). Never a `service_role` / `sb_secret_` key, the
-   database password or the JWT secret.
-6. **Authorization lives in the database**, not in Flutter code.
-7. **Migrations are the source of truth.** Every schema, RLS and Storage
-   change is a new SQL file in `supabase/migrations/` with a comment saying
-   why. Never edit a migration that may already have been applied; add a new
-   one. Never change the schema only through the dashboard, and never disable
-   RLS to make development easier.
-8. **Every migration ships with policy tests** in `supabase/tests/`, and the
-   tests must be shown to fail when a policy is loosened. Run them (Docker
-   locally, or the SQL editor) before calling the work done. Don't run the
-   local stub file on a real project.
-9. **Passwords stay in Supabase Auth.** Never store them, or anything
-   sensitive copied from `auth.users`, in our tables.
-10. **Friendly errors.** Map Supabase error codes to warm, actionable copy in
-    the repository; raw codes and exceptions never reach the screen (§42).
-
-## Table conventions
-
-* uuid primary keys with a default; the app may supply the id (offline
-  creation).
-* `timestamptz`; `updated_at` kept by a trigger.
-* Enums are `CHECK` constraints; free text has length limits.
-* Every foreign key has an index.
-* Child rows carry `owner_id`, tied to the parent's owner with a composite
-  foreign key.
-* Internal helpers and bookkeeping live in the `private` schema. Functions
-  clients may call are `SECURITY DEFINER` with `set search_path = ''`, have
-  `execute` revoked from `public`/`anon`, and are granted to `authenticated`
-  only.
-* Policies use `(select auth.uid())`, one per command, `to authenticated`.
-
-## Sharing model
-
-Sharing is invite-only and, for now, view-only. Nothing is visible to anyone
-except its owner and the accounts the memory was shared with.
-
-```text
-Owner makes an invite code for one memory   create_memory_invite()
-    |
-Owner tells a friend (message, in person)
-    |
-Friend enters the code                      redeem_memory_invite()
-    |
-Friend can VIEW that memory and its photos  memory_shares row
-```
-
-Decisions:
-
-* **Find people by code, never by search**, so nobody can check who has an
-  account. This covers invite codes and the **friend code** every account has
-  (private to its owner, resettable, guessing throttled across all code kinds).
-  Adding a friend needs their approval. Codes are random, hashed at rest, expire (7 days by default), have
-  a use limit, can be revoked, and guessing is throttled (10 wrong tries per
-  hour).
-* **A friend with a memory code can only view.** A friend who has accepted a
-  quest can also **add their own photos** to memories made from it (view and
-  add; never edit or delete the owner's). Their files live in their own folder
-  and count against their own allowance.
-* **A quest holds a fixed number of people** (a pair two, a group the chosen
-  size or 5, owner included). An invited person holds a place until they
-  decline or are removed.
-* **If an owner deletes their account, their memories are deleted** (and the
-  shares with them). A viewer deleting theirs does not affect the owner.
-* Local `people` without an account (pets, family who won't join) stay
-  local-only tags; only accounts can view a shared memory.
-* Network-backed providers use `@Riverpod(retry: neverRetry)` so a failed load
-  shows the friendly error and "Try again" at once instead of retrying behind
-  a skeleton.
-* Capture is always local first: a photo is saved on the device, then
-  uploaded in the background when the person is signed in and online. An
-  upload failure never blocks or loses a capture.
-* Deleting a memory or an account removes rows by cascade but **not Storage
-  files**; the app deletes the person's files through the Storage API first.
-
-Still open: how a friend learns the code (copy and paste for now; a link
-later), restoring memories onto a new phone, and whether participants should
-also be able to start sessions of a shared quest from their own phones.
+When a real backend is introduced, `people` (self) becomes the local
+cache of an authenticated `User`, and `quest_participants.status`
+transitions start being driven by real invitations instead of local-only
+state changes. Do not build synchronization before the product needs it.
 
 ---
 
 # 55. Local-First Principle
 
-Capturing and keeping a memory must not need the network.
+Photo Quest should work without a network account in V1.
 
-The person signs in once; a restored session opens the app offline. Then they
-should be able to:
+The user should be able to:
 
 ```text
 Open app
@@ -2437,9 +2235,7 @@ Open app later
 Memory still exists
 ```
 
-Photobooth capture, saving a memory and browsing memories require no
-internet. Only account actions (sign up, log in, reset, profile, and — when
-built — sharing and backup) need it. Always save to the device first.
+No internet should be required for the core experience.
 
 ---
 
@@ -2447,17 +2243,13 @@ built — sharing and backup) need it. Always save to the device first.
 
 Photos and quest/participant data are personal.
 
-Treat all memories and quests as private by default. A memory is visible only
-to its owner and to people the owner explicitly invited (§54C). Quest
-participation requires an explicit invite/accept step.
+Treat all memories and quests as private by default. Quest participation
+requires an explicit invite/accept step, even locally.
 
-Photos stay on the device unless the person shares or backs them up (§54C).
-When they are uploaded, they go to a private bucket under the owner's folder
-and are read through signed URLs. Do not add analytics that collect photo
-contents. Do not expose filesystem paths or storage paths in the UI. Do not
-expose one person's private information to another without cause. Settings
-copy must say honestly what is stored online (today: email, name and profile
-photo only).
+Do not upload photos anywhere unless explicitly required by a future
+feature. Do not add analytics that collect photo contents. Do not expose
+filesystem paths in the UI. Do not expose one person's private
+information to another without cause.
 
 ---
 
@@ -2594,7 +2386,7 @@ New Quest Session (participants re-confirmed)
 New Memory
 ```
 
-Invitation flow (local today; becomes real with accounts, §54C):
+Invitation flow (local-only in V1, §54A):
 
 ```text
 Creator
@@ -2605,11 +2397,9 @@ Selects People
    ↓
 quest_participants rows created (status: invited)
    ↓
-Accept / Decline
-   (locally simulated today; the invited account answers once cloud
-    invitations exist)
+Accept / Decline (locally simulated until real accounts exist)
    ↓
-Accepted participants join the Quest Session and can view the memory
+Accepted participants join the Quest Session
 ```
 
 ---
@@ -2687,10 +2477,9 @@ Before writing code:
 6. Identify database changes, if any (and whether they need a migration).
 7. Identify state changes.
 8. Identify UI changes.
-9. Check the request against §54A ("Do Not Build Yet") and §54C —
-   anything that changes who can see someone's photos (sharing, cloud
-   copies, invitations) needs the §54C plan confirmed first; a new table or
-   bucket needs RLS/Storage policies and policy tests.
+9. Check the request against §54A ("Do Not Build Yet") — flag real
+   backend/auth/social-infrastructure asks before silently implementing
+   them, and default to the local-only model instead.
 10. Implement the smallest clean solution.
 11. Run formatting.
 12. Run analysis.

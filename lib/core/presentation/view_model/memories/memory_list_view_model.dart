@@ -72,7 +72,7 @@ class MemoryFilterSelection extends _$MemoryFilterSelection {
 }
 
 /// Filtering is synchronous on top of [memoryListProvider], so switching
-/// filters never flashes a loading state.
+/// filters never flashes a loading state. See CLAUDE.md §38, §43.
 @riverpod
 AsyncValue<MemoryBox> memoryBox(Ref ref) {
   final filter = ref.watch(memoryFilterSelectionProvider);
@@ -83,6 +83,7 @@ AsyncValue<MemoryBox> memoryBox(Ref ref) {
 
 /// A memory made on this calendar day in an earlier year, if there is one —
 /// the time-capsule moment ("2 years ago today"). The most recent year wins.
+/// See CLAUDE.md §21, §68.
 @riverpod
 Future<MemorySummary?> onThisDayMemory(Ref ref) async {
   final memories = await ref.watch(memoryListProvider.future);

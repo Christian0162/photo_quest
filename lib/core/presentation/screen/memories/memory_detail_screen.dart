@@ -7,18 +7,18 @@ import '../../../domain/memories/entities/photo.dart';
 import '../../../errors/app_failure.dart';
 import '../../view_model/memories/keepsake_view_model.dart';
 import '../../view_model/memories/memory_detail_view_model.dart';
-import '../../widget/organisms/common/md_app_scaffold.dart';
-import '../../widget/organisms/memories/md_photo_viewer.dart';
-import '../../widget/templates/memories/memory_detail_template.dart';
-import '../sharing/invite_friend_sheet.dart';
+import '../../widget/organisms/md_app_scaffold.dart';
+import '../../widget/organisms/md_photo_viewer.dart';
+import '../../widget/templates/memory_detail_template.dart';
 
 /// One Memory. Wires [MemoryDetailViewModel] and navigation into
-/// [MemoryDetailTemplate].
+/// [MemoryDetailTemplate]. See CLAUDE.md §39.
 class MemoryDetailScreen extends ConsumerWidget {
   const MemoryDetailScreen({super.key, required this.memoryId, this.coverPath});
 
   final String memoryId;
 
+  /// The cover already on screen when this memory was tapped.
   final String? coverPath;
 
   Future<void> _share(BuildContext context, WidgetRef ref, Rect? origin) async {
@@ -48,6 +48,7 @@ class MemoryDetailScreen extends ConsumerWidget {
     }
   }
 
+  /// Runs a download and says how it went, in friendly words.
   Future<void> _download(
     BuildContext context,
     Future<void> Function() save,
@@ -92,7 +93,6 @@ class MemoryDetailScreen extends ConsumerWidget {
       onShare: (origin) => _share(context, ref, origin),
       onDoAgain: (questId) => context.push(AppRoutes.questDetailPath(questId)),
       onDecorate: () => context.push(AppRoutes.keepsakePath(memoryId)),
-      onInviteFriend: () => showInviteFriendSheet(context, memoryId),
       onDownloadStrip: () => _download(
         context,
         ref

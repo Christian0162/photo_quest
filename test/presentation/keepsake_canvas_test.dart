@@ -4,8 +4,8 @@ import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
 import 'package:photoquest/core/domain/memories/enum/sticker_type.dart';
 import 'package:photoquest/core/presentation/types/memories/keepsake_design.dart';
 import 'package:photoquest/core/presentation/types/memories/placed_sticker.dart';
-import 'package:photoquest/core/presentation/widget/molecules/common/md_app_widget_preview.dart';
-import 'package:photoquest/core/presentation/widget/organisms/memories/md_keepsake_canvas.dart';
+import 'package:photoquest/core/presentation/widget/molecules/md_app_widget_preview.dart';
+import 'package:photoquest/core/presentation/widget/organisms/md_keepsake_canvas.dart';
 
 final _design = KeepsakeDesign(
   memoryId: 'm',

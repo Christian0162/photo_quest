@@ -2,22 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
-import 'config/env/app_env.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() {
   _registerFontLicenses();
-  // Restores the saved session before the first frame, so a signed-in person
-  // never sees the log in screen flash by. Only the public anon key is used.
-  if (AppEnv.isSupabaseConfigured) {
-    await Supabase.initialize(
-      url: AppEnv.supabaseUrl,
-      publishableKey: AppEnv.supabasePublishableKey,
-    );
-  }
   runApp(const ProviderScope(child: PhotoQuestApp()));
 }
 

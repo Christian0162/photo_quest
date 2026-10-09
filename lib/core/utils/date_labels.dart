@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-/// Human-friendly date phrases shared across screens.
+/// Human-friendly date phrases shared across screens. See CLAUDE.md §57.
 
 /// How long ago [at] was, in words: "Today", "Yesterday", "3 days ago",
 /// "2 weeks ago", "5 months ago", "1 year ago".

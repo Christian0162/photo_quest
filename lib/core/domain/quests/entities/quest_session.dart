@@ -1,4 +1,4 @@
-/// One execution/attempt of a Quest.
+/// One execution/attempt of a Quest. See CLAUDE.md §20-21.
 class QuestSession {
   const QuestSession({
     required this.id,

@@ -2,7 +2,7 @@ import '../../../domain/quests/enum/create_quest_step.dart';
 import 'draft_shot.dart';
 
 /// The in-progress Quest a creator is building, and where they are in the
-/// flow.
+/// flow. See CLAUDE.md §33.
 class CreateQuestDraft {
   const CreateQuestDraft({
     this.title = '',
@@ -11,7 +11,6 @@ class CreateQuestDraft {
     this.type = 'solo',
     this.participantIds = const [],
     this.shots = const [],
-    this.shotType = 'group',
     this.step = CreateQuestStep.what,
     this.isSubmitting = false,
   });
@@ -22,8 +21,6 @@ class CreateQuestDraft {
   final String type; // solo, pair, group
   final List<String> participantIds;
   final List<DraftShot> shots;
-
-  final String shotType;
   final CreateQuestStep step;
   final bool isSubmitting;
 
@@ -31,8 +28,10 @@ class CreateQuestDraft {
   bool get isFirstStep => step == CreateQuestStep.values.first;
   bool get isLastStep => step == CreateQuestStep.values.last;
 
+  /// Whether leaving now would lose something the creator wrote.
   bool get hasWork => title.trim().isNotEmpty || shots.isNotEmpty;
 
+  /// Why the current step can't move on yet, or null when it can.
   String? get blocker => switch (step) {
     CreateQuestStep.what when title.trim().isEmpty => 'Give your quest a name.',
     CreateQuestStep.shots when shots.isEmpty =>
@@ -47,7 +46,6 @@ class CreateQuestDraft {
     String? type,
     List<String>? participantIds,
     List<DraftShot>? shots,
-    String? shotType,
     CreateQuestStep? step,
     bool? isSubmitting,
   }) {
@@ -58,7 +56,6 @@ class CreateQuestDraft {
       type: type ?? this.type,
       participantIds: participantIds ?? this.participantIds,
       shots: shots ?? this.shots,
-      shotType: shotType ?? this.shotType,
       step: step ?? this.step,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );

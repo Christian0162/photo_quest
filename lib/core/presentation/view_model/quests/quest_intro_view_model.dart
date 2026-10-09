@@ -35,6 +35,7 @@ QuestStartReadiness questStartReadiness(Ref ref, String questId) {
 }
 
 /// Starts a Quest from its introduction. State is true while starting.
+/// See CLAUDE.md §21, §59.
 @riverpod
 class QuestIntroViewModel extends _$QuestIntroViewModel {
   @override

@@ -27,6 +27,8 @@ import '../../types/quests/quest_participant_with_person.dart';
 abstract final class PreviewSamples {
   static final today = DateTime(2026, 9, 17);
 
+  // People -------------------------------------------------------------
+
   static final me = _person('p-me', 'Christian', 'self');
   static final jamie = _person('p-jamie', 'Jamie', 'partner');
   static final mom = _person('p-mom', 'Mom', 'family');
@@ -36,7 +38,10 @@ abstract final class PreviewSamples {
 
   static final people = [me, jamie, mom, dad, maya, buddy];
 
+  /// Everyone except the device owner — who can be invited to a Quest.
   static final invitable = [jamie, mom, dad, maya, buddy];
+
+  // Quests -------------------------------------------------------------
 
   static final anniversary = Quest(
     id: 'q-anniversary',
@@ -108,6 +113,7 @@ abstract final class PreviewSamples {
     creator: me,
   );
 
+  /// Mom's in, Dad hasn't confirmed yet.
   static final familyParticipants = [
     _participant(familySunday.id, mom, 'accepted'),
     _participant(familySunday.id, dad, 'invited'),
@@ -144,6 +150,8 @@ abstract final class PreviewSamples {
       pendingCount: 1,
     ),
   ];
+
+  // Memories -----------------------------------------------------------
 
   static final memories = [
     _summary(
@@ -184,6 +192,7 @@ abstract final class PreviewSamples {
     ),
   ];
 
+  /// The memory box as the Memories screen shows it on [today].
   static MemoryBox memoryBox([MemoryFilter filter = MemoryFilter.allJourney]) =>
       MemoryBox.from(memories, filter, today);
 
@@ -202,6 +211,8 @@ abstract final class PreviewSamples {
     questId: anniversary.id,
     stripPath: null,
   );
+
+  // Keepsakes ----------------------------------------------------------
 
   /// Four shots of the anniversary — a photo, a GIF, a boomerang and a
   /// 360° clip — as the print shows them. Paths are empty on purpose, so
@@ -250,6 +261,8 @@ abstract final class PreviewSamples {
     ],
     clearSelection: true,
   );
+
+  // Helpers ------------------------------------------------------------
 
   static Photo _capturedShot(String id, String kind, int position) => Photo(
     id: id,

@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 
 import 'quest_sessions_table.dart';
 
-/// The completed memory produced by a Quest session.
+/// The completed memory produced by a Quest session. See CLAUDE.md §19-20.
 class Memories extends Table {
   TextColumn get id => text()();
   TextColumn get questSessionId => text().references(QuestSessions, #id)();

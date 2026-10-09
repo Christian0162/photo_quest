@@ -5,7 +5,7 @@ import '../tables/app_settings_table.dart';
 
 part 'settings_dao.g.dart';
 
-/// Reads and writes [AppSettings].
+/// Reads and writes [AppSettings]. See CLAUDE.md §47.
 @DriftAccessor(tables: [AppSettings])
 class SettingsDao extends DatabaseAccessor<AppDatabase>
     with _$SettingsDaoMixin {

@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart' show XFile;
+import 'package:image/image.dart' as img;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,9 +12,8 @@ import '../../../data/repositories/people_repository_provider.dart';
 import '../../../data/repositories/quest_repository_provider.dart';
 import '../../../data/repositories/service_providers.dart';
 import '../../../data/repositories/settings_repository_provider.dart';
-import '../../../data/services/camera/camera_service.dart' show CameraService;
 import '../../../data/services/image/image_processing_service.dart'
-    show AnimationResult, ImageProcessingService, ProgressCallback;
+    show AnimationResult, ProgressCallback;
 import '../../../domain/camera/enum/capture_mode.dart';
 import '../../../domain/camera/enum/capture_phase.dart';
 import '../../../domain/memories/enum/photo_look.dart';
@@ -25,7 +25,7 @@ part 'capture_view_model.g.dart';
 
 /// Drives the photobooth capture flow: instruction -> countdown -> shutter
 /// (photo, GIF burst, boomerang or 360° clip) -> keep or retake -> next
-/// shot.
+/// shot. See CLAUDE.md §34-35.
 @riverpod
 class CaptureViewModel extends _$CaptureViewModel {
   static const _uuid = Uuid();
@@ -85,10 +85,15 @@ class CaptureViewModel extends _$CaptureViewModel {
   /// cancelled (or replaced) stops at its next beat instead of carrying on.
   int _run = 0;
 
+  /// Which pose idea is showing, for "Another idea".
   int _poseIndex = 0;
 
+  /// Set when the shutter is let go during a held boomerang or clip.
   bool _holdReleased = false;
 
+  // Choices ---------------------------------------------------------------
+
+  /// Switches between Photo, GIF, Boomerang and 360°. Only between shots.
   void setMode(CaptureMode mode) {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;
@@ -102,16 +107,11 @@ class CaptureViewModel extends _$CaptureViewModel {
     );
   }
 
+  /// Changes the look shown live and saved into the next shots.
   void setLook(PhotoLook look) {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;
     state = AsyncData(current.copyWith(look: look));
-  }
-
-  void toggleLooks() {
-    final current = state.value;
-    if (current == null) return;
-    state = AsyncData(current.copyWith(showLooks: !current.showLooks));
   }
 
   /// Shows a pose idea, or the next one if one is already showing. Solves
@@ -130,6 +130,7 @@ class CaptureViewModel extends _$CaptureViewModel {
     state = AsyncData(current.copyWith(clearPoseIdea: true));
   }
 
+  /// Changes the countdown length and remembers it for next time.
   Future<void> setCountdownSeconds(int seconds) async {
     final current = state.value;
     if (current == null) return;
@@ -139,6 +140,7 @@ class CaptureViewModel extends _$CaptureViewModel {
     await ref.read(settingsRepositoryProvider).setCountdownSeconds(seconds);
   }
 
+  /// Changes the longest 360° clip and remembers it for next time.
   Future<void> setClipSeconds(int seconds) async {
     final current = state.value;
     if (current == null) return;
@@ -149,6 +151,9 @@ class CaptureViewModel extends _$CaptureViewModel {
   List<String> _ideas(CaptureState state, CaptureMode mode) =>
       PoseIdeas.forShot(questType: state.quest.type, kind: mode.kind);
 
+  // Capture ---------------------------------------------------------------
+
+  /// Photo and GIF: counts down, then captures.
   Future<void> startCountdown() async {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;
@@ -194,10 +199,11 @@ class CaptureViewModel extends _$CaptureViewModel {
     }
   }
 
+  /// The shutter was let go.
   void endHold() => _holdReleased = true;
 
   /// "Wait, not ready!" — stops the countdown and goes back to the shot's
-  /// instruction without taking anything.
+  /// instruction without taking anything. See CLAUDE.md §35.
   void cancelCountdown() {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.countdown) return;
@@ -220,7 +226,7 @@ class CaptureViewModel extends _$CaptureViewModel {
       final file = await camera.capturePhoto();
       final raw = await file.readAsBytes();
       final bytes = await imageProcessing.applyLook(raw, current.effectiveLook);
-      final size = ImageProcessingService.sizeOf(bytes);
+      final size = _sizeOf(bytes);
 
       return (
         originalPath: await storage.saveOriginal(photoId, bytes),
@@ -230,7 +236,6 @@ class CaptureViewModel extends _$CaptureViewModel {
         ),
         width: size.$1,
         height: size.$2,
-        mirrored: false,
       );
     });
   }
@@ -241,15 +246,12 @@ class CaptureViewModel extends _$CaptureViewModel {
       final camera = ref.read(cameraServiceProvider);
       final imageProcessing = ref.read(imageProcessingServiceProvider);
 
-      // Frames are kept as the camera saved them; the front-camera flip
-      // happens after they are shrunk, inside createGif.
-      final mirror = camera.needsFrontMirror;
       final photos = <Uint8List>[];
       for (var i = 1; i <= CaptureState.gifFrames; i++) {
         state = AsyncData(
           current.copyWith(phase: CapturePhase.capturing, burstFrame: i),
         );
-        final file = await camera.capturePhoto(mirrorFront: false);
+        final file = await camera.capturePhoto();
         photos.add(await file.readAsBytes());
         if (!ref.mounted || run != _run) throw const _Abandoned();
         // A beat to change pose before the next flash.
@@ -262,13 +264,13 @@ class CaptureViewModel extends _$CaptureViewModel {
       final gif = await imageProcessing.createGif(
         photos,
         look: current.effectiveLook,
-        mirror: mirror,
         onProgress: _reportProcessing(current),
       );
       return _saveAnimation(photoId, gif);
     });
   }
 
+  /// Updates the processing percentage, if we're still in the booth.
   ProgressCallback _reportProcessing(CaptureState current) {
     return (progress) {
       if (!ref.mounted || state.value?.phase != CapturePhase.processing) {
@@ -321,7 +323,6 @@ class CaptureViewModel extends _$CaptureViewModel {
       final boomerang = await imageProcessing.createBoomerang(
         frames,
         look: current.effectiveLook,
-        mirror: camera.needsFrontMirror,
         onProgress: _reportProcessing(current),
       );
       return _saveAnimation(photoId, boomerang);
@@ -338,11 +339,13 @@ class CaptureViewModel extends _$CaptureViewModel {
       state = AsyncData(
         current.copyWith(phase: CapturePhase.capturing, captureProgress: 0),
       );
-      // Let go before filming could start: nothing to film.
-      if (_holdReleased) throw const _TooShort();
+      // A still first, for cards and the keepsake.
+      final posterFile = await camera.capturePhoto();
+      final posterBytes = await posterFile.readAsBytes();
+      final size = _sizeOf(posterBytes);
 
-      // Film straight away; the poster still is taken once the clip is done
-      // (a photo can't safely be taken while recording on every phone).
+      // Let go while the still was being taken: nothing to film.
+      if (_holdReleased) throw const _TooShort();
       await camera.startVideoRecording();
       final started = DateTime.now();
       final maxLength = Duration(seconds: current.clipSeconds);
@@ -382,46 +385,16 @@ class CaptureViewModel extends _$CaptureViewModel {
           processingProgress: 0.5,
         ),
       );
-      // The poster and moving the clip into place don't depend on each other.
-      final mirror = camera.needsFrontMirror;
-      final (poster, videoPath) = await (
-        _takePoster(camera, imageProcessing, mirror),
-        storage.saveVideo(photoId, clip.path),
-      ).wait;
       return (
-        originalPath: videoPath,
-        thumbnailPath: await storage.saveThumbnail(photoId, poster.thumbnail),
-        width: poster.width,
-        height: poster.height,
-        // The poster was flipped to match the preview, but the clip file is
-        // not, so the viewer flips the clip.
-        mirrored: mirror,
+        originalPath: await storage.saveVideo(photoId, clip.path),
+        thumbnailPath: await storage.saveThumbnail(
+          photoId,
+          await imageProcessing.createThumbnail(posterBytes),
+        ),
+        width: size.$1,
+        height: size.$2,
       );
     });
-  }
-
-  /// A still for the clip's cards and keepsake, flipped (cheaply, after
-  /// shrinking) to look like the preview. Tries twice, as a camera that just
-  /// stopped filming can need a moment.
-  Future<({Uint8List thumbnail, int width, int height})> _takePoster(
-    CameraService camera,
-    ImageProcessingService imageProcessing,
-    bool mirror,
-  ) async {
-    XFile file;
-    try {
-      file = await camera.capturePhoto(mirrorFront: false);
-    } catch (_) {
-      await Future<void>.delayed(const Duration(milliseconds: 250));
-      file = await camera.capturePhoto(mirrorFront: false);
-    }
-    final bytes = await file.readAsBytes();
-    final (width, height) = ImageProcessingService.sizeOf(bytes);
-    return (
-      thumbnail: await imageProcessing.createThumbnail(bytes, mirror: mirror),
-      width: width,
-      height: height,
-    );
   }
 
   Future<_SavedFiles> _saveAnimation(
@@ -435,7 +408,6 @@ class CaptureViewModel extends _$CaptureViewModel {
       thumbnailPath: await storage.saveThumbnail(photoId, animation.poster),
       width: animation.width,
       height: animation.height,
-      mirrored: false,
     );
   }
 
@@ -462,7 +434,6 @@ class CaptureViewModel extends _$CaptureViewModel {
             width: files.width,
             height: files.height,
             kind: current.mode.kind,
-            mirrored: files.mirrored,
           );
       if (!ref.mounted) return;
       state = AsyncData(
@@ -508,8 +479,18 @@ class CaptureViewModel extends _$CaptureViewModel {
     }
   }
 
+  static (int, int) _sizeOf(Uint8List bytes) {
+    try {
+      final decoded = img.decodeImage(bytes);
+      return (decoded?.width ?? 0, decoded?.height ?? 0);
+    } catch (_) {
+      return (0, 0);
+    }
+  }
+
   /// Discards the shot just taken and returns to its instruction. The
-  /// quest can't complete without a kept shot for every instruction.
+  /// quest can't complete without a kept shot for every instruction. See
+  /// CLAUDE.md §35, §37.
   Future<void> retake() async {
     final current = state.value;
     final photo = current?.lastPhoto;
@@ -528,6 +509,7 @@ class CaptureViewModel extends _$CaptureViewModel {
     );
   }
 
+  /// Flips between front and back cameras between shots.
   Future<void> switchCamera() async {
     final current = state.value;
     if (current == null || current.phase != CapturePhase.instruction) return;
@@ -570,7 +552,6 @@ typedef _SavedFiles = ({
   String thumbnailPath,
   int width,
   int height,
-  bool mirrored,
 });
 
 /// The person left (or cancelled) mid-capture; clean up quietly.

@@ -1,14 +1,12 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../config/constant/app_storage_paths.dart';
 
 /// Owns all photo filesystem behavior. Repositories never touch paths
-/// directly.
+/// directly. See CLAUDE.md §6.
 class PhotoStorageService {
   Future<Directory> _ensureDir(String relativePath) async {
     final root = await getApplicationDocumentsDirectory();
@@ -35,6 +33,7 @@ class PhotoStorageService {
     return file.path;
   }
 
+  /// Saves a GIF or boomerang.
   Future<String> saveAnimation(String photoId, List<int> gifBytes) async {
     final dir = await _ensureDir(AppStoragePaths.motion);
     final file = File(p.join(dir.path, '$photoId.gif'));
@@ -47,25 +46,10 @@ class PhotoStorageService {
   Future<String> saveVideo(String photoId, String sourcePath) async {
     final dir = await _ensureDir(AppStoragePaths.videos);
     final target = p.join(dir.path, '$photoId.mp4');
-    await moveFile(File(sourcePath), target);
+    final source = File(sourcePath);
+    await source.copy(target);
+    await _deleteIfExists(source);
     return target;
-  }
-
-  /// Moves [source] to [target]: an instant rename when both are on the same
-  /// volume, otherwise (rename fails across volumes) a copy then delete.
-  /// [rename] is only swapped out in tests.
-  @visibleForTesting
-  static Future<void> moveFile(
-    File source,
-    String target, {
-    Future<File> Function(File source, String target)? rename,
-  }) async {
-    try {
-      await (rename ?? (file, to) => file.rename(to))(source, target);
-    } on FileSystemException {
-      await source.copy(target);
-      if (await source.exists()) await source.delete();
-    }
   }
 
   /// Deletes a temporary camera file that won't be kept (e.g. a clip
@@ -87,6 +71,7 @@ class PhotoStorageService {
     return file.path;
   }
 
+  /// The latest keepsake for [memoryId], or null if none exists yet.
   Future<String?> findPhotoStrip(String memoryId) async {
     final strips = await _stripsFor(memoryId);
     if (strips.isEmpty) return null;
@@ -115,9 +100,6 @@ class PhotoStorageService {
       await _deleteIfExists(strip);
     }
   }
-
-  /// Reads a stored file, e.g. to make a compressed copy for the cloud.
-  Future<Uint8List> readBytes(String path) => File(path).readAsBytes();
 
   Future<String> getPhotoPath(String photoId, {required bool thumbnail}) async {
     final dir = await _ensureDir(

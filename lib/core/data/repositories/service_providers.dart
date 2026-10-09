@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../services/camera/camera_service.dart';
 import '../services/gallery/gallery_service.dart';
 import '../services/image/image_processing_service.dart';
-import '../services/image/photo_picker_service.dart';
 import '../services/sharing/sharing_service.dart';
 import '../services/storage/photo_storage_service.dart';
 
@@ -15,9 +14,6 @@ PhotoStorageService photoStorageService(Ref ref) => PhotoStorageService();
 @Riverpod(keepAlive: true)
 ImageProcessingService imageProcessingService(Ref ref) =>
     ImageProcessingService();
-
-@Riverpod(keepAlive: true)
-PhotoPickerService photoPickerService(Ref ref) => PhotoPickerService();
 
 @Riverpod(keepAlive: true)
 GalleryService galleryService(Ref ref) => GalleryService();

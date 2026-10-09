@@ -1,4 +1,5 @@
-/// A single instruction/photo the creator wants captured.
+/// A single instruction/photo the creator wants captured. See CLAUDE.md
+/// §17-19.
 class DraftShot {
   const DraftShot({required this.instruction, this.shotType = 'group'});
 

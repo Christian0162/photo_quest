@@ -105,54 +105,6 @@ final class ImageProcessingServiceProvider
 String _$imageProcessingServiceHash() =>
     r'70b24a2fc7a9a8ac60990befec4e62a717668ca4';
 
-@ProviderFor(photoPickerService)
-final photoPickerServiceProvider = PhotoPickerServiceProvider._();
-
-final class PhotoPickerServiceProvider
-    extends
-        $FunctionalProvider<
-          PhotoPickerService,
-          PhotoPickerService,
-          PhotoPickerService
-        >
-    with $Provider<PhotoPickerService> {
-  PhotoPickerServiceProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'photoPickerServiceProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$photoPickerServiceHash();
-
-  @$internal
-  @override
-  $ProviderElement<PhotoPickerService> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  PhotoPickerService create(Ref ref) {
-    return photoPickerService(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PhotoPickerService value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<PhotoPickerService>(value),
-    );
-  }
-}
-
-String _$photoPickerServiceHash() =>
-    r'234dbfede8e9c6c14f9e66ed3f55743c92a25165';
-
 @ProviderFor(galleryService)
 final galleryServiceProvider = GalleryServiceProvider._();
 
