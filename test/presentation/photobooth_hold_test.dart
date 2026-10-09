@@ -14,8 +14,8 @@ import 'package:photoquest/core/domain/memories/enum/keepsake_frame.dart';
 import 'package:photoquest/core/domain/memories/enum/keepsake_layout.dart';
 import 'package:photoquest/core/presentation/types/camera/capture_state.dart';
 import 'package:photoquest/core/presentation/view_model/camera/capture_view_model.dart';
-import 'package:photoquest/core/presentation/widget/molecules/md_app_widget_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/capture_template.dart';
+import 'package:photoquest/core/presentation/widget/molecules/common/md_app_widget_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/camera/capture_template.dart';
 import 'package:photoquest/core/presentation/widget/templates/preview_samples.dart';
 
 CaptureState _booth(
@@ -54,6 +54,7 @@ Widget _template(
       onRetake: () {},
       onModeChanged: (_) {},
       onLookChanged: (_) {},
+      onToggleLooks: () {},
       onPoseIdea: () {},
       onHidePoseIdea: () {},
       onHoldStart: onHoldStart ?? () {},

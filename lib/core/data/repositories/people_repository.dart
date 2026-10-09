@@ -5,7 +5,7 @@ import '../../domain/people/entities/person.dart';
 import '../database/app_database.dart' as db;
 import '../database/daos/people_dao.dart';
 
-/// Source of truth for Person data. See CLAUDE.md §16.
+/// Source of truth for Person data.
 class PeopleRepository {
   PeopleRepository(this._dao);
 

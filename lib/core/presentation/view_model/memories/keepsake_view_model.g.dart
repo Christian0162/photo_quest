@@ -10,19 +10,19 @@ part of 'keepsake_view_model.dart';
 // ignore_for_file: type=lint, type=warning
 /// Designs the printed keepsake for a Memory — layout, paper, stickers —
 /// and saves it as an image file. Shared by the reveal and the designer
-/// screen so both show the same design. See CLAUDE.md §36-37.
+/// screen so both show the same design.
 
 @ProviderFor(KeepsakeViewModel)
 final keepsakeViewModelProvider = KeepsakeViewModelFamily._();
 
 /// Designs the printed keepsake for a Memory — layout, paper, stickers —
 /// and saves it as an image file. Shared by the reveal and the designer
-/// screen so both show the same design. See CLAUDE.md §36-37.
+/// screen so both show the same design.
 final class KeepsakeViewModelProvider
     extends $AsyncNotifierProvider<KeepsakeViewModel, KeepsakeDesign> {
   /// Designs the printed keepsake for a Memory — layout, paper, stickers —
   /// and saves it as an image file. Shared by the reveal and the designer
-  /// screen so both show the same design. See CLAUDE.md §36-37.
+  /// screen so both show the same design.
   KeepsakeViewModelProvider._({
     required KeepsakeViewModelFamily super.from,
     required String super.argument,
@@ -63,7 +63,7 @@ String _$keepsakeViewModelHash() => r'70430dc6b8f0576e658c740d8cee408257d8562d';
 
 /// Designs the printed keepsake for a Memory — layout, paper, stickers —
 /// and saves it as an image file. Shared by the reveal and the designer
-/// screen so both show the same design. See CLAUDE.md §36-37.
+/// screen so both show the same design.
 
 final class KeepsakeViewModelFamily extends $Family
     with
@@ -85,7 +85,7 @@ final class KeepsakeViewModelFamily extends $Family
 
   /// Designs the printed keepsake for a Memory — layout, paper, stickers —
   /// and saves it as an image file. Shared by the reveal and the designer
-  /// screen so both show the same design. See CLAUDE.md §36-37.
+  /// screen so both show the same design.
 
   KeepsakeViewModelProvider call(String memoryId) =>
       KeepsakeViewModelProvider._(argument: memoryId, from: this);
@@ -96,7 +96,7 @@ final class KeepsakeViewModelFamily extends $Family
 
 /// Designs the printed keepsake for a Memory — layout, paper, stickers —
 /// and saves it as an image file. Shared by the reveal and the designer
-/// screen so both show the same design. See CLAUDE.md §36-37.
+/// screen so both show the same design.
 
 abstract class _$KeepsakeViewModel extends $AsyncNotifier<KeepsakeDesign> {
   late final _$args = ref.$arg as String;

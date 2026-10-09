@@ -21,7 +21,6 @@ class KeepsakeDesign {
     this.isSaved = false,
   });
 
-  /// Most stickers on one keepsake — keeps the print about the people.
   static const maxStickers = 12;
 
   final String memoryId;
@@ -44,7 +43,6 @@ class KeepsakeDesign {
 
   bool get canAddSticker => stickers.length < maxStickers;
 
-  /// The design choices only — layout, paper, stickers — as saved JSON.
   String toJson() => jsonEncode({
     'layout': layout.name,
     'frame': frame.name,

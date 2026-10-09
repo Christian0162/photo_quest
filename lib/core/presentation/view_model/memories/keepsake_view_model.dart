@@ -15,7 +15,7 @@ part 'keepsake_view_model.g.dart';
 
 /// Designs the printed keepsake for a Memory — layout, paper, stickers —
 /// and saves it as an image file. Shared by the reveal and the designer
-/// screen so both show the same design. See CLAUDE.md §36-37.
+/// screen so both show the same design.
 @riverpod
 class KeepsakeViewModel extends _$KeepsakeViewModel {
   int _nextStickerId = 0;

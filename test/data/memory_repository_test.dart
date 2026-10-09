@@ -86,4 +86,23 @@ void main() {
     expect(photos.first.stillPath, '/thumbnails/spin.jpg');
     expect(photos.last.stillPath, '/originals/still.jpg');
   });
+
+  test('a mirrored front-camera clip remembers to be flipped', () async {
+    final memoryId = await startMemory();
+    await repo.addPhoto(
+      id: 'selfie',
+      memoryId: memoryId,
+      originalPath: '/videos/selfie.mp4',
+      thumbnailPath: '/thumbnails/selfie.jpg',
+      position: 0,
+      width: 720,
+      height: 1280,
+      kind: PhotoKind.video,
+      mirrored: true,
+    );
+    await addPhoto(memoryId, 'still', 1);
+
+    final photos = await repo.getPhotos(memoryId);
+    expect(photos.map((p) => p.mirrored), [true, false]);
+  });
 }

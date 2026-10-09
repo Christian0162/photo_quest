@@ -3,7 +3,7 @@ import 'package:gal/gal.dart';
 import '../../../errors/app_failure.dart';
 
 /// Saves shots and keepsakes to the phone's own photo library — only when
-/// the person taps Download. Nothing leaves the device. See CLAUDE.md §56.
+/// the person taps Download. Nothing leaves the device.
 class GalleryService {
   /// Saves the file at [path]: a photo, GIF or keepsake image, or a clip
   /// when [isVideo]. Throws a friendly [AppFailure] if it can't.

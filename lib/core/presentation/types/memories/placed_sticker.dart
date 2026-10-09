@@ -15,14 +15,11 @@ class PlacedSticker {
   final String id;
   final StickerType type;
 
-  /// Center, as a fraction of the keepsake's width (x) and height (y).
   final double x;
   final double y;
 
-  /// 1 = the default size.
   final double scale;
 
-  /// Radians, clockwise.
   final double rotation;
 
   PlacedSticker copyWith({

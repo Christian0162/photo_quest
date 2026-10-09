@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../core/domain/auth/enum/auth_status.dart';
+import '../../core/presentation/screen/auth/account_screen.dart';
+import '../../core/presentation/screen/auth/auth_screens.dart';
 import '../../core/presentation/screen/camera/capture_screen.dart';
 import '../../core/presentation/screen/camera/memory_reveal_screen.dart';
 import '../../core/presentation/screen/home/home_screen.dart';
@@ -13,6 +16,8 @@ import '../../core/presentation/screen/quests/create_quest_screen.dart';
 import '../../core/presentation/screen/quests/quest_intro_screen.dart';
 import '../../core/presentation/screen/quests/quest_selection_screen.dart';
 import '../../core/presentation/screen/settings/settings_screen.dart';
+import '../../core/presentation/screen/sharing/sharing_screens.dart';
+import '../../core/presentation/view_model/auth/auth_session_view_model.dart';
 import '../constant/app_colors.dart';
 import '../constant/app_motion.dart';
 import 'app_shell.dart';
@@ -20,7 +25,7 @@ import 'app_shell.dart';
 part 'app_router.g.dart';
 
 /// Centralized route paths. Screens navigate through these constants
-/// instead of hardcoding path strings. See CLAUDE.md §10.
+/// instead of hardcoding path strings.
 abstract final class AppRoutes {
   static const home = '/';
   static const quests = '/quests';
@@ -33,6 +38,20 @@ abstract final class AppRoutes {
   static const keepsake = '/memory/:memoryId/keepsake';
   static const people = '/people';
   static const settings = '/settings';
+  static const account = '/account';
+  static const shared = '/shared';
+  static const sharedMemory = '/shared/:memoryId';
+  static const join = '/join';
+  static const sharedQuest = '/shared-quest/:questId';
+
+  // Account routes. Who may be where is decided in one place: the router's
+  // redirect, from the auth status.
+  static const welcome = '/welcome';
+  static const login = '/login';
+  static const register = '/register';
+  static const forgotPassword = '/forgot-password';
+  static const verifyEmail = '/verify-email';
+  static const resetPassword = '/reset-password';
 
   static String questDetailPath(String questId) => '/quests/$questId';
   static String capturePath(String sessionId) => '/capture/$sessionId';
@@ -40,16 +59,101 @@ abstract final class AppRoutes {
       '/capture/$sessionId/reveal';
   static String memoryDetailPath(String memoryId) => '/memory/$memoryId';
   static String keepsakePath(String memoryId) => '/memory/$memoryId/keepsake';
+  static String sharedMemoryPath(String memoryId) => '/shared/$memoryId';
+  static String sharedQuestPath(String questId) => '/shared-quest/$questId';
 }
 
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+/// Where [status] belongs, given where the person is now. Null means they
+/// are already in the right place.
+String? _authRedirect(AuthStatus status, String location) {
+  const signedOutRoutes = {
+    AppRoutes.welcome,
+    AppRoutes.login,
+    AppRoutes.register,
+    AppRoutes.forgotPassword,
+  };
+  final target = switch (status) {
+    AuthSignedOut() =>
+      signedOutRoutes.contains(location) ? null : AppRoutes.welcome,
+    AuthAwaitingVerification() => AppRoutes.verifyEmail,
+    AuthRecovering() => AppRoutes.resetPassword,
+    AuthSignedIn() =>
+      signedOutRoutes.contains(location) ||
+              location == AppRoutes.verifyEmail ||
+              location == AppRoutes.resetPassword
+          ? AppRoutes.home
+          : null,
+  };
+  return target == location ? null : target;
+}
+
 @riverpod
 GoRouter appRouter(Ref ref) {
+  // Re-runs the redirect whenever the auth status changes.
+  final authChanges = ValueNotifier<AuthStatus>(
+    ref.read(authSessionViewModelProvider),
+  );
+  ref.listen(
+    authSessionViewModelProvider,
+    (_, next) => authChanges.value = next,
+  );
+  ref.onDispose(authChanges.dispose);
+
   return GoRouter(
     initialLocation: AppRoutes.home,
     navigatorKey: _shellNavigatorKey,
+    refreshListenable: authChanges,
+    redirect: (context, state) =>
+        _authRedirect(authChanges.value, state.matchedLocation),
     routes: [
+      GoRoute(
+        path: AppRoutes.welcome,
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.verifyEmail,
+        builder: (context, state) => const VerifyEmailScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.resetPassword,
+        builder: (context, state) => const ResetPasswordScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.account,
+        builder: (context, state) => const AccountScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.shared,
+        builder: (context, state) => const SharedMemoriesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.sharedMemory,
+        builder: (context, state) =>
+            SharedMemoryScreen(memoryId: state.pathParameters['memoryId']!),
+      ),
+      GoRoute(
+        path: AppRoutes.join,
+        builder: (context, state) => const JoinMemoryScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.sharedQuest,
+        builder: (context, state) =>
+            SharedQuestScreen(questId: state.pathParameters['questId']!),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             AppShell(navigationShell: navigationShell),
@@ -136,7 +240,7 @@ GoRouter appRouter(Ref ref) {
 
 /// Stepping into the photobooth: the screen dips to dark and the booth
 /// settles in from a slight zoom, like walking behind the curtain. Plain
-/// fade under reduced motion. See design system §49 ("card → camera").
+/// fade under reduced motion.
 class _BoothTransitionPage extends CustomTransitionPage<void> {
   _BoothTransitionPage({
     super.key,

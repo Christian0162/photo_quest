@@ -9,17 +9,17 @@ part of 'people_list_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// The People known to this device, and adding new ones. Keeps repository
-/// calls out of widgets. See CLAUDE.md §15, §40, §50.
+/// calls out of widgets.
 
 @ProviderFor(PeopleList)
 final peopleListProvider = PeopleListProvider._();
 
 /// The People known to this device, and adding new ones. Keeps repository
-/// calls out of widgets. See CLAUDE.md §15, §40, §50.
+/// calls out of widgets.
 final class PeopleListProvider
     extends $AsyncNotifierProvider<PeopleList, List<Person>> {
   /// The People known to this device, and adding new ones. Keeps repository
-  /// calls out of widgets. See CLAUDE.md §15, §40, §50.
+  /// calls out of widgets.
   PeopleListProvider._()
     : super(
         from: null,
@@ -42,7 +42,7 @@ final class PeopleListProvider
 String _$peopleListHash() => r'f91f54b995569200242cedc2dbddc6530d8a3f2d';
 
 /// The People known to this device, and adding new ones. Keeps repository
-/// calls out of widgets. See CLAUDE.md §15, §40, §50.
+/// calls out of widgets.
 
 abstract class _$PeopleList extends $AsyncNotifier<List<Person>> {
   FutureOr<List<Person>> build();
@@ -63,13 +63,11 @@ abstract class _$PeopleList extends $AsyncNotifier<List<Person>> {
 }
 
 /// Everyone except the device owner — the People you can invite to a Quest.
-/// See CLAUDE.md §19, §40.
 
 @ProviderFor(invitablePeople)
 final invitablePeopleProvider = InvitablePeopleProvider._();
 
 /// Everyone except the device owner — the People you can invite to a Quest.
-/// See CLAUDE.md §19, §40.
 
 final class InvitablePeopleProvider
     extends
@@ -80,7 +78,6 @@ final class InvitablePeopleProvider
         >
     with $FutureModifier<List<Person>>, $FutureProvider<List<Person>> {
   /// Everyone except the device owner — the People you can invite to a Quest.
-  /// See CLAUDE.md §19, §40.
   InvitablePeopleProvider._()
     : super(
         from: null,

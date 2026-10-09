@@ -10,14 +10,12 @@ part of 'quests_needing_confirmation_view_model.dart';
 // ignore_for_file: type=lint, type=warning
 /// Quests you created that still have participants who haven't confirmed
 /// they're in. Surfaced on Home so a group quest doesn't quietly stall.
-/// See CLAUDE.md §16A, §31, design system §13.
 
 @ProviderFor(questsNeedingConfirmation)
 final questsNeedingConfirmationProvider = QuestsNeedingConfirmationProvider._();
 
 /// Quests you created that still have participants who haven't confirmed
 /// they're in. Surfaced on Home so a group quest doesn't quietly stall.
-/// See CLAUDE.md §16A, §31, design system §13.
 
 final class QuestsNeedingConfirmationProvider
     extends
@@ -31,7 +29,6 @@ final class QuestsNeedingConfirmationProvider
         $FutureProvider<List<QuestNeedingConfirmation>> {
   /// Quests you created that still have participants who haven't confirmed
   /// they're in. Surfaced on Home so a group quest doesn't quietly stall.
-  /// See CLAUDE.md §16A, §31, design system §13.
   QuestsNeedingConfirmationProvider._()
     : super(
         from: null,

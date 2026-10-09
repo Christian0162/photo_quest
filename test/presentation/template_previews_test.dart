@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:photoquest/core/presentation/widget/templates/capture_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/create_quest_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/home_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/keepsake_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/memories_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/memory_detail_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/memory_reveal_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/people_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/quest_intro_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/quest_selection_template_preview.dart';
-import 'package:photoquest/core/presentation/widget/templates/settings_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/camera/capture_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/quests/create_quest_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/home/home_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories/keepsake_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories/memories_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/memories/memory_detail_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/camera/memory_reveal_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/people/people_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/quests/quest_intro_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/quests/quest_selection_template_preview.dart';
+import 'package:photoquest/core/presentation/widget/templates/settings/settings_template_preview.dart';
 
 /// Every template renders from its preview sample data without providers —
 /// catches a template or sample that no longer fits together.
@@ -60,6 +60,24 @@ void main() {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(preview());
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  // The tightest case: a small phone with the OS text size turned up.
+  for (final MapEntry(key: name, value: preview) in previews.entries) {
+    testWidgets('$name preview fits a small phone at large text', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(320, 568);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearAllTestValues);
 
       await tester.pumpWidget(preview());
       await tester.pump(const Duration(seconds: 1));
