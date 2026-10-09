@@ -25,9 +25,9 @@ It's private by design: no feed, no likes, no followers. The app is
 handles sign-in and profile, and sharing is invite-only.
 
 <p align="center">
-  <img src="docs/screenshots/launch.png" alt="Launch screen" width="200" />
+  <img src="docs/screenshots/launch.png" alt="Welcome screen" width="200" />
   <img src="docs/screenshots/home.png" alt="Home with today's quest" width="200" />
-  <img src="docs/screenshots/memories.png" alt="Memories as journal pages" width="200" />
+  <img src="docs/screenshots/memories.png" alt="Memories as swipeable journal pages" width="200" />
   <img src="docs/screenshots/people.png" alt="People grouped by relationship" width="200" />
 </p>
 
@@ -35,10 +35,42 @@ handles sign-in and profile, and sharing is invite-only.
 
 - **Quests:** guided activities for couples, families, friends, pets or solo.
 - **Photobooth:** countdown, pose ideas, Photo / GIF / Boomerang / 360° modes.
-- **Memories:** a private journal of everything you captured.
+- **Memories:** a private, swipeable journal of everything you captured.
 - **Keepsakes:** printed strips, grids and polaroids to decorate and share.
 - **People & friends:** your circle, plus real friends added by friend code.
 - **Do it again:** repeat a quest and watch the memories grow.
+
+## Design
+
+The UI is a **warm photobooth with a nostalgic film feel**: cream paper, charcoal
+ink, coral for the one thing to do next. It should read like a keepsake box, not
+a dashboard.
+
+- **Poster-style cards:** quests, today's quest and memories are large
+  photo-first cards (`MdPosterCard`) with a charcoal fade under the text.
+- **Memories as a journal:** swipeable journal pages with fanned prints, tape,
+  handwritten (Caveat) captions, occasion tags and stickers, filtered by
+  *This day*, *This month* or *All journey*.
+- **People with story rings:** circles grouped by relationship, with real
+  friends shown alongside local contacts.
+- **Floating dock:** a three-tab charcoal bar (Home, Memories, People) with a
+  gliding selection bubble, and a "Start a quest" prompt above it.
+- **Playful feedback:** springy press on buttons, confetti and stickers on
+  rewards, short fade-and-slide entrances, and an animated Photo Quest mark on
+  the launch, welcome and account screens. Motion stays short and never blocks
+  the person.
+- **Photobooth:** dark, minimal camera screen with a big preview, countdown,
+  progress ring and a developing-print reveal.
+- **Calm loading:** a page shows a single skeleton while its data arrives
+  (the Screen decides; Templates never draw page loaders).
+
+Colors, type, spacing, motion and shadows are centralized in
+[`lib/config/constant/`](lib/config/constant/): Warm Coral `#FF6B5F`, Warm Cream
+`#FFF9F3`, Soft Peach `#FFD9C7`, Film Yellow `#FFD166`, Warm Charcoal `#252323`,
+Soft Green `#A8C7A1`. Headings use Outfit, body text Inter, handwriting Caveat.
+Widgets use semantic roles (`textMuted`, `coralInk`, `paper`) rather than raw
+brand colors so contrast holds. Every template has a
+`*_template_preview.dart` you can render without providers or a database.
 
 ## Tech stack
 
