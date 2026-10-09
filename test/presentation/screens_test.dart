@@ -153,7 +153,10 @@ void main() {
         child: const PhotoQuestApp(),
       ),
     );
-    await tester.pump(const Duration(milliseconds: 900));
+    // Pump frame by frame, as a device would.
+    for (var i = 0; i < 44; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
     expect(
       find.text('Do something together. Keep the memory.'),
       findsOneWidget,
@@ -162,10 +165,69 @@ void main() {
     // A tap jumps to the outro instead of waiting out the whole reveal.
     await tester.tapAt(const Offset(10, 10));
     await tester.pump(); // the outro starts on this frame
-    await tester.pump(const Duration(milliseconds: 420));
+    for (var i = 0; i < 18; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
     await tester.pump();
     expect(find.text('Do something together. Keep the memory.'), findsNothing);
     expect(find.text("Today's quest"), findsOneWidget);
+  });
+
+  group('with reduced motion', () {
+    const promise = 'Do something together. Keep the memory.';
+
+    Future<void> openApp(WidgetTester tester) async {
+      final db = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(db.close);
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [appDatabaseProvider.overrideWithValue(db)],
+          child: const PhotoQuestApp(),
+        ),
+      );
+    }
+
+    Future<void> pumpFrames(WidgetTester tester, int frames) async {
+      for (var i = 0; i < frames; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+    }
+
+    testWidgets('the reveal stays still, then gives way after the shorter '
+        'duration', (tester) async {
+      await openApp(tester);
+      await pumpFrames(tester, 2);
+      final early = tester.getRect(find.text(promise));
+
+      await pumpFrames(tester, 20); // ~1.1s: well into the reveal
+      expect(find.text(promise), findsOneWidget);
+      expect(tester.getRect(find.text(promise)), early);
+
+      await pumpFrames(tester, 12); // past 1.4s
+      await tester.pump();
+      expect(find.text(promise), findsNothing);
+      expect(find.text("TODAY'S QUEST"), findsOneWidget);
+    });
+
+    testWidgets('a tap skips straight to the fade', (tester) async {
+      await openApp(tester);
+      await pumpFrames(tester, 4);
+      expect(find.text(promise), findsOneWidget);
+
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pump();
+      // Only the 16% outro (~225ms) remains, far short of the full 1.4s.
+      await pumpFrames(tester, 8);
+      await tester.pump();
+      expect(find.text(promise), findsNothing);
+      expect(find.text("TODAY'S QUEST"), findsOneWidget);
+    });
   });
 
   testWidgets('the nav dock fits a small phone at large text on every tab', (

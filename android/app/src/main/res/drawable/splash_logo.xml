@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The launch logo as a vector, so it stays sharp at any density (a raster
+     icon scaled up by Android looks blurry). Same geometry as the in-app
+     launch reveal's prints (md_launch_reveal.dart), drawn at 80% inside a
+     288dp canvas so it fits the Android 12 splash's circular mask. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+    <group android:pivotX="144" android:pivotY="144" android:scaleX="0.8" android:scaleY="0.8">
+        <group android:translateX="24" android:translateY="24">
+            <!-- Left print -->
+            <group android:pivotX="40.8" android:pivotY="51" android:rotation="-14"
+                android:translateX="33.6" android:translateY="82.2">
+                <path android:fillColor="#FFFDFA" android:pathData="M7.34,0H74.26a7.34,7.34 0 0 1 7.34,7.34V94.66a7.34,7.34 0 0 1 -7.34,7.34H7.34a7.34,7.34 0 0 1 -7.34,-7.34V7.34a7.34,7.34 0 0 1 7.34,-7.34z" />
+                <path android:fillColor="#FFD9C7" android:pathData="M10.61,5.71H71a4.9,4.9 0 0 1 4.9,4.9V85.39a4.9,4.9 0 0 1 -4.9,4.9H10.61a4.9,4.9 0 0 1 -4.9,-4.9V10.61a4.9,4.9 0 0 1 4.9,-4.9z" />
+            </group>
+            <!-- Right print -->
+            <group android:pivotX="40.8" android:pivotY="51" android:rotation="14"
+                android:translateX="124.8" android:translateY="82.2">
+                <path android:fillColor="#FFFDFA" android:pathData="M7.34,0H74.26a7.34,7.34 0 0 1 7.34,7.34V94.66a7.34,7.34 0 0 1 -7.34,7.34H7.34a7.34,7.34 0 0 1 -7.34,-7.34V7.34a7.34,7.34 0 0 1 7.34,-7.34z" />
+                <path android:fillColor="#FFD9C7" android:pathData="M10.61,5.71H71a4.9,4.9 0 0 1 4.9,4.9V85.39a4.9,4.9 0 0 1 -4.9,4.9H10.61a4.9,4.9 0 0 1 -4.9,-4.9V10.61a4.9,4.9 0 0 1 4.9,-4.9z" />
+            </group>
+            <!-- Front print with heart -->
+            <group android:translateX="79.2" android:translateY="73.8">
+                <path android:fillColor="#FFFDFA" android:pathData="M7.34,0H74.26a7.34,7.34 0 0 1 7.34,7.34V94.66a7.34,7.34 0 0 1 -7.34,7.34H7.34a7.34,7.34 0 0 1 -7.34,-7.34V7.34a7.34,7.34 0 0 1 7.34,-7.34z" />
+                <path android:fillColor="#252323" android:pathData="M10.61,5.71H71a4.9,4.9 0 0 1 4.9,4.9V85.39a4.9,4.9 0 0 1 -4.9,4.9H10.61a4.9,4.9 0 0 1 -4.9,-4.9V10.61a4.9,4.9 0 0 1 4.9,-4.9z" />
+                <group android:translateX="20.4" android:translateY="30.6" android:scaleX="1.7" android:scaleY="1.7">
+                    <path android:fillColor="#FF6B5F" android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5 2,5.42 4.42,3 7.5,3c1.74,0 3.41,0.81 4.5,2.09C13.09,3.81 14.76,3 16.5,3 19.58,3 22,5.42 22,8.5c0,3.78 -3.4,6.86 -8.55,11.54L12,21.35z" />
+                </group>
+            </group>
+            <!-- Sparkles -->
+            <path android:fillColor="#FFD166" android:pathData="M187.2,34.8L190.29,47.31L202.8,50.4L190.29,53.49L187.2,66L184.11,53.49L171.6,50.4L184.11,47.31z" />
+            <path android:fillColor="#FFF9F3" android:pathData="M48,51.6L49.66,58.34L56.4,60L49.66,61.66L48,68.4L46.34,61.66L39.6,60L46.34,58.34z" />
+        </group>
+    </group>
+</vector>
