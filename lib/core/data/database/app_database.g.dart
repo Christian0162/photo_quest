@@ -708,19 +708,13 @@ class Quest extends DataClass implements Insertable<Quest> {
   final String id;
 
   /// The [People] row that created this quest. Null for built-in quest
-  /// templates that ship with the app. See CLAUDE.md §18 note.
+  /// templates that ship with the app.
   final String? creatorId;
   final String title;
   final String? description;
   final String category;
-
-  /// solo, pair, group. See CLAUDE.md §19.
   final String type;
-
-  /// draft, published, invited, active, completed. See CLAUDE.md §16A.
   final String status;
-
-  /// Nullable; a configured default applies when null. See CLAUDE.md §15A.
   final int? maxParticipants;
   final String? coverImagePath;
   final DateTime createdAt;
@@ -1332,12 +1326,7 @@ class QuestShot extends DataClass implements Insertable<QuestShot> {
   final int position;
   final String instruction;
   final String shotType;
-
-  /// A visual example of the pose/framing to demonstrate the shot. See
-  /// CLAUDE.md §10A.
   final String? exampleImagePath;
-
-  /// Whether this shot gates quest completion. See CLAUDE.md §37.
   final bool required;
   final DateTime createdAt;
   const QuestShot({
@@ -1812,8 +1801,6 @@ class QuestParticipant extends DataClass
   final String id;
   final String questId;
   final String personId;
-
-  /// invited, accepted, declined, removed, completed. See CLAUDE.md §16A.
   final String status;
   final DateTime invitedAt;
   final DateTime? respondedAt;
@@ -3108,6 +3095,21 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     requiredDuringInsert: false,
     defaultValue: const Constant('photo'),
   );
+  static const VerificationMeta _mirroredMeta = const VerificationMeta(
+    'mirrored',
+  );
+  @override
+  late final GeneratedColumn<bool> mirrored = GeneratedColumn<bool>(
+    'mirrored',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("mirrored" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3120,6 +3122,7 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
     width,
     height,
     kind,
+    mirrored,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3212,6 +3215,12 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
         kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
       );
     }
+    if (data.containsKey('mirrored')) {
+      context.handle(
+        _mirroredMeta,
+        mirrored.isAcceptableOrUnknown(data['mirrored']!, _mirroredMeta),
+      );
+    }
     return context;
   }
 
@@ -3261,6 +3270,10 @@ class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
         DriftSqlType.string,
         data['${effectivePrefix}kind'],
       )!,
+      mirrored: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}mirrored'],
+      )!,
     );
   }
 
@@ -3280,9 +3293,11 @@ class Photo extends DataClass implements Insertable<Photo> {
   final DateTime capturedAt;
   final int width;
   final int height;
-
-  /// photo, gif, boomerang or video (`PhotoKind`). Added in schema v3.
   final String kind;
+
+  /// True for a 360° clip whose file is not mirrored but whose preview and
+  /// poster were, so the viewer flips it to match. Added in schema v5.
+  final bool mirrored;
   const Photo({
     required this.id,
     required this.memoryId,
@@ -3294,6 +3309,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     required this.width,
     required this.height,
     required this.kind,
+    required this.mirrored,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3310,6 +3326,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     map['width'] = Variable<int>(width);
     map['height'] = Variable<int>(height);
     map['kind'] = Variable<String>(kind);
+    map['mirrored'] = Variable<bool>(mirrored);
     return map;
   }
 
@@ -3327,6 +3344,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       width: Value(width),
       height: Value(height),
       kind: Value(kind),
+      mirrored: Value(mirrored),
     );
   }
 
@@ -3346,6 +3364,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       width: serializer.fromJson<int>(json['width']),
       height: serializer.fromJson<int>(json['height']),
       kind: serializer.fromJson<String>(json['kind']),
+      mirrored: serializer.fromJson<bool>(json['mirrored']),
     );
   }
   @override
@@ -3362,6 +3381,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       'width': serializer.toJson<int>(width),
       'height': serializer.toJson<int>(height),
       'kind': serializer.toJson<String>(kind),
+      'mirrored': serializer.toJson<bool>(mirrored),
     };
   }
 
@@ -3376,6 +3396,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     int? width,
     int? height,
     String? kind,
+    bool? mirrored,
   }) => Photo(
     id: id ?? this.id,
     memoryId: memoryId ?? this.memoryId,
@@ -3387,6 +3408,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     width: width ?? this.width,
     height: height ?? this.height,
     kind: kind ?? this.kind,
+    mirrored: mirrored ?? this.mirrored,
   );
   Photo copyWithCompanion(PhotosCompanion data) {
     return Photo(
@@ -3406,6 +3428,7 @@ class Photo extends DataClass implements Insertable<Photo> {
       width: data.width.present ? data.width.value : this.width,
       height: data.height.present ? data.height.value : this.height,
       kind: data.kind.present ? data.kind.value : this.kind,
+      mirrored: data.mirrored.present ? data.mirrored.value : this.mirrored,
     );
   }
 
@@ -3421,7 +3444,8 @@ class Photo extends DataClass implements Insertable<Photo> {
           ..write('capturedAt: $capturedAt, ')
           ..write('width: $width, ')
           ..write('height: $height, ')
-          ..write('kind: $kind')
+          ..write('kind: $kind, ')
+          ..write('mirrored: $mirrored')
           ..write(')'))
         .toString();
   }
@@ -3438,6 +3462,7 @@ class Photo extends DataClass implements Insertable<Photo> {
     width,
     height,
     kind,
+    mirrored,
   );
   @override
   bool operator ==(Object other) =>
@@ -3452,7 +3477,8 @@ class Photo extends DataClass implements Insertable<Photo> {
           other.capturedAt == this.capturedAt &&
           other.width == this.width &&
           other.height == this.height &&
-          other.kind == this.kind);
+          other.kind == this.kind &&
+          other.mirrored == this.mirrored);
 }
 
 class PhotosCompanion extends UpdateCompanion<Photo> {
@@ -3466,6 +3492,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
   final Value<int> width;
   final Value<int> height;
   final Value<String> kind;
+  final Value<bool> mirrored;
   final Value<int> rowid;
   const PhotosCompanion({
     this.id = const Value.absent(),
@@ -3478,6 +3505,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     this.width = const Value.absent(),
     this.height = const Value.absent(),
     this.kind = const Value.absent(),
+    this.mirrored = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PhotosCompanion.insert({
@@ -3491,6 +3519,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     required int width,
     required int height,
     this.kind = const Value.absent(),
+    this.mirrored = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        memoryId = Value(memoryId),
@@ -3511,6 +3540,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Expression<int>? width,
     Expression<int>? height,
     Expression<String>? kind,
+    Expression<bool>? mirrored,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3524,6 +3554,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       if (width != null) 'width': width,
       if (height != null) 'height': height,
       if (kind != null) 'kind': kind,
+      if (mirrored != null) 'mirrored': mirrored,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3539,6 +3570,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     Value<int>? width,
     Value<int>? height,
     Value<String>? kind,
+    Value<bool>? mirrored,
     Value<int>? rowid,
   }) {
     return PhotosCompanion(
@@ -3552,6 +3584,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
       width: width ?? this.width,
       height: height ?? this.height,
       kind: kind ?? this.kind,
+      mirrored: mirrored ?? this.mirrored,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3589,6 +3622,9 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
     if (kind.present) {
       map['kind'] = Variable<String>(kind.value);
     }
+    if (mirrored.present) {
+      map['mirrored'] = Variable<bool>(mirrored.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3608,6 +3644,7 @@ class PhotosCompanion extends UpdateCompanion<Photo> {
           ..write('width: $width, ')
           ..write('height: $height, ')
           ..write('kind: $kind, ')
+          ..write('mirrored: $mirrored, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -7232,6 +7269,7 @@ typedef $$PhotosTableCreateCompanionBuilder = PhotosCompanion Function({
   required int width,
   required int height,
   Value<String> kind,
+  Value<bool> mirrored,
   Value<int> rowid,
 });
 typedef $$PhotosTableUpdateCompanionBuilder = PhotosCompanion Function({
@@ -7245,6 +7283,7 @@ typedef $$PhotosTableUpdateCompanionBuilder = PhotosCompanion Function({
   Value<int> width,
   Value<int> height,
   Value<String> kind,
+  Value<bool> mirrored,
   Value<int> rowid,
 });
 
@@ -7333,6 +7372,11 @@ class $$PhotosTableFilterComposer
 
   ColumnFilters<String> get kind => $composableBuilder(
     column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get mirrored => $composableBuilder(
+    column: $table.mirrored,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7432,6 +7476,11 @@ class $$PhotosTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get mirrored => $composableBuilder(
+    column: $table.mirrored,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$MemoriesTableOrderingComposer get memoryId {
     final $$MemoriesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -7518,6 +7567,9 @@ class $$PhotosTableAnnotationComposer
   GeneratedColumn<String> get kind =>
       $composableBuilder(column: $table.kind, builder: (column) => column);
 
+  GeneratedColumn<bool> get mirrored =>
+      $composableBuilder(column: $table.mirrored, builder: (column) => column);
+
   $$MemoriesTableAnnotationComposer get memoryId {
     final $$MemoriesTableAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -7603,6 +7655,7 @@ class $$PhotosTableTableManager
                 Value<int> width = const Value.absent(),
                 Value<int> height = const Value.absent(),
                 Value<String> kind = const Value.absent(),
+                Value<bool> mirrored = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PhotosCompanion(
                 id: id,
@@ -7615,6 +7668,7 @@ class $$PhotosTableTableManager
                 width: width,
                 height: height,
                 kind: kind,
+                mirrored: mirrored,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7629,6 +7683,7 @@ class $$PhotosTableTableManager
                 required int width,
                 required int height,
                 Value<String> kind = const Value.absent(),
+                Value<bool> mirrored = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PhotosCompanion.insert(
                 id: id,
@@ -7641,6 +7696,7 @@ class $$PhotosTableTableManager
                 width: width,
                 height: height,
                 kind: kind,
+                mirrored: mirrored,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 /// Headings use Outfit, body text uses Inter — both bundled in
-/// `assets/fonts`. Sizes follow design system §7; the OS text scale is
-/// applied on top automatically. See CLAUDE.md §29.
+/// `assets/fonts`. The OS text scale is applied on top automatically.
 abstract final class AppTypography {
   static const headingFamily = 'Outfit';
   static const bodyFamily = 'Inter';
 
-  /// Handwriting — only for captions written on photobooth prints.
   static const scriptFamily = 'Caveat';
 
-  /// Hero moments: greeting, "Quest complete".
   static const TextStyle display = TextStyle(
     fontFamily: headingFamily,
     fontSize: 36,
@@ -22,7 +19,16 @@ abstract final class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  /// Screen titles.
+  /// Hero wordmark on the welcome screen.
+  static const TextStyle hero = TextStyle(
+    fontFamily: headingFamily,
+    fontSize: 48,
+    height: 1.1,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -1.5,
+    color: AppColors.textPrimary,
+  );
+
   static const TextStyle heading1 = TextStyle(
     fontFamily: headingFamily,
     fontSize: 28,
@@ -32,7 +38,6 @@ abstract final class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  /// Card heroes, step questions.
   static const TextStyle heading2 = TextStyle(
     fontFamily: headingFamily,
     fontSize: 22,
@@ -41,7 +46,6 @@ abstract final class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  /// Section headers, card titles.
   static const TextStyle heading3 = TextStyle(
     fontFamily: headingFamily,
     fontSize: 18,
@@ -66,7 +70,6 @@ abstract final class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  /// Supporting copy under a heading or on a card.
   static const TextStyle bodyMuted = TextStyle(
     fontFamily: bodyFamily,
     fontSize: 14,
@@ -75,7 +78,6 @@ abstract final class AppTypography {
     color: AppColors.textMuted,
   );
 
-  /// Compact emphasized labels: chips, nav, status pills.
   static const TextStyle label = TextStyle(
     fontFamily: bodyFamily,
     fontSize: 14,
@@ -92,7 +94,6 @@ abstract final class AppTypography {
     color: AppColors.textMuted,
   );
 
-  /// Small uppercase kicker above a hero title ("TODAY'S QUEST").
   static const TextStyle overline = TextStyle(
     fontFamily: bodyFamily,
     fontSize: 12,
@@ -110,7 +111,6 @@ abstract final class AppTypography {
     color: AppColors.onCoral,
   );
 
-  /// A handwritten note on a photobooth print ("Better together").
   static const TextStyle script = TextStyle(
     fontFamily: scriptFamily,
     fontSize: 22,
@@ -129,7 +129,6 @@ abstract final class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  /// The 3-2-1 photobooth countdown.
   static const TextStyle countdown = TextStyle(
     fontFamily: headingFamily,
     fontSize: 132,

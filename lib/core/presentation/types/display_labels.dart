@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Human-facing labels and icons for stored enum-like values, so screens
 /// never show raw values like `close_up` or `family`, and every screen
-/// describes the same value the same way. See CLAUDE.md §57.
+/// describes the same value the same way.
 
 /// Quest participation models (`quests.type`).
 const questTypes = [

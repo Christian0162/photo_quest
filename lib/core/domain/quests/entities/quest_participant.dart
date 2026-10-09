@@ -1,5 +1,4 @@
-/// One Person's membership/invitation status on one Quest. See CLAUDE.md
-/// §16A, §20.
+/// One Person's membership/invitation status on one Quest.
 class QuestParticipant {
   const QuestParticipant({
     required this.id,

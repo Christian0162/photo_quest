@@ -30,19 +30,16 @@ class CaptureState {
     this.countdownSeconds = 3,
     this.clipSeconds = 6,
     this.holdTooShort = false,
+    this.showLooks = false,
   });
 
-  /// Photos in a GIF burst.
   static const gifFrames = 4;
 
-  /// Most frames in a boomerang, and the fewest that make a good one.
-  static const boomerangMaxFrames = 20;
+  static const boomerangMaxFrames = 16;
   static const boomerangMinFrames = 4;
 
-  /// Longest boomerang hold.
   static const boomerangMaxHold = Duration(seconds: 2);
 
-  /// The shortest 360° clip worth keeping.
   static const clipMinimum = Duration(milliseconds: 1500);
 
   final Quest quest;
@@ -50,7 +47,7 @@ class CaptureState {
   final String memoryId;
 
   /// The confirmed participants doing this quest together, for on-screen
-  /// context during capture. See design system §59-60.
+  /// context during capture.
   final List<Person> participants;
   final int currentIndex;
   final CapturePhase phase;
@@ -61,7 +58,7 @@ class CaptureState {
   final Photo? lastPhoto;
 
   /// True right after a capture attempt failed; the UI shows a friendly
-  /// message and the person can simply try again. See CLAUDE.md §42.
+  /// message and the person can simply try again.
   final bool captureFailed;
 
   /// The live camera to preview, or null when it isn't running (e.g. once
@@ -71,26 +68,20 @@ class CaptureState {
 
   final CaptureMode mode;
 
-  /// The look shown live and saved into photos. Clips always use natural.
   final PhotoLook look;
 
-  /// A pose suggestion on screen right now, or null. See CLAUDE.md §2.4.
   final String? poseIdea;
 
   /// GIF photos taken so far in the current burst (1-based while
   /// capturing). Each change fires the flash.
   final int burstFrame;
 
-  /// How far through a held boomerang or 360° clip we are, 0–1.
   final double captureProgress;
 
-  /// How far along making the GIF or boomerang is, 0–1.
   final double processingProgress;
 
-  /// Length of the 3-2-1, from the booth settings.
   final int countdownSeconds;
 
-  /// Longest 360° clip, from the booth settings.
   final int clipSeconds;
 
   /// True right after the shutter was let go too soon for a boomerang or
@@ -98,12 +89,13 @@ class CaptureState {
   /// [captureFailed].
   final bool holdTooShort;
 
+  final bool showLooks;
+
   QuestShot get currentShot => shots[currentIndex];
   bool get isLastShot => currentIndex == shots.length - 1;
   int get shotNumber => currentIndex + 1;
   int get totalShots => shots.length;
 
-  /// The look actually applied in the current [mode].
   PhotoLook get effectiveLook => mode.supportsLooks ? look : PhotoLook.natural;
 
   CaptureState copyWith({
@@ -126,6 +118,7 @@ class CaptureState {
     int? countdownSeconds,
     int? clipSeconds,
     bool holdTooShort = false,
+    bool? showLooks,
   }) {
     return CaptureState(
       quest: quest,
@@ -150,6 +143,7 @@ class CaptureState {
       countdownSeconds: countdownSeconds ?? this.countdownSeconds,
       clipSeconds: clipSeconds ?? this.clipSeconds,
       holdTooShort: holdTooShort,
+      showLooks: showLooks ?? this.showLooks,
     );
   }
 }

@@ -7,6 +7,5 @@ class QuestListItem {
 
   final Quest quest;
 
-  /// Only filled for a user-created pair/group Quest. See design system §15.
   final List<Person> participants;
 }

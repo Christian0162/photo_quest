@@ -9,22 +9,19 @@ part of 'today_quest_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Picks the day's featured Quest for Home's hero card from the built-in
-/// templates. Stable for the whole calendar day, different the next. See
-/// CLAUDE.md §31, design system §14.
+/// templates. Stable for the whole calendar day, different the next.
 
 @ProviderFor(todayQuest)
 final todayQuestProvider = TodayQuestProvider._();
 
 /// Picks the day's featured Quest for Home's hero card from the built-in
-/// templates. Stable for the whole calendar day, different the next. See
-/// CLAUDE.md §31, design system §14.
+/// templates. Stable for the whole calendar day, different the next.
 
 final class TodayQuestProvider
     extends $FunctionalProvider<AsyncValue<Quest?>, Quest?, FutureOr<Quest?>>
     with $FutureModifier<Quest?>, $FutureProvider<Quest?> {
   /// Picks the day's featured Quest for Home's hero card from the built-in
-  /// templates. Stable for the whole calendar day, different the next. See
-  /// CLAUDE.md §31, design system §14.
+  /// templates. Stable for the whole calendar day, different the next.
   TodayQuestProvider._()
     : super(
         from: null,

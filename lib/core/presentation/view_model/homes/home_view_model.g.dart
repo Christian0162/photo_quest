@@ -8,17 +8,17 @@ part of 'home_view_model.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// A time-of-day greeting for the top of Home. See CLAUDE.md §31.
+/// A time-of-day greeting for the top of Home.
 
 @ProviderFor(homeGreeting)
 final homeGreetingProvider = HomeGreetingProvider._();
 
-/// A time-of-day greeting for the top of Home. See CLAUDE.md §31.
+/// A time-of-day greeting for the top of Home.
 
 final class HomeGreetingProvider
     extends $FunctionalProvider<String, String, String>
     with $Provider<String> {
-  /// A time-of-day greeting for the top of Home. See CLAUDE.md §31.
+  /// A time-of-day greeting for the top of Home.
   HomeGreetingProvider._()
     : super(
         from: null,
