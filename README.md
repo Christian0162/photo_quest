@@ -98,7 +98,7 @@ text and **Caveat** for handwritten touches.
 ```bash
 flutter pub get
 dart run build_runner build --delete-conflicting-outputs
-flutter run
+flutter run --dart-define-from-file=env.json
 ```
 
 The camera needs a real camera, so test on a physical phone. Pick one of the
@@ -118,7 +118,7 @@ First enable **Developer options**: Settings → About phone → tap
 
    ```bash
    flutter devices
-   flutter run
+   flutter run --dart-define-from-file=env.json
    ```
 
 If the phone is missing, try another cable or port, set USB mode to **File
@@ -150,10 +150,10 @@ network).
 
    ```bash
    flutter devices
-   flutter run -d <device-id>
+   flutter run -d <device-id> --dart-define-from-file=env.json
    ```
 
-   With only one device connected, plain `flutter run` is enough.
+   With only one device connected, you can leave out `-d <device-id>`.
 
 The pairing port and the connect port are different. Pairing is one-time;
 afterwards only `adb connect` is needed, and the connect port can change
