@@ -18,7 +18,7 @@ Skip only for trivial, non-product-affecting edits (typo fixes, formatting, depe
 
 1. Read `CLAUDE.md` (or `grep` the specific section that applies — e.g. §18-19 for schema work, §28-30 for UI/design, §54 for scope).
 2. Translate the request into Photo Quest vocabulary. Confirm the request doesn't quietly rename or conflate `Quest`, `Quest Session`, `Memory`, `Photo`, or `Person` (§20, §59).
-3. Check the request against the **Do Not Build Yet** list (§54): auth, cloud sync, social features, push notifications, AI recognition, payments, ads. If the request implies one of these, flag it to the user before proceeding rather than silently implementing it.
+3. Check the request against the **Do Not Build Yet** list (§54A): backends other than Supabase, paid services, push notifications, public feeds/likes/comments, AI recognition, payments, ads. Accounts and Supabase are in scope (§54C), but anything that changes who can see someone's photos (cloud copies, sharing, invitations) needs the §54C plan confirmed first, and every new table or bucket needs RLS/Storage policies plus policy tests. Flag, don't silently implement.
 4. Identify which layers are affected (Presentation / Domain / Data) and confirm the plan respects the dependency direction: Presentation → Domain → Data, never the reverse (§14-17, §62).
 5. If it's a screen or UI change, check it against:
    - the design system tokens (`AppColors`, `AppTypography`, `AppSpacing`, `AppRadius` — §27-30) rather than hardcoded values
@@ -37,7 +37,7 @@ Before reporting a feature/fix as complete, confirm:
 - [ ] No SQL inside screens/ViewModels/widgets/use cases (§47)
 - [ ] No arbitrary color/spacing/radius values outside the design system tokens (§27)
 - [ ] No new user-facing copy that reads as technical/corporate instead of warm and human (§58)
-- [ ] No accidental introduction of anything from the "Do Not Build Yet" list (§54)
+- [ ] No accidental introduction of anything from the "Do Not Build Yet" list (§54A, §54C)
 - [ ] `flutter analyze` and relevant `flutter test` pass, and `dart format` has been applied (§52)
 - [ ] No dead code, stray prints, or commented-out implementations left behind (§52)
 - [ ] Repeat-able flows (Quest → Session → Memory) still create new records rather than overwriting prior ones, if touched (§21)

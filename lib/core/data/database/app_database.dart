@@ -38,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -47,7 +47,7 @@ class AppDatabase extends _$AppDatabase {
       await seedDefaultQuests(this);
     },
     onUpgrade: (m, from, to) async {
-      // v1 -> v2: quest participants/invitations (CLAUDE.md §16A, §18).
+      // v1 -> v2: quest participants/invitations.
       if (from < 2) {
         await m.addColumn(quests, quests.creatorId);
         await m.addColumn(quests, quests.type);
@@ -66,9 +66,13 @@ class AppDatabase extends _$AppDatabase {
         await m.addColumn(memories, memories.keepsakeDesign);
         await m.createTable(appSettings);
       }
+      // v4 -> v5: 360° clips remember whether the viewer must mirror them.
+      if (from < 5) {
+        await m.addColumn(photos, photos.mirrored);
+      }
     },
     // Future schema changes add a step here rather than recreating
-    // tables. See CLAUDE.md §49.
+    // tables.
   );
 
   static QueryExecutor _openConnection() {

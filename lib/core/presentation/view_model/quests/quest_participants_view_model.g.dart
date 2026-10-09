@@ -9,10 +9,9 @@ part of 'quest_participants_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
-/// §40-41, §60.
+/// invited, who's confirmed, and inviting more People.
 ///
-/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// V1 is local-only and single-device: everyone doing the
 /// quest is physically present and shares this phone, so "accepting an
 /// invitation" means tapping your own name on the shared screen before the
 /// quest starts, rather than a remote push notification.
@@ -21,10 +20,9 @@ part of 'quest_participants_view_model.dart';
 final questParticipantsViewModelProvider = QuestParticipantsViewModelFamily._();
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
-/// §40-41, §60.
+/// invited, who's confirmed, and inviting more People.
 ///
-/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// V1 is local-only and single-device: everyone doing the
 /// quest is physically present and shares this phone, so "accepting an
 /// invitation" means tapping your own name on the shared screen before the
 /// quest starts, rather than a remote push notification.
@@ -35,10 +33,9 @@ final class QuestParticipantsViewModelProvider
           List<QuestParticipantWithPerson>
         > {
   /// Drives the participant list on the Quest Introduction screen: who's
-  /// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
-  /// §40-41, §60.
+  /// invited, who's confirmed, and inviting more People.
   ///
-  /// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+  /// V1 is local-only and single-device: everyone doing the
   /// quest is physically present and shares this phone, so "accepting an
   /// invitation" means tapping your own name on the shared screen before the
   /// quest starts, rather than a remote push notification.
@@ -83,10 +80,9 @@ String _$questParticipantsViewModelHash() =>
     r'579f96ace803786fa3c271923c90b442a80045da';
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
-/// §40-41, §60.
+/// invited, who's confirmed, and inviting more People.
 ///
-/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// V1 is local-only and single-device: everyone doing the
 /// quest is physically present and shares this phone, so "accepting an
 /// invitation" means tapping your own name on the shared screen before the
 /// quest starts, rather than a remote push notification.
@@ -110,10 +106,9 @@ final class QuestParticipantsViewModelFamily extends $Family
       );
 
   /// Drives the participant list on the Quest Introduction screen: who's
-  /// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
-  /// §40-41, §60.
+  /// invited, who's confirmed, and inviting more People.
   ///
-  /// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+  /// V1 is local-only and single-device: everyone doing the
   /// quest is physically present and shares this phone, so "accepting an
   /// invitation" means tapping your own name on the shared screen before the
   /// quest starts, rather than a remote push notification.
@@ -126,10 +121,9 @@ final class QuestParticipantsViewModelFamily extends $Family
 }
 
 /// Drives the participant list on the Quest Introduction screen: who's
-/// invited, who's confirmed, and inviting more People. See CLAUDE.md §33,
-/// §40-41, §60.
+/// invited, who's confirmed, and inviting more People.
 ///
-/// V1 is local-only and single-device (CLAUDE.md §54A): everyone doing the
+/// V1 is local-only and single-device: everyone doing the
 /// quest is physically present and shares this phone, so "accepting an
 /// invitation" means tapping your own name on the shared screen before the
 /// quest starts, rather than a remote push notification.

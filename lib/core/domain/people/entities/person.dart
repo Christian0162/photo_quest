@@ -1,4 +1,4 @@
-/// Someone (or a pet) associated with memories. See CLAUDE.md §20, §40.
+/// Someone (or a pet) associated with memories.
 class Person {
   const Person({
     required this.id,

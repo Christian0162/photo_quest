@@ -7,12 +7,11 @@ import 'package:go_router/go_router.dart';
 import '../../../utils/app_haptics.dart';
 import '../../view_model/memories/keepsake_view_model.dart';
 import '../../view_model/memories/memory_detail_view_model.dart';
-import '../../widget/organisms/md_app_scaffold.dart';
-import '../../widget/templates/keepsake_template.dart';
+import '../../widget/organisms/common/md_app_scaffold.dart';
+import '../../widget/templates/memories/keepsake_template.dart';
 
 /// Decorate a Memory's printed keepsake. Wires [KeepsakeViewModel] into
-/// [KeepsakeTemplate]; saving renders the print and goes back. See
-/// CLAUDE.md §36.
+/// [KeepsakeTemplate]; saving renders the print and goes back.
 class KeepsakeScreen extends ConsumerWidget {
   const KeepsakeScreen({super.key, required this.memoryId});
 

@@ -9,7 +9,7 @@ import '../database/daos/quest_dao.dart';
 
 /// Source of truth for Quest, Quest Shot and Quest Participant data.
 /// ViewModels depend on this, never on [QuestDao] or [db.AppDatabase]
-/// directly. See CLAUDE.md §16.
+/// directly.
 class QuestRepository {
   QuestRepository(this._dao);
 
@@ -79,7 +79,7 @@ class QuestRepository {
   }
 
   /// Invites a Person to participate in a Quest, creating a
-  /// [QuestParticipant] with status `invited`. See CLAUDE.md §16A, §59.
+  /// [QuestParticipant] with status `invited`.
   Future<void> inviteParticipant({
     required String questId,
     required String personId,
@@ -111,7 +111,7 @@ class QuestRepository {
   }
 
   /// Records a participant's response to a quest invitation (`accepted`
-  /// or `declined`). See CLAUDE.md §16A.
+  /// or `declined`).
   Future<void> respondToInvitation({
     required String participantId,
     required bool accepted,

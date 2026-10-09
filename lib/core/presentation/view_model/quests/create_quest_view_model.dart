@@ -14,7 +14,7 @@ part 'create_quest_view_model.g.dart';
 const _uuid = Uuid();
 
 /// Drives the guided Create Quest flow: what/description/participants/shots
-/// -> review -> create. See CLAUDE.md §33, design system §17-19.
+/// -> review -> create.
 @riverpod
 class CreateQuestViewModel extends _$CreateQuestViewModel {
   @override
@@ -44,7 +44,6 @@ class CreateQuestViewModel extends _$CreateQuestViewModel {
     );
   }
 
-  /// Moves to the next step, unless this one still has a [blocker].
   void nextStep() {
     if (state.blocker != null || state.isLastStep) return;
     state = state.copyWith(step: CreateQuestStep.values[state.step.index + 1]);
@@ -58,6 +57,9 @@ class CreateQuestViewModel extends _$CreateQuestViewModel {
     return true;
   }
 
+  void setShotType(String shotType) =>
+      state = state.copyWith(shotType: shotType);
+
   void addShot(DraftShot shot) {
     state = state.copyWith(shots: [...state.shots, shot]);
   }
@@ -67,14 +69,12 @@ class CreateQuestViewModel extends _$CreateQuestViewModel {
     state = state.copyWith(shots: shots);
   }
 
-  /// Puts a shot back where it was — the "Undo" after removing one.
   void insertShotAt(int index, DraftShot shot) {
     final shots = [...state.shots]
       ..insert(index.clamp(0, state.shots.length), shot);
     state = state.copyWith(shots: shots);
   }
 
-  /// Moves a shot so it's taken at [to] (its final position) instead.
   void moveShot(int from, int to) {
     if (from == to) return;
     final shots = [...state.shots];
@@ -85,7 +85,7 @@ class CreateQuestViewModel extends _$CreateQuestViewModel {
 
   /// Creates the Quest, its shots, and invites the chosen participants.
   /// Returns the new Quest's id, or null if it's already being created.
-  /// Throws on failure. See CLAUDE.md §16A, §59.
+  /// Throws on failure.
   Future<String?> submit() async {
     if (state.isSubmitting || !state.canCreate) return null;
     final draft = state;
