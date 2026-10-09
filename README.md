@@ -16,13 +16,13 @@
   <img alt="Android and iOS" src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-252323" />
 </p>
 
-Photo Quest turns everyday moments into shared adventures. Pick a quest,
-invite your partner, family or friends, then do it together in real life. A
-playful photobooth guides every shot, and each quest becomes a memory you can
-relive year after year.
+Photo Quest is a social real-life quest and photobooth app. Pick a quest, do it
+together in real life, and a playful photobooth turns it into a memory you can
+repeat year after year.
 
-It's private by design: no feed, no likes, no followers. V1 is
-**local-first**, so there's no account and everything stays on the device.
+It's private by design: no feed, no likes, no followers. The app is
+**local-first** (capture and browse memories offline). A Supabase account
+handles sign-in and profile, and sharing is invite-only.
 
 <p align="center">
   <img src="docs/screenshots/launch.png" alt="Launch screen" width="200" />
@@ -33,140 +33,58 @@ It's private by design: no feed, no likes, no followers. V1 is
 
 ## Features
 
-- **Quests:** guided real-life activities for couples, families, friends,
-  pets or just you, with a new "Today's Quest" every day.
-- **Photobooth:** countdown, pose ideas, and Photo, GIF, Boomerang and 360°
-  modes, with film-style looks.
-- **Memories:** a private journal of fanned prints, filtered by *This day*,
-  *This month* or *All journey*. Tap any photo to view it full screen.
-- **Keepsakes:** printed strips, grids and polaroids you can decorate, save
-  and share.
-- **People:** your circle, grouped as your person, family, friends and pets.
-- **Do it again:** repeat a quest each year and watch the memories grow.
+- **Quests:** guided activities for couples, families, friends, pets or solo.
+- **Photobooth:** countdown, pose ideas, Photo / GIF / Boomerang / 360° modes.
+- **Memories:** a private journal of everything you captured.
+- **Keepsakes:** printed strips, grids and polaroids to decorate and share.
+- **People & friends:** your circle, plus real friends added by friend code.
+- **Do it again:** repeat a quest and watch the memories grow.
 
 ## Tech stack
 
-| Concern            | Package                                       | Version     |
-| ------------------ | --------------------------------------------- | ----------- |
-| Framework          | Flutter / Dart                                | 3.47 / 3.13 |
-| Camera             | `camera`                                      | ^0.11.0     |
-| Local database     | `drift`, `drift_flutter` (SQLite)             | ^2.20 / ^0.3 |
-| State & DI         | `flutter_riverpod`, `riverpod_annotation`     | ^3.0 / ^4.0 |
-| Navigation         | `go_router`                                   | ^14.6       |
-| Image processing   | `image`                                       | ^4.3        |
-| Video playback     | `video_player`                                | ^2.11       |
-| Files & sharing    | `path_provider`, `share_plus`, `gal`          | ^2.1 / ^10.1 / ^2.3 |
-| Utilities          | `uuid`, `intl`, `path`                        | ^4.5 / ^0.19 / ^1.9 |
-| Code generation    | `build_runner`, `drift_dev`, `riverpod_generator` | dev only |
-| Linting            | `flutter_lints`                               | ^6.0        |
-
-Fonts are bundled (SIL OFL): **Outfit** for headings, **Inter** for body
-text and **Caveat** for handwritten touches.
+Flutter · `camera` · Drift (SQLite) · Riverpod · `go_router` · `image` ·
+Supabase (`supabase_flutter`, Free plan). Fonts: Outfit, Inter, Caveat.
 
 ## Getting started
 
-### 1. Install the tools
-
-1. Install the [Flutter SDK](https://docs.flutter.dev/get-started/install)
-   and add its `bin` folder to your `PATH`.
-2. For Android, install [Android Studio](https://developer.android.com/studio),
-   open it once and let the setup wizard install the **Android SDK**,
-   **platform-tools** (this is where `adb` lives) and **command-line tools**.
-   Without Android Studio, download the
-   [command-line tools](https://developer.android.com/studio#command-line-tools-only)
-   and run `sdkmanager "platform-tools"`. Then install the Android platform
-   your Flutter SDK requires with `sdkmanager "platforms;android-<N>"`
-   (it's the `compileSdk` value the build asks for; if you skip this, Gradle
-   downloads the missing platform on the first `flutter run` once the licenses
-   are accepted).
-3. Accept the licenses and check everything:
+1. Install the [Flutter SDK](https://docs.flutter.dev/get-started/install) and
+   [Android Studio](https://developer.android.com/studio) (for the Android
+   SDK and `adb`), then check your setup:
 
    ```bash
    flutter doctor --android-licenses
    flutter doctor -v
    ```
 
-   `flutter doctor -v` prints the SDK location (`Android SDK at ...`). If your
-   SDK is somewhere unusual, point Flutter at it with
-   `flutter config --android-sdk <path>`.
-4. Make `adb` available in your terminal by adding
-   `<android-sdk>/platform-tools` to your `PATH` (on Windows it is often
-   `%LOCALAPPDATA%\Android\Sdk\platform-tools`). Check with `adb version`.
-
-### 2. Get the code running
-
-```bash
-flutter pub get
-dart run build_runner build --delete-conflicting-outputs
-flutter run --dart-define-from-file=env.json
-```
-
-The camera needs a real camera, so test on a physical phone. Pick one of the
-two ways below to connect it.
-
-### Run on a physical Android phone
-
-First enable **Developer options**: Settings → About phone → tap
-**Build number** 7 times.
-
-#### Option A: USB
-
-1. Settings → Developer options → turn on **USB debugging**.
-2. Plug the phone into your computer with a data-capable cable.
-3. Accept the **Allow USB debugging?** prompt on the phone.
-4. Check that it shows up, then run:
+2. Install, generate code and run:
 
    ```bash
-   flutter devices
+   flutter pub get
+   dart run build_runner build --delete-conflicting-outputs
    flutter run --dart-define-from-file=env.json
    ```
 
-If the phone is missing, try another cable or port, set USB mode to **File
-transfer**, and on Windows install your phone maker's USB driver.
+   Without `--dart-define-from-file=env.json` sign-in won't work. In VS Code,
+   add `"args": ["--dart-define-from-file=env.json"]` to your launch config.
 
-#### Option B: Wireless (Android 11+)
+The camera needs real hardware, so test on a physical phone.
 
-The phone and computer must be on the same Wi-Fi (not a guest or isolated
-network).
+### Connecting an Android phone
 
-1. Settings → Developer options → turn on **Wireless debugging**.
-2. Tap **Wireless debugging** → **Pair device with pairing code**. Keep the
-   dialog open: it shows a 6-digit code and a pairing `IP:port`.
-3. Pair once from your computer, using the pairing `IP:port` from the dialog:
+Enable Developer options (Settings → About phone → tap **Build number** 7
+times), then either:
 
-   ```bash
-   adb pair 192.168.1.5:37123
-   ```
+- **USB:** turn on **USB debugging**, plug in, accept the prompt, and check
+  `flutter devices`.
+- **Wireless (Android 11+, same Wi-Fi):** turn on **Wireless debugging**, then
+  `adb pair <pairing-ip:port>` (enter the 6-digit code) and
+  `adb connect <ip:port>`. The pairing and connect ports differ. If it fails,
+  run `adb kill-server` and retry.
 
-   Enter the 6-digit code when asked. Use a colon between IP and port.
-4. Close the dialog. On the main Wireless debugging screen, note the
-   **different** `IP:port` under "IP address & port" and connect:
+Then `flutter run -d <device-id> --dart-define-from-file=env.json`. iOS needs a
+Mac with Xcode.
 
-   ```bash
-   adb connect 192.168.1.5:41567
-   ```
-
-5. Run the app:
-
-   ```bash
-   flutter devices
-   flutter run -d <device-id> --dart-define-from-file=env.json
-   ```
-
-   With only one device connected, you can leave out `-d <device-id>`.
-
-The pairing port and the connect port are different. Pairing is one-time;
-afterwards only `adb connect` is needed, and the connect port can change
-when Wireless debugging is toggled or the phone restarts. If it fails, run
-`adb kill-server` and try again.
-
-On iOS, a Mac with Xcode is required; connect the iPhone by cable and trust
-the computer.
-
-Run `build_runner` again after changing a Drift table, a DAO or a
-`@riverpod` provider. Generated `*.g.dart` files are committed.
-
-Before every commit, all three must pass:
+## Before you commit
 
 ```bash
 dart format lib test
@@ -174,60 +92,40 @@ flutter analyze
 flutter test
 ```
 
-[CI](.github/workflows/ci.yml) runs the same checks on every push and pull
-request. It also makes sure the generated code is up to date and builds an
-Android APK, which you can download from the run's artifacts. Dependabot
-opens weekly PRs for package updates.
+Re-run `build_runner` after changing a Drift table, a DAO or a `@riverpod`
+provider; generated `*.g.dart` files are committed. [CI](.github/workflows/ci.yml)
+runs the same checks, verifies generated code is current and builds an APK.
 
 ## Architecture
 
-Layered, one-way: **Presentation → Domain → Data.** Photos are files;
+Layered and one-way: **Presentation → Domain → Data.** Photos are files;
 memories are data (SQLite holds only metadata).
 
 ```text
 lib/
-├── main.dart              # bootstraps app.dart only
-├── app.dart               # root MaterialApp.router
-├── config/
-│   ├── constant/          # AppColors, AppTypography, AppSpacing, AppConstants, AppTheme
-│   └── routes/            # app_router.dart, app_shell.dart — all navigation lives here
+├── main.dart, app.dart       # bootstrap and root MaterialApp.router
+├── config/                   # constant/ (design system), env/, routes/ (all navigation)
 └── core/
-    ├── domain/                # one folder per domain area
-    │   ├── quests/entities/
-    │   ├── memories/entities/
-    │   └── people/entities/
-    ├── data/
-    │   ├── database/          # app_database.dart, tables/, daos/, seed/
-    │   ├── services/          # camera/, storage/, image/, sharing/, gallery/
-    │   └── repositories/      # flat: one repository (+ provider) per aggregate
+    ├── domain/               # entities and rules, one folder per area
+    ├── data/                 # database/ (Drift), services/, repositories/
     └── presentation/
-        ├── screen/            # one subfolder per domain area (home, quests, camera, memories, people, settings)
-        ├── view_model/        # mirrors screen/, one ViewModel per screen
-        ├── types/             # UI-only state/type helpers, mirrors screen/
-        └── widget/            # shared, atomic-design tiers
-            ├── atoms/         # PrimaryButton, PersonAvatar, …
-            ├── molecules/     # AppCard, EmptyState, …
-            ├── organisms/     # AppScaffold, QuestCard, MemoryCard, …
-            └── templates/     # one *_template.dart per screen + *_template_preview.dart
+        ├── screen/           # logic: watches ViewModels, wires navigation/dialogs
+        ├── view_model/       # state and actions (Riverpod Notifier)
+        └── widget/           # atoms → molecules → organisms → templates
+supabase/                     # migrations, RLS policy tests, setup guide
 ```
 
-Each screen is split into three files that live in matching subfolders,
-and each one has exactly one job:
+Every screen is three files with matching names:
 
-- **Screen** (`screen/<area>/`) — **logic lives here.** A
-  `ConsumerWidget` that watches ViewModels, wires callbacks, navigation,
-  dialogs, sheets and snackbars. No layout.
-- **View model** (`view_model/<area>/`) — state, validation, derived
-  data and actions (Riverpod `Notifier`/`AsyncNotifier`).
-- **Template** (`widget/template/`) — **no logic, ever.** The full page
-  layout as plain data + callbacks in; it never touches `ref`, the
-  router, or a repository/service. If it needs to know something, it's
-  passed in as a parameter, not looked up.
+| Part       | Location                       | Job                                           |
+| ---------- | ------------------------------ | --------------------------------------------- |
+| Screen     | `screen/<area>/*_screen.dart`  | Logic and wiring. No layout.                  |
+| ViewModel  | `view_model/<area>/*_view_model.dart` | State, validation, actions.            |
+| Template   | `widget/templates/*_template.dart` | Layout only: plain data and callbacks in. |
 
-Only create a domain-area subfolder, or a new atomic-tier entry, when a
-screen or component actually exists for it — don't scaffold empty
-folders ahead of need. See [CLAUDE.md §22–23](CLAUDE.md) for the full
-rationale.
+Loading and fetching live in the Screen, never in a Template. Only create a
+domain-area folder or atomic-tier entry when a screen or component actually
+needs it. The full product and engineering spec is [CLAUDE.md](CLAUDE.md).
 
 ### Naming conventions
 
@@ -247,41 +145,22 @@ rationale.
 | Drift tables  | `<name>_table.dart`      | `quest_shots_table.dart`         |
 | DAOs          | `<name>_dao.dart`        | `quests_dao.dart`                |
 
-Atoms, molecules and organisms all carry an `md_` file prefix (classes:
-`Md` + `PascalCase`, e.g. `MdPrimaryButton`) regardless of tier — the
-tier is expressed only by which folder the file lives in, not by a
-different prefix per tier. A screen, its ViewModel and its template
-always share the same base name
-(`memory_detail_*`) across their three folders, so they're easy to find
-side by side. Avoid vague names like `helper.dart`, `manager.dart` or
-`utils2.dart` — prefer specific ones (`photo_storage_service.dart`, not
-`storage_helper.dart`). The full product and engineering spec is in
-[CLAUDE.md](CLAUDE.md).
+Atoms, molecules and organisms all carry the `md_` file prefix (classes:
+`Md` + `PascalCase`); the tier is expressed only by the folder. A screen, its
+ViewModel and its template share the same base name (`memory_detail_*`)
+across their three folders. Avoid vague names like `helper.dart`,
+`manager.dart` or `utils2.dart`; prefer specific ones
+(`photo_storage_service.dart`).
 
 ## Versioning
 
-The app follows [Semantic Versioning](https://semver.org). The version lives
-in `pubspec.yaml` as `MAJOR.MINOR.PATCH+BUILD`:
-
-```yaml
-version: 1.0.0+1   # 1.0.0 is the version users see, +1 is the build number
-```
-
-- Bump **PATCH** for fixes, **MINOR** for new features, **MAJOR** for
-  breaking changes such as a data migration that can't be undone.
-- Increase the **build number** on every store upload. Android uses it as
-  `versionCode` and iOS as `CFBundleVersion`.
-- Record each release in [CHANGELOG.md](CHANGELOG.md).
-
-## App icon and launch screen
-
-The master icon is [`assets/icon/app_icon.png`](assets/icon/app_icon.png)
-(1024 × 1024): three fanned photobooth prints on warm coral. Every Android
-and iOS icon size, the Android adaptive icon and both launch screens are
-made from it and committed under `android/` and `ios/`. Replace them all
-together if the icon changes.
+[Semantic Versioning](https://semver.org) in `pubspec.yaml` as
+`MAJOR.MINOR.PATCH+BUILD` (e.g. `1.0.0+1`). Bump the build number on every
+store upload and record releases in [CHANGELOG.md](CHANGELOG.md).
 
 ## Credits
 
 Example quest photos are from [Unsplash](https://unsplash.com), listed in
-[`assets/images/quests/CREDITS.md`](assets/images/quests/CREDITS.md).
+[`assets/images/quests/CREDITS.md`](assets/images/quests/CREDITS.md). The app
+icon is [`assets/icon/app_icon.png`](assets/icon/app_icon.png); replace the
+generated Android and iOS icons together if it changes.
