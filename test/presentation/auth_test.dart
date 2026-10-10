@@ -14,8 +14,10 @@ import 'package:photoquest/core/presentation/types/auth/auth_form_states.dart';
 import 'package:photoquest/core/presentation/view_model/auth/auth_session_view_model.dart';
 import 'package:photoquest/core/presentation/widget/atoms/common/md_photoquest_logo.dart';
 import 'package:photoquest/core/presentation/widget/molecules/common/md_animated_photoquest_logo.dart';
-import 'package:photoquest/core/presentation/widget/templates/auth/login_template.dart';
-import 'package:photoquest/core/presentation/widget/templates/auth/register_template.dart';
+import 'package:photoquest/core/presentation/view_model/auth/auth_sheet_view_model.dart';
+import 'package:photoquest/core/presentation/widget/organisms/auth/md_login_form.dart';
+import 'package:photoquest/core/presentation/widget/organisms/auth/md_register_form.dart';
+import 'package:photoquest/core/presentation/widget/templates/auth/welcome_template.dart';
 import 'package:photoquest/core/presentation/widget/templates/auth/verify_email_template.dart';
 
 import '../support/fake_auth_repository.dart';
@@ -555,25 +557,47 @@ void main() {
     }
 
     final templates = <String, Widget Function()>{
-      'login': () => LoginTemplate(
-        form: const LoginFormState(),
-        onEmailChanged: (_) {},
-        onPasswordChanged: (_) {},
-        onToggleShowPassword: () {},
-        onSubmit: () {},
-        onForgotPassword: () {},
+      'welcome': () => WelcomeTemplate(
+        mode: AuthSheetMode.actions,
+        formBuilder: (_, _) => const SizedBox.shrink(),
         onCreateAccount: () {},
-        onBack: () {},
-      ),
-      'register with errors': () => RegisterTemplate(
-        form: const RegisterFormState(showErrors: true, error: 'Oops'),
-        onEmailChanged: (_) {},
-        onPasswordChanged: (_) {},
-        onConfirmationChanged: (_) {},
-        onToggleShowPassword: () {},
-        onSubmit: () {},
         onLogIn: () {},
-        onBack: () {},
+        onClose: () {},
+        onExpandedChanged: (_) {},
+      ),
+      'login': () => WelcomeTemplate(
+        mode: AuthSheetMode.login,
+        formBuilder: (_, controller) => MdLoginForm(
+          scrollController: controller,
+          form: const LoginFormState(),
+          onEmailChanged: (_) {},
+          onPasswordChanged: (_) {},
+          onToggleShowPassword: () {},
+          onSubmit: () {},
+          onForgotPassword: () {},
+          onCreateAccount: () {},
+        ),
+        onCreateAccount: () {},
+        onLogIn: () {},
+        onClose: () {},
+        onExpandedChanged: (_) {},
+      ),
+      'register with errors': () => WelcomeTemplate(
+        mode: AuthSheetMode.register,
+        formBuilder: (_, controller) => MdRegisterForm(
+          scrollController: controller,
+          form: const RegisterFormState(showErrors: true, error: 'Oops'),
+          onEmailChanged: (_) {},
+          onPasswordChanged: (_) {},
+          onConfirmationChanged: (_) {},
+          onToggleShowPassword: () {},
+          onSubmit: () {},
+          onLogIn: () {},
+        ),
+        onCreateAccount: () {},
+        onLogIn: () {},
+        onClose: () {},
+        onExpandedChanged: (_) {},
       ),
       'verify': () => VerifyEmailTemplate(
         email: 'a-rather-long-address@example-domain.com',

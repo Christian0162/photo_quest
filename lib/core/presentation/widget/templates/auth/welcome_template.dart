@@ -2,140 +2,112 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../../config/constant/app_colors.dart';
+import '../../../../../config/constant/app_motion.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
+import '../../../view_model/auth/auth_sheet_view_model.dart';
 import '../../atoms/common/md_primary_button.dart';
+import '../../atoms/common/md_soft_backdrop.dart';
 import '../../atoms/common/md_sticker.dart';
-import '../../molecules/common/md_animated_photoquest_logo.dart';
+import '../../molecules/common/md_brand_header.dart';
+import '../../organisms/auth/md_auth_sheet.dart';
 import '../../organisms/common/md_app_scaffold.dart';
 
+/// The way in: the brand on top, and a drawer at the bottom that holds
+/// "Create account" and "I already have an account". Choosing one (or
+/// dragging the drawer up) lifts it over the page to show that form, while
+/// the logo and title stay above it.
 class WelcomeTemplate extends StatelessWidget {
   const WelcomeTemplate({
     super.key,
+    required this.mode,
+    required this.formBuilder,
     required this.onCreateAccount,
     required this.onLogIn,
+    required this.onClose,
+    required this.onExpandedChanged,
   });
+
+  final AuthSheetMode mode;
+
+  /// The form for [mode], built on the drawer's scroll controller. Only
+  /// asked for while the drawer is open.
+  final Widget Function(BuildContext context, ScrollController controller)
+  formBuilder;
 
   final VoidCallback onCreateAccount;
   final VoidCallback onLogIn;
+  final VoidCallback onClose;
+  final ValueChanged<bool> onExpandedChanged;
 
-  static const _logoSize = 240.0;
+  /// Handle, two actions and their padding, before the system inset.
+  static const _collapsedHeight = 184.0;
+
+  /// Room kept above the open drawer for the brand.
+  static const _expandedTopGap = 112.0;
 
   @override
   Widget build(BuildContext context) {
+    final expanded = mode != AuthSheetMode.actions;
+    final padding = MediaQuery.paddingOf(context);
+    final duration = AppMotion.of(context, AppMotion.medium);
+
     return MdAppScaffold(
       backgroundColor: AppColors.background,
       overlayStyle: SystemUiOverlayStyle.dark,
+      safeArea: false,
+      // System back closes the drawer first; only then does it leave the app.
+      onBackBlocked: expanded ? onClose : null,
       body: Stack(
         children: [
-          // Button-coral washed into a soft pink, fading to near white.
-          Positioned.fill(
-            child: ExcludeSemantics(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.warmCoral.withValues(alpha: 0.24),
-                      AppColors.warmCoral.withValues(alpha: 0.10),
-                      AppColors.background,
-                    ],
-                    stops: const [0, 0.55, 1],
-                  ),
+          const Positioned.fill(child: MdSoftBackdrop()),
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: _collapsedHeight + padding.bottom,
+            child: AnimatedAlign(
+              duration: duration,
+              curve: AppMotion.standard,
+              alignment: expanded ? Alignment.topCenter : Alignment.center,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.gutter,
+                  padding.top + AppSpacing.sm,
+                  AppSpacing.gutter,
+                  0,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MdBrandHeader(
+                      logoSize: expanded ? 72 : 240,
+                      titleSize: expanded ? 32 : 52,
+                      glow: !expanded,
+                    ),
+                    AnimatedSize(
+                      duration: duration,
+                      curve: AppMotion.standard,
+                      alignment: Alignment.topCenter,
+                      child: expanded
+                          ? const SizedBox(width: double.infinity)
+                          : const _Pitch(),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-          Column(
-            children: [
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.gutter,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _LogoGlow(
-                          // The logo's canvas has empty margin around the
-                          // prints; trim its layout height so the title sits
-                          // right under them (painting still overflows).
-                          child: const Align(
-                            heightFactor: 0.64,
-                            child: MdAnimatedPhotoQuestLogo(
-                              size: _logoSize,
-                              loop: true,
-                              duration: Duration(milliseconds: 3200),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Semantics(
-                          header: true,
-                          // Scales down rather than wrapping on narrow phones or large text.
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              'Photo Quest',
-                              style: AppTypography.hero,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Text(
-                          'Do something together.\nKeep the memory.',
-                          textAlign: TextAlign.center,
-                          style: AppTypography.heading3.copyWith(
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.lg),
-                        const Wrap(
-                          alignment: WrapAlignment.center,
-                          spacing: AppSpacing.sm,
-                          runSpacing: AppSpacing.sm,
-                          children: [
-                            MdSticker(
-                              label: 'No feed',
-                              tilt: -0.07,
-                              sway: true,
-                              color: AppColors.softPeach,
-                              delay: Duration(milliseconds: 900),
-                            ),
-                            MdSticker(
-                              label: 'No likes',
-                              tilt: 0.05,
-                              sway: true,
-                              delay: Duration(milliseconds: 1050),
-                            ),
-                            MdSticker(
-                              label: 'Just your people',
-                              tilt: -0.03,
-                              sway: true,
-                              color: AppColors.paper,
-                              delay: Duration(milliseconds: 1200),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              // Pinned to the bottom, so the actions are always in the same
-              // thumb-reach spot whatever the screen height.
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.gutter,
-                  AppSpacing.md,
-                  AppSpacing.gutter,
-                  AppSpacing.lg,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+          Positioned.fill(
+            child: MdAuthSheet(
+              expanded: expanded,
+              onExpandedChanged: onExpandedChanged,
+              collapsedHeight: _collapsedHeight + padding.bottom,
+              expandedTopGap: padding.top + _expandedTopGap,
+              builder: (context, scrollController, _) {
+                if (expanded) return formBuilder(context, scrollController);
+                return MdAuthSheetPage(
+                  scrollController: scrollController,
                   children: [
                     MdPrimaryButton(
                       label: 'Create account',
@@ -149,9 +121,9 @@ class WelcomeTemplate extends StatelessWidget {
                       child: const Text('I already have an account'),
                     ),
                   ],
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -159,43 +131,49 @@ class WelcomeTemplate extends StatelessWidget {
   }
 }
 
-/// A soft peach glow behind the logo, so the print sits in warm light
-/// instead of floating on flat cream.
-class _LogoGlow extends StatelessWidget {
-  const _LogoGlow({required this.child});
-
-  final Widget child;
+/// The tagline and what the app does not do, under the brand.
+class _Pitch extends StatelessWidget {
+  const _Pitch();
 
   @override
   Widget build(BuildContext context) {
-    // The glow spills past the logo without taking layout space, so the
-    // title sits right under the print.
-    return Stack(
-      alignment: Alignment.center,
-      clipBehavior: Clip.none,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Positioned.fill(
-          child: ExcludeSemantics(
-            child: OverflowBox(
-              minWidth: 0,
-              minHeight: 0,
-              maxWidth: WelcomeTemplate._logoSize * 1.3,
-              maxHeight: WelcomeTemplate._logoSize * 1.3,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      AppColors.softPeach,
-                      AppColors.softPeach.withValues(alpha: 0),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          'Do something together.\nKeep the memory.',
+          textAlign: TextAlign.center,
+          style: AppTypography.heading3.copyWith(color: AppColors.textPrimary),
         ),
-        child,
+        const SizedBox(height: AppSpacing.lg),
+        const Wrap(
+          alignment: WrapAlignment.center,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            MdSticker(
+              label: 'No feed',
+              tilt: -0.07,
+              sway: true,
+              color: AppColors.softPeach,
+              delay: Duration(milliseconds: 900),
+            ),
+            MdSticker(
+              label: 'No likes',
+              tilt: 0.05,
+              sway: true,
+              delay: Duration(milliseconds: 1050),
+            ),
+            MdSticker(
+              label: 'Just your people',
+              tilt: -0.03,
+              sway: true,
+              color: AppColors.paper,
+              delay: Duration(milliseconds: 1200),
+            ),
+          ],
+        ),
       ],
     );
   }

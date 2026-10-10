@@ -17,7 +17,7 @@ class MdQuestPromptBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = BorderRadius.circular(AppRadius.base);
+    final radius = BorderRadius.circular(AppRadius.button);
 
     return Semantics(
       button: true,

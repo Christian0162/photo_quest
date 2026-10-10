@@ -44,6 +44,10 @@ abstract final class AppTheme {
     borderRadius: BorderRadius.circular(AppRadius.base),
   );
 
+  static final _buttonShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(AppRadius.button),
+  );
+
   static ThemeData get light {
     return ThemeData(
       useMaterial3: true,
@@ -86,7 +90,7 @@ abstract final class AppTheme {
           textStyle: AppTypography.button,
           minimumSize: const Size(AppTouch.minTarget, AppTouch.buttonHeight),
           side: const BorderSide(color: AppColors.line, width: 1.5),
-          shape: _shape,
+          shape: _buttonShape,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -94,7 +98,7 @@ abstract final class AppTheme {
           foregroundColor: AppColors.coralInk,
           textStyle: AppTypography.label,
           minimumSize: const Size(AppTouch.minTarget, AppTouch.minTarget),
-          shape: _shape,
+          shape: _buttonShape,
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
@@ -203,7 +207,7 @@ abstract final class AppTheme {
     minimumSize: const Size(AppTouch.minTarget, AppTouch.buttonHeight),
     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
     elevation: 0,
-    shape: _shape,
+    shape: _buttonShape,
   );
 
   static OutlineInputBorder _inputBorder(Color color, {double width = 1.5}) {

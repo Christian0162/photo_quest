@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Launch splash: Photo Quest coral with the vector logo (sharp at any
-     density), matching the first frame of the in-app launch reveal. -->
+     density), shown while the app starts. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/ic_launcher_background" />
     <item

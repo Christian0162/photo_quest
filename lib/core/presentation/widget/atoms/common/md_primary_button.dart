@@ -86,7 +86,7 @@ class _MdPrimaryButtonState extends State<MdPrimaryButton> {
           0,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadius.base),
+          borderRadius: BorderRadius.circular(AppRadius.button),
           boxShadow: widget.flat
               ? null
               : [

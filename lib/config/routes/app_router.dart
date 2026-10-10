@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../core/domain/auth/enum/auth_status.dart';
 import '../../core/presentation/screen/auth/account_screen.dart';
 import '../../core/presentation/screen/auth/auth_screens.dart';
+import '../../core/presentation/screen/auth/intro_screen.dart';
 import '../../core/presentation/screen/camera/capture_screen.dart';
 import '../../core/presentation/screen/camera/memory_reveal_screen.dart';
 import '../../core/presentation/screen/home/home_screen.dart';
@@ -18,6 +19,7 @@ import '../../core/presentation/screen/quests/quest_selection_screen.dart';
 import '../../core/presentation/screen/settings/settings_screen.dart';
 import '../../core/presentation/screen/sharing/sharing_screens.dart';
 import '../../core/presentation/view_model/auth/auth_session_view_model.dart';
+import '../../core/presentation/view_model/auth/intro_view_model.dart';
 import '../constant/app_colors.dart';
 import '../constant/app_motion.dart';
 import 'app_shell.dart';
@@ -46,9 +48,8 @@ abstract final class AppRoutes {
 
   // Account routes. Who may be where is decided in one place: the router's
   // redirect, from the auth status.
+  static const intro = '/intro';
   static const welcome = '/welcome';
-  static const login = '/login';
-  static const register = '/register';
   static const forgotPassword = '/forgot-password';
   static const verifyEmail = '/verify-email';
   static const resetPassword = '/reset-password';
@@ -67,20 +68,24 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 /// Where [status] belongs, given where the person is now. Null means they
 /// are already in the right place.
-String? _authRedirect(AuthStatus status, String location) {
-  const signedOutRoutes = {
-    AppRoutes.welcome,
-    AppRoutes.login,
-    AppRoutes.register,
-    AppRoutes.forgotPassword,
-  };
+///
+/// Someone new to the app, signed out, sees the get-started pages once
+/// ([introSeen] false) before the welcome screen.
+String? _authRedirect(
+  AuthStatus status,
+  String location, {
+  required bool introSeen,
+}) {
+  const signedOutRoutes = {AppRoutes.welcome, AppRoutes.forgotPassword};
   final target = switch (status) {
+    AuthSignedOut() when !introSeen => AppRoutes.intro,
     AuthSignedOut() =>
       signedOutRoutes.contains(location) ? null : AppRoutes.welcome,
     AuthAwaitingVerification() => AppRoutes.verifyEmail,
     AuthRecovering() => AppRoutes.resetPassword,
     AuthSignedIn() =>
       signedOutRoutes.contains(location) ||
+              location == AppRoutes.intro ||
               location == AppRoutes.verifyEmail ||
               location == AppRoutes.resetPassword
           ? AppRoutes.home
@@ -101,24 +106,27 @@ GoRouter appRouter(Ref ref) {
   );
   ref.onDispose(authChanges.dispose);
 
+  final introChanges = ValueNotifier<bool>(ref.read(introSeenProvider));
+  ref.listen(introSeenProvider, (_, next) => introChanges.value = next);
+  ref.onDispose(introChanges.dispose);
+
   return GoRouter(
     initialLocation: AppRoutes.home,
     navigatorKey: _shellNavigatorKey,
-    refreshListenable: authChanges,
-    redirect: (context, state) =>
-        _authRedirect(authChanges.value, state.matchedLocation),
+    refreshListenable: Listenable.merge([authChanges, introChanges]),
+    redirect: (context, state) => _authRedirect(
+      authChanges.value,
+      state.matchedLocation,
+      introSeen: introChanges.value,
+    ),
     routes: [
+      GoRoute(
+        path: AppRoutes.intro,
+        builder: (context, state) => const IntroScreen(),
+      ),
       GoRoute(
         path: AppRoutes.welcome,
         builder: (context, state) => const WelcomeScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.login,
-        builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.register,
-        builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
         path: AppRoutes.forgotPassword,

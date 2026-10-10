@@ -6,6 +6,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
 import 'config/env/app_env.dart';
+import 'core/data/database/app_database.dart';
+import 'core/data/database/database_providers.dart';
+import 'core/data/repositories/settings_repository.dart';
+import 'core/presentation/view_model/auth/intro_view_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +22,24 @@ Future<void> main() async {
       publishableKey: AppEnv.supabasePublishableKey,
     );
   }
-  runApp(const ProviderScope(child: PhotoQuestApp()));
+  // Whether this phone has seen the get-started pages, known before the
+  // first frame so the router can pick the first screen without a flash.
+  final database = AppDatabase();
+  var introSeen = true;
+  try {
+    introSeen = await SettingsRepository(database.settingsDao).getIntroSeen();
+  } on Object {
+    // Skip the pages rather than block the app from opening.
+  }
+  runApp(
+    ProviderScope(
+      overrides: [
+        appDatabaseProvider.overrideWithValue(database),
+        initialIntroSeenProvider.overrideWithValue(introSeen),
+      ],
+      child: const PhotoQuestApp(),
+    ),
+  );
 }
 
 /// The bundled fonts are SIL OFL; their licenses must ship with the app and

@@ -475,9 +475,8 @@ Example:
 ├── people
 ├── settings
 ├── account
-├── welcome            (signed out)
-├── login              (signed out)
-├── register           (signed out)
+├── intro              (signed out, first launch only)
+├── welcome            (signed out; its drawer holds log in + create account)
 ├── forgot-password    (signed out)
 ├── verify-email       (awaiting email confirmation)
 └── reset-password     (choosing a new password)

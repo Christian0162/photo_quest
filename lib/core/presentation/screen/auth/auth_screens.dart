@@ -5,67 +5,88 @@ import 'package:go_router/go_router.dart';
 import '../../../../config/routes/app_router.dart';
 import '../../../domain/auth/enum/auth_status.dart';
 import '../../view_model/auth/auth_form_view_models.dart';
+import '../../view_model/auth/auth_sheet_view_model.dart';
 import '../../view_model/auth/auth_session_view_model.dart';
+import '../../widget/organisms/auth/md_login_form.dart';
+import '../../widget/organisms/auth/md_register_form.dart';
 import '../../widget/templates/auth/forgot_password_template.dart';
-import '../../widget/templates/auth/login_template.dart';
-import '../../widget/templates/auth/register_template.dart';
 import '../../widget/templates/auth/reset_password_template.dart';
 import '../../widget/templates/auth/verify_email_template.dart';
 import '../../widget/templates/auth/welcome_template.dart';
 
-/// Welcome. Design lives in [WelcomeTemplate].
-class WelcomeScreen extends StatelessWidget {
+/// Welcome, with log in and create account in its drawer. Design lives in
+/// [WelcomeTemplate].
+class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(authSheetViewModelProvider);
+    final sheet = ref.read(authSheetViewModelProvider.notifier);
+
     return WelcomeTemplate(
-      onCreateAccount: () => context.push(AppRoutes.register),
-      onLogIn: () => context.push(AppRoutes.login),
+      mode: mode,
+      onCreateAccount: () => sheet.open(AuthSheetMode.register),
+      onLogIn: () => sheet.open(AuthSheetMode.login),
+      onClose: sheet.close,
+      onExpandedChanged: sheet.setExpanded,
+      formBuilder: (context, scrollController) => switch (mode) {
+        AuthSheetMode.login => _LoginForm(scrollController: scrollController),
+        _ => _RegisterForm(scrollController: scrollController),
+      },
     );
   }
 }
 
-/// Log in. Design lives in [LoginTemplate].
-class LoginScreen extends ConsumerWidget {
-  const LoginScreen({super.key});
+/// Log in form for the welcome drawer. Only watches its view model while
+/// shown, so closing the drawer clears it.
+class _LoginForm extends ConsumerWidget {
+  const _LoginForm({required this.scrollController});
+
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final form = ref.watch(loginViewModelProvider);
     final viewModel = ref.read(loginViewModelProvider.notifier);
 
-    return LoginTemplate(
+    return MdLoginForm(
+      scrollController: scrollController,
       form: form,
       onEmailChanged: viewModel.setEmail,
       onPasswordChanged: viewModel.setPassword,
       onToggleShowPassword: viewModel.toggleShowPassword,
       onSubmit: viewModel.submit,
       onForgotPassword: () => context.push(AppRoutes.forgotPassword),
-      onCreateAccount: () => context.pushReplacement(AppRoutes.register),
-      onBack: () => context.pop(),
+      onCreateAccount: () => ref
+          .read(authSheetViewModelProvider.notifier)
+          .open(AuthSheetMode.register),
     );
   }
 }
 
-/// Create account. Design lives in [RegisterTemplate].
-class RegisterScreen extends ConsumerWidget {
-  const RegisterScreen({super.key});
+/// Create account form for the welcome drawer.
+class _RegisterForm extends ConsumerWidget {
+  const _RegisterForm({required this.scrollController});
+
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final form = ref.watch(registerViewModelProvider);
     final viewModel = ref.read(registerViewModelProvider.notifier);
 
-    return RegisterTemplate(
+    return MdRegisterForm(
+      scrollController: scrollController,
       form: form,
       onEmailChanged: viewModel.setEmail,
       onPasswordChanged: viewModel.setPassword,
       onConfirmationChanged: viewModel.setConfirmation,
       onToggleShowPassword: viewModel.toggleShowPassword,
       onSubmit: viewModel.submit,
-      onLogIn: () => context.pushReplacement(AppRoutes.login),
-      onBack: () => context.pop(),
+      onLogIn: () => ref
+          .read(authSheetViewModelProvider.notifier)
+          .open(AuthSheetMode.login),
     );
   }
 }

@@ -23,10 +23,15 @@ abstract final class AppSpacing {
 
 /// Centralized corner radii.
 ///
-/// Every card, button, tile, sheet and photo frame shares [base] (8px).
+/// Every card, tile, sheet and photo frame shares [base] (10px); buttons
+/// use [button] (15px).
 /// [pill] is only for badges, counters, dots and progress bars.
 abstract final class AppRadius {
-  static const base = 8.0;
+  static const base = 10.0;
+
+  /// Buttons, including the big call-to-action bars, are a little rounder
+  /// than cards.
+  static const button = 15.0;
 
   static const pill = 999.0;
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- The launch logo as a vector, so it stays sharp at any density (a raster
-     icon scaled up by Android looks blurry). Same geometry as the in-app
-     launch reveal's prints (md_launch_reveal.dart), drawn at 80% inside a
+     icon scaled up by Android looks blurry). Drawn at 80% inside a
      288dp canvas so it fits the Android 12 splash's circular mask. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="288dp"

@@ -137,65 +137,6 @@ void main() {
     expect(prompt.hitTestable(), findsOneWidget);
   });
 
-  testWidgets('opening the app plays a short reveal, then gets out of the '
-      'way; a tap skips it', (tester) async {
-    final db = AppDatabase.forTesting(NativeDatabase.memory());
-    addTearDown(db.close);
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          appDatabaseProvider.overrideWithValue(db),
-          authRepositoryProvider.overrideWithValue(
-            FakeAuthRepository(signedIn: true),
-          ),
-        ],
-        child: const PhotoQuestApp(),
-      ),
-    );
-    // Pump frame by frame, as a device would.
-    for (var i = 0; i < 20; i++) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
-    expect(
-      find.text('Do something together. Keep the memory.'),
-      findsOneWidget,
-    );
-
-    // A tap jumps to the outro instead of waiting out the whole reveal.
-    await tester.tapAt(const Offset(10, 10));
-    await tester.pump(); // the outro starts on this frame
-    for (var i = 0; i < 18; i++) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
-    await tester.pump();
-    expect(find.text('Do something together. Keep the memory.'), findsNothing);
-    expect(find.text("Today's quest"), findsOneWidget);
-  });
-
-  testWidgets('with reduced motion the reveal is skipped', (tester) async {
-    final db = AppDatabase.forTesting(NativeDatabase.memory());
-    addTearDown(db.close);
-    tester.platformDispatcher.accessibilityFeaturesTestValue =
-        const FakeAccessibilityFeatures(disableAnimations: true);
-    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          appDatabaseProvider.overrideWithValue(db),
-          authRepositoryProvider.overrideWithValue(
-            FakeAuthRepository(signedIn: true),
-          ),
-        ],
-        child: const PhotoQuestApp(),
-      ),
-    );
-    await tester.pump();
-    expect(find.text('Do something together. Keep the memory.'), findsNothing);
-    expect(find.text("Today's quest"), findsOneWidget);
-  });
-
   testWidgets('the nav dock fits a small phone at large text on every tab', (
     tester,
   ) async {

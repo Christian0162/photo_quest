@@ -7,7 +7,8 @@ import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_fade_slide_in.dart';
 import '../../atoms/common/md_round_icon_button.dart';
-import '../../molecules/common/md_animated_photoquest_logo.dart';
+import '../../atoms/common/md_soft_backdrop.dart';
+import '../../molecules/common/md_brand_header.dart';
 
 class MdAuthLayout extends StatelessWidget {
   const MdAuthLayout({
@@ -29,11 +30,12 @@ class MdAuthLayout extends StatelessWidget {
 
   final Widget? footer;
 
-  static const _bandHeight = 184.0;
-  static const _bandHeightCompact = 88.0;
-  static const _logoSize = 132.0;
-  static const _logoSizeCompact = 64.0;
-  static const _loopDuration = Duration(milliseconds: 3200);
+  static const _bandHeight = 152.0;
+  static const _bandHeightCompact = 96.0;
+  static const _logoSize = 96.0;
+  static const _logoSizeCompact = 56.0;
+  static const _titleSize = 36.0;
+  static const _titleSizeCompact = 26.0;
 
   @override
   Widget build(BuildContext context) {
@@ -43,108 +45,109 @@ class MdAuthLayout extends StatelessWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: ColoredBox(
-        color: AppColors.warmCoral,
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              AnimatedContainer(
-                duration: duration,
-                curve: AppMotion.standard,
-                height: compact ? _bandHeightCompact : _bandHeight,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    OverflowBox(
-                      maxHeight: _logoSize,
-                      child: MdAnimatedPhotoQuestLogo(
-                        size: compact ? _logoSizeCompact : _logoSize,
-                        // Never stops: it keeps the screen alive while the
-                        // person types, and the same motion covers the wait.
-                        loop: true,
-                        duration: _loopDuration,
+      child: Stack(
+        children: [
+          const Positioned.fill(child: MdSoftBackdrop()),
+          SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                AnimatedContainer(
+                  duration: duration,
+                  curve: AppMotion.standard,
+                  height: compact ? _bandHeightCompact : _bandHeight,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // The same logo and title as the welcome screen. The logo
+                      // never stops moving: it keeps the screen alive while the
+                      // person types, and the same motion covers the wait.
+                      MdBrandHeader(
+                        logoSize: compact ? _logoSizeCompact : _logoSize,
+                        titleSize: compact ? _titleSizeCompact : _titleSize,
                       ),
-                    ),
-                    if (onBack != null)
-                      Positioned(
-                        left: AppSpacing.sm,
-                        top: AppSpacing.sm,
-                        child: MdRoundIconButton(
-                          icon: Icons.arrow_back_rounded,
-                          tooltip: 'Back',
-                          onPressed: onBack,
+                      if (onBack != null)
+                        Positioned(
+                          left: AppSpacing.sm,
+                          top: AppSpacing.sm,
+                          child: MdRoundIconButton(
+                            icon: Icons.arrow_back_rounded,
+                            tooltip: 'Back',
+                            onPressed: onBack,
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(AppRadius.base),
-                    ),
+                    ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(AppRadius.base),
+                ),
+                Expanded(
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(AppRadius.base),
+                      ),
                     ),
-                    child: AutofillGroup(
-                      child: SingleChildScrollView(
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.gutter,
-                          AppSpacing.xl,
-                          AppSpacing.gutter,
-                          AppSpacing.lg,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            MdFadeSlideIn(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Semantics(
-                                    header: true,
-                                    child: Text(
-                                      title,
-                                      style: AppTypography.heading1,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(AppRadius.base),
+                      ),
+                      child: AutofillGroup(
+                        child: SingleChildScrollView(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.gutter,
+                            AppSpacing.xl,
+                            AppSpacing.gutter,
+                            AppSpacing.lg,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              MdFadeSlideIn(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Semantics(
+                                      header: true,
+                                      child: Text(
+                                        title,
+                                        style: AppTypography.heading1,
+                                      ),
                                     ),
-                                  ),
-                                  if (subtitle != null) ...[
-                                    const SizedBox(height: AppSpacing.sm),
-                                    Text(
-                                      subtitle!,
-                                      style: AppTypography.bodyMuted,
-                                    ),
+                                    if (subtitle != null) ...[
+                                      const SizedBox(height: AppSpacing.sm),
+                                      Text(
+                                        subtitle!,
+                                        style: AppTypography.bodyMuted,
+                                      ),
+                                    ],
                                   ],
-                                ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: AppSpacing.lg),
-                            for (final (index, child) in children.indexed) ...[
-                              if (index > 0)
-                                const SizedBox(height: AppSpacing.md),
-                              MdFadeSlideIn(order: index + 1, child: child),
-                            ],
-                            if (footer != null) ...[
                               const SizedBox(height: AppSpacing.lg),
-                              footer!,
+                              for (final (index, child)
+                                  in children.indexed) ...[
+                                if (index > 0)
+                                  const SizedBox(height: AppSpacing.md),
+                                MdFadeSlideIn(order: index + 1, child: child),
+                              ],
+                              if (footer != null) ...[
+                                const SizedBox(height: AppSpacing.lg),
+                                footer!,
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

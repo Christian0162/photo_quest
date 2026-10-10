@@ -10,10 +10,17 @@ class SettingsRepository {
   static const _clipKey = 'booth.clip_seconds';
   static const _backupKey = 'backup.enabled';
   static const _withheldKey = 'backup.withheld';
+  static const _introSeenKey = 'onboarding.intro_seen';
 
   static const countdownChoices = [3, 5, 10];
 
   static const clipChoices = [6, 10, 15];
+
+  /// Whether the get-started pages were already shown on this device.
+  Future<bool> getIntroSeen() async =>
+      await _dao.getValue(_introSeenKey) == '1';
+
+  Future<void> setIntroSeen() => _dao.setValue(_introSeenKey, '1');
 
   Future<int> getCountdownSeconds() =>
       _readChoice(_countdownKey, countdownChoices);
