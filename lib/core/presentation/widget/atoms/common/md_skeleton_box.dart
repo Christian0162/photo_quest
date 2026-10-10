@@ -10,7 +10,7 @@ class MdSkeletonBox extends StatelessWidget {
     super.key,
     this.width,
     this.height,
-    this.radius = AppRadius.lg,
+    this.radius = AppRadius.base,
   });
 
   final double? width;

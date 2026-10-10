@@ -17,7 +17,7 @@ class MdPosterCard extends StatelessWidget {
     this.onTap,
     this.semanticLabel,
     this.aspectRatio = 4 / 5,
-    this.radius = AppRadius.photo,
+    this.radius = AppRadius.base,
     this.scrimStart = 0.35,
   });
 

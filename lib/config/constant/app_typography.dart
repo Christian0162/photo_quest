@@ -9,24 +9,25 @@ abstract final class AppTypography {
   static const bodyFamily = 'Inter';
 
   static const scriptFamily = 'Caveat';
+  static const wordmarkFamily = 'Pacifico';
 
+  /// Page titles and the wordmark: handwritten, like a caption on a print.
+  /// Caveat runs small for its point size, so it is set larger than Outfit.
   static const TextStyle display = TextStyle(
-    fontFamily: headingFamily,
-    fontSize: 36,
-    height: 1.1,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.5,
+    fontFamily: scriptFamily,
+    fontSize: 46,
+    height: 1.0,
+    fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
   /// Hero wordmark on the welcome screen.
   static const TextStyle hero = TextStyle(
-    fontFamily: headingFamily,
-    fontSize: 48,
-    height: 1.1,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -1.5,
-    color: AppColors.textPrimary,
+    fontFamily: wordmarkFamily,
+    fontSize: 52,
+    height: 1.0,
+    fontWeight: FontWeight.w400,
+    color: AppColors.warmCoral,
   );
 
   static const TextStyle heading1 = TextStyle(

@@ -41,7 +41,7 @@ abstract final class AppTheme {
   );
 
   static final _shape = RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(AppRadius.lg),
+    borderRadius: BorderRadius.circular(AppRadius.base),
   );
 
   static ThemeData get light {
@@ -130,7 +130,7 @@ abstract final class AppTheme {
         ),
         labelStyle: AppTypography.label,
         side: const BorderSide(color: AppColors.line),
-        shape: const StadiumBorder(),
+        shape: _shape,
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.xs,
           vertical: AppSpacing.xs,
@@ -143,7 +143,7 @@ abstract final class AppTheme {
         dragHandleColor: AppColors.line,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppRadius.xl),
+            top: Radius.circular(AppRadius.base),
           ),
         ),
       ),
@@ -155,7 +155,7 @@ abstract final class AppTheme {
           color: AppColors.textMuted,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.xl),
+          borderRadius: BorderRadius.circular(AppRadius.base),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
@@ -166,7 +166,7 @@ abstract final class AppTheme {
         ),
         actionTextColor: AppColors.filmYellow,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.base),
         ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
@@ -187,7 +187,7 @@ abstract final class AppTheme {
       tooltipTheme: TooltipThemeData(
         decoration: BoxDecoration(
           color: AppColors.warmCharcoal,
-          borderRadius: BorderRadius.circular(AppRadius.sm),
+          borderRadius: BorderRadius.circular(AppRadius.base),
         ),
         textStyle: AppTypography.caption.copyWith(color: AppColors.warmCream),
       ),
@@ -208,7 +208,7 @@ abstract final class AppTheme {
 
   static OutlineInputBorder _inputBorder(Color color, {double width = 1.5}) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppRadius.md),
+      borderRadius: BorderRadius.circular(AppRadius.base),
       borderSide: BorderSide(color: color, width: width),
     );
   }

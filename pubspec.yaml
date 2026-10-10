@@ -123,6 +123,10 @@ flutter:
           weight: 500
         - asset: assets/fonts/Inter-SemiBold.ttf
           weight: 600
+    # Friendly retro script for the "Photo Quest" wordmark.
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
     # Handwriting, only for photobooth-print captions ("Better together").
     - family: Caveat
       fonts:

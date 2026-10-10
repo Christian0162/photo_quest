@@ -39,7 +39,7 @@ class MdMemoryCard extends StatelessWidget {
     return MdPosterCard(
       onTap: onTap,
       aspectRatio: _aspectRatio,
-      radius: AppRadius.xl,
+      radius: AppRadius.base,
       semanticLabel: [
         memory.title,
         date,

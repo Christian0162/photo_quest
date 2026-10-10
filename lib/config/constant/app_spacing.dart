@@ -21,14 +21,12 @@ abstract final class AppSpacing {
   static const dockHeight = 64.0;
 }
 
-/// Centralized corner-radius scale.
+/// Centralized corner radii.
+///
+/// Every card, button, tile, sheet and photo frame shares [base] (8px).
+/// [pill] is only for badges, counters, dots and progress bars.
 abstract final class AppRadius {
-  static const sm = 10.0;
-  static const md = 14.0;
-  static const lg = 18.0;
-  static const xl = 24.0;
-
-  static const photo = 28.0;
+  static const base = 8.0;
 
   static const pill = 999.0;
 }

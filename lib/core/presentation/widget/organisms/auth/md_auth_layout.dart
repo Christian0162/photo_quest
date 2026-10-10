@@ -84,12 +84,12 @@ class MdAuthLayout extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: AppColors.background,
                     borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(AppRadius.xl),
+                      top: Radius.circular(AppRadius.base),
                     ),
                   ),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(AppRadius.xl),
+                      top: Radius.circular(AppRadius.base),
                     ),
                     child: AutofillGroup(
                       child: SingleChildScrollView(

@@ -18,6 +18,8 @@ class MdPrimaryButton extends StatefulWidget {
     this.icon,
     this.loading = false,
     this.expand = true,
+    this.flat = false,
+    this.foregroundColor,
   });
 
   final String label;
@@ -25,6 +27,12 @@ class MdPrimaryButton extends StatefulWidget {
   final IconData? icon;
   final bool loading;
   final bool expand;
+
+  /// Overrides the label colour (charcoal on coral by default).
+  final Color? foregroundColor;
+
+  /// Drops the charcoal lip (and the press-down motion) for a plain button.
+  final bool flat;
 
   static const _lip = 4.0;
 
@@ -42,9 +50,13 @@ class _MdPrimaryButtonState extends State<MdPrimaryButton> {
   @override
   Widget build(BuildContext context) {
     final enabled = widget.onPressed != null && !widget.loading;
-    final sunk = _pressed && enabled && !AppMotion.reduced(context);
+    final sunk =
+        !widget.flat && _pressed && enabled && !AppMotion.reduced(context);
 
     final button = FilledButton(
+      style: widget.foregroundColor == null
+          ? null
+          : FilledButton.styleFrom(foregroundColor: widget.foregroundColor),
       onPressed: enabled
           ? () {
               AppHaptics.tap();
@@ -55,7 +67,7 @@ class _MdPrimaryButtonState extends State<MdPrimaryButton> {
         label: widget.label,
         icon: widget.icon,
         loading: widget.loading,
-        spinnerColor: AppColors.onCoral,
+        spinnerColor: widget.foregroundColor ?? AppColors.onCoral,
       ),
     );
 
@@ -74,20 +86,22 @@ class _MdPrimaryButtonState extends State<MdPrimaryButton> {
           0,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          boxShadow: [
-            BoxShadow(
-              color: enabled ? AppColors.warmCharcoal : AppColors.line,
-              offset: Offset(0, sunk ? 0 : MdPrimaryButton._lip),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(AppRadius.base),
+          boxShadow: widget.flat
+              ? null
+              : [
+                  BoxShadow(
+                    color: enabled ? AppColors.warmCharcoal : AppColors.line,
+                    offset: Offset(0, sunk ? 0 : MdPrimaryButton._lip),
+                  ),
+                ],
         ),
         child: button,
       ),
     );
 
     final padded = Padding(
-      padding: const EdgeInsets.only(bottom: MdPrimaryButton._lip),
+      padding: EdgeInsets.only(bottom: widget.flat ? 0 : MdPrimaryButton._lip),
       child: lipped,
     );
 

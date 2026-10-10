@@ -82,7 +82,7 @@ class _Chip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           decoration: BoxDecoration(
             color: selected ? AppColors.warmCoral : AppColors.paper,
-            borderRadius: BorderRadius.circular(AppRadius.pill),
+            borderRadius: BorderRadius.circular(AppRadius.base),
             boxShadow: selected ? AppShadows.card : null,
           ),
           child: Row(

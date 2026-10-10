@@ -26,7 +26,7 @@ class MdInviteCodeCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.softPeach,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
+        borderRadius: BorderRadius.circular(AppRadius.base),
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),

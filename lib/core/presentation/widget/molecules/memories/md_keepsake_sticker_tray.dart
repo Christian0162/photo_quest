@@ -55,7 +55,7 @@ class MdKeepsakeStickerTray extends StatelessWidget {
                 child: Opacity(
                   opacity: canAdd ? 1 : 0.4,
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(AppRadius.md),
+                    borderRadius: BorderRadius.circular(AppRadius.base),
                     onTap: canAdd
                         ? () {
                             AppHaptics.selection();
@@ -69,7 +69,7 @@ class MdKeepsakeStickerTray extends StatelessWidget {
                       padding: const EdgeInsets.all(AppSpacing.sm),
                       decoration: BoxDecoration(
                         color: AppColors.sunken,
-                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        borderRadius: BorderRadius.circular(AppRadius.base),
                       ),
                       alignment: Alignment.center,
                       child: MdStickerArt(type: type, size: 40),

@@ -14,7 +14,7 @@ class MdAppCard extends StatelessWidget {
     this.onTap,
     this.color = AppColors.paper,
     this.padding = const EdgeInsets.all(AppSpacing.md),
-    this.radius = AppRadius.lg,
+    this.radius = AppRadius.base,
     this.elevated = true,
     this.semanticLabel,
   });

@@ -33,7 +33,7 @@ class MdOnThisDayCard extends StatelessWidget {
     return MdPosterCard(
       onTap: onTap,
       aspectRatio: 16 / 10,
-      radius: AppRadius.xl,
+      radius: AppRadius.base,
       semanticLabel: '$_ago: ${summary.memory.title}. Open this memory',
       // No hero here: the same memory may also be on the Recent shelf, and
       // one screen can't fly two copies.

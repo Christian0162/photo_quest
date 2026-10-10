@@ -30,7 +30,7 @@ class MdOptionTile extends StatelessWidget {
       label: label,
       excludeSemantics: true,
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.md),
+        borderRadius: BorderRadius.circular(AppRadius.base),
         onTap: () {
           AppHaptics.selection();
           onTap();
@@ -41,7 +41,7 @@ class MdOptionTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
           decoration: BoxDecoration(
             color: selected ? AppColors.softPeach : AppColors.paper,
-            borderRadius: BorderRadius.circular(AppRadius.md),
+            borderRadius: BorderRadius.circular(AppRadius.base),
             border: Border.all(
               color: selected ? AppColors.textPrimary : AppColors.line,
               width: selected ? 2 : 1.5,

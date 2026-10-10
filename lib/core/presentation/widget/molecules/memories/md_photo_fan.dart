@@ -103,11 +103,11 @@ class _Print extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.xs + AppSpacing.xxs),
       decoration: BoxDecoration(
         color: AppColors.paper,
-        borderRadius: BorderRadius.circular(AppRadius.md),
+        borderRadius: BorderRadius.circular(AppRadius.base),
         boxShadow: AppShadows.print,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppRadius.sm),
+        borderRadius: BorderRadius.circular(AppRadius.base),
         child: AspectRatio(
           aspectRatio: 1 / MdPhotoFan._printRatio,
           child: MdLocalPhoto(path: path),

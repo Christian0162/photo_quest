@@ -60,7 +60,7 @@ class _MdPhotoAlbumState extends State<MdPhotoAlbum> {
           aspectRatio: 4 / 5,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppRadius.photo),
+              borderRadius: BorderRadius.circular(AppRadius.base),
               boxShadow: AppShadows.print,
             ),
             child: Stack(
@@ -101,7 +101,7 @@ class _MdPhotoAlbumState extends State<MdPhotoAlbum> {
                       child: GestureDetector(
                         onTap: () => widget.onOpen(index),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(AppRadius.photo),
+                          borderRadius: BorderRadius.circular(AppRadius.base),
                           child: image,
                         ),
                       ),

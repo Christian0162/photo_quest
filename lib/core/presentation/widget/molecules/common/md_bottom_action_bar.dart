@@ -23,7 +23,7 @@ class MdBottomActionBar extends StatelessWidget {
             ? null
             : const Border(top: BorderSide(color: AppColors.line)),
         borderRadius: sheet
-            ? const BorderRadius.vertical(top: Radius.circular(AppRadius.xl))
+            ? const BorderRadius.vertical(top: Radius.circular(AppRadius.base))
             : null,
       ),
       child: SafeArea(

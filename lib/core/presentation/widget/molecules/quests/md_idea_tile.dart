@@ -26,7 +26,7 @@ class MdIdeaTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return MdAppCard(
       color: color,
-      radius: AppRadius.xl,
+      radius: AppRadius.base,
       onTap: onTap,
       semanticLabel: '$title. $subtitle',
       child: Column(

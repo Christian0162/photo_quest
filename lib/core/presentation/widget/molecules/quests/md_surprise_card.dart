@@ -66,7 +66,7 @@ class _MdSurpriseCardState extends State<MdSurpriseCard>
   Widget build(BuildContext context) {
     return MdAppCard(
       color: AppColors.filmYellow,
-      radius: AppRadius.xl,
+      radius: AppRadius.base,
       onTap: _tap,
       semanticLabel: "Can't decide? Surprise me",
       child: Row(

@@ -24,7 +24,7 @@ class MdAuthMessage extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: isError ? AppColors.errorSurface : AppColors.successSurface,
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(AppRadius.base),
         ),
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.md),

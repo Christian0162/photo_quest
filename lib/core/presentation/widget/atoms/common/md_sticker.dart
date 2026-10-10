@@ -36,7 +36,7 @@ class MdSticker extends StatelessWidget {
     final sticker = DecoratedBox(
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(AppRadius.md),
+        borderRadius: BorderRadius.circular(AppRadius.base),
         border: Border.all(color: AppColors.paper, width: 3),
         boxShadow: const [
           BoxShadow(

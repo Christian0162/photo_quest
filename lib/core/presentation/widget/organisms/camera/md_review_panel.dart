@@ -39,7 +39,7 @@ class MdReviewPanel extends StatelessWidget {
               padding: const EdgeInsets.all(AppSpacing.sm),
               decoration: BoxDecoration(
                 color: AppColors.paper,
-                borderRadius: BorderRadius.circular(AppRadius.md),
+                borderRadius: BorderRadius.circular(AppRadius.base),
                 boxShadow: AppShadows.print,
               ),
               child: AspectRatio(
@@ -47,7 +47,7 @@ class MdReviewPanel extends StatelessWidget {
                     ? photo.width / photo.height
                     : 3 / 4,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  borderRadius: BorderRadius.circular(AppRadius.base),
                   child: photo.kind == PhotoKind.photo
                       ? MdLocalPhoto(
                           path: photo.thumbnailPath,

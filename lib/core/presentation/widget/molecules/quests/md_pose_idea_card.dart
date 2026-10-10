@@ -29,7 +29,7 @@ class MdPoseIdeaCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.cameraScrim,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
+        borderRadius: BorderRadius.circular(AppRadius.base),
         border: Border.all(color: AppColors.filmYellow, width: 1.5),
       ),
       child: Column(

@@ -311,7 +311,7 @@ class _PlacedStickerViewState extends State<_PlacedStickerView> {
         position: DecorationPosition.foreground,
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.warmCoral, width: 2),
-          borderRadius: BorderRadius.circular(AppRadius.sm),
+          borderRadius: BorderRadius.circular(AppRadius.base),
         ),
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.xs),

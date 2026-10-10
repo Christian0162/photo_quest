@@ -189,7 +189,7 @@ class MdQuestShotsStep extends StatelessWidget {
                   padding: const EdgeInsets.only(right: AppSpacing.lg),
                   decoration: BoxDecoration(
                     color: AppColors.errorSurface,
-                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                    borderRadius: BorderRadius.circular(AppRadius.base),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

@@ -168,7 +168,7 @@ class _PhotoTile extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderRadius: BorderRadius.circular(AppRadius.base),
           child: Stack(
             fit: StackFit.expand,
             children: [

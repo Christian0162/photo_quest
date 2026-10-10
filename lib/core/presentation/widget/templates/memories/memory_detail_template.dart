@@ -116,11 +116,11 @@ class MemoryDetailTemplate extends StatelessWidget {
               AspectRatio(
                 aspectRatio: 4 / 5,
                 child: coverPath == null
-                    ? const MdSkeletonBox(radius: AppRadius.photo)
+                    ? const MdSkeletonBox(radius: AppRadius.base)
                     : MdMemoryCoverHero(
                         memoryId: memoryId,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(AppRadius.photo),
+                          borderRadius: BorderRadius.circular(AppRadius.base),
                           child: MdLocalPhoto(path: coverPath),
                         ),
                       ),
@@ -157,7 +157,7 @@ class MemoryDetailTemplate extends StatelessWidget {
                   aspectRatio: 4 / 5,
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(AppRadius.photo),
+                      Radius.circular(AppRadius.base),
                     ),
                     child: MdPhotoPlaceholder(),
                   ),

@@ -53,7 +53,7 @@ class MdPhotoboothPrint extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: AppColors.printPaper,
-            borderRadius: BorderRadius.circular(AppRadius.sm / 2),
+            borderRadius: BorderRadius.circular(AppRadius.base / 2),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(

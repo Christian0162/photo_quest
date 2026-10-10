@@ -27,7 +27,7 @@ class MdSelfCard extends StatelessWidget {
     return MdAppCard(
       color: AppColors.softPeach,
       elevated: false,
-      radius: AppRadius.xl,
+      radius: AppRadius.base,
       semanticLabel: '${person.name}, you. $circle',
       child: Row(
         children: [

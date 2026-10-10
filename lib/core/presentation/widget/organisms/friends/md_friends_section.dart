@@ -51,7 +51,8 @@ class MdFriendsSection extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.ms),
         friends.when(
-          loading: () => const MdSkeletonBox(height: 64, radius: AppRadius.lg),
+          loading: () =>
+              const MdSkeletonBox(height: 64, radius: AppRadius.base),
           error: (error, stack) => Row(
             children: [
               Expanded(

@@ -171,11 +171,11 @@ class _MdMemoryRevealState extends State<MdMemoryReveal>
                     ),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                        borderRadius: BorderRadius.circular(AppRadius.base),
                         boxShadow: AppShadows.print,
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                        borderRadius: BorderRadius.circular(AppRadius.base),
                         child: widget.keepsake == null
                             ? MdLocalPhoto(
                                 path: result.stripPath,

@@ -32,7 +32,7 @@ class MdSharedMemoryTile extends StatelessWidget {
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.md),
+            borderRadius: BorderRadius.circular(AppRadius.base),
             child: SizedBox.square(
               dimension: _pictureSize,
               child: cover == null

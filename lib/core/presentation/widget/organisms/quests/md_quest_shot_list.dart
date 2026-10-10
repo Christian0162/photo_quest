@@ -88,7 +88,7 @@ class _ShotRow extends StatelessWidget {
             if (shot.exampleImagePath != null) ...[
               const SizedBox(width: AppSpacing.sm),
               ClipRRect(
-                borderRadius: BorderRadius.circular(AppRadius.sm),
+                borderRadius: BorderRadius.circular(AppRadius.base),
                 child: SizedBox(
                   width: 48,
                   height: 64,

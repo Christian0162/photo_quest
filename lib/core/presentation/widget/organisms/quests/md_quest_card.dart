@@ -33,7 +33,7 @@ class MdQuestCard extends StatelessWidget {
     return MdPosterCard(
       onTap: onTap,
       aspectRatio: 4 / 5,
-      radius: AppRadius.xl,
+      radius: AppRadius.base,
       semanticLabel: [
         quest.title,
         questTypeLabel(quest.type),

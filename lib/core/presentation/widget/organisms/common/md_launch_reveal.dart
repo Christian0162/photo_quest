@@ -8,6 +8,7 @@ import '../../../../../config/constant/app_motion.dart';
 import '../../../../../config/constant/app_spacing.dart';
 import '../../../../../config/constant/app_typography.dart';
 import '../../atoms/common/md_photoquest_logo.dart';
+import '../../atoms/common/md_write_on_text.dart';
 
 class MdLaunchReveal extends StatefulWidget {
   const MdLaunchReveal({super.key, required this.child});
@@ -24,7 +25,7 @@ class MdLaunchReveal extends StatefulWidget {
 
 class _MdLaunchRevealState extends State<MdLaunchReveal>
     with SingleTickerProviderStateMixin {
-  static const _duration = Duration(milliseconds: 1800);
+  static const _duration = Duration(milliseconds: 1000);
 
   static const _outroAt = 0.78;
 
@@ -86,6 +87,7 @@ class _MdLaunchRevealState extends State<MdLaunchReveal>
                   final open = _phase(0.05, 0.45, Curves.easeOutBack);
                   final lift = _phase(0.1, 0.5, Curves.easeOutCubic);
                   final words = _phase(0.3, 0.62, Curves.easeOutCubic);
+                  final write = _phase(0.3, 0.72, Curves.easeInOut);
                   final twinkle = math.sin(math.pi * _phase(0.2, 0.6));
                   final outro = _phase(_outroAt, 1, Curves.easeInCubic);
 
@@ -101,6 +103,7 @@ class _MdLaunchRevealState extends State<MdLaunchReveal>
                           open: open,
                           lift: lift,
                           words: words,
+                          write: write,
                           twinkle: twinkle,
                         ),
                       ),
@@ -122,12 +125,16 @@ class _Stage extends StatelessWidget {
     required this.open,
     required this.lift,
     required this.words,
+    required this.write,
     required this.twinkle,
   });
 
   final double open;
   final double lift;
   final double words;
+
+  /// 0→1 as the title is "written" left to right.
+  final double write;
   final double twinkle;
 
   static const _rise = 56.0;
@@ -176,8 +183,9 @@ class _Stage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    MdWriteOnText(
                       'Photo Quest',
+                      progress: write,
                       style: AppTypography.display.copyWith(
                         color: AppColors.onCoral,
                       ),

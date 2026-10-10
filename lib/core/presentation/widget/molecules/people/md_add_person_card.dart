@@ -16,7 +16,7 @@ class MdAddPersonCard extends StatelessWidget {
       onTap: onTap,
       color: AppColors.sunken,
       elevated: false,
-      radius: AppRadius.xl,
+      radius: AppRadius.base,
       semanticLabel: 'Add someone. Partner, family, friends or pets.',
       child: Row(
         children: [

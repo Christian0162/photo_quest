@@ -120,7 +120,7 @@ class MdInstructionControls extends StatelessWidget {
                   width: 64,
                   height: 84,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                    borderRadius: BorderRadius.circular(AppRadius.base),
                     border: Border.all(color: AppColors.onCamera, width: 2),
                   ),
                   clipBehavior: Clip.antiAlias,

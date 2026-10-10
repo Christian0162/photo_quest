@@ -44,12 +44,12 @@ class MdMemoryFeatureCard extends StatelessWidget {
 
     final card = DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppRadius.xl),
+        borderRadius: BorderRadius.circular(AppRadius.base),
         boxShadow: AppShadows.print,
       ),
       child: Material(
         color: AppColors.printWell,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
+        borderRadius: BorderRadius.circular(AppRadius.base),
         clipBehavior: Clip.antiAlias,
         child: Semantics(
           button: true,

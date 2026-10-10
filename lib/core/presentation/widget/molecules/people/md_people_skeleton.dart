@@ -14,7 +14,7 @@ class MdPeopleSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const MdSkeletonBox(height: 96, radius: AppRadius.xl),
+          const MdSkeletonBox(height: 96, radius: AppRadius.base),
           const SizedBox(height: AppSpacing.xl),
           const MdSkeletonBox(width: 120, height: 20),
           const SizedBox(height: AppSpacing.ms),

@@ -111,8 +111,10 @@ class MemoriesTemplate extends StatelessWidget {
                     itemCount: 2,
                     separatorBuilder: (_, _) =>
                         const SizedBox(height: AppSpacing.lg),
-                    itemBuilder: (_, _) =>
-                        const MdSkeletonBox(height: 420, radius: AppRadius.xl),
+                    itemBuilder: (_, _) => const MdSkeletonBox(
+                      height: 420,
+                      radius: AppRadius.base,
+                    ),
                   ),
                 ),
               ],

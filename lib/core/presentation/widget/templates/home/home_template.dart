@@ -85,7 +85,7 @@ class HomeTemplate extends StatelessWidget {
               loading: () => const MdSkeletonBox(
                 key: ValueKey('today-loading'),
                 height: 520,
-                radius: AppRadius.photo,
+                radius: AppRadius.base,
               ),
               error: (error, stack) => const SizedBox.shrink(),
               data: (quest) => quest == null

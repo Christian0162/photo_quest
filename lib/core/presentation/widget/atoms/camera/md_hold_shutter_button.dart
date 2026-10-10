@@ -67,7 +67,7 @@ class MdHoldShutterButton extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.warmCoral,
                     borderRadius: BorderRadius.circular(
-                      recording ? AppRadius.sm / 2 : size,
+                      recording ? AppRadius.base / 2 : size,
                     ),
                   ),
                 ),
